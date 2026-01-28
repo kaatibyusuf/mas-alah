@@ -1,0 +1,22 @@
+[
+  {
+    "id": "SRH-BEG-001",
+    "category": "Seerah",
+    "level": "Beginner",
+    "tags": ["makkah"],
+    "question": "What city was the Prophet ﷺ born in?",
+    "options": ["Madinah", "Makkah", "Ta'if", "Jerusalem"],
+    "correctIndex": 1,
+    "explanation": "He ﷺ was born in Makkah."
+  },
+  {
+    "id": "FIQ-BEG-001",
+    "category": "Fiqh",
+    "level": "Beginner",
+    "tags": ["purification"],
+    "question": "Which of the following is required for wudū’ to be valid?",
+    "options": ["Intention", "Facing the Qiblah", "Wearing perfume", "Speaking aloud"],
+    "correctIndex": 0,
+    "explanation": "Intention is required for acts of worship."
+  }
+]
