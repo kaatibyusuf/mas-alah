@@ -234,54 +234,180 @@ function startTimer() {
    Screens
 ======================= */
 function renderHome() {
+  const progress = loadProgress();
+  const last = progress.lastAttempt;
+
+  const streakLabel =
+    progress.streakCount === 1 ? "1 day" : `${progress.streakCount} days`;
+
+  const lastAttemptText = last
+    ? `${last.category} • ${last.level} (${last.percent}%)`
+    : "No attempts yet";
+
+  // Find best score
+  const bestEntries = Object.entries(progress.bestScores);
+  let bestText = "No best score yet";
+  if (bestEntries.length) {
+    bestEntries.sort((a, b) => b[1] - a[1]);
+    const [key, val] = bestEntries[0];
+    const [cat, lvl] = key.split("|");
+    bestText = `${val}% (${cat} • ${lvl})`;
+  }
+
   app.innerHTML = `
-    <section class="card">
-      <h2>Start a Quiz</h2>
-      <p class="muted">Choose category and level. Timed mode is 20 seconds per question.</p>
+    <section class="home-hero">
+      <div class="hero-row">
+        <div>
+          <h2 class="hero-title">Stay consistent. One quiz a day.</h2>
+          <p class="hero-text">
+            Mas'alah helps you test what you know, learn from short explanations, and build a streak without pressure.
+          </p>
 
-      <div class="grid">
-        <button id="dailyGo" class="btn">Today’s Quiz</button>
+          <div class="home-actions">
+            <div class="action-card">
+              <div class="action-head">
+                <div>
+                  <p class="action-title">Today’s Quiz</p>
+                  <p class="action-sub">Locked for today. Same questions even after refresh.</p>
+                </div>
+                <span class="pill">Daily</span>
+              </div>
 
-        <label class="field">
-          <span>Category</span>
-          <select id="category">
-            <option>Qur’an</option>
-            <option>Seerah</option>
-            <option>Fiqh</option>
-            <option>Tawheed</option>
-            <option>Arabic</option>
-            <option>Adhkaar</option>
-          </select>
-        </label>
+              <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+                <button id="goDaily" class="primary">Start Today</button>
+                <button id="goDailySetup" class="btn">Choose topic</button>
+              </div>
+            </div>
 
-        <label class="field">
-          <span>Level</span>
-          <select id="level">
-            <option>Beginner</option>
-            <option>Intermediate</option>
-            <option>Advanced</option>
-          </select>
-        </label>
+            <div class="action-card">
+              <div class="action-head">
+                <div>
+                  <p class="action-title">Custom Quiz</p>
+                  <p class="action-sub">Choose a category and level. Practice or timed.</p>
+                </div>
+                <span class="pill">Custom</span>
+              </div>
 
-        <label class="field inline">
-          <input id="timed" type="checkbox" checked />
-          <span>Timed mode (20 seconds per question)</span>
-        </label>
+              <div class="grid" style="margin-top:12px;">
+                <label class="field">
+                  <span>Category</span>
+                  <select id="category">
+                    <option>Qur’an</option>
+                    <option>Seerah</option>
+                    <option>Fiqh</option>
+                    <option>Tawheed</option>
+                    <option>Arabic</option>
+                    <option>Adhkaar</option>
+                  </select>
+                </label>
 
-        <label class="field">
-          <span>Questions</span>
-          <select id="count">
-            <option value="20" selected>20</option>
-            <option value="10">10</option>
-          </select>
-        </label>
+                <label class="field">
+                  <span>Level</span>
+                  <select id="level">
+                    <option>Beginner</option>
+                    <option>Intermediate</option>
+                    <option>Advanced</option>
+                  </select>
+                </label>
 
-        <button id="startBtn" class="primary">Start Quiz</button>
+                <label class="field inline">
+                  <input id="timed" type="checkbox" checked />
+                  <span>Timed mode (20 seconds per question)</span>
+                </label>
 
-        <p id="status" class="muted"></p>
+                <label class="field">
+                  <span>Questions</span>
+                  <select id="count">
+                    <option value="20" selected>20</option>
+                    <option value="10">10</option>
+                  </select>
+                </label>
+
+                <button id="startBtn" class="primary">Start Quiz</button>
+                <p id="status" class="muted"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="kpi">
+          <div class="kpi-card">
+            <p class="kpi-label">Streak</p>
+            <p class="kpi-value">🔥 ${streakLabel}</p>
+            <p class="muted" style="margin:8px 0 0 0; font-size:12px;">
+              Last active: ${progress.lastActiveDate || "Not yet"}
+            </p>
+          </div>
+
+          <div class="kpi-card">
+            <p class="kpi-label">Last attempt</p>
+            <p class="kpi-value">${last ? `${last.score}/${last.total}` : "—"}</p>
+            <p class="muted" style="margin:8px 0 0 0; font-size:12px;">
+              ${lastAttemptText}
+            </p>
+          </div>
+
+          <div class="kpi-card">
+            <p class="kpi-label">Best</p>
+            <p class="kpi-value">⭐ ${bestEntries.length ? `${bestEntries.sort((a,b)=>b[1]-a[1])[0][1]}%` : "—"}</p>
+            <p class="muted" style="margin:8px 0 0 0; font-size:12px;">
+              ${bestText}
+            </p>
+          </div>
+
+          <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+            <button id="goProgress" class="btn">View Progress</button>
+          </div>
+        </div>
       </div>
     </section>
   `;
+
+  document.getElementById("goDaily").addEventListener("click", () => {
+    window.location.hash = "daily";
+    // Let daily page handle the locked quiz
+  });
+
+  document.getElementById("goDailySetup").addEventListener("click", () => {
+    window.location.hash = "daily";
+  });
+
+  document.getElementById("goProgress").addEventListener("click", () => {
+    window.location.hash = "progress";
+  });
+
+  const startBtn = document.getElementById("startBtn");
+  startBtn.addEventListener("click", async () => {
+    const category = document.getElementById("category").value;
+    const level = document.getElementById("level").value;
+    const timed = document.getElementById("timed").checked;
+    const count = Number(document.getElementById("count").value);
+    const status = document.getElementById("status");
+
+    state.lastSettings = { category, level, timed, count, mode: "normal" };
+
+    try {
+      const all = await loadQuestions();
+      const pool = all.filter((q) => q.category === category && q.level === level);
+
+      if (pool.length === 0) {
+        status.textContent =
+          `No questions found for ${category} • ${level}. Add them in data/questions.json.`;
+        return;
+      }
+
+      state.quizQuestions = pickRandom(pool, Math.min(count, pool.length));
+      state.index = 0;
+      state.score = 0;
+      state.timed = timed;
+
+      renderQuiz();
+    } catch (err) {
+      status.textContent = String(err.message || err);
+    }
+  });
+}
+
 
   document.getElementById("dailyGo").addEventListener("click", () => {
     window.location.hash = "daily";
