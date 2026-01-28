@@ -443,7 +443,7 @@ function renderHome() {
       status.textContent = String(err.message || err);
     }
   });
-}
+
 
 async function renderDaily() {
   const today = todayISO();
