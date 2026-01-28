@@ -5,6 +5,9 @@ const app = document.getElementById("app");
 ======================= */
 const STORAGE_KEY = "masalah_progress_v1";
 
+// Stores the locked daily quiz selection for today
+const DAILY_KEY = "masalah_daily_v1";
+
 function todayISO() {
   return new Date().toISOString().slice(0, 10); // YYYY-MM-DD
 }
@@ -75,7 +78,7 @@ const state = {
   secondsPerQuestion: 20,
   timerId: null,
   timeLeft: 20,
-  lastSettings: null
+  lastSettings: null // { category, level, timed, count, mode? }
 };
 
 /* =======================
@@ -99,6 +102,106 @@ function pickRandom(arr, n) {
   return copy.slice(0, n);
 }
 
+/* =======================
+   Deterministic helpers
+======================= */
+function hashStringToInt(str) {
+  // FNV-1a like hash
+  let h = 2166136261;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return Math.abs(h);
+}
+
+function seededShuffle(arr, seedStr) {
+  const copy = [...arr];
+  let seed = hashStringToInt(seedStr);
+
+  for (let i = copy.length - 1; i > 0; i--) {
+    seed = (seed * 1664525 + 1013904223) % 4294967296;
+    const j = seed % (i + 1);
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+/* =======================
+   Daily quiz (no reroll)
+======================= */
+function loadDailyState() {
+  const raw = localStorage.getItem(DAILY_KEY);
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+function saveDailyState(daily) {
+  localStorage.setItem(DAILY_KEY, JSON.stringify(daily));
+}
+
+/**
+ * Locks today's daily quiz: picks question IDs deterministically once and stores them.
+ * This prevents "rerolling" by refreshing the page.
+ */
+async function getOrCreateDailyQuiz(category, level, count) {
+  const today = todayISO();
+  const existing = loadDailyState();
+
+  // If we already locked a daily quiz for today with same category+level+count, reuse it.
+  if (
+    existing &&
+    existing.date === today &&
+    existing.category === category &&
+    existing.level === level &&
+    existing.count === count &&
+    Array.isArray(existing.questionIds) &&
+    existing.questionIds.length
+  ) {
+    return existing;
+  }
+
+  // Otherwise create a new locked daily quiz for today
+  const all = await loadQuestions();
+  const pool = all.filter((q) => q.category === category && q.level === level);
+
+  if (!pool.length) {
+    return {
+      date: today,
+      category,
+      level,
+      count,
+      questionIds: []
+    };
+  }
+
+  const seed = `masalah_daily_${today}_${category}_${level}`;
+  const shuffled = seededShuffle(pool, seed);
+  const chosen = shuffled.slice(0, Math.min(count, shuffled.length));
+  const questionIds = chosen.map((q) => q.id);
+
+  const daily = { date: today, category, level, count, questionIds };
+  saveDailyState(daily);
+  return daily;
+}
+
+function buildQuestionsByIds(all, ids) {
+  const map = new Map(all.map((q) => [q.id, q]));
+  const ordered = [];
+  for (const id of ids) {
+    const q = map.get(id);
+    if (q) ordered.push(q);
+  }
+  return ordered;
+}
+
+/* =======================
+   Timer
+======================= */
 function clearTimer() {
   if (state.timerId) {
     clearInterval(state.timerId);
@@ -137,6 +240,8 @@ function renderHome() {
       <p class="muted">Choose category and level. Timed mode is 20 seconds per question.</p>
 
       <div class="grid">
+        <button id="dailyGo" class="btn">Today’s Quiz</button>
+
         <label class="field">
           <span>Category</span>
           <select id="category">
@@ -178,6 +283,10 @@ function renderHome() {
     </section>
   `;
 
+  document.getElementById("dailyGo").addEventListener("click", () => {
+    window.location.hash = "daily";
+  });
+
   const startBtn = document.getElementById("startBtn");
   startBtn.addEventListener("click", async () => {
     const category = document.getElementById("category").value;
@@ -186,7 +295,7 @@ function renderHome() {
     const count = Number(document.getElementById("count").value);
     const status = document.getElementById("status");
 
-    state.lastSettings = { category, level, timed, count };
+    state.lastSettings = { category, level, timed, count, mode: "normal" };
 
     try {
       const all = await loadQuestions();
@@ -210,6 +319,88 @@ function renderHome() {
   });
 }
 
+async function renderDaily() {
+  const today = todayISO();
+  const existing = loadDailyState();
+  const defaultCategory = existing?.date === today ? existing.category : "Qur’an";
+  const defaultLevel = existing?.date === today ? existing.level : "Beginner";
+
+  app.innerHTML = `
+    <section class="card">
+      <h2>Today’s Quiz</h2>
+      <p class="muted">This quiz is locked for today. Refreshing won’t change the questions.</p>
+
+      <div class="grid" style="margin-top:12px;">
+        <label class="field">
+          <span>Category</span>
+          <select id="dailyCategory">
+            <option ${defaultCategory === "Qur’an" ? "selected" : ""}>Qur’an</option>
+            <option ${defaultCategory === "Seerah" ? "selected" : ""}>Seerah</option>
+            <option ${defaultCategory === "Fiqh" ? "selected" : ""}>Fiqh</option>
+            <option ${defaultCategory === "Tawheed" ? "selected" : ""}>Tawheed</option>
+            <option ${defaultCategory === "Arabic" ? "selected" : ""}>Arabic</option>
+            <option ${defaultCategory === "Adhkaar" ? "selected" : ""}>Adhkaar</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span>Level</span>
+          <select id="dailyLevel">
+            <option ${defaultLevel === "Beginner" ? "selected" : ""}>Beginner</option>
+            <option ${defaultLevel === "Intermediate" ? "selected" : ""}>Intermediate</option>
+            <option ${defaultLevel === "Advanced" ? "selected" : ""}>Advanced</option>
+          </select>
+        </label>
+
+        <label class="field inline">
+          <input id="dailyTimed" type="checkbox" checked />
+          <span>Timed mode (20 seconds per question)</span>
+        </label>
+
+        <button id="dailyStartBtn" class="primary">Start Today’s Quiz</button>
+        <p id="dailyStatus" class="muted"></p>
+
+        ${
+          existing && existing.date === today && existing.questionIds?.length
+            ? `<p class="muted">Locked for today: ${existing.category} • ${existing.level} (${existing.questionIds.length} questions)</p>`
+            : `<p class="muted">No locked quiz yet for today. Start one to lock it.</p>`
+        }
+      </div>
+    </section>
+  `;
+
+  document.getElementById("dailyStartBtn").addEventListener("click", async () => {
+    const category = document.getElementById("dailyCategory").value;
+    const level = document.getElementById("dailyLevel").value;
+    const timed = document.getElementById("dailyTimed").checked;
+    const status = document.getElementById("dailyStatus");
+
+    const count = 20;
+
+    try {
+      const daily = await getOrCreateDailyQuiz(category, level, count);
+
+      if (!daily.questionIds.length) {
+        status.textContent = `No questions found for ${category} • ${level}. Add them in data/questions.json.`;
+        return;
+      }
+
+      const all = await loadQuestions();
+      const chosen = buildQuestionsByIds(all, daily.questionIds);
+
+      state.lastSettings = { category, level, timed, count: chosen.length, mode: "daily" };
+      state.quizQuestions = chosen;
+      state.index = 0;
+      state.score = 0;
+      state.timed = timed;
+
+      renderQuiz();
+    } catch (err) {
+      status.textContent = String(err.message || err);
+    }
+  });
+}
+
 function renderQuiz() {
   const total = state.quizQuestions.length;
   const q = state.quizQuestions[state.index];
@@ -220,6 +411,11 @@ function renderQuiz() {
         <div>
           <h2 style="margin:0;">Question ${state.index + 1} / ${total}</h2>
           <p class="muted" style="margin:6px 0 0 0;">Score: ${state.score}</p>
+          ${
+            state.lastSettings?.mode === "daily"
+              ? `<p class="muted" style="margin:6px 0 0 0;">Mode: Today’s Quiz</p>`
+              : ``
+          }
         </div>
 
         ${
@@ -259,7 +455,9 @@ function renderQuiz() {
       </div>
 
       ${
-        state.lastSettings && state.lastSettings.count > total
+        state.lastSettings &&
+        state.lastSettings.mode !== "daily" &&
+        state.lastSettings.count > total
           ? `<p class="muted" style="margin-top:12px;">
                Note: You selected ${state.lastSettings.count} questions, but only ${total} exist for this category/level right now.
              </p>`
@@ -391,6 +589,12 @@ function renderResults() {
     const s = state.lastSettings;
     if (!s) return renderHome();
 
+    // Daily should NOT reroll. Send them back to Daily screen instead.
+    if (s.mode === "daily") {
+      window.location.hash = "daily";
+      return;
+    }
+
     const all = await loadQuestions();
     const pool = all.filter((q) => q.category === s.category && q.level === s.level);
     const chosen = pickRandom(pool, Math.min(s.count, pool.length));
@@ -485,6 +689,7 @@ function renderProgress() {
 ======================= */
 function render(route) {
   if (route === "progress") return renderProgress();
+  if (route === "daily") return renderDaily();
   return renderHome();
 }
 
