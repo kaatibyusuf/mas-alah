@@ -13,13 +13,13 @@
       <div class="wrap topbar-inner">
         <div class="brand">
           <div class="brand-mark">م</div>
-          <div>
+          <div class="brand-text">
             <h1 class="brand-name">Mas'alah</h1>
-            <p class="brand-sub">Quick Islamic quizzes. One question at a time.</p>
+            <p class="brand-sub">Short Islamic quizzes. One steady step daily.</p>
           </div>
         </div>
 
-        <nav class="nav">
+        <nav class="nav" aria-label="Primary navigation">
           <button class="nav-btn" data-route="home" type="button">Home</button>
           <button class="nav-btn" data-route="daily" type="button">Daily</button>
           <button class="nav-btn" data-route="progress" type="button">Progress</button>
@@ -27,15 +27,17 @@
       </div>
     </header>
 
-    <main id="app" class="wrap">
+    <main id="app" class="wrap" role="main">
       <!-- App screens render here -->
     </main>
 
-    <footer class="footer wrap">
-      <p class="muted">Built for consistency. Small steps daily.</p>
+    <footer class="footer">
+      <div class="wrap footer-inner">
+        <p class="muted">Built for consistency. Quiet progress, every day.</p>
+      </div>
     </footer>
 
     <!-- Load app AFTER the HTML -->
-    <script src="scripts/app.js"></script>
+    <script src="scripts/app.js" type="module"></script>
   </body>
 </html>

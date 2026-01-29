@@ -187,6 +187,18 @@ function buildQuestionsByIds(all, ids) {
 }
 
 /* =======================
+   Nav active state
+======================= */
+function setActiveNav(route) {
+  const r = route || "home";
+  document.querySelectorAll(".nav-btn[data-route]").forEach((b) => {
+    const active = b.dataset.route === r;
+    if (active) b.setAttribute("aria-current", "page");
+    else b.removeAttribute("aria-current");
+  });
+}
+
+/* =======================
    Timer
 ======================= */
 function clearTimer() {
@@ -246,32 +258,32 @@ function renderHome() {
     <section class="home-hero">
       <div class="hero-row">
         <div>
-          <h2 class="hero-title">Stay consistent. One quiz a day.</h2>
+          <h2 class="hero-title">A quieter way to stay consistent.</h2>
           <p class="hero-text">
-            Mas'alah helps you test what you know, learn from short explanations, and build a streak without pressure.
+            Short quizzes. Clear explanations. Steady progress you can actually keep up with.
           </p>
 
           <div class="home-actions">
             <div class="action-card">
               <div class="action-head">
                 <div>
-                  <p class="action-title">Today’s Quiz</p>
-                  <p class="action-sub">Locked for today. Same questions even after refresh.</p>
+                  <p class="action-title">Today’s quiz</p>
+                  <p class="action-sub">Locked for today. Refreshing will not change the questions.</p>
                 </div>
                 <span class="pill">Daily</span>
               </div>
 
               <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-                <button id="goDaily" class="primary">Start Today</button>
-                <button id="goDailySetup" class="btn">Choose topic</button>
+                <button id="goDaily" class="primary" type="button">Start today</button>
+                <button id="goDailySetup" class="btn" type="button">Choose topic</button>
               </div>
             </div>
 
             <div class="action-card">
               <div class="action-head">
                 <div>
-                  <p class="action-title">Custom Quiz</p>
-                  <p class="action-sub">Choose a category and level. Practice or timed.</p>
+                  <p class="action-title">Custom quiz</p>
+                  <p class="action-sub">Pick a topic and level. Use timed mode if you want focus.</p>
                 </div>
                 <span class="pill">Custom</span>
               </div>
@@ -311,7 +323,7 @@ function renderHome() {
                   </select>
                 </label>
 
-                <button id="startBtn" class="primary">Start Quiz</button>
+                <button id="startBtn" class="primary" type="button">Start quiz</button>
                 <p id="status" class="muted"></p>
               </div>
             </div>
@@ -344,7 +356,7 @@ function renderHome() {
           </div>
 
           <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-            <button id="goProgress" class="btn">View Progress</button>
+            <button id="goProgress" class="btn" type="button">View progress</button>
           </div>
         </div>
       </div>
@@ -401,8 +413,8 @@ async function renderDaily() {
 
   app.innerHTML = `
     <section class="card">
-      <h2>Today’s Quiz</h2>
-      <p class="muted">This quiz is locked for today. Refreshing won’t change the questions.</p>
+      <h2>Today’s quiz</h2>
+      <p class="muted">Locked for today. Refreshing will not change the questions.</p>
 
       <div class="grid" style="margin-top:12px;">
         <label class="field">
@@ -431,13 +443,13 @@ async function renderDaily() {
           <span>Timed mode (20 seconds per question)</span>
         </label>
 
-        <button id="dailyStartBtn" class="primary">Start Today’s Quiz</button>
+        <button id="dailyStartBtn" class="primary" type="button">Start</button>
         <p id="dailyStatus" class="muted"></p>
 
         ${
           existing && existing.date === today && existing.questionIds?.length
-            ? `<p class="muted">Locked for today: ${existing.category} • ${existing.level} (${existing.questionIds.length} questions)</p>`
-            : `<p class="muted">No locked quiz yet for today. Start one to lock it.</p>`
+            ? `<p class="muted">Locked today: ${existing.category} • ${existing.level} (${existing.questionIds.length} questions)</p>`
+            : `<p class="muted">No locked quiz yet. Start to lock it for today.</p>`
         }
       </div>
     </section>
@@ -462,14 +474,7 @@ async function renderDaily() {
       const all = await loadQuestions();
       const chosen = buildQuestionsByIds(all, daily.questionIds);
 
-      state.lastSettings = {
-        category,
-        level,
-        timed,
-        count: chosen.length,
-        mode: "daily"
-      };
-
+      state.lastSettings = { category, level, timed, count: chosen.length, mode: "daily" };
       state.quizQuestions = chosen;
       state.index = 0;
       state.score = 0;
@@ -494,7 +499,7 @@ function renderQuiz() {
           <p class="muted" style="margin:6px 0 0 0;">Score: ${state.score}</p>
           ${
             state.lastSettings?.mode === "daily"
-              ? `<p class="muted" style="margin:6px 0 0 0;">Mode: Today’s Quiz</p>`
+              ? `<p class="muted" style="margin:6px 0 0 0;">Mode: Today’s quiz</p>`
               : ``
           }
         </div>
@@ -519,7 +524,7 @@ function renderQuiz() {
         ${q.options
           .map(
             (opt, idx) => `
-              <button class="optionBtn" data-idx="${idx}">
+              <button class="optionBtn" data-idx="${idx}" type="button">
                 <span class="badge">${String.fromCharCode(65 + idx)}</span>
                 <span>${opt}</span>
               </button>
@@ -531,8 +536,8 @@ function renderQuiz() {
       <div id="feedback" class="feedback" style="display:none;"></div>
 
       <div style="display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;">
-        <button id="quitBtn" class="btn">Quit</button>
-        <button id="nextBtn" class="btn" style="display:none;">Next</button>
+        <button id="quitBtn" class="btn" type="button">Quit</button>
+        <button id="nextBtn" class="btn" style="display:none;" type="button">Next</button>
       </div>
 
       ${
@@ -540,7 +545,7 @@ function renderQuiz() {
         state.lastSettings.mode !== "daily" &&
         state.lastSettings.count > total
           ? `<p class="muted" style="margin-top:12px;">
-               Note: You selected ${state.lastSettings.count} questions, but only ${total} exist for this category/level right now.
+               Note: You selected ${state.lastSettings.count} questions, but only ${total} exist for this category and level right now.
              </p>`
           : ``
       }
@@ -590,7 +595,7 @@ function showFeedback(selectedIdx) {
   const nextBtn = document.getElementById("nextBtn");
   nextBtn.style.display = "inline-block";
   nextBtn.textContent =
-    state.index === state.quizQuestions.length - 1 ? "See Results" : "Next";
+    state.index === state.quizQuestions.length - 1 ? "See results" : "Next";
 
   nextBtn.onclick = () => {
     feedback.style.display = "none";
@@ -641,15 +646,15 @@ function renderResults() {
 
       <div class="card" style="margin-top:12px;">
         <p class="muted" style="margin:0 0 8px 0;">Share to compete</p>
-        <textarea id="shareText" rows="3" style="width:100%; padding:10px; border-radius:10px; border:1px solid #ddd;">I scored ${state.score}/${total} in Mas'alah. ${category} (${level}). Can you beat that?</textarea>
-        <button id="copyBtn" class="btn" style="margin-top:10px;">Copy</button>
+        <textarea id="shareText" rows="3" style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(20,22,35,.18);">I scored ${state.score}/${total} in Mas'alah. ${category} (${level}). Can you beat that?</textarea>
+        <button id="copyBtn" class="btn" style="margin-top:10px;" type="button">Copy</button>
         <p id="copyStatus" class="muted" style="margin-top:8px;"></p>
       </div>
 
       <div style="display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;">
-        <button id="tryAgainBtn" class="btn">Try Again</button>
-        <button id="progressBtn" class="btn">Progress</button>
-        <button id="homeBtn" class="btn">Back Home</button>
+        <button id="tryAgainBtn" class="btn" type="button">Try again</button>
+        <button id="progressBtn" class="btn" type="button">Progress</button>
+        <button id="homeBtn" class="btn" type="button">Back home</button>
       </div>
     </section>
   `;
@@ -752,8 +757,8 @@ function renderProgress() {
         </div>
 
         <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          <button id="resetProgress" class="btn">Reset progress</button>
-          <button id="backHome" class="btn">Back Home</button>
+          <button id="resetProgress" class="btn" type="button">Reset progress</button>
+          <button id="backHome" class="btn" type="button">Back home</button>
         </div>
       </div>
     </section>
@@ -772,9 +777,17 @@ function renderProgress() {
 /* =======================
    Routing
 ======================= */
+function getRoute() {
+  return (window.location.hash || "#home").slice(1);
+}
+
 function render(route) {
-  if (route === "progress") return renderProgress();
-  if (route === "daily") return renderDaily();
+  const r = route || "home";
+  setActiveNav(r);
+  clearTimer();
+
+  if (r === "progress") return renderProgress();
+  if (r === "daily") return renderDaily();
   return renderHome();
 }
 
@@ -789,17 +802,9 @@ function bindNavRoutes() {
 
 window.addEventListener("DOMContentLoaded", () => {
   bindNavRoutes();
-  render((window.location.hash || "#home").slice(1));
+  render(getRoute());
 });
 
 window.addEventListener("hashchange", () => {
-  render((window.location.hash || "#home").slice(1));
+  render(getRoute());
 });
-
-
-window.addEventListener("hashchange", () => {
-  const route = (window.location.hash || "#home").slice(1);
-  render(route);
-});
-
-render((window.location.hash || "#home").slice(1));
