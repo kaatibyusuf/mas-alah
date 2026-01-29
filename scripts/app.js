@@ -7,7 +7,7 @@ const STORAGE_KEY = "masalah_progress_v1";
 const DAILY_KEY = "masalah_daily_v1"; // locked daily quiz for today
 
 function todayISO() {
-  return new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+  return new Date().toISOString().slice(0, 10);
 }
 
 function loadProgress() {
@@ -16,7 +16,7 @@ function loadProgress() {
     return {
       streakCount: 0,
       lastActiveDate: null,
-      bestScores: {}, // "Category|Level" -> percent
+      bestScores: {},
       lastAttempt: null
     };
   }
@@ -51,7 +51,6 @@ function updateStreak(progress) {
     progress.lastActiveDate = today;
     return;
   }
-
   if (last === today) return;
 
   const diffDays = Math.round(
@@ -187,18 +186,6 @@ function buildQuestionsByIds(all, ids) {
 }
 
 /* =======================
-   Nav active state
-======================= */
-function setActiveNav(route) {
-  const r = route || "home";
-  document.querySelectorAll(".nav-btn[data-route]").forEach((b) => {
-    const active = b.dataset.route === r;
-    if (active) b.setAttribute("aria-current", "page");
-    else b.removeAttribute("aria-current");
-  });
-}
-
-/* =======================
    Timer
 ======================= */
 function clearTimer() {
@@ -230,149 +217,165 @@ function startTimer() {
 }
 
 /* =======================
+   Nav active state
+======================= */
+function setActiveNav(route) {
+  document.querySelectorAll(".nav-btn[data-route]").forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.route === route);
+  });
+}
+
+/* =======================
    Screens
 ======================= */
 function renderHome() {
   const progress = loadProgress();
   const last = progress.lastAttempt;
 
-  const streakLabel =
-    progress.streakCount === 1 ? "1 day" : `${progress.streakCount} days`;
-
-  const lastAttemptText = last
-    ? `${last.category} • ${last.level} (${last.percent}%)`
-    : "No attempts yet";
+  const streakLabel = progress.streakCount === 1 ? "1 day" : `${progress.streakCount} days`;
 
   const bestEntries = Object.entries(progress.bestScores);
-  let bestText = "No best score yet";
   let bestHeadline = "—";
+  let bestText = "No best score yet.";
   if (bestEntries.length) {
     bestEntries.sort((a, b) => b[1] - a[1]);
     const [key, val] = bestEntries[0];
     const [cat, lvl] = key.split("|");
-    bestText = `${val}% (${cat} • ${lvl})`;
     bestHeadline = `${val}%`;
+    bestText = `${val}% in ${cat} (${lvl}).`;
   }
 
+  const lastHeadline = last ? `${last.score}/${last.total}` : "—";
+  const lastText = last ? `${last.category} (${last.level}), ${last.percent}%` : "No attempts yet.";
+
   app.innerHTML = `
-    <section class="home-hero">
-      <div class="hero-row">
-        <div>
-          <h2 class="hero-title">A quieter way to stay consistent.</h2>
-          <p class="hero-text">
-            Short quizzes. Clear explanations. Steady progress you can actually keep up with.
+    <section class="home">
+      <div class="hero">
+        <div class="hero-card">
+          <h2 class="hero-title">Learn steadily, without noise.</h2>
+          <p class="hero-copy">
+            Mas'alah gives you short Islamic quizzes with clear feedback.
+            Build a daily habit, spot weak areas, and improve one session at a time.
           </p>
 
-          <div class="home-actions">
-            <div class="action-card">
-              <div class="action-head">
-                <div>
-                  <p class="action-title">Today’s quiz</p>
-                  <p class="action-sub">Locked for today. Refreshing will not change the questions.</p>
-                </div>
-                <span class="pill">Daily</span>
-              </div>
-
-              <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-                <button id="goDaily" class="primary" type="button">Start today</button>
-                <button id="goDailySetup" class="btn" type="button">Choose topic</button>
-              </div>
-            </div>
-
-            <div class="action-card">
-              <div class="action-head">
-                <div>
-                  <p class="action-title">Custom quiz</p>
-                  <p class="action-sub">Pick a topic and level. Use timed mode if you want focus.</p>
-                </div>
-                <span class="pill">Custom</span>
-              </div>
-
-              <div class="grid" style="margin-top:12px;">
-                <label class="field">
-                  <span>Category</span>
-                  <select id="category">
-                    <option>Qur’an</option>
-                    <option>Seerah</option>
-                    <option>Fiqh</option>
-                    <option>Tawheed</option>
-                    <option>Arabic</option>
-                    <option>Adhkaar</option>
-                  </select>
-                </label>
-
-                <label class="field">
-                  <span>Level</span>
-                  <select id="level">
-                    <option>Beginner</option>
-                    <option>Intermediate</option>
-                    <option>Advanced</option>
-                  </select>
-                </label>
-
-                <label class="field inline">
-                  <input id="timed" type="checkbox" checked />
-                  <span>Timed mode (20 seconds per question)</span>
-                </label>
-
-                <label class="field">
-                  <span>Questions</span>
-                  <select id="count">
-                    <option value="20" selected>20</option>
-                    <option value="10">10</option>
-                  </select>
-                </label>
-
-                <button id="startBtn" class="primary" type="button">Start quiz</button>
-                <p id="status" class="muted"></p>
-              </div>
-            </div>
+          <div class="hero-cta">
+            <button id="ctaDaily" class="primary" type="button">Start Today’s Quiz</button>
+            <button id="ctaCustom" class="btn" type="button">Create a Custom Quiz</button>
           </div>
+
+          <ul class="hero-bullets">
+            <li><span class="dot"></span><span>Instant feedback with short explanations.</span></li>
+            <li><span class="dot"></span><span>Daily quiz is locked, so you focus instead of refreshing.</span></li>
+            <li><span class="dot"></span><span>Progress tracking stays on your device for now.</span></li>
+          </ul>
         </div>
 
-        <div class="kpi">
-          <div class="kpi-card">
-            <p class="kpi-label">Streak</p>
-            <p class="kpi-value">🔥 ${streakLabel}</p>
-            <p class="muted" style="margin:8px 0 0 0; font-size:12px;">
-              Last active: ${progress.lastActiveDate || "Not yet"}
-            </p>
+        <div class="sidebar">
+          <div class="stat">
+            <h4>Streak</h4>
+            <div class="value">🔥 ${streakLabel}</div>
+            <div class="sub">Last active: ${progress.lastActiveDate || "Not yet"}</div>
           </div>
 
-          <div class="kpi-card">
-            <p class="kpi-label">Last attempt</p>
-            <p class="kpi-value">${last ? `${last.score}/${last.total}` : "—"}</p>
-            <p class="muted" style="margin:8px 0 0 0; font-size:12px;">
-              ${lastAttemptText}
-            </p>
+          <div class="stat">
+            <h4>Last attempt</h4>
+            <div class="value">${lastHeadline}</div>
+            <div class="sub">${lastText}</div>
           </div>
 
-          <div class="kpi-card">
-            <p class="kpi-label">Best</p>
-            <p class="kpi-value">⭐ ${bestHeadline}</p>
-            <p class="muted" style="margin:8px 0 0 0; font-size:12px;">
-              ${bestText}
-            </p>
+          <div class="stat">
+            <h4>Best</h4>
+            <div class="value">⭐ ${bestHeadline}</div>
+            <div class="sub">${bestText}</div>
           </div>
 
-          <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-            <button id="goProgress" class="btn" type="button">View progress</button>
+          <button id="ctaProgress" class="btn" type="button">View Progress</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-head">
+          <h3 class="section-title">Choose how you want to study</h3>
+          <p class="muted" style="margin:0;">Timed mode is 20 seconds per question.</p>
+        </div>
+
+        <div class="cards2">
+          <div class="mini">
+            <p class="mini-title">Today’s Quiz</p>
+            <p class="mini-sub">
+              Pick a topic and level. Once you start, your questions stay the same until the date changes.
+            </p>
+            <div class="row">
+              <button id="goDaily" class="primary" type="button">Open Daily</button>
+              <button id="goDailySetup" class="btn" type="button">Choose topic</button>
+            </div>
+          </div>
+
+          <div class="mini">
+            <p class="mini-title">Custom Quiz</p>
+            <p class="mini-sub">
+              Practice a specific area. Useful when you want repetition and fast review.
+            </p>
+
+            <div class="grid" style="margin-top:12px;">
+              <label class="field">
+                <span>Category</span>
+                <select id="category">
+                  <option>Qur’an</option>
+                  <option>Seerah</option>
+                  <option>Fiqh</option>
+                  <option>Tawheed</option>
+                  <option>Arabic</option>
+                  <option>Adhkaar</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span>Level</span>
+                <select id="level">
+                  <option>Beginner</option>
+                  <option>Intermediate</option>
+                  <option>Advanced</option>
+                </select>
+              </label>
+
+              <label class="field inline">
+                <input id="timed" type="checkbox" checked />
+                <span>Timed mode (20 seconds per question)</span>
+              </label>
+
+              <label class="field">
+                <span>Questions</span>
+                <select id="count">
+                  <option value="20" selected>20</option>
+                  <option value="10">10</option>
+                </select>
+              </label>
+
+              <button id="startBtn" class="primary" type="button">Start Custom Quiz</button>
+              <p id="status" class="muted" style="margin:0;"></p>
+            </div>
           </div>
         </div>
       </div>
     </section>
   `;
 
+  document.getElementById("ctaDaily").addEventListener("click", () => {
+    window.location.hash = "#daily";
+  });
+  document.getElementById("ctaCustom").addEventListener("click", () => {
+    document.getElementById("category")?.focus();
+  });
+  document.getElementById("ctaProgress").addEventListener("click", () => {
+    window.location.hash = "#progress";
+  });
+
   document.getElementById("goDaily").addEventListener("click", () => {
     window.location.hash = "#daily";
   });
-
   document.getElementById("goDailySetup").addEventListener("click", () => {
     window.location.hash = "#daily";
-  });
-
-  document.getElementById("goProgress").addEventListener("click", () => {
-    window.location.hash = "#progress";
   });
 
   document.getElementById("startBtn").addEventListener("click", async () => {
@@ -413,8 +416,10 @@ async function renderDaily() {
 
   app.innerHTML = `
     <section class="card">
-      <h2>Today’s quiz</h2>
-      <p class="muted">Locked for today. Refreshing will not change the questions.</p>
+      <h2>Today’s Quiz</h2>
+      <p class="muted">
+        This quiz is locked for today. Refreshing won’t change the questions.
+      </p>
 
       <div class="grid" style="margin-top:12px;">
         <label class="field">
@@ -443,13 +448,13 @@ async function renderDaily() {
           <span>Timed mode (20 seconds per question)</span>
         </label>
 
-        <button id="dailyStartBtn" class="primary" type="button">Start</button>
-        <p id="dailyStatus" class="muted"></p>
+        <button id="dailyStartBtn" class="primary" type="button">Start Today’s Quiz</button>
+        <p id="dailyStatus" class="muted" style="margin:0;"></p>
 
         ${
           existing && existing.date === today && existing.questionIds?.length
-            ? `<p class="muted">Locked today: ${existing.category} • ${existing.level} (${existing.questionIds.length} questions)</p>`
-            : `<p class="muted">No locked quiz yet. Start to lock it for today.</p>`
+            ? `<p class="muted">Locked for today: ${existing.category} • ${existing.level} (${existing.questionIds.length} questions)</p>`
+            : `<p class="muted">No locked quiz yet for today. Start one to lock it.</p>`
         }
       </div>
     </section>
@@ -460,7 +465,6 @@ async function renderDaily() {
     const level = document.getElementById("dailyLevel").value;
     const timed = document.getElementById("dailyTimed").checked;
     const status = document.getElementById("dailyStatus");
-
     const count = 20;
 
     try {
@@ -499,7 +503,7 @@ function renderQuiz() {
           <p class="muted" style="margin:6px 0 0 0;">Score: ${state.score}</p>
           ${
             state.lastSettings?.mode === "daily"
-              ? `<p class="muted" style="margin:6px 0 0 0;">Mode: Today’s quiz</p>`
+              ? `<p class="muted" style="margin:6px 0 0 0;">Mode: Today’s Quiz</p>`
               : ``
           }
         </div>
@@ -539,16 +543,6 @@ function renderQuiz() {
         <button id="quitBtn" class="btn" type="button">Quit</button>
         <button id="nextBtn" class="btn" style="display:none;" type="button">Next</button>
       </div>
-
-      ${
-        state.lastSettings &&
-        state.lastSettings.mode !== "daily" &&
-        state.lastSettings.count > total
-          ? `<p class="muted" style="margin-top:12px;">
-               Note: You selected ${state.lastSettings.count} questions, but only ${total} exist for this category and level right now.
-             </p>`
-          : ``
-      }
     </section>
   `;
 
@@ -594,8 +588,7 @@ function showFeedback(selectedIdx) {
 
   const nextBtn = document.getElementById("nextBtn");
   nextBtn.style.display = "inline-block";
-  nextBtn.textContent =
-    state.index === state.quizQuestions.length - 1 ? "See results" : "Next";
+  nextBtn.textContent = state.index === state.quizQuestions.length - 1 ? "See Results" : "Next";
 
   nextBtn.onclick = () => {
     feedback.style.display = "none";
@@ -625,36 +618,30 @@ function renderResults() {
   const prevBest = progress.bestScores[key] ?? 0;
   progress.bestScores[key] = Math.max(prevBest, percent);
 
-  progress.lastAttempt = {
-    date: todayISO(),
-    category,
-    level,
-    score: state.score,
-    total,
-    percent
-  };
-
+  progress.lastAttempt = { date: todayISO(), category, level, score: state.score, total, percent };
   saveProgress(progress);
 
   app.innerHTML = `
     <section class="card">
       <h2>Results</h2>
       <p class="muted">Score</p>
-      <div style="font-size:34px; font-weight:800; margin:10px 0;">
+      <div style="font-size:34px; font-weight:900; margin:10px 0;">
         ${state.score} / ${total} (${percent}%)
       </div>
 
       <div class="card" style="margin-top:12px;">
         <p class="muted" style="margin:0 0 8px 0;">Share to compete</p>
-        <textarea id="shareText" rows="3" style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(20,22,35,.18);">I scored ${state.score}/${total} in Mas'alah. ${category} (${level}). Can you beat that?</textarea>
+        <textarea id="shareText" rows="3" style="width:100%; padding:10px; border-radius:10px; border:1px solid rgba(20,20,20,.18);">
+I scored ${state.score}/${total} in Mas'alah. ${category} (${level}). Can you beat that?
+        </textarea>
         <button id="copyBtn" class="btn" style="margin-top:10px;" type="button">Copy</button>
         <p id="copyStatus" class="muted" style="margin-top:8px;"></p>
       </div>
 
       <div style="display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;">
-        <button id="tryAgainBtn" class="btn" type="button">Try again</button>
+        <button id="tryAgainBtn" class="btn" type="button">Try Again</button>
         <button id="progressBtn" class="btn" type="button">Progress</button>
-        <button id="homeBtn" class="btn" type="button">Back home</button>
+        <button id="homeBtn" class="btn" type="button">Back Home</button>
       </div>
     </section>
   `;
@@ -714,7 +701,7 @@ function renderProgress() {
       <div class="grid" style="margin-top:12px;">
         <div class="card">
           <p class="muted" style="margin:0;">Streak</p>
-          <div style="font-size:28px; font-weight:800; margin-top:6px;">
+          <div style="font-size:28px; font-weight:900; margin-top:6px;">
             ${progress.streakCount} day${progress.streakCount === 1 ? "" : "s"}
           </div>
           <p class="muted" style="margin-top:6px;">
@@ -726,10 +713,10 @@ function renderProgress() {
           <p class="muted" style="margin:0;">Last attempt</p>
           ${
             last
-              ? `<div style="margin-top:8px; font-weight:700;">
+              ? `<div style="margin-top:8px; font-weight:800;">
                    ${last.category} • ${last.level}
                  </div>
-                 <div style="font-size:22px; font-weight:800; margin-top:6px;">
+                 <div style="font-size:22px; font-weight:900; margin-top:6px;">
                    ${last.score}/${last.total} (${last.percent}%)
                  </div>
                  <p class="muted" style="margin-top:6px;">${last.date}</p>`
@@ -758,7 +745,7 @@ function renderProgress() {
 
         <div style="display:flex; gap:10px; flex-wrap:wrap;">
           <button id="resetProgress" class="btn" type="button">Reset progress</button>
-          <button id="backHome" class="btn" type="button">Back home</button>
+          <button id="backHome" class="btn" type="button">Back Home</button>
         </div>
       </div>
     </section>
@@ -777,14 +764,9 @@ function renderProgress() {
 /* =======================
    Routing
 ======================= */
-function getRoute() {
-  return (window.location.hash || "#home").slice(1);
-}
-
 function render(route) {
   const r = route || "home";
   setActiveNav(r);
-  clearTimer();
 
   if (r === "progress") return renderProgress();
   if (r === "daily") return renderDaily();
@@ -794,17 +776,16 @@ function render(route) {
 function bindNavRoutes() {
   document.querySelectorAll("[data-route]").forEach((btn) => {
     btn.addEventListener("click", () => {
-      const route = btn.dataset.route;
-      window.location.hash = "#" + route;
+      window.location.hash = "#" + btn.dataset.route;
     });
   });
 }
 
 window.addEventListener("DOMContentLoaded", () => {
   bindNavRoutes();
-  render(getRoute());
+  render((window.location.hash || "#home").slice(1));
 });
 
 window.addEventListener("hashchange", () => {
-  render(getRoute());
+  render((window.location.hash || "#home").slice(1));
 });
