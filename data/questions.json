@@ -1,438 +1,548 @@
-,
-{
-  "id": "quran_beg_003",
-  "category": "Qur’an",
-  "level": "Beginner",
-  "question": "Which surah is known as Ikhlāṣ (Sincerity)?",
-  "options": ["Al-Ikhlāṣ", "Al-Kāfirūn", "Al-Falaq", "Al-ʿAṣr"],
-  "correctIndex": 0,
-  "explanation": "Surah Al-Ikhlāṣ affirms Allah’s oneness."
-},
-{
-  "id": "quran_beg_004",
-  "category": "Qur’an",
-  "level": "Beginner",
-  "question": "Which surah is the longest in the Qur’an?",
-  "options": ["Al-Baqarah", "Āl ʿImrān", "An-Nisā’", "Al-Mā’idah"],
-  "correctIndex": 0,
-  "explanation": "Surah Al-Baqarah is the longest chapter."
-},
-{
-  "id": "quran_beg_005",
-  "category": "Qur’an",
-  "level": "Beginner",
-  "question": "Which surah begins with 'Qul aʿūdhu bi Rabbil-falaq'?",
-  "options": ["Al-Falaq", "An-Nās", "Al-Kawthar", "Al-Masad"],
-  "correctIndex": 0,
-  "explanation": "That opening is from Surah Al-Falaq."
-},
-{
-  "id": "quran_beg_006",
-  "category": "Qur’an",
-  "level": "Beginner",
-  "question": "What is the name of the verse known as Āyat al-Kursī?",
-  "options": ["2:255", "1:1", "112:1", "36:1"],
-  "correctIndex": 0,
-  "explanation": "Āyat al-Kursī is verse 255 of Surah Al-Baqarah."
-},
-{
-  "id": "quran_beg_007",
-  "category": "Qur’an",
-  "level": "Beginner",
-  "question": "Which surah is called 'the Heart of the Qur’an' in common usage?",
-  "options": ["Yā-Sīn", "Al-Mulk", "Ar-Raḥmān", "Al-Wāqiʿah"],
-  "correctIndex": 0,
-  "explanation": "Many refer to Surah Yā-Sīn that way."
-},
-{
-  "id": "quran_beg_008",
-  "category": "Qur’an",
-  "level": "Beginner",
-  "question": "What does the word 'Sūrah' refer to?",
-  "options": ["A chapter", "A page", "A vowel", "A reciter"],
-  "correctIndex": 0,
-  "explanation": "A sūrah is a chapter of the Qur’an."
-},
-{
-  "id": "quran_beg_009",
-  "category": "Qur’an",
-  "level": "Beginner",
-  "question": "Which short surah ends with 'wa lam yakun lahu kufuwan aḥad'?",
-  "options": ["Al-Ikhlāṣ", "Al-Fātiḥah", "Al-ʿAṣr", "Al-Qadr"],
-  "correctIndex": 0,
-  "explanation": "That ending is from Surah Al-Ikhlāṣ."
-},
-{
-  "id": "quran_beg_010",
-  "category": "Qur’an",
-  "level": "Beginner",
-  "question": "Which surah is recommended to recite at night for protection (common sunnah practice)?",
-  "options": ["Al-Mulk", "Al-Fīl", "Al-Māʿūn", "Al-Qāriʿah"],
-  "correctIndex": 0,
-  "explanation": "Surah Al-Mulk is widely practiced for nightly recitation."
-},
+[
+  {
+    "id": "quran_beg_001",
+    "category": "Qur’an",
+    "level": "Beginner",
+    "question": "Which surah is called the Opening of the Qur’an?",
+    "options": ["Al-Fātiḥah", "Al-Baqarah", "Al-Ikhlāṣ", "An-Nās"],
+    "correctIndex": 0,
+    "explanation": "Al-Fātiḥah opens the Qur’an and is recited in every ṣalāh."
+  },
+  {
+    "id": "quran_beg_002",
+    "category": "Qur’an",
+    "level": "Beginner",
+    "question": "How many surahs are in the Qur’an?",
+    "options": ["114", "100", "120", "99"],
+    "correctIndex": 0,
+    "explanation": "The Qur’an contains 114 surahs."
+  },
+  {
+    "id": "seerah_beg_001",
+    "category": "Seerah",
+    "level": "Beginner",
+    "question": "In which city was the Prophet ﷺ born?",
+    "options": ["Makkah", "Madinah", "Ṭā’if", "Jerusalem"],
+    "correctIndex": 0,
+    "explanation": "The Prophet ﷺ was born in Makkah."
+  },
+  {
+    "id": "seerah_beg_002",
+    "category": "Seerah",
+    "level": "Beginner",
+    "question": "What is the migration from Makkah to Madinah called?",
+    "options": ["Hijrah", "Umrah", "Ḥajj", "Ṣulḥ"],
+    "correctIndex": 0,
+    "explanation": "The Hijrah marks the major migration to Madinah."
+  },
+  {
+    "id": "fiqh_beg_001",
+    "category": "Fiqh",
+    "level": "Beginner",
+    "question": "Which is a condition for ṣalāh to be valid?",
+    "options": ["Being in ṭahārah (purity)", "Eating before prayer", "Speaking in prayer", "Facing any direction"],
+    "correctIndex": 0,
+    "explanation": "Purity (ṭahārah) is required before ṣalāh."
+  },
+  {
+    "id": "fiqh_beg_002",
+    "category": "Fiqh",
+    "level": "Beginner",
+    "question": "How many obligatory prayers are there in a day?",
+    "options": ["Five", "Three", "Six", "Seven"],
+    "correctIndex": 0,
+    "explanation": "The obligatory prayers are five daily."
+  },
+  {
+    "id": "tawheed_beg_001",
+    "category": "Tawheed",
+    "level": "Beginner",
+    "question": "What does Tawḥīd mainly mean?",
+    "options": ["Worshipping Allah alone", "Worshipping angels", "Worshipping prophets", "Worshipping saints"],
+    "correctIndex": 0,
+    "explanation": "Tawḥīd is singling out Allah in worship."
+  },
+  {
+    "id": "tawheed_beg_002",
+    "category": "Tawheed",
+    "level": "Beginner",
+    "question": "Which act is the greatest opposite of Tawḥīd?",
+    "options": ["Shirk", "Ṣadaqah", "Ṣalāh", "Duʿā’"],
+    "correctIndex": 0,
+    "explanation": "Shirk is associating partners with Allah in worship."
+  },
+  {
+    "id": "arabic_beg_001",
+    "category": "Arabic",
+    "level": "Beginner",
+    "question": "What is the Arabic word for 'book'?",
+    "options": ["Kitāb", "Qalam", "Bayt", "Mā’"],
+    "correctIndex": 0,
+    "explanation": "Kitāb means book."
+  },
+  {
+    "id": "arabic_beg_002",
+    "category": "Arabic",
+    "level": "Beginner",
+    "question": "Which word means 'water' in Arabic?",
+    "options": ["Mā’", "Nār", "Rīḥ", "Samā’"],
+    "correctIndex": 0,
+    "explanation": "Mā’ means water."
+  },
+  {
+    "id": "adhkaar_beg_001",
+    "category": "Adhkaar",
+    "level": "Beginner",
+    "question": "What do you say after sneezing?",
+    "options": ["Alḥamdulillāh", "Subḥānallāh", "Allāhu Akbar", "Astaghfirullāh"],
+    "correctIndex": 0,
+    "explanation": "The sunnah is to say Alḥamdulillāh after sneezing."
+  },
+  {
+    "id": "adhkaar_beg_002",
+    "category": "Adhkaar",
+    "level": "Beginner",
+    "question": "Which phrase means 'Glory be to Allah'?",
+    "options": ["Subḥānallāh", "Alḥamdulillāh", "Allāhu Akbar", "Lā ilāha illa Allah"],
+    "correctIndex": 0,
+    "explanation": "Subḥānallāh means Glory be to Allah."
+  },
 
-{
-  "id": "seerah_beg_003",
-  "category": "Seerah",
-  "level": "Beginner",
-  "question": "Who was the Prophet ﷺ’s first wife?",
-  "options": ["Khadījah bint Khuwaylid", "ʿĀ’ishah bint Abī Bakr", "Ḥafṣah bint ʿUmar", "Zaynab bint Jaḥsh"],
-  "correctIndex": 0,
-  "explanation": "Khadījah (raḍiyallāhu ʿanhā) was his first wife."
-},
-{
-  "id": "seerah_beg_004",
-  "category": "Seerah",
-  "level": "Beginner",
-  "question": "Who accompanied the Prophet ﷺ in the cave during Hijrah?",
-  "options": ["Abū Bakr", "ʿUmar", "ʿUthmān", "ʿAlī"],
-  "correctIndex": 0,
-  "explanation": "Abū Bakr (raḍiyallāhu ʿanhu) accompanied him."
-},
-{
-  "id": "seerah_beg_005",
-  "category": "Seerah",
-  "level": "Beginner",
-  "question": "What is the Prophet ﷺ’s tribe called?",
-  "options": ["Quraysh", "Thaqīf", "Aws", "Khazraj"],
-  "correctIndex": 0,
-  "explanation": "He was from the Quraysh tribe."
-},
-{
-  "id": "seerah_beg_006",
-  "category": "Seerah",
-  "level": "Beginner",
-  "question": "Which city is known as the city of the Prophet ﷺ?",
-  "options": ["Madinah", "Makkah", "Baghdad", "Damascus"],
-  "correctIndex": 0,
-  "explanation": "Madinah is often called Madīnat an-Nabī."
-},
-{
-  "id": "seerah_beg_007",
-  "category": "Seerah",
-  "level": "Beginner",
-  "question": "What was the first major battle in Islam?",
-  "options": ["Badr", "Uḥud", "Khandaq", "Hunayn"],
-  "correctIndex": 0,
-  "explanation": "Badr was the first major battle."
-},
-{
-  "id": "seerah_beg_008",
-  "category": "Seerah",
-  "level": "Beginner",
-  "question": "What is the name of the Prophet ﷺ’s father?",
-  "options": ["ʿAbdullāh", "Abū Ṭālib", "Hāshim", "ʿAbdul-Muṭṭalib"],
-  "correctIndex": 0,
-  "explanation": "His father’s name was ʿAbdullāh."
-},
-{
-  "id": "seerah_beg_009",
-  "category": "Seerah",
-  "level": "Beginner",
-  "question": "What is the name of the Prophet ﷺ’s mother?",
-  "options": ["Āminah", "Ṣafiyyah", "Khadījah", "Fāṭimah"],
-  "correctIndex": 0,
-  "explanation": "His mother’s name was Āminah bint Wahb."
-},
-{
-  "id": "seerah_beg_010",
-  "category": "Seerah",
-  "level": "Beginner",
-  "question": "Which event is commonly called the Year of Sorrow (ʿĀm al-Ḥuzn)?",
-  "options": ["When Khadījah and Abū Ṭālib died", "When Badr happened", "When Makkah was conquered", "When the first revelation came"],
-  "correctIndex": 0,
-  "explanation": "It refers to the year Khadījah and Abū Ṭālib passed away."
-},
+  {
+    "id": "quran_beg_003",
+    "category": "Qur’an",
+    "level": "Beginner",
+    "question": "Which surah is known as Ikhlāṣ (Sincerity)?",
+    "options": ["Al-Ikhlāṣ", "Al-Kāfirūn", "Al-Falaq", "Al-ʿAṣr"],
+    "correctIndex": 0,
+    "explanation": "Surah Al-Ikhlāṣ affirms Allah’s oneness."
+  },
+  {
+    "id": "quran_beg_004",
+    "category": "Qur’an",
+    "level": "Beginner",
+    "question": "Which surah is the longest in the Qur’an?",
+    "options": ["Al-Baqarah", "Āl ʿImrān", "An-Nisā’", "Al-Mā’idah"],
+    "correctIndex": 0,
+    "explanation": "Surah Al-Baqarah is the longest chapter."
+  },
+  {
+    "id": "quran_beg_005",
+    "category": "Qur’an",
+    "level": "Beginner",
+    "question": "Which surah begins with 'Qul aʿūdhu bi Rabbil-falaq'?",
+    "options": ["Al-Falaq", "An-Nās", "Al-Kawthar", "Al-Masad"],
+    "correctIndex": 0,
+    "explanation": "That opening is from Surah Al-Falaq."
+  },
+  {
+    "id": "quran_beg_006",
+    "category": "Qur’an",
+    "level": "Beginner",
+    "question": "What is the name of the verse known as Āyat al-Kursī?",
+    "options": ["2:255", "1:1", "112:1", "36:1"],
+    "correctIndex": 0,
+    "explanation": "Āyat al-Kursī is verse 255 of Surah Al-Baqarah."
+  },
+  {
+    "id": "quran_beg_007",
+    "category": "Qur’an",
+    "level": "Beginner",
+    "question": "Which surah is called 'the Heart of the Qur’an' in common usage?",
+    "options": ["Yā-Sīn", "Al-Mulk", "Ar-Raḥmān", "Al-Wāqiʿah"],
+    "correctIndex": 0,
+    "explanation": "Many refer to Surah Yā-Sīn that way."
+  },
+  {
+    "id": "quran_beg_008",
+    "category": "Qur’an",
+    "level": "Beginner",
+    "question": "What does the word 'Sūrah' refer to?",
+    "options": ["A chapter", "A page", "A vowel", "A reciter"],
+    "correctIndex": 0,
+    "explanation": "A sūrah is a chapter of the Qur’an."
+  },
+  {
+    "id": "quran_beg_009",
+    "category": "Qur’an",
+    "level": "Beginner",
+    "question": "Which short surah ends with 'wa lam yakun lahu kufuwan aḥad'?",
+    "options": ["Al-Ikhlāṣ", "Al-Fātiḥah", "Al-ʿAṣr", "Al-Qadr"],
+    "correctIndex": 0,
+    "explanation": "That ending is from Surah Al-Ikhlāṣ."
+  },
+  {
+    "id": "quran_beg_010",
+    "category": "Qur’an",
+    "level": "Beginner",
+    "question": "Which surah is recommended to recite at night for protection (common sunnah practice)?",
+    "options": ["Al-Mulk", "Al-Fīl", "Al-Māʿūn", "Al-Qāriʿah"],
+    "correctIndex": 0,
+    "explanation": "Surah Al-Mulk is widely practiced for nightly recitation."
+  },
 
-{
-  "id": "fiqh_beg_003",
-  "category": "Fiqh",
-  "level": "Beginner",
-  "question": "Which direction do Muslims face in ṣalāh?",
-  "options": ["Qiblah (toward the Kaʿbah)", "Toward the sun", "Toward the east always", "Any direction"],
-  "correctIndex": 0,
-  "explanation": "The Qiblah is toward the Kaʿbah in Makkah."
-},
-{
-  "id": "fiqh_beg_004",
-  "category": "Fiqh",
-  "level": "Beginner",
-  "question": "What is wudū’?",
-  "options": ["Ablution before prayer", "A type of charity", "A funeral prayer", "A pilgrimage"],
-  "correctIndex": 0,
-  "explanation": "Wudū’ is washing specific parts for purity."
-},
-{
-  "id": "fiqh_beg_005",
-  "category": "Fiqh",
-  "level": "Beginner",
-  "question": "Which action breaks wudū’ (basic ruling)?",
-  "options": ["Using the restroom", "Smiling", "Reading Qur’an", "Making duʿā’"],
-  "correctIndex": 0,
-  "explanation": "Using the restroom breaks wudū’."
-},
-{
-  "id": "fiqh_beg_006",
-  "category": "Fiqh",
-  "level": "Beginner",
-  "question": "Which month do Muslims fast in?",
-  "options": ["Ramaḍān", "Muḥarram", "Rajab", "Ṣafar"],
-  "correctIndex": 0,
-  "explanation": "Fasting is in the month of Ramaḍān."
-},
-{
-  "id": "fiqh_beg_007",
-  "category": "Fiqh",
-  "level": "Beginner",
-  "question": "What is zakāh?",
-  "options": ["Obligatory charity on wealth", "Voluntary fasting", "A prayer after Maghrib", "A greeting"],
-  "correctIndex": 0,
-  "explanation": "Zakāh is a required charity on qualifying wealth."
-},
-{
-  "id": "fiqh_beg_008",
-  "category": "Fiqh",
-  "level": "Beginner",
-  "question": "What is ṣawm?",
-  "options": ["Fasting", "Prayer", "Charity", "Pilgrimage"],
-  "correctIndex": 0,
-  "explanation": "Ṣawm means fasting."
-},
-{
-  "id": "fiqh_beg_009",
-  "category": "Fiqh",
-  "level": "Beginner",
-  "question": "Which prayer is prayed at sunset?",
-  "options": ["Maghrib", "Fajr", "Ẓuhr", "ʿIshā’"],
-  "correctIndex": 0,
-  "explanation": "Maghrib is the sunset prayer."
-},
-{
-  "id": "fiqh_beg_010",
-  "category": "Fiqh",
-  "level": "Beginner",
-  "question": "What is tayammum?",
-  "options": ["Dry purification when water is unavailable", "Extra night prayer", "A type of zakāh", "A form of greeting"],
-  "correctIndex": 0,
-  "explanation": "Tayammum replaces wudū’/ghusl when needed."
-},
+  {
+    "id": "seerah_beg_003",
+    "category": "Seerah",
+    "level": "Beginner",
+    "question": "Who was the Prophet ﷺ’s first wife?",
+    "options": ["Khadījah bint Khuwaylid", "ʿĀ’ishah bint Abī Bakr", "Ḥafṣah bint ʿUmar", "Zaynab bint Jaḥsh"],
+    "correctIndex": 0,
+    "explanation": "Khadījah (raḍiyallāhu ʿanhā) was his first wife."
+  },
+  {
+    "id": "seerah_beg_004",
+    "category": "Seerah",
+    "level": "Beginner",
+    "question": "Who accompanied the Prophet ﷺ in the cave during Hijrah?",
+    "options": ["Abū Bakr", "ʿUmar", "ʿUthmān", "ʿAlī"],
+    "correctIndex": 0,
+    "explanation": "Abū Bakr (raḍiyallāhu ʿanhu) accompanied him."
+  },
+  {
+    "id": "seerah_beg_005",
+    "category": "Seerah",
+    "level": "Beginner",
+    "question": "What is the Prophet ﷺ’s tribe called?",
+    "options": ["Quraysh", "Thaqīf", "Aws", "Khazraj"],
+    "correctIndex": 0,
+    "explanation": "He was from the Quraysh tribe."
+  },
+  {
+    "id": "seerah_beg_006",
+    "category": "Seerah",
+    "level": "Beginner",
+    "question": "Which city is known as the city of the Prophet ﷺ?",
+    "options": ["Madinah", "Makkah", "Baghdad", "Damascus"],
+    "correctIndex": 0,
+    "explanation": "Madinah is often called Madīnat an-Nabī."
+  },
+  {
+    "id": "seerah_beg_007",
+    "category": "Seerah",
+    "level": "Beginner",
+    "question": "What was the first major battle in Islam?",
+    "options": ["Badr", "Uḥud", "Khandaq", "Hunayn"],
+    "correctIndex": 0,
+    "explanation": "Badr was the first major battle."
+  },
+  {
+    "id": "seerah_beg_008",
+    "category": "Seerah",
+    "level": "Beginner",
+    "question": "What is the name of the Prophet ﷺ’s father?",
+    "options": ["ʿAbdullāh", "Abū Ṭālib", "Hāshim", "ʿAbdul-Muṭṭalib"],
+    "correctIndex": 0,
+    "explanation": "His father’s name was ʿAbdullāh."
+  },
+  {
+    "id": "seerah_beg_009",
+    "category": "Seerah",
+    "level": "Beginner",
+    "question": "What is the name of the Prophet ﷺ’s mother?",
+    "options": ["Āminah", "Ṣafiyyah", "Khadījah", "Fāṭimah"],
+    "correctIndex": 0,
+    "explanation": "His mother’s name was Āminah bint Wahb."
+  },
+  {
+    "id": "seerah_beg_010",
+    "category": "Seerah",
+    "level": "Beginner",
+    "question": "Which event is commonly called the Year of Sorrow (ʿĀm al-Ḥuzn)?",
+    "options": ["When Khadījah and Abū Ṭālib died", "When Badr happened", "When Makkah was conquered", "When the first revelation came"],
+    "correctIndex": 0,
+    "explanation": "It refers to the year Khadījah and Abū Ṭālib passed away."
+  },
 
-{
-  "id": "tawheed_beg_003",
-  "category": "Tawheed",
-  "level": "Beginner",
-  "question": "Which statement is the core of Islam’s creed?",
-  "options": ["Lā ilāha illa Allah", "Subḥānallāh", "Allāhu Akbar", "Astaghfirullāh"],
-  "correctIndex": 0,
-  "explanation": "It affirms that only Allah is worthy of worship."
-},
-{
-  "id": "tawheed_beg_004",
-  "category": "Tawheed",
-  "level": "Beginner",
-  "question": "Who alone knows the unseen in full knowledge?",
-  "options": ["Allah", "The angels", "The prophets", "The scholars"],
-  "correctIndex": 0,
-  "explanation": "Complete knowledge of the unseen belongs to Allah."
-},
-{
-  "id": "tawheed_beg_005",
-  "category": "Tawheed",
-  "level": "Beginner",
-  "question": "Which is an example of worship?",
-  "options": ["Duʿā’ (supplication)", "Sleeping", "Walking", "Trading"],
-  "correctIndex": 0,
-  "explanation": "Duʿā’ is worship and should be directed to Allah."
-},
-{
-  "id": "tawheed_beg_006",
-  "category": "Tawheed",
-  "level": "Beginner",
-  "question": "What is the meaning of 'Rabb'?",
-  "options": ["Lord and Sustainer", "Messenger", "Angel", "Book"],
-  "correctIndex": 0,
-  "explanation": "Rabb means the Lord, Owner, and Sustainer."
-},
-{
-  "id": "tawheed_beg_007",
-  "category": "Tawheed",
-  "level": "Beginner",
-  "question": "Which is a correct belief about Allah?",
-  "options": ["Allah has no partners", "Allah needs helpers", "Allah gets tired", "Allah is like creation"],
-  "correctIndex": 0,
-  "explanation": "Allah is unique and has no partners."
-},
-{
-  "id": "tawheed_beg_008",
-  "category": "Tawheed",
-  "level": "Beginner",
-  "question": "What does 'shahādah' refer to?",
-  "options": ["Testimony of faith", "Friday sermon", "Funeral prayer", "Call to prayer"],
-  "correctIndex": 0,
-  "explanation": "The shahādah is the testimony of faith."
-},
-{
-  "id": "tawheed_beg_009",
-  "category": "Tawheed",
-  "level": "Beginner",
-  "question": "Which action should be done sincerely for Allah?",
-  "options": ["All acts of worship", "Only fasting", "Only charity", "Only prayer"],
-  "correctIndex": 0,
-  "explanation": "Worship is for Allah alone and must be sincere."
-},
-{
-  "id": "tawheed_beg_010",
-  "category": "Tawheed",
-  "level": "Beginner",
-  "question": "What is the meaning of 'Ilāh' in 'Lā ilāha illa Allah'?",
-  "options": ["One worthy of worship", "A prophet", "An angel", "A king"],
-  "correctIndex": 0,
-  "explanation": "Ilāh means one who is worshipped."
-},
+  {
+    "id": "fiqh_beg_003",
+    "category": "Fiqh",
+    "level": "Beginner",
+    "question": "Which direction do Muslims face in ṣalāh?",
+    "options": ["Qiblah (toward the Kaʿbah)", "Toward the sun", "Toward the east always", "Any direction"],
+    "correctIndex": 0,
+    "explanation": "The Qiblah is toward the Kaʿbah in Makkah."
+  },
+  {
+    "id": "fiqh_beg_004",
+    "category": "Fiqh",
+    "level": "Beginner",
+    "question": "What is wudū’?",
+    "options": ["Ablution before prayer", "A type of charity", "A funeral prayer", "A pilgrimage"],
+    "correctIndex": 0,
+    "explanation": "Wudū’ is washing specific parts for purity."
+  },
+  {
+    "id": "fiqh_beg_005",
+    "category": "Fiqh",
+    "level": "Beginner",
+    "question": "Which action breaks wudū’ (basic ruling)?",
+    "options": ["Using the restroom", "Smiling", "Reading Qur’an", "Making duʿā’"],
+    "correctIndex": 0,
+    "explanation": "Using the restroom breaks wudū’."
+  },
+  {
+    "id": "fiqh_beg_006",
+    "category": "Fiqh",
+    "level": "Beginner",
+    "question": "Which month do Muslims fast in?",
+    "options": ["Ramaḍān", "Muḥarram", "Rajab", "Ṣafar"],
+    "correctIndex": 0,
+    "explanation": "Fasting is in the month of Ramaḍān."
+  },
+  {
+    "id": "fiqh_beg_007",
+    "category": "Fiqh",
+    "level": "Beginner",
+    "question": "What is zakāh?",
+    "options": ["Obligatory charity on wealth", "Voluntary fasting", "A prayer after Maghrib", "A greeting"],
+    "correctIndex": 0,
+    "explanation": "Zakāh is a required charity on qualifying wealth."
+  },
+  {
+    "id": "fiqh_beg_008",
+    "category": "Fiqh",
+    "level": "Beginner",
+    "question": "What is ṣawm?",
+    "options": ["Fasting", "Prayer", "Charity", "Pilgrimage"],
+    "correctIndex": 0,
+    "explanation": "Ṣawm means fasting."
+  },
+  {
+    "id": "fiqh_beg_009",
+    "category": "Fiqh",
+    "level": "Beginner",
+    "question": "Which prayer is prayed at sunset?",
+    "options": ["Maghrib", "Fajr", "Ẓuhr", "ʿIshā’"],
+    "correctIndex": 0,
+    "explanation": "Maghrib is the sunset prayer."
+  },
+  {
+    "id": "fiqh_beg_010",
+    "category": "Fiqh",
+    "level": "Beginner",
+    "question": "What is tayammum?",
+    "options": ["Dry purification when water is unavailable", "Extra night prayer", "A type of zakāh", "A form of greeting"],
+    "correctIndex": 0,
+    "explanation": "Tayammum replaces wudū’/ghusl when needed."
+  },
 
-{
-  "id": "arabic_beg_003",
-  "category": "Arabic",
-  "level": "Beginner",
-  "question": "Which word means 'house' in Arabic?",
-  "options": ["Bayt", "Bāb", "Sūq", "Jabal"],
-  "correctIndex": 0,
-  "explanation": "Bayt means house."
-},
-{
-  "id": "arabic_beg_004",
-  "category": "Arabic",
-  "level": "Beginner",
-  "question": "Which word means 'pen' in Arabic?",
-  "options": ["Qalam", "Kitāb", "Nūr", "Nahr"],
-  "correctIndex": 0,
-  "explanation": "Qalam means pen."
-},
-{
-  "id": "arabic_beg_005",
-  "category": "Arabic",
-  "level": "Beginner",
-  "question": "What does 'Salām' mean?",
-  "options": ["Peace", "Food", "Night", "Market"],
-  "correctIndex": 0,
-  "explanation": "Salām means peace."
-},
-{
-  "id": "arabic_beg_006",
-  "category": "Arabic",
-  "level": "Beginner",
-  "question": "Which word means 'light' in Arabic?",
-  "options": ["Nūr", "Layl", "Ṣabāḥ", "Nār"],
-  "correctIndex": 0,
-  "explanation": "Nūr means light."
-},
-{
-  "id": "arabic_beg_007",
-  "category": "Arabic",
-  "level": "Beginner",
-  "question": "Which word means 'fire' in Arabic?",
-  "options": ["Nār", "Mā’", "Rīḥ", "Arḍ"],
-  "correctIndex": 0,
-  "explanation": "Nār means fire."
-},
-{
-  "id": "arabic_beg_008",
-  "category": "Arabic",
-  "level": "Beginner",
-  "question": "Which word means 'earth/land' in Arabic?",
-  "options": ["Arḍ", "Samā’", "Baḥr", "Shams"],
-  "correctIndex": 0,
-  "explanation": "Arḍ refers to earth/land."
-},
-{
-  "id": "arabic_beg_009",
-  "category": "Arabic",
-  "level": "Beginner",
-  "question": "Which word means 'sky' in Arabic?",
-  "options": ["Samā’", "Arḍ", "Baḥr", "Jabal"],
-  "correctIndex": 0,
-  "explanation": "Samā’ means sky."
-},
-{
-  "id": "arabic_beg_010",
-  "category": "Arabic",
-  "level": "Beginner",
-  "question": "Which word means 'mountain' in Arabic?",
-  "options": ["Jabal", "Baḥr", "Sūq", "Bāb"],
-  "correctIndex": 0,
-  "explanation": "Jabal means mountain."
-},
+  {
+    "id": "tawheed_beg_003",
+    "category": "Tawheed",
+    "level": "Beginner",
+    "question": "Which statement is the core of Islam’s creed?",
+    "options": ["Lā ilāha illa Allah", "Subḥānallāh", "Allāhu Akbar", "Astaghfirullāh"],
+    "correctIndex": 0,
+    "explanation": "It affirms that only Allah is worthy of worship."
+  },
+  {
+    "id": "tawheed_beg_004",
+    "category": "Tawheed",
+    "level": "Beginner",
+    "question": "Who alone knows the unseen in full knowledge?",
+    "options": ["Allah", "The angels", "The prophets", "The scholars"],
+    "correctIndex": 0,
+    "explanation": "Complete knowledge of the unseen belongs to Allah."
+  },
+  {
+    "id": "tawheed_beg_005",
+    "category": "Tawheed",
+    "level": "Beginner",
+    "question": "Which is an example of worship?",
+    "options": ["Duʿā’ (supplication)", "Sleeping", "Walking", "Trading"],
+    "correctIndex": 0,
+    "explanation": "Duʿā’ is worship and should be directed to Allah."
+  },
+  {
+    "id": "tawheed_beg_006",
+    "category": "Tawheed",
+    "level": "Beginner",
+    "question": "What is the meaning of 'Rabb'?",
+    "options": ["Lord and Sustainer", "Messenger", "Angel", "Book"],
+    "correctIndex": 0,
+    "explanation": "Rabb means the Lord, Owner, and Sustainer."
+  },
+  {
+    "id": "tawheed_beg_007",
+    "category": "Tawheed",
+    "level": "Beginner",
+    "question": "Which is a correct belief about Allah?",
+    "options": ["Allah has no partners", "Allah needs helpers", "Allah gets tired", "Allah is like creation"],
+    "correctIndex": 0,
+    "explanation": "Allah is unique and has no partners."
+  },
+  {
+    "id": "tawheed_beg_008",
+    "category": "Tawheed",
+    "level": "Beginner",
+    "question": "What does 'shahādah' refer to?",
+    "options": ["Testimony of faith", "Friday sermon", "Funeral prayer", "Call to prayer"],
+    "correctIndex": 0,
+    "explanation": "The shahādah is the testimony of faith."
+  },
+  {
+    "id": "tawheed_beg_009",
+    "category": "Tawheed",
+    "level": "Beginner",
+    "question": "Which action should be done sincerely for Allah?",
+    "options": ["All acts of worship", "Only fasting", "Only charity", "Only prayer"],
+    "correctIndex": 0,
+    "explanation": "Worship is for Allah alone and must be sincere."
+  },
+  {
+    "id": "tawheed_beg_010",
+    "category": "Tawheed",
+    "level": "Beginner",
+    "question": "What is the meaning of 'Ilāh' in 'Lā ilāha illa Allah'?",
+    "options": ["One worthy of worship", "A prophet", "An angel", "A king"],
+    "correctIndex": 0,
+    "explanation": "Ilāh means one who is worshipped."
+  },
 
-{
-  "id": "adhkaar_beg_003",
-  "category": "Adhkaar",
-  "level": "Beginner",
-  "question": "Which phrase means 'Praise be to Allah'?",
-  "options": ["Alḥamdulillāh", "Subḥānallāh", "Astaghfirullāh", "Bismillāh"],
-  "correctIndex": 0,
-  "explanation": "Alḥamdulillāh means Praise be to Allah."
-},
-{
-  "id": "adhkaar_beg_004",
-  "category": "Adhkaar",
-  "level": "Beginner",
-  "question": "Which phrase means 'Allah is the Greatest'?",
-  "options": ["Allāhu Akbar", "Subḥānallāh", "Alḥamdulillāh", "Lā ḥawla wa lā quwwata illā billāh"],
-  "correctIndex": 0,
-  "explanation": "Allāhu Akbar means Allah is the Greatest."
-},
-{
-  "id": "adhkaar_beg_005",
-  "category": "Adhkaar",
-  "level": "Beginner",
-  "question": "What do you say before starting to eat (common sunnah practice)?",
-  "options": ["Bismillāh", "Alḥamdulillāh", "Subḥānallāh", "Allāhu Akbar"],
-  "correctIndex": 0,
-  "explanation": "Begin with Bismillāh."
-},
-{
-  "id": "adhkaar_beg_006",
-  "category": "Adhkaar",
-  "level": "Beginner",
-  "question": "What do you say after finishing a meal?",
-  "options": ["Alḥamdulillāh", "Bismillāh", "Subḥānallāh", "Allāhu Akbar"],
-  "correctIndex": 0,
-  "explanation": "You praise Allah after eating."
-},
-{
-  "id": "adhkaar_beg_007",
-  "category": "Adhkaar",
-  "level": "Beginner",
-  "question": "Which dhikr is linked to seeking forgiveness?",
-  "options": ["Astaghfirullāh", "Allāhu Akbar", "Subḥānallāh", "Bismillāh"],
-  "correctIndex": 0,
-  "explanation": "Astaghfirullāh means I seek Allah’s forgiveness."
-},
-{
-  "id": "adhkaar_beg_008",
-  "category": "Adhkaar",
-  "level": "Beginner",
-  "question": "Which phrase means 'There is no power nor might except with Allah'?",
-  "options": ["Lā ḥawla wa lā quwwata illā billāh", "Allāhu Akbar", "Subḥānallāh", "Alḥamdulillāh"],
-  "correctIndex": 0,
-  "explanation": "It expresses reliance on Allah’s help."
-},
-{
-  "id": "adhkaar_beg_009",
-  "category": "Adhkaar",
-  "level": "Beginner",
-  "question": "Which phrase affirms Tawḥīd directly?",
-  "options": ["Lā ilāha illa Allah", "Subḥānallāh", "Alḥamdulillāh", "Allāhu Akbar"],
-  "correctIndex": 0,
-  "explanation": "It affirms that only Allah is worthy of worship."
-},
-{
-  "id": "adhkaar_beg_010",
-  "category": "Adhkaar",
-  "level": "Beginner",
-  "question": "What do you say when something good happens and you want to thank Allah?",
-  "options": ["Alḥamdulillāh", "Astaghfirullāh", "Bismillāh", "Allāhu Akbar"],
-  "correctIndex": 0,
-  "explanation": "Alḥamdulillāh is praise and thanks to Allah."
-}
+  {
+    "id": "arabic_beg_003",
+    "category": "Arabic",
+    "level": "Beginner",
+    "question": "Which word means 'house' in Arabic?",
+    "options": ["Bayt", "Bāb", "Sūq", "Jabal"],
+    "correctIndex": 0,
+    "explanation": "Bayt means house."
+  },
+  {
+    "id": "arabic_beg_004",
+    "category": "Arabic",
+    "level": "Beginner",
+    "question": "Which word means 'pen' in Arabic?",
+    "options": ["Qalam", "Kitāb", "Nūr", "Nahr"],
+    "correctIndex": 0,
+    "explanation": "Qalam means pen."
+  },
+  {
+    "id": "arabic_beg_005",
+    "category": "Arabic",
+    "level": "Beginner",
+    "question": "What does 'Salām' mean?",
+    "options": ["Peace", "Food", "Night", "Market"],
+    "correctIndex": 0,
+    "explanation": "Salām means peace."
+  },
+  {
+    "id": "arabic_beg_006",
+    "category": "Arabic",
+    "level": "Beginner",
+    "question": "Which word means 'light' in Arabic?",
+    "options": ["Nūr", "Layl", "Ṣabāḥ", "Nār"],
+    "correctIndex": 0,
+    "explanation": "Nūr means light."
+  },
+  {
+    "id": "arabic_beg_007",
+    "category": "Arabic",
+    "level": "Beginner",
+    "question": "Which word means 'fire' in Arabic?",
+    "options": ["Nār", "Mā’", "Rīḥ", "Arḍ"],
+    "correctIndex": 0,
+    "explanation": "Nār means fire."
+  },
+  {
+    "id": "arabic_beg_008",
+    "category": "Arabic",
+    "level": "Beginner",
+    "question": "Which word means 'earth/land' in Arabic?",
+    "options": ["Arḍ", "Samā’", "Baḥr", "Shams"],
+    "correctIndex": 0,
+    "explanation": "Arḍ refers to earth/land."
+  },
+  {
+    "id": "arabic_beg_009",
+    "category": "Arabic",
+    "level": "Beginner",
+    "question": "Which word means 'sky' in Arabic?",
+    "options": ["Samā’", "Arḍ", "Baḥr", "Jabal"],
+    "correctIndex": 0,
+    "explanation": "Samā’ means sky."
+  },
+  {
+    "id": "arabic_beg_010",
+    "category": "Arabic",
+    "level": "Beginner",
+    "question": "Which word means 'mountain' in Arabic?",
+    "options": ["Jabal", "Baḥr", "Sūq", "Bāb"],
+    "correctIndex": 0,
+    "explanation": "Jabal means mountain."
+  },
+
+  {
+    "id": "adhkaar_beg_003",
+    "category": "Adhkaar",
+    "level": "Beginner",
+    "question": "Which phrase means 'Praise be to Allah'?",
+    "options": ["Alḥamdulillāh", "Subḥānallāh", "Astaghfirullāh", "Bismillāh"],
+    "correctIndex": 0,
+    "explanation": "Alḥamdulillāh means Praise be to Allah."
+  },
+  {
+    "id": "adhkaar_beg_004",
+    "category": "Adhkaar",
+    "level": "Beginner",
+    "question": "Which phrase means 'Allah is the Greatest'?",
+    "options": ["Allāhu Akbar", "Subḥānallāh", "Alḥamdulillāh", "Lā ḥawla wa lā quwwata illā billāh"],
+    "correctIndex": 0,
+    "explanation": "Allāhu Akbar means Allah is the Greatest."
+  },
+  {
+    "id": "adhkaar_beg_005",
+    "category": "Adhkaar",
+    "level": "Beginner",
+    "question": "What do you say before starting to eat (common sunnah practice)?",
+    "options": ["Bismillāh", "Alḥamdulillāh", "Subḥānallāh", "Allāhu Akbar"],
+    "correctIndex": 0,
+    "explanation": "Begin with Bismillāh."
+  },
+  {
+    "id": "adhkaar_beg_006",
+    "category": "Adhkaar",
+    "level": "Beginner",
+    "question": "What do you say after finishing a meal?",
+    "options": ["Alḥamdulillāh", "Bismillāh", "Subḥānallāh", "Allāhu Akbar"],
+    "correctIndex": 0,
+    "explanation": "You praise Allah after eating."
+  },
+  {
+    "id": "adhkaar_beg_007",
+    "category": "Adhkaar",
+    "level": "Beginner",
+    "question": "Which dhikr is linked to seeking forgiveness?",
+    "options": ["Astaghfirullāh", "Allāhu Akbar", "Subḥānallāh", "Bismillāh"],
+    "correctIndex": 0,
+    "explanation": "Astaghfirullāh means I seek Allah’s forgiveness."
+  },
+  {
+    "id": "adhkaar_beg_008",
+    "category": "Adhkaar",
+    "level": "Beginner",
+    "question": "Which phrase means 'There is no power nor might except with Allah'?",
+    "options": ["Lā ḥawla wa lā quwwata illā billāh", "Allāhu Akbar", "Subḥānallāh", "Alḥamdulillāh"],
+    "correctIndex": 0,
+    "explanation": "It expresses reliance on Allah’s help."
+  },
+  {
+    "id": "adhkaar_beg_009",
+    "category": "Adhkaar",
+    "level": "Beginner",
+    "question": "Which phrase affirms Tawḥīd directly?",
+    "options": ["Lā ilāha illa Allah", "Subḥānallāh", "Alḥamdulillāh", "Allāhu Akbar"],
+    "correctIndex": 0,
+    "explanation": "It affirms that only Allah is worthy of worship."
+  },
+  {
+    "id": "adhkaar_beg_010",
+    "category": "Adhkaar",
+    "level": "Beginner",
+    "question": "What do you say when something good happens and you want to thank Allah?",
+    "options": ["Alḥamdulillāh", "Astaghfirullāh", "Bismillāh", "Allāhu Akbar"],
+    "correctIndex": 0,
+    "explanation": "Alḥamdulillāh is praise and thanks to Allah."
+  }
+]
