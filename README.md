@@ -1,7 +1,7 @@
 <div align="center">
 Mas’alah
 
-Quick Islamic quizzes. One question at a time.
+Quick Islamic quizzes.
 
 Build consistency, strengthen knowledge, and learn with clarity.
 
