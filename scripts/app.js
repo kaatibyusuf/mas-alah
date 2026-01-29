@@ -4,9 +4,7 @@ const app = document.getElementById("app");
    LocalStorage (Progress)
 ======================= */
 const STORAGE_KEY = "masalah_progress_v1";
-
-// Stores the locked daily quiz selection for today
-const DAILY_KEY = "masalah_daily_v1";
+const DAILY_KEY = "masalah_daily_v1"; // locked daily quiz for today
 
 function todayISO() {
   return new Date().toISOString().slice(0, 10); // YYYY-MM-DD
@@ -78,7 +76,7 @@ const state = {
   secondsPerQuestion: 20,
   timerId: null,
   timeLeft: 20,
-  lastSettings: null // { category, level, timed, count, mode? }
+  lastSettings: null // { category, level, timed, count, mode: "normal"|"daily" }
 };
 
 /* =======================
@@ -106,7 +104,6 @@ function pickRandom(arr, n) {
    Deterministic helpers
 ======================= */
 function hashStringToInt(str) {
-  // FNV-1a like hash
   let h = 2166136261;
   for (let i = 0; i < str.length; i++) {
     h ^= str.charCodeAt(i);
@@ -144,15 +141,10 @@ function saveDailyState(daily) {
   localStorage.setItem(DAILY_KEY, JSON.stringify(daily));
 }
 
-/**
- * Locks today's daily quiz: picks question IDs deterministically once and stores them.
- * This prevents "rerolling" by refreshing the page.
- */
 async function getOrCreateDailyQuiz(category, level, count) {
   const today = todayISO();
   const existing = loadDailyState();
 
-  // If we already locked a daily quiz for today with same category+level+count, reuse it.
   if (
     existing &&
     existing.date === today &&
@@ -165,18 +157,13 @@ async function getOrCreateDailyQuiz(category, level, count) {
     return existing;
   }
 
-  // Otherwise create a new locked daily quiz for today
   const all = await loadQuestions();
   const pool = all.filter((q) => q.category === category && q.level === level);
 
   if (!pool.length) {
-    return {
-      date: today,
-      category,
-      level,
-      count,
-      questionIds: []
-    };
+    const empty = { date: today, category, level, count, questionIds: [] };
+    saveDailyState(empty);
+    return empty;
   }
 
   const seed = `masalah_daily_${today}_${category}_${level}`;
@@ -244,14 +231,15 @@ function renderHome() {
     ? `${last.category} • ${last.level} (${last.percent}%)`
     : "No attempts yet";
 
-  // Find best score
   const bestEntries = Object.entries(progress.bestScores);
   let bestText = "No best score yet";
+  let bestHeadline = "—";
   if (bestEntries.length) {
     bestEntries.sort((a, b) => b[1] - a[1]);
     const [key, val] = bestEntries[0];
     const [cat, lvl] = key.split("|");
     bestText = `${val}% (${cat} • ${lvl})`;
+    bestHeadline = `${val}%`;
   }
 
   app.innerHTML = `
@@ -349,7 +337,7 @@ function renderHome() {
 
           <div class="kpi-card">
             <p class="kpi-label">Best</p>
-            <p class="kpi-value">⭐ ${bestEntries.length ? `${bestEntries.sort((a,b)=>b[1]-a[1])[0][1]}%` : "—"}</p>
+            <p class="kpi-value">⭐ ${bestHeadline}</p>
             <p class="muted" style="margin:8px 0 0 0; font-size:12px;">
               ${bestText}
             </p>
@@ -364,20 +352,18 @@ function renderHome() {
   `;
 
   document.getElementById("goDaily").addEventListener("click", () => {
-    window.location.hash = "daily";
-    // Let daily page handle the locked quiz
+    window.location.hash = "#daily";
   });
 
   document.getElementById("goDailySetup").addEventListener("click", () => {
-    window.location.hash = "daily";
+    window.location.hash = "#daily";
   });
 
   document.getElementById("goProgress").addEventListener("click", () => {
-    window.location.hash = "progress";
+    window.location.hash = "#progress";
   });
 
-  const startBtn = document.getElementById("startBtn");
-  startBtn.addEventListener("click", async () => {
+  document.getElementById("startBtn").addEventListener("click", async () => {
     const category = document.getElementById("category").value;
     const level = document.getElementById("level").value;
     const timed = document.getElementById("timed").checked;
@@ -391,8 +377,7 @@ function renderHome() {
       const pool = all.filter((q) => q.category === category && q.level === level);
 
       if (pool.length === 0) {
-        status.textContent =
-          `No questions found for ${category} • ${level}. Add them in data/questions.json.`;
+        status.textContent = `No questions found for ${category} • ${level}. Add them in data/questions.json.`;
         return;
       }
 
@@ -407,43 +392,6 @@ function renderHome() {
     }
   });
 }
-
-
-  document.getElementById("dailyGo").addEventListener("click", () => {
-    window.location.hash = "daily";
-  });
-
-  const startBtn = document.getElementById("startBtn");
-  startBtn.addEventListener("click", async () => {
-    const category = document.getElementById("category").value;
-    const level = document.getElementById("level").value;
-    const timed = document.getElementById("timed").checked;
-    const count = Number(document.getElementById("count").value);
-    const status = document.getElementById("status");
-
-    state.lastSettings = { category, level, timed, count, mode: "normal" };
-
-    try {
-      const all = await loadQuestions();
-      const pool = all.filter((q) => q.category === category && q.level === level);
-
-      if (pool.length === 0) {
-        status.textContent =
-          `No questions found for ${category} • ${level}. Add them in data/questions.json.`;
-        return;
-      }
-
-      state.quizQuestions = pickRandom(pool, Math.min(count, pool.length));
-      state.index = 0;
-      state.score = 0;
-      state.timed = timed;
-
-      renderQuiz();
-    } catch (err) {
-      status.textContent = String(err.message || err);
-    }
-  });
-
 
 async function renderDaily() {
   const today = todayISO();
@@ -514,7 +462,14 @@ async function renderDaily() {
       const all = await loadQuestions();
       const chosen = buildQuestionsByIds(all, daily.questionIds);
 
-      state.lastSettings = { category, level, timed, count: chosen.length, mode: "daily" };
+      state.lastSettings = {
+        category,
+        level,
+        timed,
+        count: chosen.length,
+        mode: "daily"
+      };
+
       state.quizQuestions = chosen;
       state.index = 0;
       state.score = 0;
@@ -594,7 +549,7 @@ function renderQuiz() {
 
   document.getElementById("quitBtn").addEventListener("click", () => {
     clearTimer();
-    renderHome();
+    window.location.hash = "#home";
   });
 
   document.querySelectorAll(".optionBtn").forEach((btn) => {
@@ -617,8 +572,9 @@ function showFeedback(selectedIdx) {
     btn.disabled = true;
     const idx = Number(btn.dataset.idx);
     if (idx === correct) btn.classList.add("correct");
-    if (selectedIdx !== null && idx === selectedIdx && idx !== correct)
+    if (selectedIdx !== null && idx === selectedIdx && idx !== correct) {
       btn.classList.add("wrong");
+    }
   });
 
   const isCorrect = selectedIdx === correct;
@@ -654,7 +610,6 @@ function renderResults() {
   const total = state.quizQuestions.length;
   const percent = Math.round((state.score / total) * 100);
 
-  // Save progress
   const progress = loadProgress();
   updateStreak(progress);
 
@@ -703,21 +658,21 @@ function renderResults() {
     const text = document.getElementById("shareText").value;
     try {
       await navigator.clipboard.writeText(text);
-      document.getElementById("copyStatus").textContent =
-        "Copied. Send it to your friends.";
+      document.getElementById("copyStatus").textContent = "Copied. Send it to your friends.";
     } catch {
-      document.getElementById("copyStatus").textContent =
-        "Could not copy automatically. Copy it manually.";
+      document.getElementById("copyStatus").textContent = "Could not copy automatically. Copy it manually.";
     }
   });
 
   document.getElementById("tryAgainBtn").addEventListener("click", async () => {
     const s = state.lastSettings;
-    if (!s) return renderHome();
+    if (!s) {
+      window.location.hash = "#home";
+      return;
+    }
 
-    // Daily should NOT reroll. Send them back to Daily screen instead.
     if (s.mode === "daily") {
-      window.location.hash = "daily";
+      window.location.hash = "#daily";
       return;
     }
 
@@ -734,10 +689,12 @@ function renderResults() {
   });
 
   document.getElementById("progressBtn").addEventListener("click", () => {
-    window.location.hash = "progress";
+    window.location.hash = "#progress";
   });
 
-  document.getElementById("homeBtn").addEventListener("click", () => renderHome());
+  document.getElementById("homeBtn").addEventListener("click", () => {
+    window.location.hash = "#home";
+  });
 }
 
 function renderProgress() {
@@ -755,7 +712,9 @@ function renderProgress() {
           <div style="font-size:28px; font-weight:800; margin-top:6px;">
             ${progress.streakCount} day${progress.streakCount === 1 ? "" : "s"}
           </div>
-          <p class="muted" style="margin-top:6px;">Last active: ${progress.lastActiveDate || "Not yet"}</p>
+          <p class="muted" style="margin-top:6px;">
+            Last active: ${progress.lastActiveDate || "Not yet"}
+          </p>
         </div>
 
         <div class="card">
@@ -806,7 +765,7 @@ function renderProgress() {
   });
 
   document.getElementById("backHome").addEventListener("click", () => {
-    window.location.hash = "home";
+    window.location.hash = "#home";
   });
 }
 
@@ -819,11 +778,24 @@ function render(route) {
   return renderHome();
 }
 
-document.addEventListener("click", (e) => {
-  const btn = e.target.closest("[data-route]");
-  if (!btn) return;
-  window.location.hash = btn.dataset.route;
+function bindNavRoutes() {
+  document.querySelectorAll("[data-route]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const route = btn.dataset.route;
+      window.location.hash = "#" + route;
+    });
+  });
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  bindNavRoutes();
+  render((window.location.hash || "#home").slice(1));
 });
+
+window.addEventListener("hashchange", () => {
+  render((window.location.hash || "#home").slice(1));
+});
+
 
 window.addEventListener("hashchange", () => {
   const route = (window.location.hash || "#home").slice(1);

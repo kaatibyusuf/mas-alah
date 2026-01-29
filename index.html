@@ -5,35 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mas'alah</title>
 
-    <!-- Main styles -->
     <link rel="stylesheet" href="styles/main.css" />
   </head>
+
   <body>
     <header class="topbar">
-  <div class="wrap topbar-inner">
-    <div class="brand">
-      <div class="brand-mark">م</div>
-      <div>
-        <h1 class="brand-name">Mas'alah</h1>
-        <p class="brand-sub">Quick Islamic quizzes. One question at a time.</p>
+      <div class="wrap topbar-inner">
+        <div class="brand">
+          <div class="brand-mark">م</div>
+          <div>
+            <h1 class="brand-name">Mas'alah</h1>
+            <p class="brand-sub">Quick Islamic quizzes. One question at a time.</p>
+          </div>
+        </div>
+
+        <nav class="nav">
+          <button class="nav-btn" data-route="home" type="button">Home</button>
+          <button class="nav-btn" data-route="daily" type="button">Daily</button>
+          <button class="nav-btn" data-route="progress" type="button">Progress</button>
+        </nav>
       </div>
-    </div>
+    </header>
 
-    <nav class="nav">
-      <button class="nav-btn" data-route="home">Home</button>
-      <button class="nav-btn" data-route="daily">Daily</button>
-      <button class="nav-btn" data-route="progress">Progress</button>
-    </nav>
-  </div>
-</header>
+    <main id="app" class="wrap">
+      <!-- App screens render here -->
+    </main>
 
-<main id="app" class="wrap">
-  <!-- App screens render here -->
-</main>
+    <footer class="footer wrap">
+      <p class="muted">Built for consistency. Small steps daily.</p>
+    </footer>
 
-<footer class="footer wrap">
-  <p class="muted">
-    Built for consistency. Small steps daily.
-  </p>
-</footer>
-
+    <!-- Load app AFTER the HTML -->
+    <script src="scripts/app.js"></script>
+  </body>
+</html>
