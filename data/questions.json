@@ -1,22 +1,115 @@
 [
   {
-    "id": "SRH-BEG-001",
-    "category": "Seerah",
+    "id": "quran_beg_001",
+    "category": "Qur’an",
     "level": "Beginner",
-    "tags": ["makkah"],
-    "question": "What city was the Prophet ﷺ born in?",
-    "options": ["Madinah", "Makkah", "Ta'if", "Jerusalem"],
-    "correctIndex": 1,
-    "explanation": "He ﷺ was born in Makkah."
+    "question": "Which surah is called the Opening of the Qur’an?",
+    "options": ["Al-Fātiḥah", "Al-Baqarah", "Al-Ikhlāṣ", "An-Nās"],
+    "correctIndex": 0,
+    "explanation": "Al-Fātiḥah opens the Qur’an and is recited in every ṣalāh."
   },
   {
-    "id": "FIQ-BEG-001",
+    "id": "quran_beg_002",
+    "category": "Qur’an",
+    "level": "Beginner",
+    "question": "How many surahs are in the Qur’an?",
+    "options": ["114", "100", "120", "99"],
+    "correctIndex": 0,
+    "explanation": "The Qur’an contains 114 surahs."
+  },
+
+  {
+    "id": "seerah_beg_001",
+    "category": "Seerah",
+    "level": "Beginner",
+    "question": "In which city was the Prophet ﷺ born?",
+    "options": ["Makkah", "Madinah", "Ṭā’if", "Jerusalem"],
+    "correctIndex": 0,
+    "explanation": "The Prophet ﷺ was born in Makkah."
+  },
+  {
+    "id": "seerah_beg_002",
+    "category": "Seerah",
+    "level": "Beginner",
+    "question": "What is the migration from Makkah to Madinah called?",
+    "options": ["Hijrah", "Umrah", "Ḥajj", "Ṣulḥ"],
+    "correctIndex": 0,
+    "explanation": "The Hijrah marks the major migration to Madinah."
+  },
+
+  {
+    "id": "fiqh_beg_001",
     "category": "Fiqh",
     "level": "Beginner",
-    "tags": ["purification"],
-    "question": "Which of the following is required for wudū’ to be valid?",
-    "options": ["Intention", "Facing the Qiblah", "Wearing perfume", "Speaking aloud"],
+    "question": "Which is a condition for ṣalāh to be valid?",
+    "options": ["Being in ṭahārah (purity)", "Eating before prayer", "Speaking in prayer", "Facing any direction"],
     "correctIndex": 0,
-    "explanation": "Intention is required for acts of worship."
+    "explanation": "Purity (ṭahārah) is required before ṣalāh."
+  },
+  {
+    "id": "fiqh_beg_002",
+    "category": "Fiqh",
+    "level": "Beginner",
+    "question": "How many obligatory prayers are there in a day?",
+    "options": ["Five", "Three", "Six", "Seven"],
+    "correctIndex": 0,
+    "explanation": "The obligatory prayers are five daily."
+  },
+
+  {
+    "id": "tawheed_beg_001",
+    "category": "Tawheed",
+    "level": "Beginner",
+    "question": "What does Tawḥīd mainly mean?",
+    "options": ["Worshipping Allah alone", "Worshipping angels", "Worshipping prophets", "Worshipping saints"],
+    "correctIndex": 0,
+    "explanation": "Tawḥīd is singling out Allah in worship."
+  },
+  {
+    "id": "tawheed_beg_002",
+    "category": "Tawheed",
+    "level": "Beginner",
+    "question": "Which act is the greatest opposite of Tawḥīd?",
+    "options": ["Shirk", "Ṣadaqah", "Ṣalāh", "Duʿā’"],
+    "correctIndex": 0,
+    "explanation": "Shirk is associating partners with Allah in worship."
+  },
+
+  {
+    "id": "arabic_beg_001",
+    "category": "Arabic",
+    "level": "Beginner",
+    "question": "What is the Arabic word for 'book'?",
+    "options": ["Kitāb", "Qalam", "Bayt", "Mā’"],
+    "correctIndex": 0,
+    "explanation": "Kitāb means book."
+  },
+  {
+    "id": "arabic_beg_002",
+    "category": "Arabic",
+    "level": "Beginner",
+    "question": "Which word means 'water' in Arabic?",
+    "options": ["Mā’", "Nār", "Rīḥ", "Samā’"],
+    "correctIndex": 0,
+    "explanation": "Mā’ means water."
+  },
+
+  {
+    "id": "adhkaar_beg_001",
+    "category": "Adhkaar",
+    "level": "Beginner",
+    "question": "What do you say after sneezing?",
+    "options": ["Alḥamdulillāh", "Subḥānallāh", "Allāhu Akbar", "Astaghfirullāh"],
+    "correctIndex": 0,
+    "explanation": "The sunnah is to say Alḥamdulillāh after sneezing."
+  },
+  {
+    "id": "adhkaar_beg_002",
+    "category": "Adhkaar",
+    "level": "Beginner",
+    "question": "Which phrase means 'Glory be to Allah'?",
+    "options": ["Subḥānallāh", "Alḥamdulillāh", "Allāhu Akbar", "Lā ilāha illa Allah"],
+    "correctIndex": 0,
+    "explanation": "Subḥānallāh means Glory be to Allah."
   }
 ]
