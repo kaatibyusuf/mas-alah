@@ -12,7 +12,7 @@
     <header class="topbar">
       <div class="wrap topbar-inner">
         <div class="brand">
-          <div class="brand-mark">م</div>
+          <div class="brand-mark" aria-hidden="true">م</div>
           <div class="brand-text">
             <h1 class="brand-name">Mas'alah</h1>
             <p class="brand-sub">Short Islamic quizzes. One steady step daily.</p>
@@ -23,6 +23,7 @@
           <button class="nav-btn" data-route="home" type="button">Home</button>
           <button class="nav-btn" data-route="daily" type="button">Daily</button>
           <button class="nav-btn" data-route="progress" type="button">Progress</button>
+          <button class="nav-btn" data-route="faq" type="button">FAQ</button>
         </nav>
       </div>
     </header>
@@ -33,9 +34,39 @@
 
     <footer class="footer">
       <div class="wrap footer-inner">
-        <p class="muted">Built for consistency. Quiet progress, every day.</p>
+        <div class="footer-left">
+          <div class="footer-brand">
+            <span class="footer-mark" aria-hidden="true">م</span>
+            <div>
+              <p class="footer-name">Mas'alah</p>
+              <p class="footer-tag muted">Quiet revision. Strong foundations.</p>
+            </div>
+          </div>
+
+          <p class="footer-note muted">
+            Short quizzes for Qur’an, Seerah, Fiqh, Tawheed, Arabic, and Adhkaar. Built for consistency.
+          </p>
+        </div>
+
+        <div class="footer-right">
+          <div class="footer-links" aria-label="Footer links">
+            <button class="footer-link" data-route="home" type="button">Home</button>
+            <button class="footer-link" data-route="daily" type="button">Daily</button>
+            <button class="footer-link" data-route="progress" type="button">Progress</button>
+            <button class="footer-link" data-route="faq" type="button">FAQ</button>
+          </div>
+
+          <div class="footer-meta">
+            <span class="muted">© <span id="year"></span> Mas'alah</span>
+            <span class="muted">Local progress saved on this device</span>
+          </div>
+        </div>
       </div>
     </footer>
+
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
 
     <!-- Load app AFTER the HTML -->
     <script src="scripts/app.js" type="module"></script>
