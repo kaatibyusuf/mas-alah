@@ -652,3 +652,143 @@ select:focus, textarea:focus{
   .footer-right{ justify-items:start; }
   .footer-links, .footer-meta{ justify-content:flex-start; }
 }
+/* =======================
+   Page transitions (warm)
+   Paste at END of main.css
+======================= */
+
+:root{
+  --ease-warm: cubic-bezier(.2,.9,.2,1);
+}
+
+/* Wrap all rendered screens with this class (we'll do it in JS) */
+.screen{
+  animation: screenIn .55s var(--ease-warm) both;
+  transform-origin: top center;
+}
+
+@keyframes screenIn{
+  from{
+    opacity: 0;
+    transform: translateY(10px) scale(.99);
+    filter: blur(6px);
+  }
+  to{
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+/* Animate out before switching screens */
+.screen.is-leaving{
+  animation: screenOut .22s ease-out both;
+}
+
+@keyframes screenOut{
+  to{
+    opacity: 0;
+    transform: translateY(6px) scale(.995);
+    filter: blur(4px);
+  }
+}
+
+/* Welcome-specific: stagger hero items */
+.welcome .kicker,
+.welcome .welcome-title,
+.welcome .welcome-sub,
+.welcome .welcome-actions,
+.welcome .welcome-values,
+.welcome .welcome-section{
+  opacity: 0;
+  transform: translateY(10px);
+  animation: warmUp .7s var(--ease-warm) both;
+}
+
+.welcome .kicker{ animation-delay: .05s; }
+.welcome .welcome-title{ animation-delay: .12s; }
+.welcome .welcome-sub{ animation-delay: .18s; }
+.welcome .welcome-actions{ animation-delay: .26s; }
+.welcome .welcome-values{ animation-delay: .32s; }
+.welcome .welcome-section{ animation-delay: .40s; }
+
+@keyframes warmUp{
+  to{
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Respect people who prefer reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .screen, .screen.is-leaving,
+  .welcome .kicker,
+  .welcome .welcome-title,
+  .welcome .welcome-sub,
+  .welcome .welcome-actions,
+  .welcome .welcome-values,
+  .welcome .welcome-section{
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}
+/* =========================
+   Mobile header cleanup
+   Paste at END of main.css
+========================= */
+@media (max-width: 720px){
+
+  /* Make the blue area shorter */
+  .topbar-inner{
+    padding: 10px 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  /* Smaller brand row */
+  .brand{
+    min-width: 0;
+    gap: 10px;
+  }
+  .brand-mark{
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+  }
+  .brand-name{
+    font-size: 16px;
+  }
+  .brand-sub{
+    font-size: 11px;
+  }
+
+  /* Nav becomes a single horizontal row (no tall stacking) */
+  .nav{
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 8px;
+    padding-bottom: 2px;
+  }
+
+  /* Hide scrollbar but keep scroll working */
+  .nav::-webkit-scrollbar{ height: 0; }
+
+  /* Smaller buttons */
+  .nav-btn{
+    white-space: nowrap;
+    padding: 8px 10px;
+    font-size: 13px;
+    font-weight: 900;
+  }
+
+  /* Give the page breathing space from the header */
+  main.wrap{
+    padding-top: 10px;
+  }
+}
