@@ -298,7 +298,7 @@ function renderWelcome() {
             <span>Mas'alah</span>
           </div>
 
-          <h2>Learn consistently. One thoughtful question at a time.</h2>
+          <h2>Learn consistently</h2>
 
           <p>
             Short Islamic quizzes built for calm revision. Clear explanations, daily structure,
