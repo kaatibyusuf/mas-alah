@@ -180,8 +180,97 @@
     "correctIndex": 0,
     "explanation": "Surah Al-Mulk is widely practiced for nightly recitation."
   },
-
-  {
+{
+  "id": "quran_beg_011",
+  "category": "Qur’an",
+  "level": "Beginner",
+  "question": "Which surah is also called 'Umm al-Qur’an' (the Mother of the Qur’an)?",
+  "options": ["Al-Fātiḥah", "Al-Baqarah", "Al-Ikhlāṣ", "An-Nās"],
+  "correctIndex": 0,
+  "explanation": "Surah Al-Fātiḥah is commonly known as Umm al-Qur’an."
+},
+{
+  "id": "quran_beg_012",
+  "category": "Qur’an",
+  "level": "Beginner",
+  "question": "Which surah begins with 'Al-ḥamdu lillāhi Rabbil-ʿālamīn'?",
+  "options": ["Al-Fātiḥah", "Al-ʿAṣr", "Al-Kawthar", "Al-Falaq"],
+  "correctIndex": 0,
+  "explanation": "The opening of Surah Al-Fātiḥah begins with that phrase."
+},
+{
+  "id": "quran_beg_013",
+  "category": "Qur’an",
+  "level": "Beginner",
+  "question": "What is the name of the last surah in the Qur’an?",
+  "options": ["An-Nās", "Al-Falaq", "Al-Ikhlāṣ", "Al-Kāfirūn"],
+  "correctIndex": 0,
+  "explanation": "Surah An-Nās is the final chapter (surah 114)."
+},
+{
+  "id": "quran_beg_014",
+  "category": "Qur’an",
+  "level": "Beginner",
+  "question": "Which surah is the first surah of the Qur’an?",
+  "options": ["Al-Fātiḥah", "Al-Baqarah", "Al-ʿAlaq", "Al-Mulk"],
+  "correctIndex": 0,
+  "explanation": "Surah Al-Fātiḥah is placed first in the muṣḥaf."
+},
+{
+  "id": "quran_beg_015",
+  "category": "Qur’an",
+  "level": "Beginner",
+  "question": "Which surah begins with 'Qul aʿūdhu bi Rabbin-nās'?",
+  "options": ["An-Nās", "Al-Falaq", "Al-Ikhlāṣ", "Al-Masad"],
+  "correctIndex": 0,
+  "explanation": "That opening is from Surah An-Nās."
+},
+{
+  "id": "quran_beg_016",
+  "category": "Qur’an",
+  "level": "Beginner",
+  "question": "What is the meaning of 'Juz’' in Qur’an structure?",
+  "options": ["A part/section", "A vowel sign", "A style of recitation", "A type of duʿā’"],
+  "correctIndex": 0,
+  "explanation": "A juz’ is a section of the Qur’an used to divide it into parts."
+},
+{
+  "id": "quran_beg_017",
+  "category": "Qur’an",
+  "level": "Beginner",
+  "question": "How many surahs are in the Qur’an?",
+  "options": ["114", "100", "120", "99"],
+  "correctIndex": 0,
+  "explanation": "The Qur’an contains 114 surahs."
+},
+{
+  "id": "quran_beg_018",
+  "category": "Qur’an",
+  "level": "Beginner",
+  "question": "Which surah contains the phrase 'Bismillāhir-Raḥmānir-Raḥīm' as its first ayah (as commonly counted)?",
+  "options": ["Al-Fātiḥah", "At-Tawbah", "Al-Fīl", "Al-Qadr"],
+  "correctIndex": 0,
+  "explanation": "In common numbering, Al-Fātiḥah begins with the basmalah as the first ayah."
+},
+{
+  "id": "quran_beg_019",
+  "category": "Qur’an",
+  "level": "Beginner",
+  "question": "Which surah is known for repeating the line 'Fa-bi ayyi ālā’i Rabbikumā tukadhdhibān'?",
+  "options": ["Ar-Raḥmān", "Al-Mulk", "Yā-Sīn", "Al-Wāqiʿah"],
+  "correctIndex": 0,
+  "explanation": "Surah Ar-Raḥmān repeats that question many times."
+},
+{
+  "id": "quran_beg_020",
+  "category": "Qur’an",
+  "level": "Beginner",
+  "question": "Which surah is the shortest in the Qur’an?",
+  "options": ["Al-Kawthar", "Al-Ikhlāṣ", "Al-ʿAṣr", "An-Nās"],
+  "correctIndex": 0,
+  "explanation": "Surah Al-Kawthar is the shortest surah (3 ayat)."
+},
+{
     "id": "seerah_beg_003",
     "category": "Seerah",
     "level": "Beginner",
@@ -253,7 +342,96 @@
     "correctIndex": 0,
     "explanation": "It refers to the year Khadījah and Abū Ṭālib passed away."
   },
-
+{
+  "id": "seerah_beg_011",
+  "category": "Seerah",
+  "level": "Beginner",
+  "question": "How old was the Prophet ﷺ when his mother Āminah passed away?",
+  "options": ["Six years old", "Four years old", "Eight years old", "Ten years old"],
+  "correctIndex": 0,
+  "explanation": "Āminah bint Wahb passed away when the Prophet ﷺ was six years old."
+},
+{
+  "id": "seerah_beg_012",
+  "category": "Seerah",
+  "level": "Beginner",
+  "question": "Who took care of the Prophet ﷺ after the death of his mother?",
+  "options": ["ʿAbdul-Muṭṭalib", "Abū Ṭālib", "Ḥamzah", "Al-ʿAbbās"],
+  "correctIndex": 0,
+  "explanation": "His grandfather ʿAbdul-Muṭṭalib took care of him after his mother’s death."
+},
+{
+  "id": "seerah_beg_013",
+  "category": "Seerah",
+  "level": "Beginner",
+  "question": "After ʿAbdul-Muṭṭalib passed away, who became the Prophet ﷺ’s guardian?",
+  "options": ["Abū Ṭālib", "Ḥamzah", "Al-ʿAbbās", "Abū Lahab"],
+  "correctIndex": 0,
+  "explanation": "Abū Ṭālib, his uncle, became his guardian."
+},
+{
+  "id": "seerah_beg_014",
+  "category": "Seerah",
+  "level": "Beginner",
+  "question": "What title was the Prophet ﷺ known by among the Quraysh before prophethood?",
+  "options": ["Al-Amīn", "Al-Ṣādiq", "Al-Fāḍil", "Al-Qawiyy"],
+  "correctIndex": 0,
+  "explanation": "He was widely known as Al-Amīn (the Trustworthy)."
+},
+{
+  "id": "seerah_beg_015",
+  "category": "Seerah",
+  "level": "Beginner",
+  "question": "Which trade did the Prophet ﷺ engage in before prophethood?",
+  "options": ["Trade and commerce", "Farming", "Metalwork", "Carpentry"],
+  "correctIndex": 0,
+  "explanation": "The Prophet ﷺ worked as a trader, known for honesty and integrity."
+},
+{
+  "id": "seerah_beg_016",
+  "category": "Seerah",
+  "level": "Beginner",
+  "question": "At what age did the Prophet ﷺ receive the first revelation?",
+  "options": ["40 years old", "35 years old", "45 years old", "30 years old"],
+  "correctIndex": 0,
+  "explanation": "The first revelation came when the Prophet ﷺ was 40 years old."
+},
+{
+  "id": "seerah_beg_017",
+  "category": "Seerah",
+  "level": "Beginner",
+  "question": "Which angel brought the first revelation to the Prophet ﷺ?",
+  "options": ["Jibrīl", "Mīkā’īl", "Isrāfīl", "Malik"],
+  "correctIndex": 0,
+  "explanation": "Angel Jibrīl (ʿalayhi as-salām) brought the first revelation."
+},
+{
+  "id": "seerah_beg_018",
+  "category": "Seerah",
+  "level": "Beginner",
+  "question": "Where was the Prophet ﷺ when the first revelation was revealed?",
+  "options": ["Cave of Ḥirā’", "Masjid al-Ḥarām", "His home in Makkah", "Cave of Thawr"],
+  "correctIndex": 0,
+  "explanation": "The first revelation occurred in the Cave of Ḥirā’."
+},
+{
+  "id": "seerah_beg_019",
+  "category": "Seerah",
+  "level": "Beginner",
+  "question": "What was the first word revealed in the Qur’an?",
+  "options": ["Iqra’", "Bismillah", "Qul", "Al-ḥamdu"],
+  "correctIndex": 0,
+  "explanation": "The first revealed word was ‘Iqra’’ (Read/Recite)."
+},
+{
+  "id": "seerah_beg_020",
+  "category": "Seerah",
+  "level": "Beginner",
+  "question": "Who was the first adult male to accept Islam?",
+  "options": ["Abū Bakr", "ʿAlī ibn Abī Ṭālib", "Zayd ibn Ḥārithah", "ʿUmar ibn al-Khaṭṭāb"],
+  "correctIndex": 0,
+  "explanation": "Abū Bakr aṣ-Ṣiddīq was the first adult male to accept Islam."
+},
   {
     "id": "fiqh_beg_003",
     "category": "Fiqh",
@@ -326,8 +504,97 @@
     "correctIndex": 0,
     "explanation": "Tayammum replaces wudū’/ghusl when needed."
   },
-
-  {
+{
+  "id": "fiqh_beg_011",
+  "category": "Fiqh",
+  "level": "Beginner",
+  "question": "Which of the following is a condition for the validity of ṣalāh?",
+  "options": ["Facing the Qiblah", "Reciting loudly", "Praying in congregation", "Wearing new clothes"],
+  "correctIndex": 0,
+  "explanation": "Facing the Qiblah is a condition (sharṭ) for the validity of ṣalāh."
+},
+{
+  "id": "fiqh_beg_012",
+  "category": "Fiqh",
+  "level": "Beginner",
+  "question": "Which body parts are obligatory to wash in wudū’?",
+  "options": ["Face, arms, head, feet", "Hands only", "Face and feet only", "Whole body"],
+  "correctIndex": 0,
+  "explanation": "The obligatory parts are the face, arms, wiping the head, and washing the feet."
+},
+{
+  "id": "fiqh_beg_013",
+  "category": "Fiqh",
+  "level": "Beginner",
+  "question": "What nullifies tayammum once it has been performed?",
+  "options": ["Finding water", "Sleeping briefly", "Changing clothes", "Talking"],
+  "correctIndex": 0,
+  "explanation": "Tayammum is invalidated when water becomes available."
+},
+{
+  "id": "fiqh_beg_014",
+  "category": "Fiqh",
+  "level": "Beginner",
+  "question": "Which of the following invalidates ṣalāh?",
+  "options": ["Intentionally speaking", "Sneezing", "Blinking", "Crying quietly"],
+  "correctIndex": 0,
+  "explanation": "Intentional speech breaks ṣalāh."
+},
+{
+  "id": "fiqh_beg_015",
+  "category": "Fiqh",
+  "level": "Beginner",
+  "question": "What is the minimum number of rakʿahs for the Fajr prayer?",
+  "options": ["Two", "Four", "Three", "One"],
+  "correctIndex": 0,
+  "explanation": "Fajr consists of two obligatory rakʿahs."
+},
+{
+  "id": "fiqh_beg_016",
+  "category": "Fiqh",
+  "level": "Beginner",
+  "question": "Which intention (niyyah) is required for fasting Ramaḍān?",
+  "options": ["Intending to fast before dawn", "Intending after sunrise", "Saying it aloud", "Writing it down"],
+  "correctIndex": 0,
+  "explanation": "The intention for fasting must be made before dawn."
+},
+{
+  "id": "fiqh_beg_017",
+  "category": "Fiqh",
+  "level": "Beginner",
+  "question": "Which action invalidates the fast of Ramaḍān?",
+  "options": ["Eating deliberately", "Forgetting and eating", "Sleeping", "Using miswāk"],
+  "correctIndex": 0,
+  "explanation": "Deliberate eating invalidates the fast, unlike eating forgetfully."
+},
+{
+  "id": "fiqh_beg_018",
+  "category": "Fiqh",
+  "level": "Beginner",
+  "question": "Who is exempt from fasting Ramaḍān (basic ruling)?",
+  "options": ["The sick and travelers", "The wealthy", "Children only", "Students"],
+  "correctIndex": 0,
+  "explanation": "Those who are sick or traveling are given concessions."
+},
+{
+  "id": "fiqh_beg_019",
+  "category": "Fiqh",
+  "level": "Beginner",
+  "question": "Which prayer has four obligatory rakʿahs?",
+  "options": ["Ẓuhr", "Maghrib", "Fajr", "Witr"],
+  "correctIndex": 0,
+  "explanation": "Ẓuhr consists of four obligatory rakʿahs."
+},
+{
+  "id": "fiqh_beg_020",
+  "category": "Fiqh",
+  "level": "Beginner",
+  "question": "What is the ruling on praying without ṭahārah (purification)?",
+  "options": ["Ṣalāh is invalid", "Ṣalāh is disliked", "Ṣalāh is valid", "Ṣalāh is optional"],
+  "correctIndex": 0,
+  "explanation": "Purification is a condition; without it, ṣalāh is invalid."
+},
+{
     "id": "tawheed_beg_003",
     "category": "Tawheed",
     "level": "Beginner",
@@ -399,7 +666,96 @@
     "correctIndex": 0,
     "explanation": "Ilāh means one who is worshipped."
   },
-
+  {
+  "id": "tawheed_beg_011",
+  "category": "Tawheed",
+  "level": "Beginner",
+  "question": "What does Tawḥīd al-Ulūhiyyah focus on?",
+  "options": ["Directing all worship to Allah alone", "Believing Allah created everything", "Believing Allah knows everything", "Believing in angels"],
+  "correctIndex": 0,
+  "explanation": "Tawḥīd al-Ulūhiyyah is singling Allah out in worship."
+},
+{
+  "id": "tawheed_beg_012",
+  "category": "Tawheed",
+  "level": "Beginner",
+  "question": "What does Tawḥīd ar-Rubūbiyyah affirm?",
+  "options": ["Allah alone creates, owns, and controls", "Allah alone is worshipped", "Allah sent prophets", "Allah revealed books"],
+  "correctIndex": 0,
+  "explanation": "Rubūbiyyah affirms Allah as Creator, Owner, and Sustainer."
+},
+{
+  "id": "tawheed_beg_013",
+  "category": "Tawheed",
+  "level": "Beginner",
+  "question": "Which action is an example of shirk in worship?",
+  "options": ["Calling upon someone besides Allah for help", "Making duʿā’ to Allah", "Giving charity", "Reading Qur’an"],
+  "correctIndex": 0,
+  "explanation": "Directing duʿā’ to other than Allah is major shirk."
+},
+{
+  "id": "tawheed_beg_014",
+  "category": "Tawheed",
+  "level": "Beginner",
+  "question": "Why did the Quraysh reject the statement 'Lā ilāha illa Allah'?",
+  "options": ["Because it required abandoning other gods", "Because they did not believe in Allah", "Because they denied prophets", "Because they rejected prayer"],
+  "correctIndex": 0,
+  "explanation": "They understood it meant exclusive worship of Allah."
+},
+{
+  "id": "tawheed_beg_015",
+  "category": "Tawheed",
+  "level": "Beginner",
+  "question": "Which of the following is considered hidden shirk (minor shirk)?",
+  "options": ["Doing acts of worship to be seen by people", "Denying Allah", "Worshipping idols", "Rejecting revelation"],
+  "correctIndex": 0,
+  "explanation": "Showing off (riyā’) corrupts sincerity and is minor shirk."
+},
+{
+  "id": "tawheed_beg_016",
+  "category": "Tawheed",
+  "level": "Beginner",
+  "question": "What is the correct belief regarding Allah’s names and attributes?",
+  "options": ["They are affirmed without distortion or resemblance", "They are denied", "They are interpreted freely", "They resemble creation"],
+  "correctIndex": 0,
+  "explanation": "Allah’s attributes are affirmed as they came, without likening Him to creation."
+},
+{
+  "id": "tawheed_beg_017",
+  "category": "Tawheed",
+  "level": "Beginner",
+  "question": "Which statement best explains the meaning of 'Lā ilāha illa Allah'?",
+  "options": ["There is no deity worthy of worship except Allah", "There is no creator except Allah", "There is no prophet except Allah", "There is no ruler except Allah"],
+  "correctIndex": 0,
+  "explanation": "It negates all false gods and affirms worship for Allah alone."
+},
+{
+  "id": "tawheed_beg_018",
+  "category": "Tawheed",
+  "level": "Beginner",
+  "question": "What was the main message of all the prophets?",
+  "options": ["Worship Allah alone", "Follow the law of the land", "Seek wealth", "Develop civilization"],
+  "correctIndex": 0,
+  "explanation": "Every prophet called to Tawḥīd before anything else."
+},
+{
+  "id": "tawheed_beg_019",
+  "category": "Tawheed",
+  "level": "Beginner",
+  "question": "Which belief nullifies a person’s Tawḥīd?",
+  "options": ["Believing someone shares Allah’s right to worship", "Making mistakes", "Committing sins", "Forgetting supplications"],
+  "correctIndex": 0,
+  "explanation": "Shirk in worship contradicts Tawḥīd entirely."
+},
+{
+  "id": "tawheed_beg_020",
+  "category": "Tawheed",
+  "level": "Beginner",
+  "question": "Why is Tawḥīd the greatest obligation?",
+  "options": ["Because all deeds depend on it", "Because it is easy", "Because it brings wealth", "Because it brings status"],
+  "correctIndex": 0,
+  "explanation": "Without Tawḥīd, no deed is accepted."
+},
   {
     "id": "arabic_beg_003",
     "category": "Arabic",
@@ -472,7 +828,96 @@
     "correctIndex": 0,
     "explanation": "Jabal means mountain."
   },
-
+{
+  "id": "arabic_beg_011",
+  "category": "Arabic",
+  "level": "Beginner",
+  "question": "Which of the following is a common three-letter Arabic root?",
+  "options": ["ك ت ب", "ك ت ا ب", "ك ا ت ب", "ك ب ا"],
+  "correctIndex": 0,
+  "explanation": "Most Arabic words are built from three-letter roots like ك ت ب (to write)."
+},
+{
+  "id": "arabic_beg_012",
+  "category": "Arabic",
+  "level": "Beginner",
+  "question": "Which word is derived from the root ك ت ب?",
+  "options": ["Kitāb", "Bayt", "Nūr", "Mā’"],
+  "correctIndex": 0,
+  "explanation": "Kitāb (book) comes from the root ك ت ب related to writing."
+},
+{
+  "id": "arabic_beg_013",
+  "category": "Arabic",
+  "level": "Beginner",
+  "question": "What does the verb 'kataba' (كَتَبَ) mean?",
+  "options": ["He wrote", "He read", "He walked", "He spoke"],
+  "correctIndex": 0,
+  "explanation": "Kataba means 'he wrote'."
+},
+{
+  "id": "arabic_beg_014",
+  "category": "Arabic",
+  "level": "Beginner",
+  "question": "Which of the following is a verb?",
+  "options": ["Dhahaba (ذهب)", "Bayt", "Qalam", "Samā’"],
+  "correctIndex": 0,
+  "explanation": "Dhahaba is a verb meaning 'he went'."
+},
+{
+  "id": "arabic_beg_015",
+  "category": "Arabic",
+  "level": "Beginner",
+  "question": "What does 'dhahaba al-waladu' (ذهب الولد) mean?",
+  "options": ["The boy went", "The boy wrote", "The boy slept", "The boy ate"],
+  "correctIndex": 0,
+  "explanation": "Dhahaba means 'went' and al-walad means 'the boy'."
+},
+{
+  "id": "arabic_beg_016",
+  "category": "Arabic",
+  "level": "Beginner",
+  "question": "Which word means 'he ate' in Arabic?",
+  "options": ["Akala (أكل)", "Shariba", "Jalasa", "Qara’a"],
+  "correctIndex": 0,
+  "explanation": "Akala means 'he ate'."
+},
+{
+  "id": "arabic_beg_017",
+  "category": "Arabic",
+  "level": "Beginner",
+  "question": "What does 'al-waladu akala' (الولد أكل) mean?",
+  "options": ["The boy ate", "The boy drank", "The boy wrote", "The boy left"],
+  "correctIndex": 0,
+  "explanation": "Al-walad means 'the boy' and akala means 'ate'."
+},
+{
+  "id": "arabic_beg_018",
+  "category": "Arabic",
+  "level": "Beginner",
+  "question": "Which word means 'water' in Arabic?",
+  "options": ["Mā’", "Nār", "Rīḥ", "Ḥajar"],
+  "correctIndex": 0,
+  "explanation": "Mā’ means water."
+},
+{
+  "id": "arabic_beg_019",
+  "category": "Arabic",
+  "level": "Beginner",
+  "question": "Which simple sentence is correct?",
+  "options": ["Al-waladu kataba", "Kataba walad", "Walad al-kataba", "Katib walad"],
+  "correctIndex": 0,
+  "explanation": "Arabic often starts with verb or subject. This sentence correctly means 'The boy wrote'."
+},
+{
+  "id": "arabic_beg_020",
+  "category": "Arabic",
+  "level": "Beginner",
+  "question": "Why are three-letter roots important in Arabic?",
+  "options": ["They form the base meaning of many words", "They replace grammar", "They are only for Qur’an", "They are only nouns"],
+  "correctIndex": 0,
+  "explanation": "Most Arabic vocabulary expands from three-letter root meanings."
+},
   {
     "id": "adhkaar_beg_003",
     "category": "Adhkaar",
@@ -544,5 +989,145 @@
     "options": ["Alḥamdulillāh", "Astaghfirullāh", "Bismillāh", "Allāhu Akbar"],
     "correctIndex": 0,
     "explanation": "Alḥamdulillāh is praise and thanks to Allah."
-  }
+},
+{
+  "id": "adhkaar_beg_011",
+  "category": "Adhkaar",
+  "level": "Beginner",
+  "question": "What should a Muslim say when entering the bathroom?",
+  "options": [
+    "Allāhumma innī aʿūdhu bika minal-khubthi wal-khabā’ith",
+    "Bismillāh",
+    "Alḥamdulillāh",
+    "Subḥānallāh"
+  ],
+  "correctIndex": 0,
+  "explanation": "This duʿā’ seeks protection from harm when entering the bathroom."
+},
+{
+  "id": "adhkaar_beg_012",
+  "category": "Adhkaar",
+  "level": "Beginner",
+  "question": "What is said after leaving the bathroom?",
+  "options": [
+    "Ghufrānaka",
+    "Alḥamdulillāh",
+    "Bismillāh",
+    "Allāhu Akbar"
+  ],
+  "correctIndex": 0,
+  "explanation": "Ghufrānaka means 'I seek Your forgiveness'."
+},
+{
+  "id": "adhkaar_beg_013",
+  "category": "Adhkaar",
+  "level": "Beginner",
+  "question": "Which dhikr is recommended before sleeping?",
+  "options": [
+    "Bismika Allāhumma amūtu wa aḥyā",
+    "Allāhu Akbar",
+    "Astaghfirullāh",
+    "Lā ilāha illa Allah"
+  ],
+  "correctIndex": 0,
+  "explanation": "This duʿā’ is reported in authentic Sunnah before sleeping."
+},
+{
+  "id": "adhkaar_beg_014",
+  "category": "Adhkaar",
+  "level": "Beginner",
+  "question": "What should be said when waking up from sleep?",
+  "options": [
+    "Alḥamdulillāh alladhī aḥyā-nā baʿda mā amātanā",
+    "Subḥānallāh",
+    "Allāhu Akbar",
+    "Bismillāh"
+  ],
+  "correctIndex": 0,
+  "explanation": "This duʿā’ thanks Allah for restoring life after sleep."
+},
+{
+  "id": "adhkaar_beg_015",
+  "category": "Adhkaar",
+  "level": "Beginner",
+  "question": "Which phrase should be said before starting any important task?",
+  "options": [
+    "Bismillāh",
+    "Alḥamdulillāh",
+    "Astaghfirullāh",
+    "Lā ilāha illa Allah"
+  ],
+  "correctIndex": 0,
+  "explanation": "Beginning with Bismillāh brings blessing and remembrance."
+},
+{
+  "id": "adhkaar_beg_016",
+  "category": "Adhkaar",
+  "level": "Beginner",
+  "question": "What should you say when leaving the house?",
+  "options": [
+    "Bismillāh, tawakkaltu ʿalā Allāh",
+    "Alḥamdulillāh",
+    "Allāhu Akbar",
+    "Subḥānallāh"
+  ],
+  "correctIndex": 0,
+  "explanation": "This duʿā’ expresses reliance upon Allah."
+},
+{
+  "id": "adhkaar_beg_017",
+  "category": "Adhkaar",
+  "level": "Beginner",
+  "question": "Which dhikr is recommended after obligatory prayers?",
+  "options": [
+    "Subḥānallāh, Alḥamdulillāh, Allāhu Akbar",
+    "Astaghfirullāh only",
+    "Lā ilāha illa Allah only",
+    "Bismillāh"
+  ],
+  "correctIndex": 0,
+  "explanation": "These are well-known post-ṣalāh adhkār."
+},
+{
+  "id": "adhkaar_beg_018",
+  "category": "Adhkaar",
+  "level": "Beginner",
+  "question": "What is recommended to say when feeling afraid or anxious?",
+  "options": [
+    "Ḥasbiyallāhu lā ilāha illā Huwa",
+    "Subḥānallāh",
+    "Allāhu Akbar",
+    "Bismillāh"
+  ],
+  "correctIndex": 0,
+  "explanation": "This dhikr affirms trust in Allah during fear."
+},
+{
+  "id": "adhkaar_beg_019",
+  "category": "Adhkaar",
+  "level": "Beginner",
+  "question": "Which dhikr is associated with protection from harm?",
+  "options": [
+    "Aʿūdhu billāhi min ash-shayṭānir-rajīm",
+    "Alḥamdulillāh",
+    "Allāhu Akbar",
+    "Astaghfirullāh"
+  ],
+  "correctIndex": 0,
+  "explanation": "Seeking refuge with Allah protects from Shayṭān."
+},
+{
+  "id": "adhkaar_beg_020",
+  "category": "Adhkaar",
+  "level": "Beginner",
+  "question": "Why are daily adhkār important?",
+  "options": [
+    "They keep the heart connected to Allah throughout the day",
+    "They replace prayer",
+    "They are only for scholars",
+    "They are optional habits with no effect"
+  ],
+  "correctIndex": 0,
+  "explanation": "Adhkār preserve awareness of Allah in everyday life."
+}
 ]
