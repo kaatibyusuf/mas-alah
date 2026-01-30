@@ -20,6 +20,7 @@
         </div>
 
         <nav class="nav" aria-label="Primary navigation">
+          <button class="nav-btn" data-route="welcome" type="button">Welcome</button>
           <button class="nav-btn" data-route="home" type="button">Home</button>
           <button class="nav-btn" data-route="daily" type="button">Daily</button>
           <button class="nav-btn" data-route="progress" type="button">Progress</button>
@@ -50,6 +51,7 @@
 
         <div class="footer-right">
           <div class="footer-links" aria-label="Footer links">
+            <button class="footer-link" data-route="welcome" type="button">Welcome</button>
             <button class="footer-link" data-route="home" type="button">Home</button>
             <button class="footer-link" data-route="daily" type="button">Daily</button>
             <button class="footer-link" data-route="progress" type="button">Progress</button>
@@ -63,10 +65,6 @@
         </div>
       </div>
     </footer>
-
-    <script>
-      document.getElementById("year").textContent = new Date().getFullYear();
-    </script>
 
     <!-- Load app AFTER the HTML -->
     <script src="scripts/app.js" type="module"></script>
