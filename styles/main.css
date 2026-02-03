@@ -97,6 +97,8 @@ h2,h3{ font-weight: 900; }
   user-select:none;
 }
 
+.brand-text{ display:block; }
+
 .brand-name{
   margin:0;
   font-size:16px;
@@ -111,7 +113,7 @@ h2,h3{ font-weight: 900; }
   color: var(--muted);
 }
 
-/* Nav (pill container, premium) */
+/* Nav (pill container) */
 .nav{
   display:flex;
   gap:8px;
@@ -181,10 +183,7 @@ h2,h3{ font-weight: 900; }
 }
 
 /* Inputs */
-.field{
-  display:grid;
-  gap:6px;
-}
+.field{ display:grid; gap:6px; }
 .field span{ color:var(--muted); font-size:12px; }
 .field.inline{
   grid-template-columns: 18px 1fr;
@@ -225,6 +224,14 @@ select:focus, textarea:focus{
 
 .btn:hover, .optionBtn:hover{ background: rgba(255,255,255,.06); }
 .btn:active, .optionBtn:active{ transform: translateY(1px); }
+
+.btn:focus-visible,
+.primary:focus-visible,
+.optionBtn:focus-visible,
+.footer-link:focus-visible{
+  outline: 2px solid rgba(255,187,0,.55);
+  outline-offset: 2px;
+}
 
 .primary{
   border:1px solid rgba(255,187,0,.45);
@@ -304,6 +311,25 @@ select:focus, textarea:focus{
   height:100%;
   width:100%;
   background: linear-gradient(90deg, rgba(255,187,0,.95), rgba(255,187,0,.55));
+}
+
+/* =======================
+   Quiz progress bar
+======================= */
+.quiz-progress{
+  margin-bottom: 14px;
+}
+.quiz-progress-bar{
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.08);
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.12);
+}
+.quiz-progress-fill{
+  height: 100%;
+  background: linear-gradient(90deg, rgba(255,187,0,.95), rgba(255,187,0,.65));
+  transition: width .35s ease;
 }
 
 /* =======================
@@ -496,6 +522,110 @@ select:focus, textarea:focus{
 }
 
 /* =======================
+   FAQ (dark)
+======================= */
+.faq{ padding: 26px 0 8px; }
+
+.faq-head{
+  text-align:center;
+  padding: 22px 10px 6px;
+}
+
+.faq-title{
+  margin: 0;
+  font-size: clamp(28px, 3.2vw, 42px);
+  letter-spacing: -0.4px;
+  line-height: 1.1;
+  color: var(--text);
+}
+
+.faq-sub{
+  margin: 10px auto 0;
+  max-width: 70ch;
+  color: var(--muted);
+  line-height: 1.7;
+  font-size: 15px;
+}
+
+.faq-grid{
+  margin-top: 18px;
+  display:grid;
+  grid-template-columns: 1.15fr .85fr;
+  gap: 12px;
+}
+@media (max-width: 980px){
+  .faq-grid{ grid-template-columns: 1fr; }
+}
+
+.faq-panel{
+  background: rgba(255,255,255,.03);
+  border:1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px;
+}
+
+.faq-acc{ display:grid; gap: 10px; }
+
+.faq-item{
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 16px;
+  background: rgba(255,255,255,.02);
+  overflow:hidden;
+}
+
+.faq-item summary{
+  list-style:none;
+  cursor:pointer;
+  padding: 14px 14px;
+  font-weight: 900;
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap: 12px;
+  color: var(--text);
+}
+.faq-item summary::-webkit-details-marker{ display:none; }
+
+.faq-q{
+  display:flex;
+  align-items:flex-start;
+  gap: 10px;
+}
+
+.faq-dot{
+  width: 30px;
+  height: 30px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,187,0,.25);
+  background: rgba(255,187,0,.12);
+  display:grid;
+  place-items:center;
+  flex: 0 0 auto;
+  color: var(--gold);
+}
+
+.faq-chevron{
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: rgba(255,255,255,.65);
+  transition: transform .18s ease;
+}
+
+.faq-item[open] .faq-chevron{ transform: rotate(180deg); }
+
+.faq-a{
+  padding: 0 14px 14px 54px;
+  color: var(--muted);
+  line-height: 1.7;
+  font-size: 14px;
+}
+
+.faq-side{ display:grid; gap: 12px; }
+
+/* =======================
    Footer (dark premium)
 ======================= */
 .footer{
@@ -577,11 +707,13 @@ select:focus, textarea:focus{
   color: var(--text);
   font-weight: 850;
   cursor: pointer;
+  transition: background .12s ease, border-color .12s ease, transform .12s ease;
 }
 .footer-link:hover{
   background: rgba(255,187,0,.10);
   border-color: rgba(255,187,0,.22);
 }
+.footer-link:active{ transform: translateY(1px); }
 
 .footer-meta{
   display:flex;

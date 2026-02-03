@@ -2,9 +2,12 @@
    Updated:
    - Warm screen transitions (leave + enter)
    - Route-safe rendering (handles async daily)
-   - Full FAQ page (styled with your existing FAQ CSS)
+   - Full FAQ page (styled with your FAQ CSS)
    - Centralized navigation + CTA bindings
    - Year auto-fill
+   - Keyboard support: A/B/C/D, Enter for Next
+   - Visual progress bar (top of quiz)
+   - Haptics (mobile): light vibration for correct/wrong/timeout (if supported)
 */
 
 const app = document.getElementById("app");
@@ -73,7 +76,11 @@ const state = {
   timeLeft: 20,
   lastSettings: null, // { category, level, timed, count, mode: "normal"|"daily" }
   isNavigating: false,
-  currentRoute: "welcome"
+  currentRoute: "welcome",
+
+  // UX touches
+  answered: false,
+  correctIdx: null
 };
 
 /* =======================
@@ -209,9 +216,21 @@ function startTimer() {
 
     if (state.timeLeft <= 0) {
       clearTimer();
-      showFeedback(null);
+      // timeout: treat as no selection
+      showFeedback(null, { reason: "timeout" });
     }
   }, 1000);
+}
+
+/* =======================
+   Haptics
+======================= */
+function vibrate(pattern) {
+  if (typeof navigator === "undefined") return;
+  if (!("vibrate" in navigator)) return;
+  try {
+    navigator.vibrate(pattern);
+  } catch {}
 }
 
 /* =======================
@@ -307,12 +326,10 @@ function beginTransition() {
   app.classList.add("screen");
   app.classList.add("is-leaving");
 }
-
 function endTransition() {
   app.classList.remove("is-leaving");
   app.classList.add("screen");
 }
-
 function withTransition(fn) {
   clearTimer();
   beginTransition();
@@ -323,9 +340,50 @@ function withTransition(fn) {
 }
 
 /* =======================
+   Keyboard support
+======================= */
+function handleQuizKeys(e) {
+  if (state.currentRoute !== "quiz") return;
+
+  const key = (e.key || "").toLowerCase();
+  const isTyping =
+    e.target &&
+    (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA" || e.target.isContentEditable);
+
+  if (isTyping) return;
+
+  // Enter -> Next (only when available)
+  if (key === "enter") {
+    const nextBtn = document.getElementById("nextBtn");
+    if (nextBtn && nextBtn.style.display !== "none") {
+      e.preventDefault();
+      nextBtn.click();
+    }
+    return;
+  }
+
+  // A/B/C/D -> options 0-3
+  const map = { a: 0, b: 1, c: 2, d: 3 };
+  if (key in map) {
+    const idx = map[key];
+    const btn = document.querySelector(`.optionBtn[data-idx="${idx}"]`);
+    if (btn && !btn.disabled) {
+      e.preventDefault();
+      btn.click();
+    }
+  }
+}
+
+function bindGlobalKeyboard() {
+  window.addEventListener("keydown", handleQuizKeys);
+}
+
+/* =======================
    WELCOME
 ======================= */
 function renderWelcome() {
+  state.currentRoute = "welcome";
+
   const progress = loadProgress();
   const hasAnyActivity =
     (progress.lastAttempt && progress.lastAttempt.total) ||
@@ -427,6 +485,8 @@ function renderWelcome() {
    HOME
 ======================= */
 function renderHome() {
+  state.currentRoute = "home";
+
   const progress = loadProgress();
   const last = progress.lastAttempt;
 
@@ -553,7 +613,6 @@ function renderHome() {
     </section>
   `;
 
-  // keep your quick responsive fix
   if (window.matchMedia("(max-width: 900px)").matches) {
     const row = app.querySelector('[style*="repeat(3, 1fr)"]');
     if (row) row.style.gridTemplateColumns = "1fr";
@@ -597,6 +656,8 @@ function renderHome() {
    DAILY
 ======================= */
 async function renderDaily() {
+  state.currentRoute = "daily";
+
   const today = todayISO();
   const existing = loadDailyState();
   const defaultCategory = existing?.date === today ? existing.category : "Qur’an";
@@ -684,16 +745,37 @@ async function renderDaily() {
    QUIZ
 ======================= */
 function renderQuiz() {
+  state.currentRoute = "quiz";
+  state.answered = false;
+
   const total = state.quizQuestions.length;
   const q = state.quizQuestions[state.index];
+  state.correctIdx = q.correctIndex;
+
+  const progressPct = Math.round(((state.index + 1) / total) * 100);
 
   app.innerHTML = `
     <section class="card" style="margin-top:20px;">
+
+      <div class="quiz-progress">
+        <div class="muted" style="display:flex; justify-content:space-between; gap:10px; margin-bottom:8px;">
+          <span>Question ${state.index + 1} of ${total}</span>
+          <span>${progressPct}%</span>
+        </div>
+        <div class="quiz-progress-bar">
+          <div class="quiz-progress-fill" style="width:${progressPct}%"></div>
+        </div>
+      </div>
+
       <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
         <div>
           <h2 style="margin:0;">Question ${state.index + 1} / ${total}</h2>
           <p class="muted" style="margin:6px 0 0 0;">Score: ${state.score}</p>
-          ${state.lastSettings?.mode === "daily" ? `<p class="muted" style="margin:6px 0 0 0;">Mode: Today’s Quiz</p>` : ``}
+          ${
+            state.lastSettings?.mode === "daily"
+              ? `<p class="muted" style="margin:6px 0 0 0;">Mode: Today’s Quiz</p>`
+              : ``
+          }
         </div>
 
         ${
@@ -747,7 +829,10 @@ function renderQuiz() {
   if (state.timed) startTimer();
 }
 
-function showFeedback(selectedIdx) {
+function showFeedback(selectedIdx, meta = {}) {
+  if (state.answered) return;
+  state.answered = true;
+
   clearTimer();
 
   const q = state.quizQuestions[state.index];
@@ -763,10 +848,17 @@ function showFeedback(selectedIdx) {
   const isCorrect = selectedIdx === correct;
   if (isCorrect) state.score += 1;
 
+  // Haptics
+  if (meta.reason === "timeout") {
+    vibrate(20);
+  } else {
+    vibrate(isCorrect ? 15 : [10, 30, 10]);
+  }
+
   const feedback = document.getElementById("feedback");
   feedback.style.display = "block";
   feedback.innerHTML = `
-    <strong>${isCorrect ? "Correct." : "Incorrect."}</strong>
+    <strong>${meta.reason === "timeout" ? "Time up." : isCorrect ? "Correct." : "Incorrect."}</strong>
     <div class="muted" style="margin-top:6px;">${q.explanation || ""}</div>
   `;
 
@@ -790,6 +882,7 @@ function showFeedback(selectedIdx) {
    RESULTS
 ======================= */
 function renderResults() {
+  state.currentRoute = "results";
   clearTimer();
 
   const total = state.quizQuestions.length;
@@ -867,6 +960,8 @@ function renderResults() {
    PROGRESS
 ======================= */
 function renderProgress() {
+  state.currentRoute = "progress";
+
   const progress = loadProgress();
   const bestEntries = Object.entries(progress.bestScores).sort((a, b) => b[1] - a[1]);
   const last = progress.lastAttempt;
@@ -931,9 +1026,11 @@ function renderProgress() {
 }
 
 /* =======================
-   FAQ (full page)
+   FAQ
 ======================= */
 function renderFAQ() {
+  state.currentRoute = "faq";
+
   app.innerHTML = `
     <section class="faq">
       <div class="wrap">
@@ -1066,7 +1163,6 @@ function renderFAQ() {
 ======================= */
 async function renderRoute(route) {
   const r = route || "welcome";
-  state.currentRoute = r;
   setActiveNav(r);
 
   if (r === "welcome") return renderWelcome();
@@ -1105,6 +1201,7 @@ function bindNavRoutes() {
 ======================= */
 window.addEventListener("DOMContentLoaded", () => {
   bindNavRoutes();
+  bindGlobalKeyboard();
   setFooterYear();
 
   const initial = (window.location.hash || "").slice(1);
