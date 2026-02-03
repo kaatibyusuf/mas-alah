@@ -1,3 +1,12 @@
+/* Mas'alah App
+   Updated:
+   - Warm screen transitions (leave + enter)
+   - Route-safe rendering (handles async daily)
+   - Full FAQ page (styled with your existing FAQ CSS)
+   - Centralized navigation + CTA bindings
+   - Year auto-fill
+*/
+
 const app = document.getElementById("app");
 
 /* =======================
@@ -7,7 +16,6 @@ const STORAGE_KEY = "masalah_progress_v1";
 const DAILY_KEY = "masalah_daily_v1";
 
 function todayISO() {
-  // Local date, not UTC
   const d = new Date();
   const y = d.getFullYear();
   const m = String(d.getMonth() + 1).padStart(2, "0");
@@ -17,9 +25,7 @@ function todayISO() {
 
 function loadProgress() {
   const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) {
-    return { streakCount: 0, lastActiveDate: null, bestScores: {}, lastAttempt: null };
-  }
+  if (!raw) return { streakCount: 0, lastActiveDate: null, bestScores: {}, lastAttempt: null };
   try {
     const parsed = JSON.parse(raw);
     return {
@@ -65,7 +71,9 @@ const state = {
   secondsPerQuestion: 20,
   timerId: null,
   timeLeft: 20,
-  lastSettings: null // { category, level, timed, count, mode: "normal"|"daily" }
+  lastSettings: null, // { category, level, timed, count, mode: "normal"|"daily" }
+  isNavigating: false,
+  currentRoute: "welcome"
 };
 
 /* =======================
@@ -221,46 +229,46 @@ function icon(name) {
     case "spark":
       return wrap(
         `<path ${common} d="M12 2l1.2 4.2L17.4 8 13.2 9.2 12 13.4 10.8 9.2 6.6 8l4.2-1.8L12 2z"/>` +
-        `<path ${common} d="M19 13l.7 2.5L22 16l-2.3.5L19 19l-.7-2.5L16 16l2.3-.5L19 13z"/>`
+          `<path ${common} d="M19 13l.7 2.5L22 16l-2.3.5L19 19l-.7-2.5L16 16l2.3-.5L19 13z"/>`
       );
     case "bolt":
       return wrap(`<path ${common} d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/>`);
     case "target":
       return wrap(
         `<circle ${common} cx="12" cy="12" r="8"/>` +
-        `<circle ${common} cx="12" cy="12" r="3"/>` +
-        `<path ${common} d="M12 2v2M12 20v2M2 12h2M20 12h2"/>`
+          `<circle ${common} cx="12" cy="12" r="3"/>` +
+          `<path ${common} d="M12 2v2M12 20v2M2 12h2M20 12h2"/>`
       );
     case "calendar":
       return wrap(
         `<path ${common} d="M8 2v3M16 2v3"/>` +
-        `<path ${common} d="M4 7h16"/>` +
-        `<path ${common} d="M5 5h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/>`
+          `<path ${common} d="M4 7h16"/>` +
+          `<path ${common} d="M5 5h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/>`
       );
     case "trophy":
       return wrap(
         `<path ${common} d="M8 21h8"/>` +
-        `<path ${common} d="M12 17v4"/>` +
-        `<path ${common} d="M7 4h10v4a5 5 0 0 1-10 0V4z"/>` +
-        `<path ${common} d="M7 6H4a2 2 0 0 0 2 4h1"/>` +
-        `<path ${common} d="M17 6h3a2 2 0 0 1-2 4h-1"/>`
+          `<path ${common} d="M12 17v4"/>` +
+          `<path ${common} d="M7 4h10v4a5 5 0 0 1-10 0V4z"/>` +
+          `<path ${common} d="M7 6H4a2 2 0 0 0 2 4h1"/>` +
+          `<path ${common} d="M17 6h3a2 2 0 0 1-2 4h-1"/>`
       );
     case "shield":
       return wrap(
         `<path ${common} d="M12 2l7 4v6c0 5-3 9-7 10-4-1-7-5-7-10V6l7-4z"/>` +
-        `<path ${common} d="M9 12l2 2 4-5"/>`
+          `<path ${common} d="M9 12l2 2 4-5"/>`
       );
     case "book":
       return wrap(
         `<path ${common} d="M4 19a2 2 0 0 0 2 2h12"/>` +
-        `<path ${common} d="M6 3h12v18H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/>` +
-        `<path ${common} d="M8 7h6"/>`
+          `<path ${common} d="M6 3h12v18H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/>` +
+          `<path ${common} d="M8 7h6"/>`
       );
     case "layers":
       return wrap(
         `<path ${common} d="M12 2l9 5-9 5-9-5 9-5z"/>` +
-        `<path ${common} d="M3 12l9 5 9-5"/>` +
-        `<path ${common} d="M3 17l9 5 9-5"/>`
+          `<path ${common} d="M3 12l9 5 9-5"/>` +
+          `<path ${common} d="M3 17l9 5 9-5"/>`
       );
     case "check":
       return wrap(`<path ${common} d="M20 6L9 17l-5-5"/>`);
@@ -279,7 +287,43 @@ function setActiveNav(route) {
 }
 
 /* =======================
-   WELCOME (matches CSS)
+   Navigation helpers
+======================= */
+function go(route) {
+  if (!route) return;
+  window.location.hash = `#${route}`;
+}
+
+function bindGotoButtons() {
+  app.querySelectorAll("[data-goto]").forEach((btn) => {
+    btn.addEventListener("click", () => go(btn.dataset.goto));
+  });
+}
+
+/* =======================
+   Screen transitions
+======================= */
+function beginTransition() {
+  app.classList.add("screen");
+  app.classList.add("is-leaving");
+}
+
+function endTransition() {
+  app.classList.remove("is-leaving");
+  app.classList.add("screen");
+}
+
+function withTransition(fn) {
+  clearTimer();
+  beginTransition();
+  setTimeout(() => {
+    fn();
+    endTransition();
+  }, 180);
+}
+
+/* =======================
+   WELCOME
 ======================= */
 function renderWelcome() {
   const progress = loadProgress();
@@ -291,7 +335,6 @@ function renderWelcome() {
   app.innerHTML = `
     <section class="welcome">
       <div class="welcome-shell">
-
         <div class="welcome-hero">
           <div class="welcome-topline">
             ${icon("spark")}
@@ -373,17 +416,11 @@ function renderWelcome() {
             <button class="btn" type="button" data-goto="home">Browse topics</button>
           </div>
         </div>
-
       </div>
     </section>
   `;
 
-  // bind [data-goto]
-  app.querySelectorAll("[data-goto]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      window.location.hash = "#" + btn.dataset.goto;
-    });
-  });
+  bindGotoButtons();
 }
 
 /* =======================
@@ -456,10 +493,10 @@ function renderHome() {
             </p>
 
             <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
-              <button id="goDaily" class="primary" type="button">
+              <button class="primary" type="button" data-goto="daily">
                 <span class="btn-inner">${icon("bolt")}Open daily</span>
               </button>
-              <button id="goWelcome" class="btn" type="button">Welcome</button>
+              <button class="btn" type="button" data-goto="welcome">Welcome</button>
             </div>
           </div>
 
@@ -516,7 +553,7 @@ function renderHome() {
     </section>
   `;
 
-  // responsive quick fix for the 3 cards row
+  // keep your quick responsive fix
   if (window.matchMedia("(max-width: 900px)").matches) {
     const row = app.querySelector('[style*="repeat(3, 1fr)"]');
     if (row) row.style.gridTemplateColumns = "1fr";
@@ -524,8 +561,7 @@ function renderHome() {
     if (two) two.style.gridTemplateColumns = "1fr";
   }
 
-  document.getElementById("goDaily").addEventListener("click", () => (window.location.hash = "#daily"));
-  document.getElementById("goWelcome").addEventListener("click", () => (window.location.hash = "#welcome"));
+  bindGotoButtons();
 
   document.getElementById("startBtn").addEventListener("click", async () => {
     const category = document.getElementById("category").value;
@@ -550,7 +586,7 @@ function renderHome() {
       state.score = 0;
       state.timed = timed;
 
-      renderQuiz();
+      withTransition(renderQuiz);
     } catch (err) {
       status.textContent = String(err.message || err);
     }
@@ -637,7 +673,7 @@ async function renderDaily() {
       state.score = 0;
       state.timed = timed;
 
-      renderQuiz();
+      withTransition(renderQuiz);
     } catch (err) {
       status.textContent = String(err.message || err);
     }
@@ -698,7 +734,7 @@ function renderQuiz() {
 
   document.getElementById("quitBtn").addEventListener("click", () => {
     clearTimer();
-    window.location.hash = "#home";
+    go("home");
   });
 
   document.querySelectorAll(".optionBtn").forEach((btn) => {
@@ -743,10 +779,10 @@ function showFeedback(selectedIdx) {
     state.index += 1;
 
     if (state.index >= state.quizQuestions.length) {
-      renderResults();
+      withTransition(renderResults);
       return;
     }
-    renderQuiz();
+    withTransition(renderQuiz);
   };
 }
 
@@ -808,8 +844,8 @@ function renderResults() {
 
   document.getElementById("tryAgainBtn").addEventListener("click", async () => {
     const s = state.lastSettings;
-    if (!s) return (window.location.hash = "#home");
-    if (s.mode === "daily") return (window.location.hash = "#daily");
+    if (!s) return go("home");
+    if (s.mode === "daily") return go("daily");
 
     const all = await loadQuestions();
     const pool = all.filter((q) => q.category === s.category && q.level === s.level);
@@ -820,11 +856,11 @@ function renderResults() {
     state.score = 0;
     state.timed = s.timed;
 
-    renderQuiz();
+    withTransition(renderQuiz);
   });
 
-  document.getElementById("progressBtn").addEventListener("click", () => (window.location.hash = "#progress"));
-  document.getElementById("homeBtn").addEventListener("click", () => (window.location.hash = "#home"));
+  document.getElementById("progressBtn").addEventListener("click", () => go("progress"));
+  document.getElementById("homeBtn").addEventListener("click", () => go("home"));
 }
 
 /* =======================
@@ -880,7 +916,7 @@ function renderProgress() {
 
         <div style="display:flex; gap:10px; flex-wrap:wrap;">
           <button id="resetProgress" class="btn" type="button">Reset progress</button>
-          <button id="backHome" class="btn" type="button">Back Home</button>
+          <button class="btn" type="button" data-goto="home">Back Home</button>
         </div>
       </div>
     </section>
@@ -888,46 +924,179 @@ function renderProgress() {
 
   document.getElementById("resetProgress").addEventListener("click", () => {
     localStorage.removeItem(STORAGE_KEY);
-    renderProgress();
+    withTransition(renderProgress);
   });
 
-  document.getElementById("backHome").addEventListener("click", () => {
-    window.location.hash = "#home";
-  });
+  bindGotoButtons();
 }
 
 /* =======================
-   FAQ
+   FAQ (full page)
 ======================= */
 function renderFAQ() {
-  // keep your FAQ HTML as-is (it matches your CSS)
-  // I’m keeping it short here, because you already pasted it.
-  // Paste your exact renderFAQ() content under this line if needed.
-  app.innerHTML = `<section class="card" style="margin-top:20px;"><h2>FAQ</h2><p class="muted">Paste your existing FAQ block here.</p></section>`;
+  app.innerHTML = `
+    <section class="faq">
+      <div class="wrap">
+        <div class="faq-head">
+          <h2 class="faq-title">FAQ</h2>
+          <p class="faq-sub">
+            Mas'alah is built for calm revision. Short questions, short explanations, steady progress.
+          </p>
+        </div>
+
+        <div class="faq-grid">
+          <div class="faq-panel">
+            <div class="faq-acc">
+
+              <details class="faq-item" open>
+                <summary>
+                  <span class="faq-q">
+                    <span class="faq-dot">${icon("spark")}</span>
+                    What is Mas'alah?
+                  </span>
+                  <span class="faq-chevron">${icon("check")}</span>
+                </summary>
+                <div class="faq-a">
+                  A short Islamic quiz app designed to help you revise consistently. One calm step daily.
+                </div>
+              </details>
+
+              <details class="faq-item">
+                <summary>
+                  <span class="faq-q">
+                    <span class="faq-dot">${icon("calendar")}</span>
+                    What is “Today’s Quiz”?
+                  </span>
+                  <span class="faq-chevron">${icon("check")}</span>
+                </summary>
+                <div class="faq-a">
+                  It is locked for the day. Refreshing does not change the questions, so you can focus on learning, not rerolling.
+                </div>
+              </details>
+
+              <details class="faq-item">
+                <summary>
+                  <span class="faq-q">
+                    <span class="faq-dot">${icon("target")}</span>
+                    What is “Custom Quiz”?
+                  </span>
+                  <span class="faq-chevron">${icon("check")}</span>
+                </summary>
+                <div class="faq-a">
+                  Custom lets you choose a category and level, then practice in timed mode or calm practice mode.
+                </div>
+              </details>
+
+              <details class="faq-item">
+                <summary>
+                  <span class="faq-q">
+                    <span class="faq-dot">${icon("shield")}</span>
+                    Where is my progress stored?
+                  </span>
+                  <span class="faq-chevron">${icon("check")}</span>
+                </summary>
+                <div class="faq-a">
+                  Progress is saved locally on your device. If you clear browser data or switch devices, it resets.
+                </div>
+              </details>
+
+              <details class="faq-item">
+                <summary>
+                  <span class="faq-q">
+                    <span class="faq-dot">${icon("layers")}</span>
+                    Can I add more questions?
+                  </span>
+                  <span class="faq-chevron">${icon("check")}</span>
+                </summary>
+                <div class="faq-a">
+                  Yes. Add items in <span class="kbd">data/questions.json</span>. The app will pick them up automatically.
+                </div>
+              </details>
+
+              <details class="faq-item">
+                <summary>
+                  <span class="faq-q">
+                    <span class="faq-dot">${icon("book")}</span>
+                    Why are explanations short?
+                  </span>
+                  <span class="faq-chevron">${icon("check")}</span>
+                </summary>
+                <div class="faq-a">
+                  Because the goal is revision, not replacing lessons. Short explanations help you correct quickly and move forward.
+                </div>
+              </details>
+
+            </div>
+          </div>
+
+          <div class="faq-side">
+            <div class="faq-panel">
+              <h3 style="margin:0;">Quick start</h3>
+              <p class="muted" style="margin:8px 0 0; line-height:1.6;">
+                If you want the simplest path, do Today’s Quiz daily. If you want to target a weakness, use Custom.
+              </p>
+              <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+                <button class="primary" type="button" data-goto="daily">
+                  <span class="btn-inner">${icon("bolt")}Start today</span>
+                </button>
+                <button class="btn" type="button" data-goto="home">
+                  <span class="btn-inner">${icon("target")}Open home</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="faq-panel">
+              <h3 style="margin:0;">Reminder</h3>
+              <p class="muted" style="margin:8px 0 0; line-height:1.6;">
+                Consistency beats intensity. The goal is not to win a quiz. The goal is to remember.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  `;
+
+  bindGotoButtons();
 }
 
 /* =======================
    Routing
 ======================= */
-function render(route) {
+async function renderRoute(route) {
   const r = route || "welcome";
+  state.currentRoute = r;
   setActiveNav(r);
 
   if (r === "welcome") return renderWelcome();
   if (r === "faq") return renderFAQ();
   if (r === "progress") return renderProgress();
-  if (r === "daily") return renderDaily();
   if (r === "home") return renderHome();
+  if (r === "daily") return renderDaily();
 
-  // fallback
   return renderWelcome();
+}
+
+function render(route) {
+  if (state.isNavigating) return;
+  state.isNavigating = true;
+
+  withTransition(() => {
+    const maybePromise = renderRoute(route);
+    if (maybePromise && typeof maybePromise.then === "function") {
+      maybePromise.finally(() => {
+        state.isNavigating = false;
+      });
+    } else {
+      state.isNavigating = false;
+    }
+  });
 }
 
 function bindNavRoutes() {
   document.querySelectorAll("[data-route]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      window.location.hash = "#" + btn.dataset.route;
-    });
+    btn.addEventListener("click", () => go(btn.dataset.route));
   });
 }
 
@@ -936,16 +1105,18 @@ function bindNavRoutes() {
 ======================= */
 window.addEventListener("DOMContentLoaded", () => {
   bindNavRoutes();
+  setFooterYear();
 
   const initial = (window.location.hash || "").slice(1);
   render(initial || "welcome");
 });
 
 window.addEventListener("hashchange", () => {
-  render((window.location.hash || "#welcome").slice(1));
+  const route = (window.location.hash || "#welcome").slice(1);
+  render(route);
 });
 
-(function setFooterYear() {
+function setFooterYear() {
   const el = document.getElementById("year");
   if (el) el.textContent = String(new Date().getFullYear());
-})();
+}
