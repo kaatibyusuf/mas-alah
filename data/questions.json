@@ -1129,5 +1129,4224 @@
   ],
   "correctIndex": 0,
   "explanation": "Adhkār preserve awareness of Allah in everyday life."
-}
+},
+  {
+    "id": "fiqh_int_001",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "A person made wudu, then later doubted whether they broke it. What is the ruling based on the core fiqh principle?",
+    "options": [
+      "Wudu is invalid because doubt cancels certainty",
+      "Wudu remains valid because certainty is not removed by doubt",
+      "Wudu is invalid unless they renew it immediately",
+      "They must repeat wudu only if it is after one hour"
+    ],
+    "correctIndex": 1,
+    "explanation": "The default is that wudu remains because certainty is not removed by doubt."
+  },
+  {
+    "id": "fiqh_int_002",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "Someone prayed and later doubted whether they prayed 3 or 4 rak‘ahs, with no strong assumption. What should they do?",
+    "options": [
+      "Assume 4 and finish, no sujud as-sahw",
+      "Assume 3, complete one, then sujud as-sahw",
+      "Cancel the prayer and restart",
+      "Assume the higher number and sujud as-sahw"
+    ],
+    "correctIndex": 1,
+    "explanation": "When unsure with no stronger view, build on certainty (the lesser), complete, then sujud as-sahw."
+  },
+  {
+    "id": "fiqh_int_003",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "Which statement best reflects the rule for removing najasah from clothing for prayer?",
+    "options": [
+      "It must be removed with scented water",
+      "It must be removed until traces are gone as much as reasonably possible",
+      "It must be removed only if visible",
+      "It must be removed by rubbing, not washing"
+    ],
+    "correctIndex": 1,
+    "explanation": "The goal is removing the impurity itself. Residual traces that are genuinely hard to remove are excused."
+  },
+  {
+    "id": "fiqh_int_004",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "A person has a cut that bleeds lightly during wudu. The bleeding stops, but some blood remains on the skin. What is the best ruling for completing wudu and prayer?",
+    "options": [
+      "Wudu is invalid and must restart immediately",
+      "Wudu can be completed, but blood must be cleaned before prayer",
+      "Wudu is invalid only if blood is more than a coin size",
+      "Prayer is valid even if blood is smeared and wet"
+    ],
+    "correctIndex": 1,
+    "explanation": "Complete wudu, then remove blood from the prayer area of the body/clothes as much as possible."
+  },
+  {
+    "id": "fiqh_int_005",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "A traveler plans to travel later today but has not left their city yet. When can they begin shortening the prayer (qasr)?",
+    "options": [
+      "As soon as they pack for travel",
+      "After they pass the built-up area of their city/town",
+      "After they intend travel, even at home",
+      "Only after the first rest stop"
+    ],
+    "correctIndex": 1,
+    "explanation": "Qasr starts when one has actually begun travel and left the settled area."
+  },
+  {
+    "id": "fiqh_int_006",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "A person missed Dhuhr and ‘Asr intentionally, then repented later. Which action is correct regarding missed prayers?",
+    "options": [
+      "They do not make them up because they were intentional",
+      "They must make them up and repent sincerely",
+      "They only make up one of them as a penalty",
+      "They only make up if it was within 24 hours"
+    ],
+    "correctIndex": 1,
+    "explanation": "They must repent and make up the missed obligations."
+  },
+  {
+    "id": "fiqh_int_007",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "Which is a condition for the validity of prayer (not a pillar inside the prayer itself)?",
+    "options": [
+      "Reciting al-Fatihah",
+      "Facing the qiblah",
+      "Sujud",
+      "Tashahhud"
+    ],
+    "correctIndex": 1,
+    "explanation": "Facing the qiblah is a condition outside the prayer’s internal actions."
+  },
+  {
+    "id": "fiqh_int_008",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "Someone prayed without realizing their clothing had najasah. After prayer, they discover it. What is the strongest general ruling?",
+    "options": [
+      "They must repeat the prayer immediately",
+      "They should repeat if they are sure it was present during prayer",
+      "They do not repeat because ignorance always excuses",
+      "They repeat only if it was visible to others"
+    ],
+    "correctIndex": 1,
+    "explanation": "If they are certain impurity was present in prayer, repeating is the safe correction."
+  },
+  {
+    "id": "fiqh_int_009",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "A person starts fasting, then vomits unintentionally. What is the ruling for their fast?",
+    "options": [
+      "Invalid, must make up",
+      "Valid, no make up needed",
+      "Invalid only if they feel relief",
+      "Valid only if they rinse their mouth"
+    ],
+    "correctIndex": 1,
+    "explanation": "Unintentional vomiting does not break the fast."
+  },
+  {
+    "id": "fiqh_int_010",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "Someone intentionally causes themselves to vomit while fasting. What is the ruling?",
+    "options": [
+      "Fast is valid, but disliked",
+      "Fast is invalid and must be made up",
+      "Fast is invalid and requires kaffarah",
+      "Fast is valid if vomiting was small"
+    ],
+    "correctIndex": 1,
+    "explanation": "Deliberate vomiting breaks the fast and requires qada."
+  },
+  {
+    "id": "fiqh_int_011",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "Which act definitely breaks wudu by agreement (without needing detail or debate)?",
+    "options": [
+      "Sleeping while sitting upright firmly",
+      "Passing wind",
+      "Touching one’s spouse",
+      "Minor nosebleed"
+    ],
+    "correctIndex": 1,
+    "explanation": "Passing wind breaks wudu."
+  },
+  {
+    "id": "fiqh_int_012",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "A person is praying and hears an unclear sound, unsure if it was wind. What is the ruling?",
+    "options": [
+      "Prayer is invalid and must stop",
+      "Continue prayer unless they are sure",
+      "Stop prayer and renew wudu as precaution",
+      "Continue only if it is a nafl prayer"
+    ],
+    "correctIndex": 1,
+    "explanation": "Doubt does not cancel certainty. They continue unless sure."
+  },
+  {
+    "id": "fiqh_int_013",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "In prayer, a person forgets a wajib/sunnah element (not a pillar). The correct general fix is:",
+    "options": [
+      "Restart the prayer always",
+      "Perform sujud as-sahw",
+      "Ignore it because it is not a pillar",
+      "Add an extra rak‘ah"
+    ],
+    "correctIndex": 1,
+    "explanation": "Sujud as-sahw compensates for many non-pillar mistakes."
+  },
+  {
+    "id": "fiqh_int_014",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "Which of the following is a pillar (rukn) such that leaving it invalidates the rak‘ah?",
+    "options": [
+      "Saying 'Ameen'",
+      "Ruku‘",
+      "Raising hands at takbir",
+      "Reciting a surah after al-Fatihah"
+    ],
+    "correctIndex": 1,
+    "explanation": "Ruku‘ is a pillar of prayer."
+  },
+  {
+    "id": "fiqh_int_015",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "A person joins the congregation in ruku‘. When do they count that rak‘ah?",
+    "options": [
+      "If they catch the imam before he says takbir",
+      "If they reach ruku‘ with the imam before the imam rises",
+      "Only if they recite al-Fatihah fully",
+      "Only if they join at the start of the rak‘ah"
+    ],
+    "correctIndex": 1,
+    "explanation": "Catching ruku‘ before the imam rises counts as catching the rak‘ah."
+  },
+  {
+    "id": "fiqh_int_016",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "A person prayed facing the wrong direction after doing sincere ijtihad. Later they discover the qiblah was different. What is the general ruling?",
+    "options": [
+      "They must repeat every prayer of that day",
+      "They do not repeat that prayer",
+      "They repeat only if it was fard, not nafl",
+      "They repeat only if it was in the masjid"
+    ],
+    "correctIndex": 1,
+    "explanation": "If they tried their best and prayed, the prayer stands."
+  },
+  {
+    "id": "fiqh_int_017",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "A person cannot find water and time is running out. Which is correct?",
+    "options": [
+      "Delay prayer until water is found",
+      "Pray on time with tayammum",
+      "Skip and combine later without excuse",
+      "Pray without wudu or tayammum"
+    ],
+    "correctIndex": 1,
+    "explanation": "Tayammum is the substitute when water is unavailable and prayer time is due."
+  },
+  {
+    "id": "fiqh_int_018",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "After making tayammum, water becomes available before starting prayer. What is the ruling?",
+    "options": [
+      "Proceed with tayammum because it is already done",
+      "Use water for wudu and then pray",
+      "Pray with tayammum and redo later",
+      "Only use water if it is warm"
+    ],
+    "correctIndex": 1,
+    "explanation": "Availability of water returns the original ruling. Use wudu."
+  },
+  {
+    "id": "fiqh_int_019",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "After starting prayer with tayammum, water becomes available during prayer. What is the best general ruling?",
+    "options": [
+      "Break prayer immediately and do wudu",
+      "Continue and finish, then do wudu for later prayers",
+      "Continue only if it is a nafl prayer",
+      "Continue only if water is far"
+    ],
+    "correctIndex": 1,
+    "explanation": "If tayammum was valid at the start, finish the prayer. Then use water going forward."
+  },
+  {
+    "id": "fiqh_int_020",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "Which statement best describes the intention (niyyah) for wudu?",
+    "options": [
+      "It must be spoken aloud",
+      "It is in the heart, not necessarily spoken",
+      "It is optional for wudu",
+      "It must be the same words every time"
+    ],
+    "correctIndex": 1,
+    "explanation": "Niyyah is a heart action. Speech is not required."
+  },
+  {
+    "id": "fiqh_int_021",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "A person delays Maghrib until after ‘Isha without a valid excuse. What is the correct action now?",
+    "options": [
+      "Only pray ‘Isha because the time passed",
+      "Pray Maghrib immediately (qada), then pray ‘Isha",
+      "Pray ‘Isha first because it is current",
+      "Do nothing and just repent"
+    ],
+    "correctIndex": 1,
+    "explanation": "Missed obligations are made up. Then pray the current obligation."
+  },
+  {
+    "id": "fiqh_int_022",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "Which principle best guides rulings when real hardship is present?",
+    "options": [
+      "Hardship always cancels obligations",
+      "Hardship brings facilitation within the Shari‘ah",
+      "Hardship is ignored in worship",
+      "Hardship only matters in transactions"
+    ],
+    "correctIndex": 1,
+    "explanation": "A major maxim is that hardship brings facilitation, within limits."
+  },
+  {
+    "id": "fiqh_int_023",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "A person owes zakat but also has an immediate debt due now that consumes their available cash. What is the most accurate general approach?",
+    "options": [
+      "Zakat is never due if any debt exists",
+      "Immediate due debts reduce available zakatable wealth",
+      "Debts never affect zakat calculations",
+      "Only long-term debts reduce zakat, never immediate debts"
+    ],
+    "correctIndex": 1,
+    "explanation": "Debts that are due can reduce what is truly owned and available for zakat."
+  },
+  {
+    "id": "fiqh_int_024",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "Which is a valid recipient category for zakat?",
+    "options": [
+      "A wealthy person who manages the masjid",
+      "A poor person who meets zakat criteria",
+      "A close friend who wants to start a business but is already wealthy",
+      "Any person you like, regardless of need"
+    ],
+    "correctIndex": 1,
+    "explanation": "Zakat goes to eligible categories, including the poor and needy."
+  },
+  {
+    "id": "fiqh_int_025",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "A person is praying and their child is in danger. What is the ruling about breaking prayer?",
+    "options": [
+      "They must not break prayer for any worldly reason",
+      "They may break prayer to prevent harm",
+      "They may only break if it is a nafl prayer",
+      "They may only break after finishing the rak‘ah"
+    ],
+    "correctIndex": 1,
+    "explanation": "Preventing real harm takes priority. Prayer can be broken for necessity."
+  },
+  {
+    "id": "fiqh_int_026",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "A person is unsure whether the start of Ramadan was confirmed properly in their community. What is the safest practical approach for the individual?",
+    "options": [
+      "Ignore the community and start whenever they prefer",
+      "Follow a reliable, recognized local announcement to avoid chaos",
+      "Fast two months to be safe",
+      "Only fast if they personally sight the moon"
+    ],
+    "correctIndex": 1,
+    "explanation": "Unity and reliable confirmation matter. Follow a trustworthy local process."
+  },
+  {
+    "id": "fiqh_int_027",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "A person accidentally eats while fasting, then remembers. What is the ruling?",
+    "options": [
+      "Fast is broken and requires qada",
+      "Fast remains valid, they stop immediately",
+      "Fast is broken and requires kaffarah",
+      "Fast is valid only if they eat very little"
+    ],
+    "correctIndex": 1,
+    "explanation": "Accidental eating does not break the fast. They stop when they remember."
+  },
+  {
+    "id": "fiqh_int_028",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "A person deliberately eats in Ramadan without a valid excuse. What is the ruling in principle?",
+    "options": [
+      "Only repentance, no qada",
+      "They must repent and make up that day",
+      "They must make up and also pay zakat",
+      "They must repeat the whole Ramadan"
+    ],
+    "correctIndex": 1,
+    "explanation": "Deliberate breaking requires sincere repentance and qada at minimum."
+  },
+  {
+    "id": "fiqh_int_029",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "A person breaks their fast because they thought Maghrib had entered, but it had not. What is the ruling?",
+    "options": [
+      "No problem, intention matters only",
+      "Fast is invalid and must be made up",
+      "Fast is valid if it was only water",
+      "Fast is valid if they were tired"
+    ],
+    "correctIndex": 1,
+    "explanation": "Breaking before time invalidates the fast. That day is made up."
+  },
+  {
+    "id": "fiqh_int_030",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "A person is ill and fasting will likely worsen their condition. What is the correct principle-based ruling?",
+    "options": [
+      "They must fast regardless",
+      "They may break and make up later when able",
+      "They break and never make it up",
+      "They only break if a doctor is Muslim"
+    ],
+    "correctIndex": 1,
+    "explanation": "Genuine harm is an excuse. They make up later if they recover."
+  },
+  {
+    "id": "fiqh_int_031",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "Which statement best reflects the relationship between 'ibadah and following evidence/process?",
+    "options": [
+      "Anything that feels spiritual is worship",
+      "Worship is based on revelation, not personal preference",
+      "Worship changes completely by culture",
+      "Worship must always be difficult to be accepted"
+    ],
+    "correctIndex": 1,
+    "explanation": "Acts of worship are defined by revelation and correct method, not personal invention."
+  },
+  {
+    "id": "fiqh_int_032",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "A person makes wudu, then forgets whether they washed their left arm. What should they do immediately in wudu?",
+    "options": [
+      "Ignore it and finish",
+      "Wash the left arm and continue",
+      "Restart wudu from the beginning",
+      "Only wipe the arm"
+    ],
+    "correctIndex": 1,
+    "explanation": "When still in the act, complete what you are unsure about to ensure validity."
+  },
+  {
+    "id": "fiqh_int_033",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "A person prays in a place where they later discover there were pictures on the wall. What is the ruling on the prayer itself?",
+    "options": [
+      "Prayer is invalid",
+      "Prayer is valid, though the setting may be disliked",
+      "Prayer is invalid only if the picture is large",
+      "Prayer is invalid only for fard prayers"
+    ],
+    "correctIndex": 1,
+    "explanation": "The prayer remains valid, though such distractions may be disliked."
+  },
+  {
+    "id": "fiqh_int_034",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "A person is in jama‘ah and the imam makes a clear mistake in recitation that changes meaning. What is the best action for someone who knows?",
+    "options": [
+      "Stay silent always",
+      "Correct the imam in the established manner",
+      "Leave the prayer immediately",
+      "Restart the prayer alone without finishing"
+    ],
+    "correctIndex": 1,
+    "explanation": "The sunnah is to correct the imam when needed so the prayer’s recitation is sound."
+  },
+  {
+    "id": "fiqh_int_035",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "A person arrives to prayer late and joins the imam. After salam, what do they do?",
+    "options": [
+      "Repeat the whole prayer",
+      "Complete what they missed",
+      "Leave because they missed the start",
+      "Pray only two rak‘ahs regardless"
+    ],
+    "correctIndex": 1,
+    "explanation": "The latecomer completes the missed units after the imam finishes."
+  },
+  {
+    "id": "fiqh_int_036",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "Which statement is correct about delaying zakat payment after it becomes due without a reason?",
+    "options": [
+      "It is preferred to delay so the poor receive later",
+      "It should be paid without undue delay once due",
+      "It can be delayed until Ramadan only",
+      "It is only due at the end of one’s lifetime"
+    ],
+    "correctIndex": 1,
+    "explanation": "Once zakat is due, it should not be delayed without a valid reason."
+  },
+  {
+    "id": "fiqh_int_037",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "A person performs ghusl for major impurity. Which is correct regarding wudu afterward?",
+    "options": [
+      "They must always do a separate wudu afterward",
+      "Ghusl can suffice for wudu if done correctly",
+      "Ghusl never counts for wudu",
+      "Wudu counts only if they also fast"
+    ],
+    "correctIndex": 1,
+    "explanation": "A complete ghusl can include wudu, so a separate wudu is not always required."
+  },
+  {
+    "id": "fiqh_int_038",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "A person touches a wet impurity with their hand, then touches their clothing without washing. What is the basic ruling?",
+    "options": [
+      "Nothing transfers because it is small",
+      "Impurity can transfer with wetness and should be cleaned",
+      "Impurity transfers only if it has smell",
+      "Only prayer time matters, not cleanliness"
+    ],
+    "correctIndex": 1,
+    "explanation": "If wet impurity transfers, the affected area should be cleaned for prayer."
+  },
+  {
+    "id": "fiqh_int_039",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "A person makes a vow (nadhr) to do a worship act if something happens. The condition happens. What is the ruling?",
+    "options": [
+      "Vows have no legal weight",
+      "They should fulfill the vow because it became binding",
+      "They may ignore it if it is difficult",
+      "They only fulfill it if others remind them"
+    ],
+    "correctIndex": 1,
+    "explanation": "A vow becomes binding when its condition is met, within lawful limits."
+  },
+  {
+    "id": "fiqh_int_040",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "A person swears an oath (yamin) to do something permissible, then deliberately breaks it. What is the correct principle?",
+    "options": [
+      "No consequence, oaths are only words",
+      "They must repent and offer the prescribed expiation",
+      "They must fast Ramadan again",
+      "They must pay zakat twice"
+    ],
+    "correctIndex": 1,
+    "explanation": "Breaking a binding oath requires repentance and kaffarah for yamin."
+  },
+  {
+    "id": "fiqh_int_041",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "Which scenario best fits the maxim 'harm is removed' in fiqh practice?",
+    "options": [
+      "Adding extra worship to feel better",
+      "Preventing a harmful practice even if some people dislike the change",
+      "Ignoring harm to avoid arguments",
+      "Delaying obligations because they are tiring"
+    ],
+    "correctIndex": 1,
+    "explanation": "Shari‘ah aims to remove real harm, while staying within evidence and method."
+  },
+  {
+    "id": "fiqh_int_042",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "A person prays while wearing tight time constraints and cannot stand for long due to medical pain. What is the correct approach?",
+    "options": [
+      "Standing is required even if it worsens injury",
+      "They pray in the posture they are able, standing if possible then sitting",
+      "They skip prayer until fully healed",
+      "They pray only if someone assists them physically"
+    ],
+    "correctIndex": 1,
+    "explanation": "Obligations are according to ability. Do what you can without harming yourself."
+  },
+  {
+    "id": "fiqh_int_043",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "A person starts prayer, then realizes they have no wudu. What should they do immediately?",
+    "options": [
+      "Continue and make it up later",
+      "Stop, make wudu, and pray properly",
+      "Continue if they are shy to leave",
+      "Continue if it is a short surah"
+    ],
+    "correctIndex": 1,
+    "explanation": "Wudu is a condition for prayer. They stop and restart after purification."
+  },
+  {
+    "id": "fiqh_int_044",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "A person is unsure whether a substance on their clothing is najasah or not, and there is no proof. What is the default ruling?",
+    "options": [
+      "Assume it is najasah to be safe",
+      "Assume purity unless proven otherwise",
+      "Assume najasah if it has any color",
+      "Assume najasah if it is from outside"
+    ],
+    "correctIndex": 1,
+    "explanation": "The default for things is purity until impurity is confirmed."
+  },
+  {
+    "id": "fiqh_int_045",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "A person forgets to say the opening takbir and starts reciting. What is the ruling?",
+    "options": [
+      "Prayer is valid because recitation started",
+      "Prayer is invalid because takbir is required to enter prayer",
+      "Prayer is valid if they intended it",
+      "Prayer is valid if it was nafl"
+    ],
+    "correctIndex": 1,
+    "explanation": "Takbirat al-ihram is required to begin prayer."
+  },
+  {
+    "id": "fiqh_int_046",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "A person is fasting and uses an inhaler due to a sudden asthma attack. What is the most careful general approach?",
+    "options": [
+      "They must refuse because health is secondary",
+      "They use it to prevent harm, then consult scholars for the ruling and likely make up later if required",
+      "They use it and no follow-up is needed",
+      "They use it but must pay kaffarah immediately"
+    ],
+    "correctIndex": 1,
+    "explanation": "Preventing harm comes first. Because details differ, the careful path is use it, then verify and make up if needed."
+  },
+  {
+    "id": "fiqh_int_047",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "A person combined prayers due to travel. Later they stop traveling and settle before the second prayer time. What is the best general ruling?",
+    "options": [
+      "They must repeat because travel ended",
+      "If combined validly at the time, it stands",
+      "They must always repeat when travel ends",
+      "Combination is never allowed so it is invalid"
+    ],
+    "correctIndex": 1,
+    "explanation": "If it was validly done based on their state at the time, it remains valid."
+  },
+  {
+    "id": "fiqh_int_048",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "A person prays and adds an extra rak‘ah by mistake, then realizes. What is the correct fix in principle?",
+    "options": [
+      "End immediately without salam",
+      "Return, complete properly, and do sujud as-sahw",
+      "Cancel the prayer completely",
+      "Ignore it because it was a mistake"
+    ],
+    "correctIndex": 1,
+    "explanation": "Extra actions by mistake are corrected, and sujud as-sahw is performed."
+  },
+  {
+    "id": "fiqh_int_049",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "A person delays ghusl until after Fajr in Ramadan though they were able to do it earlier. What is the ruling on the fast itself?",
+    "options": [
+      "Fast is invalid because ghusl was delayed",
+      "Fast is valid, but they must pray with proper purification",
+      "Fast is invalid only for women",
+      "Fast is valid only if they skip suhoor"
+    ],
+    "correctIndex": 1,
+    "explanation": "Ghusl timing affects prayer, not the validity of the fast itself."
+  },
+  {
+    "id": "fiqh_int_050",
+    "category": "Fiqh",
+    "level": "Intermediate",
+    "question": "Which choice best captures the difference between 'valid' and 'accepted' in worship discussions?",
+    "options": [
+      "They mean the same thing always",
+      "Valid means conditions/pillars met. Accepted relates to sincerity and soundness",
+      "Accepted means it was public",
+      "Valid means it felt spiritual"
+    ],
+    "correctIndex": 1,
+    "explanation": "Validity is legal correctness. Acceptance is with Allah and includes sincerity and proper conduct."
+  },
+
+  {
+    "id": "quran_int_001",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "Which principle best explains why some Makkan verses discuss legal and moral accountability despite detailed laws appearing later in Madinah?",
+    "options": [
+      "Makkan verses were later edited in Madinah",
+      "Core belief and accountability precede detailed legislation",
+      "Makkan verses originally contained full legal rulings",
+      "Legal rulings were intentionally hidden in Makkan surahs"
+    ],
+    "correctIndex": 1,
+    "explanation": "The Makkan period focused on īmān, accountability, and moral responsibility, which prepare the heart before detailed legal rulings were revealed in Madinah."
+  },
+  {
+    "id": "quran_int_002",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "The verse 'There is no compulsion in religion' (Al-Baqarah 2:256) is best understood through which Qur’anic principle?",
+    "options": [
+      "It abrogates all verses related to jihad",
+      "It applies only to the People of the Book",
+      "It establishes freedom of belief while accountability remains",
+      "It was revealed before Islam had legal authority"
+    ],
+    "correctIndex": 2,
+    "explanation": "The verse establishes that belief cannot be forced, while the Qur’an still affirms moral and legal accountability for choices."
+  },
+  {
+    "id": "quran_int_003",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "Which description best defines a verse classified as mutashābih?",
+    "options": [
+      "A verse whose meaning is completely unknowable",
+      "A verse that contradicts another verse",
+      "A verse whose full reality is known only to Allah",
+      "A verse that was revealed more than once"
+    ],
+    "correctIndex": 2,
+    "explanation": "Mutashābih verses have meanings whose full reality is known only to Allah, though partial understanding may exist."
+  },
+  {
+    "id": "quran_int_004",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "Why does the Qur’an often repeat stories of earlier prophets with variations in wording?",
+    "options": [
+      "Because the Qur’an was compiled from different sources",
+      "To address different contexts and lessons",
+      "Because early Muslims forgot earlier versions",
+      "To replace earlier incorrect narrations"
+    ],
+    "correctIndex": 1,
+    "explanation": "Repetition with variation highlights different lessons depending on the context and audience addressed."
+  },
+  {
+    "id": "quran_int_005",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "Which statement about nasikh and mansukh is correct?",
+    "options": [
+      "Any later verse automatically abrogates earlier ones",
+      "Abrogation occurs only when reconciliation is impossible",
+      "Most Qur’anic verses are abrogated",
+      "Abrogation applies to all Makkan verses"
+    ],
+    "correctIndex": 1,
+    "explanation": "Abrogation is established only when verses cannot be reconciled, and its scope is limited according to scholars."
+  },
+  {
+    "id": "quran_int_006",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "The gradual prohibition of alcohol in the Qur’an demonstrates which principle?",
+    "options": [
+      "Legal uncertainty in revelation",
+      "Contradiction between verses",
+      "Gradual legislation in response to human capacity",
+      "Abrogation without wisdom"
+    ],
+    "correctIndex": 2,
+    "explanation": "The Qur’an introduced rulings gradually to align with human readiness and societal reform."
+  },
+  {
+    "id": "quran_int_007",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "What distinguishes a Madani verse from a Makki verse?",
+    "options": [
+      "Length of the verse",
+      "Subject matter only",
+      "Place and period of revelation",
+      "Presence of legal rulings"
+    ],
+    "correctIndex": 2,
+    "explanation": "Makki and Madani classification is based on when and where the verse was revealed, not merely content."
+  },
+  {
+    "id": "quran_int_008",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "Why is knowledge of sabab al-nuzūl important in Qur’anic interpretation?",
+    "options": [
+      "It replaces the general meaning of verses",
+      "It restricts verses only to their original audience",
+      "It clarifies context without nullifying general rulings",
+      "It makes tafsir unnecessary"
+    ],
+    "correctIndex": 2,
+    "explanation": "Knowing the context of revelation clarifies meaning while preserving the general applicability of verses."
+  },
+  {
+    "id": "quran_int_009",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "The challenge verses (e.g., Yunus 10:38) primarily establish which Qur’anic concept?",
+    "options": [
+      "The linguistic difficulty of Arabic",
+      "The moral authority of the Prophet",
+      "The inimitability (iʿjāz) of the Qur’an",
+      "The historical accuracy of revelation"
+    ],
+    "correctIndex": 2,
+    "explanation": "These verses establish the Qur’an’s inimitability, demonstrating its divine origin."
+  },
+  {
+    "id": "quran_int_010",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "Which approach aligns with the Qur’anic method of self-explanation (tafsīr al-Qur’ān bil-Qur’ān)?",
+    "options": [
+      "Interpreting verses using philosophy first",
+      "Explaining ambiguous verses through clearer Qur’anic passages",
+      "Rejecting hadith entirely",
+      "Limiting interpretation to linguistic analysis only"
+    ],
+    "correctIndex": 1,
+    "explanation": "The Qur’an explains itself by clarifying ambiguous verses through clearer ones elsewhere."
+  },
+  {
+    "id": "quran_int_011",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "Why do some Qur’anic commands appear general while their application is later specified?",
+    "options": [
+      "Because the Qur’an expects later correction",
+      "Because the Qur’an uses general wording clarified by other texts",
+      "Because companions misunderstood the verses",
+      "Because legal rulings were incomplete at revelation"
+    ],
+    "correctIndex": 1,
+    "explanation": "General verses are often specified by other Qur’anic verses or authentic Sunnah, a core usūl principle."
+  },
+  {
+    "id": "quran_int_012",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "Which verse establishes that the Qur’an was revealed in stages?",
+    "options": [
+      "Al-Fātiḥah 1:1",
+      "Al-Isrāʾ 17:106",
+      "Al-Baqarah 2:23",
+      "Al-Anʿām 6:38"
+    ],
+    "correctIndex": 1,
+    "explanation": "Al-Isrāʾ 17:106 explicitly mentions gradual revelation to strengthen the Prophet and believers."
+  },
+  {
+    "id": "quran_int_013",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "What does the Qur’an mean when it describes itself as 'clear' (mubīn)?",
+    "options": [
+      "Every verse is self-explanatory without study",
+      "Its core guidance is clear, even if details require explanation",
+      "It needs no interpretation at all",
+      "It is linguistically simple for all readers"
+    ],
+    "correctIndex": 1,
+    "explanation": "Clarity refers to guidance and truth, not the absence of scholarly interpretation."
+  },
+  {
+    "id": "quran_int_014",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "Which statement best describes the Qur’anic use of parables (amthāl)?",
+    "options": [
+      "They are symbolic stories with no real meaning",
+      "They simplify complex truths for reflection",
+      "They are meant only for scholars",
+      "They replace legal rulings"
+    ],
+    "correctIndex": 1,
+    "explanation": "Parables translate abstract truths into relatable imagery to provoke reflection."
+  },
+  {
+    "id": "quran_int_015",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "What is the primary danger of interpreting mutashābih verses independently?",
+    "options": [
+      "Linguistic errors",
+      "Contradiction with science",
+      "Deviation from established belief",
+      "Loss of historical context"
+    ],
+    "correctIndex": 2,
+    "explanation": "Isolating ambiguous verses can lead to theological deviation without reference to clear texts."
+  },
+  {
+    "id": "quran_int_016",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "Which concept explains why legal verses increased after the Hijrah?",
+    "options": [
+      "Change in divine intent",
+      "Growth of the Muslim community into a society",
+      "Correction of earlier verses",
+      "Influence of other legal systems"
+    ],
+    "correctIndex": 1,
+    "explanation": "Law becomes necessary when a community forms and governance begins."
+  },
+  {
+    "id": "quran_int_017",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "The Qur’an’s frequent address 'O you who believe' indicates what shift?",
+    "options": [
+      "A stylistic change only",
+      "Transition to communal responsibility",
+      "End of individual accountability",
+      "Replacement of earlier teachings"
+    ],
+    "correctIndex": 1,
+    "explanation": "This address reflects a community bound by shared obligations."
+  },
+  {
+    "id": "quran_int_018",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "Why is tafsīr al-Qur’ān bil-Qur’ān considered the strongest form of tafsīr?",
+    "options": [
+      "It removes the need for scholars",
+      "The Qur’an is the most authoritative explainer of itself",
+      "It eliminates linguistic ambiguity",
+      "It replaces hadith literature"
+    ],
+    "correctIndex": 1,
+    "explanation": "The Qur’an is the most reliable source for explaining its own meanings."
+  },
+  {
+    "id": "quran_int_019",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "What does the Qur’an affirm about previous scriptures?",
+    "options": [
+      "They were entirely false",
+      "They were originally revealed but later altered",
+      "They are identical to the Qur’an",
+      "They contain no guidance"
+    ],
+    "correctIndex": 1,
+    "explanation": "The Qur’an confirms original revelation while noting later distortions."
+  },
+  {
+    "id": "quran_int_020",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "Why does the Qur’an sometimes delay answers to questions posed to the Prophet?",
+    "options": [
+      "To test the Prophet’s patience",
+      "Due to uncertainty in revelation",
+      "To emphasize reliance on divine timing",
+      "Because companions disagreed"
+    ],
+    "correctIndex": 2,
+    "explanation": "Delayed revelation reinforced that knowledge comes only from Allah."
+  },
+  {
+    "id": "quran_int_021",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "Which principle explains reconciling verses about mercy and punishment?",
+    "options": [
+      "Contradiction within revelation",
+      "Contextual balance of hope and fear",
+      "Chronological replacement",
+      "Human interpretation error"
+    ],
+    "correctIndex": 1,
+    "explanation": "The Qur’an balances mercy and warning to guide behavior."
+  },
+  {
+    "id": "quran_int_022",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "What is the Qur’anic purpose of mentioning destroyed nations?",
+    "options": [
+      "Historical storytelling",
+      "Entertainment",
+      "Moral warning and reflection",
+      "Political justification"
+    ],
+    "correctIndex": 2,
+    "explanation": "Past nations are reminders of consequences tied to moral choices."
+  },
+  {
+    "id": "quran_int_023",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "Why is Surah Al-Fātiḥah considered comprehensive?",
+    "options": [
+      "It contains all Qur’anic verses",
+      "It summarizes core themes of guidance",
+      "It replaces the rest of the Qur’an",
+      "It was revealed multiple times"
+    ],
+    "correctIndex": 1,
+    "explanation": "Al-Fātiḥah encapsulates tawḥīd, guidance, worship, and accountability."
+  },
+  {
+    "id": "quran_int_024",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "Which factor most strongly supports the Qur’an’s preservation?",
+    "options": [
+      "Written manuscripts only",
+      "Oral transmission alone",
+      "Combined oral and written preservation",
+      "Later scholarly editing"
+    ],
+    "correctIndex": 2,
+    "explanation": "The Qur’an was preserved through mass memorization and written records."
+  },
+  {
+    "id": "quran_int_025",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "What distinguishes Qur’anic oaths from ordinary speech?",
+    "options": [
+      "They exaggerate meaning",
+      "They draw attention to significant truths",
+      "They replace arguments",
+      "They are poetic devices only"
+    ],
+    "correctIndex": 1,
+    "explanation": "Divine oaths emphasize important realities for reflection."
+  },
+  {
+    "id": "quran_int_026",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "Why does the Qur’an sometimes respond indirectly to objections?",
+    "options": [
+      "To avoid confrontation",
+      "To redirect flawed assumptions",
+      "Because answers were unknown",
+      "To delay judgment"
+    ],
+    "correctIndex": 1,
+    "explanation": "Indirect responses correct the underlying premise rather than the surface question."
+  },
+  {
+    "id": "quran_int_027",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "Which theme dominates Makkan revelation?",
+    "options": [
+      "Inheritance law",
+      "Criminal law",
+      "Tawḥīd and the Hereafter",
+      "Judicial procedure"
+    ],
+    "correctIndex": 2,
+    "explanation": "Makkan verses focus on belief, resurrection, and accountability."
+  },
+  {
+    "id": "quran_int_028",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "What role does the Sunnah play in relation to the Qur’an?",
+    "options": [
+      "It overrides Qur’anic rulings",
+      "It explains and applies Qur’anic guidance",
+      "It replaces Qur’anic law",
+      "It is independent of revelation"
+    ],
+    "correctIndex": 1,
+    "explanation": "The Sunnah clarifies, details, and implements Qur’anic teachings."
+  },
+  {
+    "id": "quran_int_029",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "Why are some rulings mentioned briefly in the Qur’an?",
+    "options": [
+      "Because they were incomplete",
+      "To be expanded by the Sunnah",
+      "Due to limited revelation time",
+      "Because details were forgotten"
+    ],
+    "correctIndex": 1,
+    "explanation": "The Qur’an often states principles, while the Sunnah provides details."
+  },
+  {
+    "id": "quran_int_030",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "What does the Qur’an indicate about reflection (tadabbur)?",
+    "options": [
+      "It is optional",
+      "It is reserved for scholars",
+      "It is encouraged for believers",
+      "It replaces worship"
+    ],
+    "correctIndex": 2,
+    "explanation": "The Qur’an repeatedly calls believers to reflect deeply on its meanings."
+  },
+  {
+    "id": "quran_int_031",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "Why does the Qur’an combine commands with reminders of Allah’s names?",
+    "options": [
+      "For literary style",
+      "To link law with divine attributes",
+      "To soften legal rulings",
+      "To avoid direct commands"
+    ],
+    "correctIndex": 1,
+    "explanation": "Commands are tied to Allah’s attributes to deepen understanding and compliance."
+  },
+  {
+    "id": "quran_int_032",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "What is the Qur’anic stance on blind imitation?",
+    "options": [
+      "It is encouraged",
+      "It is condemned when it rejects truth",
+      "It is mandatory",
+      "It replaces reasoning"
+    ],
+    "correctIndex": 1,
+    "explanation": "The Qur’an criticizes following tradition when it opposes guidance."
+  },
+  {
+    "id": "quran_int_033",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "Which factor distinguishes Qur’anic storytelling from historical chronicles?",
+    "options": [
+      "Chronological precision",
+      "Moral and spiritual focus",
+      "Complete biographies",
+      "Political detail"
+    ],
+    "correctIndex": 1,
+    "explanation": "Qur’anic narratives focus on lessons, not exhaustive history."
+  },
+  {
+    "id": "quran_int_034",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "Why does the Qur’an address both intellect and emotion?",
+    "options": [
+      "To appeal to all audiences",
+      "To replace logic with feeling",
+      "To confuse opponents",
+      "To entertain listeners"
+    ],
+    "correctIndex": 0,
+    "explanation": "The Qur’an engages reason and the heart to produce transformation."
+  },
+  {
+    "id": "quran_int_035",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "What does the Qur’an teach about human free will?",
+    "options": [
+      "Humans have no choice",
+      "Choice exists within divine decree",
+      "Free will negates destiny",
+      "Actions have no consequences"
+    ],
+    "correctIndex": 1,
+    "explanation": "Human choice operates within Allah’s ultimate will."
+  },
+  {
+    "id": "quran_int_036",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "Why are some verses concise while others are detailed?",
+    "options": [
+      "Random variation",
+      "Audience consideration and purpose",
+      "Memory limitations",
+      "Contradictory styles"
+    ],
+    "correctIndex": 1,
+    "explanation": "Length serves meaning, context, and impact."
+  },
+  {
+    "id": "quran_int_037",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "What is the Qur’anic function of repetition in warnings?",
+    "options": [
+      "Threat amplification",
+      "Reinforcement and emphasis",
+      "Replacement of evidence",
+      "Literary weakness"
+    ],
+    "correctIndex": 1,
+    "explanation": "Repetition reinforces seriousness and accountability."
+  },
+  {
+    "id": "quran_int_038",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "Why does the Qur’an correct earlier religious misunderstandings?",
+    "options": [
+      "To dismiss previous prophets",
+      "To restore original monotheism",
+      "To introduce new beliefs",
+      "To cause division"
+    ],
+    "correctIndex": 1,
+    "explanation": "The Qur’an restores pure tawḥīd and correct belief."
+  },
+  {
+    "id": "quran_int_039",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "Which concept explains moral accountability despite divine knowledge?",
+    "options": [
+      "Predestination negates responsibility",
+      "Human ignorance",
+      "Choice with accountability",
+      "Symbolic judgment"
+    ],
+    "correctIndex": 2,
+    "explanation": "Knowledge does not remove responsibility for chosen actions."
+  },
+  {
+    "id": "quran_int_040",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "Why does the Qur’an condemn selective belief?",
+    "options": [
+      "Because belief must be total",
+      "Because partial belief leads to distortion",
+      "Because law is optional",
+      "Because belief evolves"
+    ],
+    "correctIndex": 1,
+    "explanation": "Accepting some revelation while rejecting others distorts guidance."
+  },
+  {
+    "id": "quran_int_041",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "What role does patience play in Qur’anic ethics?",
+    "options": [
+      "Passive endurance only",
+      "Strategic restraint aligned with faith",
+      "Delay of justice",
+      "Avoidance of effort"
+    ],
+    "correctIndex": 1,
+    "explanation": "Ṣabr includes perseverance, restraint, and commitment."
+  },
+  {
+    "id": "quran_int_042",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "Why are believers warned against arrogance?",
+    "options": [
+      "It invalidates knowledge",
+      "It prevents submission to truth",
+      "It reduces worship",
+      "It causes ignorance"
+    ],
+    "correctIndex": 1,
+    "explanation": "Arrogance blocks acceptance of guidance."
+  },
+  {
+    "id": "quran_int_043",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "What does the Qur’an emphasize about worldly success?",
+    "options": [
+      "It guarantees divine favor",
+      "It is irrelevant",
+      "It is a test",
+      "It replaces faith"
+    ],
+    "correctIndex": 2,
+    "explanation": "Worldly gain is a test, not proof of righteousness."
+  },
+  {
+    "id": "quran_int_044",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "Why does the Qur’an often pair belief with action?",
+    "options": [
+      "To reduce faith to behavior",
+      "To show faith’s practical manifestation",
+      "To emphasize law over belief",
+      "To discourage reflection"
+    ],
+    "correctIndex": 1,
+    "explanation": "True belief manifests in righteous action."
+  },
+  {
+    "id": "quran_int_045",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "What does the Qur’an teach about despair of Allah’s mercy?",
+    "options": [
+      "It is understandable",
+      "It is a minor fault",
+      "It is prohibited",
+      "It is recommended humility"
+    ],
+    "correctIndex": 2,
+    "explanation": "Despair contradicts trust in Allah’s mercy."
+  },
+  {
+    "id": "quran_int_046",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "Why does the Qur’an affirm accountability on the Day of Judgment?",
+    "options": [
+      "To instill fear only",
+      "To complete moral responsibility",
+      "To discourage worldly effort",
+      "To replace justice"
+    ],
+    "correctIndex": 1,
+    "explanation": "Final accountability completes moral justice."
+  },
+  {
+    "id": "quran_int_047",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "What is the Qur’anic view of knowledge without action?",
+    "options": [
+      "It is praised",
+      "It is neutral",
+      "It increases responsibility",
+      "It guarantees guidance"
+    ],
+    "correctIndex": 2,
+    "explanation": "Knowledge increases accountability if not acted upon."
+  },
+  {
+    "id": "quran_int_048",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "Why does the Qur’an emphasize intention?",
+    "options": [
+      "To replace actions",
+      "To excuse wrongdoing",
+      "To define moral value of actions",
+      "To discourage effort"
+    ],
+    "correctIndex": 2,
+    "explanation": "Intentions determine moral worth."
+  },
+  {
+    "id": "quran_int_049",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "Which statement best reflects Qur’anic guidance methodology?",
+    "options": [
+      "Immediate enforcement",
+      "Gradual transformation",
+      "Philosophical debate",
+      "Political authority"
+    ],
+    "correctIndex": 1,
+    "explanation": "The Qur’an transforms individuals and societies gradually."
+  },
+  {
+    "id": "quran_int_050",
+    "category": "Qur’an",
+    "level": "Intermediate",
+    "question": "What is the ultimate objective of Qur’anic guidance?",
+    "options": [
+      "Legal compliance only",
+      "Intellectual mastery",
+      "Rectification of belief and conduct",
+      "Historical preservation"
+    ],
+    "correctIndex": 2,
+    "explanation": "The Qur’an aims to correct belief, behavior, and purpose."
+  },
+
+  {
+    "id": "seerah_int_001",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "Why did the Prophet ﷺ initially call people to Islam privately in Makkah?",
+    "options": [
+      "Fear of Quraysh retaliation",
+      "Lack of divine permission",
+      "Strategic cultivation of a strong core group",
+      "Absence of public preaching methods"
+    ],
+    "correctIndex": 2,
+    "explanation": "The early private phase focused on building conviction and resilience before public confrontation."
+  },
+  {
+    "id": "seerah_int_002",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "What was the primary significance of Dār al-Arqam?",
+    "options": [
+      "A hiding place only",
+      "A military planning center",
+      "A training ground for belief and discipline",
+      "A replacement for the Ka‘bah"
+    ],
+    "correctIndex": 2,
+    "explanation": "It functioned as a secure environment for education, spiritual formation, and unity."
+  },
+  {
+    "id": "seerah_int_003",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "Why did the Prophet ﷺ not retaliate violently during early persecution?",
+    "options": [
+      "Lack of supporters",
+      "Fear of escalation",
+      "Absence of permission and strategic restraint",
+      "Preference for diplomacy only"
+    ],
+    "correctIndex": 2,
+    "explanation": "Restraint was divinely guided and strategically necessary to protect the mission."
+  },
+  {
+    "id": "seerah_int_004",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "What made the boycott of Banū Hāshim especially severe?",
+    "options": [
+      "Military attacks",
+      "Economic and social isolation",
+      "Forced migration",
+      "Loss of tribal leadership"
+    ],
+    "correctIndex": 1,
+    "explanation": "The boycott cut off food, trade, and social relations, targeting survival itself."
+  },
+  {
+    "id": "seerah_int_005",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "Why did the Prophet ﷺ allow migration to Abyssinia before Madinah?",
+    "options": [
+      "Geographical proximity",
+      "Political alliance",
+      "Presence of a just ruler",
+      "Weak Quraysh control"
+    ],
+    "correctIndex": 2,
+    "explanation": "The Najāshī’s justice ensured protection despite religious differences."
+  },
+  {
+    "id": "seerah_int_006",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "What lesson is emphasized by the incident of Ṭā’if?",
+    "options": [
+      "Persistence without reflection",
+      "Immediate divine punishment",
+      "Mercy combined with long-term vision",
+      "Withdrawal from da‘wah"
+    ],
+    "correctIndex": 2,
+    "explanation": "The Prophet ﷺ chose mercy and hope over retaliation."
+  },
+  {
+    "id": "seerah_int_007",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "Why was the Night Journey (Isrāʾ and Mi‘rāj) a critical test for believers?",
+    "options": [
+      "Its physical difficulty",
+      "Its public announcement",
+      "Its challenge to rational acceptance",
+      "Its secrecy"
+    ],
+    "correctIndex": 2,
+    "explanation": "It tested submission to divine truth beyond empirical limits."
+  },
+  {
+    "id": "seerah_int_008",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "What distinguished the second pledge of ‘Aqabah from the first?",
+    "options": [
+      "Public declaration",
+      "Commitment to armed protection",
+      "Migration requirement",
+      "Economic support"
+    ],
+    "correctIndex": 1,
+    "explanation": "It included readiness to defend the Prophet ﷺ militarily."
+  },
+  {
+    "id": "seerah_int_009",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "Why did the Prophet ﷺ remain in Makkah after many companions migrated?",
+    "options": [
+      "Fear of travel",
+      "Waiting for divine permission",
+      "Protecting property",
+      "Negotiating peace"
+    ],
+    "correctIndex": 1,
+    "explanation": "He did not migrate until commanded by Allah."
+  },
+  {
+    "id": "seerah_int_010",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "What was the strategic importance of the Hijrah route chosen?",
+    "options": [
+      "Shortest distance",
+      "Least guarded paths",
+      "Psychological misdirection",
+      "Existing trade roads"
+    ],
+    "correctIndex": 2,
+    "explanation": "The route countered Quraysh expectations and tracking."
+  },
+  {
+    "id": "seerah_int_011",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "Why did the Prophet ﷺ establish brotherhood between Muhājirūn and Anṣār?",
+    "options": [
+      "Emotional bonding only",
+      "Economic redistribution",
+      "Tribal replacement",
+      "Political symbolism"
+    ],
+    "correctIndex": 1,
+    "explanation": "It stabilized the new society socially and economically."
+  },
+  {
+    "id": "seerah_int_012",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "What was the role of the Madinah Charter?",
+    "options": [
+      "Religious enforcement",
+      "Military alliance only",
+      "Civil governance framework",
+      "Temporary truce"
+    ],
+    "correctIndex": 2,
+    "explanation": "It defined rights, responsibilities, and coexistence."
+  },
+  {
+    "id": "seerah_int_013",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "Why did the Prophet ﷺ consult companions before Badr?",
+    "options": [
+      "Lack of confidence",
+      "Democratic formality",
+      "Binding communal consent",
+      "Avoiding blame"
+    ],
+    "correctIndex": 2,
+    "explanation": "Especially to confirm Anṣār commitment beyond Madinah."
+  },
+  {
+    "id": "seerah_int_014",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "What was the key reason for Muslim loss at Uḥud?",
+    "options": [
+      "Inferior numbers",
+      "Leadership failure",
+      "Disobedience to clear instruction",
+      "Lack of faith"
+    ],
+    "correctIndex": 2,
+    "explanation": "The archers’ disobedience reversed the situation."
+  },
+  {
+    "id": "seerah_int_015",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "What leadership principle emerged after Uḥud?",
+    "options": [
+      "Punitive discipline",
+      "Withdrawal from consultation",
+      "Accountability with mercy",
+      "Centralized authority"
+    ],
+    "correctIndex": 2,
+    "explanation": "Mistakes were addressed without crushing morale."
+  },
+  {
+    "id": "seerah_int_016",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "Why was the Treaty of Ḥudaybiyyah a strategic victory?",
+    "options": [
+      "Immediate military gain",
+      "Recognition by Quraysh",
+      "Long-term da‘wah expansion",
+      "Economic control"
+    ],
+    "correctIndex": 2,
+    "explanation": "Peace enabled widespread interaction and conversions."
+  },
+  {
+    "id": "seerah_int_017",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "Why did some companions initially object to Ḥudaybiyyah?",
+    "options": [
+      "Weak faith",
+      "Emotional response to apparent concession",
+      "Political rivalry",
+      "Misunderstanding terms"
+    ],
+    "correctIndex": 1,
+    "explanation": "They struggled with short-term loss despite long-term wisdom."
+  },
+  {
+    "id": "seerah_int_018",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "What does the conquest of Makkah primarily demonstrate?",
+    "options": [
+      "Military dominance",
+      "Tribal revenge",
+      "Controlled power with mercy",
+      "Political supremacy"
+    ],
+    "correctIndex": 2,
+    "explanation": "Forgiveness replaced retaliation at the moment of power."
+  },
+  {
+    "id": "seerah_int_019",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "Why were idols destroyed immediately after the conquest?",
+    "options": [
+      "Symbolic action",
+      "Political consolidation",
+      "Removal of shirk’s foundation",
+      "Public intimidation"
+    ],
+    "correctIndex": 2,
+    "explanation": "Tawḥīd required immediate elimination of shirk symbols."
+  },
+  {
+    "id": "seerah_int_020",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "What does the Farewell Sermon emphasize most?",
+    "options": [
+      "Expansion",
+      "Social hierarchy",
+      "Universal justice and accountability",
+      "Political succession"
+    ],
+    "correctIndex": 2,
+    "explanation": "It summarized ethical, legal, and spiritual foundations."
+  },
+  {
+    "id": "seerah_int_021",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "Why did the Prophet ﷺ continue consulting companions until his final days?",
+    "options": [
+      "Habit",
+      "Delegation training",
+      "Institutional leadership model",
+      "Personal humility only"
+    ],
+    "correctIndex": 2,
+    "explanation": "Consultation was embedded as a governance principle."
+  },
+  {
+    "id": "seerah_int_022",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "What distinguishes prophetic leadership from charismatic leadership?",
+    "options": [
+      "Popularity",
+      "Strategic genius",
+      "Revelation-guided restraint",
+      "Oratory skill"
+    ],
+    "correctIndex": 2,
+    "explanation": "Decisions were bound by revelation, not ego."
+  },
+  {
+    "id": "seerah_int_023",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "Why did hypocrisy emerge mainly in Madinah?",
+    "options": [
+      "Weaker faith",
+      "Political advantage of pretending belief",
+      "Fear of persecution",
+      "Lack of knowledge"
+    ],
+    "correctIndex": 1,
+    "explanation": "Islam’s power made outward allegiance beneficial."
+  },
+  {
+    "id": "seerah_int_024",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "Why were some battles avoided despite provocation?",
+    "options": [
+      "Fear of defeat",
+      "Strategic cost-benefit evaluation",
+      "Weak army",
+      "Diplomatic pressure"
+    ],
+    "correctIndex": 1,
+    "explanation": "Not every provocation warrants engagement."
+  },
+  {
+    "id": "seerah_int_025",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "What role did patience play in early treaties?",
+    "options": [
+      "Delaying justice",
+      "Preserving long-term mission",
+      "Weak negotiation",
+      "Avoiding conflict"
+    ],
+    "correctIndex": 1,
+    "explanation": "Patience safeguarded future strength."
+  },
+  {
+    "id": "seerah_int_026",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "Why did the Prophet ﷺ pardon specific enemies repeatedly?",
+    "options": [
+      "Political necessity",
+      "Moral inconsistency",
+      "Transformational mercy",
+      "Tribal pressure"
+    ],
+    "correctIndex": 2,
+    "explanation": "Mercy dismantled resistance more effectively than force."
+  },
+  {
+    "id": "seerah_int_027",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "What does the Prophet’s ﷺ reaction to personal insult show?",
+    "options": [
+      "Passivity",
+      "Calculated restraint",
+      "Emotional detachment",
+      "Lack of authority"
+    ],
+    "correctIndex": 1,
+    "explanation": "Personal insults were subordinated to mission goals."
+  },
+  {
+    "id": "seerah_int_028",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "Why did revelation sometimes correct the Prophet ﷺ?",
+    "options": [
+      "Human error",
+      "Teaching the Ummah humility and law",
+      "Loss of authority",
+      "Contradiction"
+    ],
+    "correctIndex": 1,
+    "explanation": "Corrections established ethical and legal boundaries."
+  },
+  {
+    "id": "seerah_int_029",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "What was the Prophet’s ﷺ stance toward tribalism?",
+    "options": [
+      "Utilized fully",
+      "Ignored entirely",
+      "Transformed into moral unity",
+      "Preserved selectively"
+    ],
+    "correctIndex": 2,
+    "explanation": "Tribal identity was subordinated to faith-based unity."
+  },
+  {
+    "id": "seerah_int_030",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "Why were delegations welcomed after the conquest of Makkah?",
+    "options": [
+      "Political submission",
+      "Military surrender",
+      "Voluntary acceptance after clarity",
+      "Fear-based allegiance"
+    ],
+    "correctIndex": 2,
+    "explanation": "Islam spread after barriers to understanding were removed."
+  },
+  {
+    "id": "seerah_int_031",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "What does the Prophet’s ﷺ treatment of prisoners show?",
+    "options": [
+      "Leniency without limits",
+      "Strategic ethics",
+      "Weak authority",
+      "Inconsistency"
+    ],
+    "correctIndex": 1,
+    "explanation": "Ethics guided even wartime decisions."
+  },
+  {
+    "id": "seerah_int_032",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "Why did the Prophet ﷺ reject personal kingship offers?",
+    "options": [
+      "Political risk",
+      "Economic loss",
+      "Conflict with prophetic mission",
+      "Lack of support"
+    ],
+    "correctIndex": 2,
+    "explanation": "Prophethood was not negotiable for power."
+  },
+  {
+    "id": "seerah_int_033",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "What lesson comes from delaying retaliation against Quraysh?",
+    "options": [
+      "Avoidance of justice",
+      "Mission-first thinking",
+      "Weakness",
+      "Compromise of truth"
+    ],
+    "correctIndex": 1,
+    "explanation": "Timing can determine success or failure."
+  },
+  {
+    "id": "seerah_int_034",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "Why did the Prophet ﷺ allow cultural practices that did not contradict Islam?",
+    "options": [
+      "Indecision",
+      "Gradual reform",
+      "Fear of backlash",
+      "Cultural relativism"
+    ],
+    "correctIndex": 1,
+    "explanation": "Islam reforms rather than erases neutral customs."
+  },
+  {
+    "id": "seerah_int_035",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "What does the Prophet’s ﷺ simplicity in leadership indicate?",
+    "options": [
+      "Ascetic withdrawal",
+      "Symbolic humility",
+      "Detachment from society",
+      "Lack of resources"
+    ],
+    "correctIndex": 1,
+    "explanation": "Authority was exercised without personal elevation."
+  },
+  {
+    "id": "seerah_int_036",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "Why were some treaties honored despite breaches?",
+    "options": [
+      "Fear of conflict",
+      "Maintaining moral authority",
+      "Political weakness",
+      "Lack of alternatives"
+    ],
+    "correctIndex": 1,
+    "explanation": "Moral credibility outweighed short-term gain."
+  },
+  {
+    "id": "seerah_int_037",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "What role did women play in early Islam according to Seerah?",
+    "options": [
+      "Passive followers",
+      "Supportive but secondary",
+      "Active participants in belief and sacrifice",
+      "Limited to domestic roles"
+    ],
+    "correctIndex": 2,
+    "explanation": "Women were central to belief, migration, and endurance."
+  },
+  {
+    "id": "seerah_int_038",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "Why did revelation sometimes delay judgment on events?",
+    "options": [
+      "Uncertainty",
+      "Teaching restraint and patience",
+      "Human limitation",
+      "Political pressure"
+    ],
+    "correctIndex": 1,
+    "explanation": "Delay cultivated discipline and trust."
+  },
+  {
+    "id": "seerah_int_039",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "What distinguishes prophetic forgiveness from political amnesty?",
+    "options": [
+      "Lack of consequences",
+      "Moral reform intent",
+      "Strategic calculation only",
+      "Temporary peace"
+    ],
+    "correctIndex": 1,
+    "explanation": "Forgiveness aimed at inner transformation."
+  },
+  {
+    "id": "seerah_int_040",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "Why did the Prophet ﷺ emphasize intention over appearance?",
+    "options": [
+      "Avoiding accountability",
+      "Focusing on inner reform",
+      "Minimizing law",
+      "Encouraging secrecy"
+    ],
+    "correctIndex": 1,
+    "explanation": "Sincere intention anchors ethical behavior."
+  },
+  {
+    "id": "seerah_int_041",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "What does the Prophet’s ﷺ response to failure teach?",
+    "options": [
+      "Immediate correction with blame",
+      "Reflection, correction, and continuation",
+      "Withdrawal",
+      "Delegation of responsibility"
+    ],
+    "correctIndex": 1,
+    "explanation": "Failure was used as instruction, not termination."
+  },
+  {
+    "id": "seerah_int_042",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "Why did Islam spread rapidly after Madinah?",
+    "options": [
+      "Forced conversion",
+      "Military dominance",
+      "Moral credibility and clarity",
+      "Economic incentives"
+    ],
+    "correctIndex": 2,
+    "explanation": "Integrity and structure enabled growth."
+  },
+  {
+    "id": "seerah_int_043",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "What does the Prophet’s ﷺ patience with companions show?",
+    "options": [
+      "Tolerance of error",
+      "Leadership development",
+      "Avoidance of discipline",
+      "Emotional attachment"
+    ],
+    "correctIndex": 1,
+    "explanation": "Patience built capable future leaders."
+  },
+  {
+    "id": "seerah_int_044",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "Why was succession not explicitly named?",
+    "options": [
+      "Oversight",
+      "Divine wisdom allowing communal process",
+      "Fear of division",
+      "Incomplete message"
+    ],
+    "correctIndex": 1,
+    "explanation": "The Ummah was trained to govern through principles."
+  },
+  {
+    "id": "seerah_int_045",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "What does the final illness of the Prophet ﷺ demonstrate?",
+    "options": [
+      "Loss of authority",
+      "Human vulnerability with mission continuity",
+      "Withdrawal from leadership",
+      "End of guidance"
+    ],
+    "correctIndex": 1,
+    "explanation": "The mission outlived the individual."
+  },
+  [
+  {
+    "id": "seerah_int_046",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "Why did the Prophet ﷺ send letters to rulers?",
+    "options": [
+      "To threaten them with war",
+      "To expand trade routes",
+      "To universalize the message beyond Arabia through formal invitation",
+      "To seek financial support"
+    ],
+    "correctIndex": 2,
+    "explanation": "The letters carried da‘wah beyond Arabia and established Islam’s universal call through recognized diplomatic channels."
+  },
+  {
+    "id": "seerah_int_047",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "What principle is shown by sending qualified companions as governors and teachers to new regions?",
+    "options": [
+      "Centralization of all authority in Madinah",
+      "Training leadership and decentralizing responsibility with accountability",
+      "Avoiding da‘wah in distant lands",
+      "Using only tribal leaders for authority"
+    ],
+    "correctIndex": 1,
+    "explanation": "The Prophet ﷺ built institutions by delegating to capable people while keeping moral and legal accountability."
+  },
+  {
+    "id": "seerah_int_048",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "What did the Prophet ﷺ prioritize when choosing emissaries and representatives?",
+    "options": [
+      "Wealth and social rank",
+      "Physical strength",
+      "Trustworthiness, wisdom, and clarity of communication",
+      "Family ties to Quraysh"
+    ],
+    "correctIndex": 2,
+    "explanation": "Representation required amanah, sound judgment, and the ability to convey Islam clearly under pressure."
+  },
+  {
+    "id": "seerah_int_049",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "What does the Prophet’s ﷺ consistent emphasis on justice even with enemies indicate?",
+    "options": [
+      "Political neutrality",
+      "Selective morality",
+      "A principle-based leadership not driven by emotion",
+      "Weakness in enforcement"
+    ],
+    "correctIndex": 2,
+    "explanation": "Justice was not tied to friendship or enmity. It was tied to Allah’s command and moral integrity."
+  },
+  {
+    "id": "seerah_int_050",
+    "category": "Seerah",
+    "level": "Intermediate",
+    "question": "What is the most accurate summary of the Prophet’s ﷺ leadership legacy in Seerah?",
+    "options": [
+      "Winning battles and expanding territory",
+      "Building a belief-driven community with law, ethics, and mercy",
+      "Achieving tribal dominance in Arabia",
+      "Creating a political dynasty"
+    ],
+    "correctIndex": 1,
+    "explanation": "The Seerah shows a complete model: faith formation, ethical conduct, social order, justice, and mercy, all anchored to revelation."
+  },
+
+  {
+    "id": "tawheed_int_001",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "Which statement best defines Tawheed al-Uluhiyyah?",
+    "options": [
+      "Believing Allah created everything",
+      "Making all acts of worship for Allah alone",
+      "Believing Allah knows everything",
+      "Believing Allah has beautiful names"
+    ],
+    "correctIndex": 1,
+    "explanation": "Tawheed al-Uluhiyyah is singling Allah out in worship such as du‘a, salah, sacrifice, reliance, and love of worship."
+  },
+  {
+    "id": "tawheed_int_002",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "Many idolaters affirmed Allah as Creator, yet were still condemned. Why?",
+    "options": [
+      "They denied prophethood",
+      "They rejected angels",
+      "They committed shirk in worship despite affirming Lordship",
+      "They did not fast Ramadan"
+    ],
+    "correctIndex": 2,
+    "explanation": "Affirming Rububiyyah alone is not enough if worship is directed to others besides Allah."
+  },
+  {
+    "id": "tawheed_int_003",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "Which is the most accurate description of Tawheed al-Asma’ wa al-Sifat?",
+    "options": [
+      "Interpreting all attributes metaphorically to avoid resemblance",
+      "Affirming what Allah affirmed for Himself without distortion, denial, or likening",
+      "Rejecting all attributes and focusing only on actions",
+      "Believing Allah’s names are only for decoration"
+    ],
+    "correctIndex": 1,
+    "explanation": "The sound approach is to affirm Allah’s names and attributes as revealed, without tahrif, ta‘til, takyif, or tamthil."
+  },
+  {
+    "id": "tawheed_int_004",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "What is the best definition of shirk (major shirk)?",
+    "options": [
+      "Any sin at all",
+      "Showing off in worship",
+      "Directing an act of worship to other than Allah",
+      "Making a mistake in fiqh"
+    ],
+    "correctIndex": 2,
+    "explanation": "Major shirk is to associate partners with Allah in worship, such as du‘a, sacrifice, or reliance in a worship sense."
+  },
+  {
+    "id": "tawheed_int_005",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "Which example best represents minor shirk?",
+    "options": [
+      "Praying to a saint",
+      "Believing an amulet independently protects you",
+      "Showing off in prayer to impress people",
+      "Denying Allah’s existence"
+    ],
+    "correctIndex": 2,
+    "explanation": "Riya’ (showing off) is minor shirk because it corrupts sincerity, though it is not worshipping another deity."
+  },
+  {
+    "id": "tawheed_int_006",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "What is the strongest meaning of 'La ilaha illa Allah'?",
+    "options": [
+      "There is no creator except Allah",
+      "There is no law except Allah’s law",
+      "There is none worthy of worship except Allah",
+      "There is no power except Allah"
+    ],
+    "correctIndex": 2,
+    "explanation": "Its core meaning is exclusivity of worship. It is not merely acknowledging creation or power."
+  },
+  {
+    "id": "tawheed_int_007",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "A person says: 'I worship Allah, but I also call upon a dead righteous man as a means.' What is the ruling in principle?",
+    "options": [
+      "It is pure tawheed because intention is Allah",
+      "It is acceptable because the man is righteous",
+      "It is shirk because du‘a is worship directed to other than Allah",
+      "It is only disliked, not serious"
+    ],
+    "correctIndex": 2,
+    "explanation": "Du‘a is worship. Directing it to the dead, regardless of intention, is major shirk."
+  },
+  {
+    "id": "tawheed_int_008",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "Which statement about tawakkul (reliance) is correct?",
+    "options": [
+      "Reliance means abandoning all means",
+      "Reliance is using means while the heart depends on Allah",
+      "Reliance is only for scholars",
+      "Reliance is a feeling, not worship"
+    ],
+    "correctIndex": 1,
+    "explanation": "True tawakkul is taking lawful means while the heart depends on Allah alone for outcomes."
+  },
+  {
+    "id": "tawheed_int_009",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "Which is an example of worship of the heart?",
+    "options": [
+      "Salah",
+      "Zakat",
+      "Fear and hope directed to Allah in a worship sense",
+      "Hajj"
+    ],
+    "correctIndex": 2,
+    "explanation": "Actions of the heart like khawf, raja’, mahabbah, and tawakkul are worship when directed properly."
+  },
+  {
+    "id": "tawheed_int_010",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "What is the safest understanding of seeking 'barakah'?",
+    "options": [
+      "Barakah is taken from any object with good vibes",
+      "Barakah is sought through what Allah legislated, not invented rituals",
+      "Barakah is only inherited through lineage",
+      "Barakah is guaranteed by touching graves"
+    ],
+    "correctIndex": 1,
+    "explanation": "Barakah is real, but it is sought through lawful causes proven in revelation, not superstition."
+  },
+  {
+    "id": "tawheed_int_011",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "A person wears an amulet believing it protects them independently. What is the ruling?",
+    "options": [
+      "Minor shirk",
+      "Major shirk",
+      "Permissible if it has Arabic writing",
+      "Permissible if elders approve"
+    ],
+    "correctIndex": 1,
+    "explanation": "Believing an object protects independently makes it a rival to Allah’s power. That is major shirk."
+  },
+  {
+    "id": "tawheed_int_012",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "A person wears an amulet believing it is only a 'means' while protection is from Allah. What is the principle-based ruling?",
+    "options": [
+      "Always permitted",
+      "Minor shirk or prohibited if the 'means' is not legislated or proven",
+      "Major shirk always",
+      "Recommended practice"
+    ],
+    "correctIndex": 1,
+    "explanation": "Taking unlegislated means in matters of protection is blameworthy and can fall under minor shirk or prohibition."
+  },
+  {
+    "id": "tawheed_int_013",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "Which is the most accurate meaning of 'ibadah in Islam?",
+    "options": [
+      "Only rituals like prayer and fasting",
+      "Everything that feels spiritual",
+      "All that Allah loves and is pleased with of sayings and actions, outward and inward",
+      "Only good manners"
+    ],
+    "correctIndex": 2,
+    "explanation": "‘Ibadah includes outward deeds and inner actions that Allah loves, within revelation."
+  },
+  {
+    "id": "tawheed_int_014",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "What is the danger of ghuluw (exaggeration) in praising the righteous?",
+    "options": [
+      "It increases love of Allah",
+      "It leads to disrespect",
+      "It can become a doorway to shirk",
+      "It is harmless"
+    ],
+    "correctIndex": 2,
+    "explanation": "Exaggeration often begins as admiration and ends as worship-like devotion."
+  },
+  {
+    "id": "tawheed_int_015",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "Which statement best defines bid‘ah in worship?",
+    "options": [
+      "Any new invention in worldly life",
+      "Any change in culture",
+      "Introducing a religious act as worship without proof from revelation",
+      "Learning new Islamic sciences"
+    ],
+    "correctIndex": 2,
+    "explanation": "Bid‘ah in worship is inventing acts of devotion without textual basis, even if intentions are good."
+  },
+  {
+    "id": "tawheed_int_016",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "Why is sincerity (ikhlas) inseparable from tawheed?",
+    "options": [
+      "Because tawheed is only knowledge",
+      "Because worship must be directed to Allah alone, inwardly and outwardly",
+      "Because sincerity replaces prayer",
+      "Because sincerity is optional"
+    ],
+    "correctIndex": 1,
+    "explanation": "Tawheed is not only belief. It is exclusive worship. Ikhlas is the heart’s exclusivity."
+  },
+  {
+    "id": "tawheed_int_017",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "What is the correct stance on attributing unseen knowledge (ghayb) to anyone besides Allah?",
+    "options": [
+      "Permissible for righteous people",
+      "Permissible for astrologers",
+      "Not permissible except what Allah reveals to a messenger",
+      "Permissible if it is based on dreams"
+    ],
+    "correctIndex": 2,
+    "explanation": "Ghayb belongs to Allah. Messengers only know what Allah reveals to them."
+  },
+  {
+    "id": "tawheed_int_018",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "A person says: 'This sheikh will definitely forgive my sins.' What is the correction?",
+    "options": [
+      "It is true if the sheikh is famous",
+      "Forgiveness is only from Allah, so this belief is wrong",
+      "The sheikh can forgive minor sins",
+      "It depends on the sheikh’s lineage"
+    ],
+    "correctIndex": 1,
+    "explanation": "Forgiveness is Allah’s right. People can advise and pray, not grant forgiveness."
+  },
+  {
+    "id": "tawheed_int_019",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "What is the best understanding of 'seeking help' (isti‘anah)?",
+    "options": [
+      "All help from humans is shirk",
+      "Seeking normal help from people is allowed, worship-level help is for Allah alone",
+      "Only scholars can help",
+      "Help is only through du‘a"
+    ],
+    "correctIndex": 1,
+    "explanation": "Asking people for what they can do is permissible. Asking for divine-only matters is shirk."
+  },
+  {
+    "id": "tawheed_int_020",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "Why is making du‘a to Allah directly emphasized in tawheed teaching?",
+    "options": [
+      "Because intermediaries are always sinful",
+      "Because direct du‘a is worship and shows pure dependence",
+      "Because du‘a is optional",
+      "Because du‘a replaces action"
+    ],
+    "correctIndex": 1,
+    "explanation": "Du‘a is worship and dependence. Tawheed demands it be directed to Allah alone."
+  },
+  {
+    "id": "tawheed_int_021",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "Which phrase reflects proper adab when attributing outcomes?",
+    "options": [
+      "I did it by my power alone",
+      "It happened by luck",
+      "By Allah’s will, then through the means He allowed",
+      "It happened because the stars aligned"
+    ],
+    "correctIndex": 2,
+    "explanation": "We affirm Allah’s will first, while acknowledging lawful means as secondary."
+  },
+  {
+    "id": "tawheed_int_022",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "What is the best meaning of 'ibadah-based love' (mahabbah ‘ibadiyyah)?",
+    "options": [
+      "Loving something because it benefits you",
+      "Loving Allah with worshipful devotion above all",
+      "Loving family",
+      "Loving a teacher"
+    ],
+    "correctIndex": 1,
+    "explanation": "Mahabbah ‘ibadiyyah is worship-love reserved for Allah, above all else."
+  },
+  {
+    "id": "tawheed_int_023",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "What is a common doorway to shirk in many cultures?",
+    "options": [
+      "Learning Arabic",
+      "Exaggerating saints and attaching the heart to graves/objects",
+      "Praying in congregation",
+      "Giving charity"
+    ],
+    "correctIndex": 1,
+    "explanation": "Shirk often begins with exaggeration of righteous people and superstitious practices around them."
+  },
+  {
+    "id": "tawheed_int_024",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "Which statement about causes (asbab) is correct?",
+    "options": [
+      "Causes work independently",
+      "Causes are illusions",
+      "Causes exist, but Allah is the Creator of outcomes",
+      "Causes replace reliance on Allah"
+    ],
+    "correctIndex": 2,
+    "explanation": "Islam affirms causes, but outcomes are created by Allah. This protects tawheed."
+  },
+  {
+    "id": "tawheed_int_025",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "Which is the correct approach to Allah’s attributes that mention 'Hand', 'Face', etc.?",
+    "options": [
+      "Deny them entirely",
+      "Describe exactly 'how' they are",
+      "Affirm them as revealed without likening Allah to creation",
+      "Say they mean Allah has a human body"
+    ],
+    "correctIndex": 2,
+    "explanation": "We affirm what Allah affirmed without asking how, and without comparing Him to creation."
+  },
+  {
+    "id": "tawheed_int_026",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "What is the relationship between tawheed and obedience?",
+    "options": [
+      "Obedience is unrelated to belief",
+      "Tawheed is proven by submission and obedience to Allah",
+      "Only love matters, not obedience",
+      "Obedience is only for leaders"
+    ],
+    "correctIndex": 1,
+    "explanation": "Tawheed is not a slogan. It is submission that shows in obedience and rejection of shirk."
+  },
+  {
+    "id": "tawheed_int_027",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "A person says: 'I trust Allah, so I won’t study for an exam.' What is the correction?",
+    "options": [
+      "That is perfect tawakkul",
+      "That is laziness. Tawakkul requires taking means",
+      "Studying is bid‘ah",
+      "Exams are haram"
+    ],
+    "correctIndex": 1,
+    "explanation": "Leaving means is not tawakkul. It is failure to fulfill responsibility."
+  },
+  {
+    "id": "tawheed_int_028",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "What is the meaning of 'taghut' in tawheed discussions?",
+    "options": [
+      "Any leader",
+      "Anything worshipped or obeyed in disobedience to Allah as a rival",
+      "Any cultural practice",
+      "Any innovation in technology"
+    ],
+    "correctIndex": 1,
+    "explanation": "Taghut includes false gods and systems treated as rivals to Allah in worship or ultimate obedience."
+  },
+  {
+    "id": "tawheed_int_029",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "Why is repentance (tawbah) considered a pillar of maintaining tawheed?",
+    "options": [
+      "Because tawheed never has mistakes",
+      "Because sins weaken the heart’s sincerity and submission",
+      "Because tawbah is only for major shirk",
+      "Because tawbah replaces prayer"
+    ],
+    "correctIndex": 1,
+    "explanation": "Sins damage the heart, weaken ikhlas, and open doors to dependence on other than Allah."
+  },
+  {
+    "id": "tawheed_int_030",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "What is the best response to someone who says: 'As long as my heart is clean, actions don’t matter'?",
+    "options": [
+      "Correct, Islam is only intentions",
+      "Partly correct, actions are optional",
+      "Wrong, a clean heart produces obedience and correct worship",
+      "Correct, actions are culture"
+    ],
+    "correctIndex": 2,
+    "explanation": "The heart and limbs are connected. Sound belief shows in action."
+  },
+  {
+    "id": "tawheed_int_031",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "What is the safest view on making vows to people at graves (e.g., 'If I pass, I’ll slaughter for you')?",
+    "options": [
+      "Permissible if the person was righteous",
+      "Permissible if it is charity",
+      "Shirk, because sacrifice and vows are worship",
+      "Disliked only"
+    ],
+    "correctIndex": 2,
+    "explanation": "Vows and sacrifice are worship. Directing them to other than Allah is major shirk."
+  },
+  {
+    "id": "tawheed_int_032",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "Which is an example of 'seeking intercession' in a correct way?",
+    "options": [
+      "Asking a dead person to intercede",
+      "Asking Allah for intercession while following the Sunnah",
+      "Asking angels directly",
+      "Asking stars for guidance"
+    ],
+    "correctIndex": 1,
+    "explanation": "Intercession is requested from Allah, and it occurs only by His permission."
+  },
+  {
+    "id": "tawheed_int_033",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "What is the purpose of learning tawheed first?",
+    "options": [
+      "To debate people",
+      "To judge others",
+      "To correct worship and protect the foundation of deen",
+      "To avoid learning fiqh"
+    ],
+    "correctIndex": 2,
+    "explanation": "Tawheed is the foundation. Without it, worship collapses even if actions look plenty."
+  },
+  {
+    "id": "tawheed_int_034",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "Which statement best reflects Islamic balance between fear and hope?",
+    "options": [
+      "Only fear matters",
+      "Only hope matters",
+      "Fear and hope together drive worship and repentance",
+      "Fear is for sinners only"
+    ],
+    "correctIndex": 2,
+    "explanation": "A believer worships with fear and hope, avoiding despair and complacency."
+  },
+  {
+    "id": "tawheed_int_035",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "What is the ruling on believing fortune-tellers know the unseen?",
+    "options": [
+      "Permissible if they are accurate",
+      "Permissible if it is for fun",
+      "Haram and a violation of tawheed",
+      "Recommended for guidance"
+    ],
+    "correctIndex": 2,
+    "explanation": "Claiming knowledge of the unseen is a violation of tawheed and is forbidden."
+  },
+  {
+    "id": "tawheed_int_036",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "What is the best definition of 'ihsan' in worship?",
+    "options": [
+      "Doing the minimum only",
+      "Worshipping Allah as if you see Him, and knowing He sees you",
+      "Being kind to people only",
+      "Avoiding sins only"
+    ],
+    "correctIndex": 1,
+    "explanation": "Ihsan perfects worship through presence of heart and awareness of Allah."
+  },
+  {
+    "id": "tawheed_int_037",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "Why is seeking praise for worship dangerous?",
+    "options": [
+      "Because praise is haram always",
+      "Because it can turn worship into showing off and corrupt sincerity",
+      "Because people will envy you",
+      "Because worship should be secret always"
+    ],
+    "correctIndex": 1,
+    "explanation": "Praise-seeking can shift worship from Allah to people, harming ikhlas."
+  },
+  {
+    "id": "tawheed_int_038",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "A person says: 'I only worship Allah, but I swear by my father.' What is the correction?",
+    "options": [
+      "It is fine because it is culture",
+      "Swearing by other than Allah is prohibited and can be a form of minor shirk",
+      "It is major shirk always",
+      "It is recommended for respect"
+    ],
+    "correctIndex": 1,
+    "explanation": "Oaths are a form of veneration. Swearing by other than Allah is forbidden."
+  },
+  {
+    "id": "tawheed_int_039",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "What is the best way to define 'du‘a' in tawheed terms?",
+    "options": [
+      "A motivational speech",
+      "A spiritual poem",
+      "Worship and dependence upon Allah",
+      "Only asking for money"
+    ],
+    "correctIndex": 2,
+    "explanation": "Du‘a is worship, showing need and reliance on Allah."
+  },
+  {
+    "id": "tawheed_int_040",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "What is the relationship between shirk and good deeds?",
+    "options": [
+      "Shirk has no effect on deeds",
+      "Major shirk can nullify deeds if not repented from",
+      "Only minor sins nullify deeds",
+      "Good deeds erase shirk automatically"
+    ],
+    "correctIndex": 1,
+    "explanation": "Major shirk is the greatest injustice and can nullify deeds if a person dies upon it."
+  },
+  {
+    "id": "tawheed_int_041",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "Why does the Qur’an emphasize that prophets were human?",
+    "options": [
+      "To reduce their status",
+      "To deny miracles",
+      "To prevent worshiping them and preserve tawheed",
+      "To discourage following them"
+    ],
+    "correctIndex": 2,
+    "explanation": "Prophets are honored but not divine. Their humanity protects tawheed."
+  },
+  {
+    "id": "tawheed_int_042",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "What is the best statement about 'love of the Prophet ﷺ'?",
+    "options": [
+      "Love means celebrating him in any invented way",
+      "Love means obeying him and following his Sunnah",
+      "Love means calling upon him",
+      "Love is optional"
+    ],
+    "correctIndex": 1,
+    "explanation": "True love is shown in obedience, following, and honoring him within revelation."
+  },
+  {
+    "id": "tawheed_int_043",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "Which act is most clearly a violation of tawheed in worship?",
+    "options": [
+      "Asking a living person to help carry a load",
+      "Taking medicine when sick",
+      "Sacrificing an animal in the name of a jinn",
+      "Seeking advice from a teacher"
+    ],
+    "correctIndex": 2,
+    "explanation": "Sacrifice is worship. Offering it to other than Allah is major shirk."
+  },
+  {
+    "id": "tawheed_int_044",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "What is the best correction to 'I rely on my connections, not Allah'?",
+    "options": [
+      "Connections are haram",
+      "Rely on Allah first while using means, and never let means replace the Creator",
+      "Allah does not care",
+      "Reliance is for weak people"
+    ],
+    "correctIndex": 1,
+    "explanation": "Means are tools, not gods. The heart’s reliance remains for Allah alone."
+  },
+  {
+    "id": "tawheed_int_045",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "What is the most accurate definition of kufr (in a general sense)?",
+    "options": [
+      "Any major sin",
+      "Disbelief or rejection of what must be believed after evidence is established",
+      "Being rude",
+      "Making mistakes in worship"
+    ],
+    "correctIndex": 1,
+    "explanation": "Kufr is disbelief or rejection, not every major sin."
+  },
+  {
+    "id": "tawheed_int_046",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "Which statement best shows the danger of superstition?",
+    "options": [
+      "It builds culture",
+      "It distracts from progress only",
+      "It attaches the heart to false causes and weakens tawheed",
+      "It increases optimism"
+    ],
+    "correctIndex": 2,
+    "explanation": "Superstition shifts reliance from Allah to imagined causes, which corrupts faith and judgment."
+  },
+  {
+    "id": "tawheed_int_047",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "A person says: 'I swear by the Qur’an.' What is the general ruling?",
+    "options": [
+      "Always haram",
+      "Permissible because it is Allah’s speech, with correct intention and respect",
+      "Major shirk",
+      "Only allowed in court"
+    ],
+    "correctIndex": 1,
+    "explanation": "Swearing is by Allah or His attributes. The Qur’an is Allah’s speech, so it is not like swearing by creation."
+  },
+  {
+    "id": "tawheed_int_048",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "Why is the statement 'Allah is everywhere' corrected by scholars?",
+    "options": [
+      "Because Allah is absent",
+      "Because it denies Allah’s knowledge",
+      "Because it can imply Allah is inside creation, while Allah is exalted above that",
+      "Because it is only wrong in Arabic"
+    ],
+    "correctIndex": 2,
+    "explanation": "Allah is not contained by creation. He is above His creation, while His knowledge encompasses all."
+  },
+  {
+    "id": "tawheed_int_049",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "What is the best way to protect tawheed in daily life?",
+    "options": [
+      "Avoid people",
+      "Only focus on rituals",
+      "Learn correct belief, practice ikhlas, avoid superstition, and keep du‘a consistent",
+      "Debate everyone online"
+    ],
+    "correctIndex": 2,
+    "explanation": "Protection is through knowledge, sincere worship, and cutting off doors to shirk and bid‘ah."
+  },
+  {
+    "id": "tawheed_int_050",
+    "category": "Tawheed",
+    "level": "Intermediate",
+    "question": "Which statement best captures tawheed as a lived reality?",
+    "options": [
+      "A slogan you repeat",
+      "A concept you debate",
+      "A total orientation of worship, reliance, love, fear, and obedience to Allah alone",
+      "A cultural identity"
+    ],
+    "correctIndex": 2,
+    "explanation": "Tawheed is not theory. It is the heart and limbs submitting to Allah alone."
+  }
+],
+{
+  "id": "adhkaar_int_001",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "What is the primary purpose of legislated adhkār?",
+  "options": [
+    "To calm the mind psychologically",
+    "To fill free time",
+    "To maintain constant consciousness of Allah",
+    "To replace acts of worship"
+  ],
+  "correctIndex": 2,
+  "explanation": "Adhkār are acts of worship meant to keep the heart connected to Allah throughout the day."
+},
+{
+  "id": "adhkaar_int_002",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "Why are morning and evening adhkār emphasized?",
+  "options": [
+    "They mark time",
+    "They protect against physical harm only",
+    "They frame the believer’s day with remembrance and reliance",
+    "They replace salah"
+  ],
+  "correctIndex": 2,
+  "explanation": "They establish reliance, protection, and remembrance at the most vulnerable transitions of the day."
+},
+{
+  "id": "adhkaar_int_003",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "Which principle governs repetition in adhkār?",
+  "options": [
+    "Habitual chanting",
+    "Numerical symbolism",
+    "Strengthening presence, sincerity, and meaning",
+    "Reward multiplication only"
+  ],
+  "correctIndex": 2,
+  "explanation": "Repetition anchors meaning in the heart and disciplines attention and sincerity."
+},
+{
+  "id": "adhkaar_int_004",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "What distinguishes adhkār from mindfulness practices?",
+  "options": [
+    "Language used",
+    "Emotional effect",
+    "Grounding in revelation and worship",
+    "Duration"
+  ],
+  "correctIndex": 2,
+  "explanation": "Adhkār are acts of worship rooted in revelation, not merely psychological techniques."
+},
+{
+  "id": "adhkaar_int_005",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "Why is understanding the meaning of adhkār important?",
+  "options": [
+    "It is optional",
+    "It increases vocabulary",
+    "It deepens presence of heart and sincerity",
+    "It replaces memorization"
+  ],
+  "correctIndex": 2,
+  "explanation": "Understanding strengthens khushū‘ and prevents heedless repetition."
+},
+{
+  "id": "adhkaar_int_006",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "What is the ruling on innovated adhkār with fixed numbers and forms?",
+  "options": [
+    "Recommended if intentions are good",
+    "Permissible as culture",
+    "Rejected because worship must be text-based",
+    "Obligatory for spiritual growth"
+  ],
+  "correctIndex": 2,
+  "explanation": "Acts of worship require evidence. Fixed forms without proof are bid‘ah."
+},
+{
+  "id": "adhkaar_int_007",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "Which adhkār are most effective according to Sunnah?",
+  "options": [
+    "Long poetic phrases",
+    "Rare expressions",
+    "Consistent, legislated adhkār with presence",
+    "Only spontaneous words"
+  ],
+  "correctIndex": 2,
+  "explanation": "Consistency upon Sunnah outweighs novelty or length."
+},
+{
+  "id": "adhkaar_int_008",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "What is the danger of excessive vocalized group dhikr without knowledge?",
+  "options": [
+    "It disturbs others only",
+    "It can lead to ritualization without understanding",
+    "It reduces reward",
+    "It is always forbidden"
+  ],
+  "correctIndex": 1,
+  "explanation": "Without knowledge, form can replace meaning and sincerity."
+},
+{
+  "id": "adhkaar_int_009",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "Why are adhkār after salah legislated?",
+  "options": [
+    "To shorten prayer",
+    "To replace sunnah prayers",
+    "To seal the prayer with remembrance",
+    "To socialize"
+  ],
+  "correctIndex": 2,
+  "explanation": "They complete and reinforce the spiritual state of salah."
+},
+{
+  "id": "adhkaar_int_010",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "Which heart state invalidates the benefit of adhkār?",
+  "options": [
+    "Quiet recitation",
+    "Slow pace",
+    "Complete heedlessness",
+    "Low volume"
+  ],
+  "correctIndex": 2,
+  "explanation": "Dhikr without awareness becomes habit, not worship."
+},
+
+{
+  "id": "adhkaar_int_011",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "What role does intention play in adhkār?",
+  "options": [
+    "None",
+    "It affects pronunciation only",
+    "It defines whether remembrance is worship or habit",
+    "It replaces wording"
+  ],
+  "correctIndex": 2,
+  "explanation": "Intention distinguishes worship from routine speech."
+},
+{
+  "id": "adhkaar_int_012",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "Why are specific adhkār tied to specific situations?",
+  "options": [
+    "For memorization ease",
+    "For variety",
+    "To align remembrance with lived experience",
+    "To increase length"
+  ],
+  "correctIndex": 2,
+  "explanation": "Contextual adhkār train the believer to remember Allah in every state."
+},
+{
+  "id": "adhkaar_int_013",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "Which statement best describes dhikr of the heart?",
+  "options": [
+    "Silent words",
+    "Emotional excitement",
+    "Constant awareness and reliance",
+    "Memorization"
+  ],
+  "correctIndex": 2,
+  "explanation": "True dhikr lives in the heart before the tongue."
+},
+{
+  "id": "adhkaar_int_014",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "What is the relationship between dhikr and patience?",
+  "options": [
+    "Unrelated",
+    "Dhikr replaces patience",
+    "Dhikr strengthens patience during trials",
+    "Patience cancels dhikr"
+  ],
+  "correctIndex": 2,
+  "explanation": "Remembrance anchors the heart during hardship."
+},
+{
+  "id": "adhkaar_int_015",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "Which danger exists in obsessing over counts rather than meaning?",
+  "options": [
+    "Loss of reward",
+    "Physical fatigue",
+    "Mechanical worship",
+    "Invalidation of dhikr"
+  ],
+  "correctIndex": 2,
+  "explanation": "Numbers serve meaning. When numbers replace meaning, presence is lost."
+},
+
+{
+  "id": "adhkaar_int_016",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "Why is dhikr described as life for the heart?",
+  "options": [
+    "It increases intelligence",
+    "It replaces knowledge",
+    "It prevents spiritual death and heedlessness",
+    "It guarantees success"
+  ],
+  "correctIndex": 2,
+  "explanation": "Hearts without remembrance decay through heedlessness."
+},
+{
+  "id": "adhkaar_int_017",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "Which dhikr best reflects humility?",
+  "options": [
+    "Dhikr of praise only",
+    "Dhikr of need and dependence",
+    "Dhikr of strength",
+    "Dhikr of gratitude only"
+  ],
+  "correctIndex": 1,
+  "explanation": "Calling upon Allah in need cultivates humility."
+},
+{
+  "id": "adhkaar_int_018",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "Why is consistency valued over intensity in adhkār?",
+  "options": [
+    "It is easier",
+    "It builds long-term spiritual discipline",
+    "It earns more reward automatically",
+    "It avoids boredom"
+  ],
+  "correctIndex": 1,
+  "explanation": "Small consistent acts shape the heart more reliably."
+},
+{
+  "id": "adhkaar_int_019",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "Which is a sign of sound dhikr?",
+  "options": [
+    "Public display",
+    "Emotional highs",
+    "Increased obedience and humility",
+    "Isolation"
+  ],
+  "correctIndex": 2,
+  "explanation": "True dhikr produces obedience, not just feelings."
+},
+{
+  "id": "adhkaar_int_020",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "What distinguishes prophetic adhkār from personal wording?",
+  "options": [
+    "Length",
+    "Language",
+    "Precision, balance, and divine approval",
+    "Difficulty"
+  ],
+  "correctIndex": 2,
+  "explanation": "Prophetic adhkār are perfectly measured in meaning and impact."
+},
+
+{
+  "id": "adhkaar_int_021",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "Why is dhikr linked to protection?",
+  "options": [
+    "Psychological comfort",
+    "Habit formation",
+    "Reliance upon Allah’s guardianship",
+    "Physical immunity"
+  ],
+  "correctIndex": 2,
+  "explanation": "Protection flows from reliance, not words alone."
+},
+{
+  "id": "adhkaar_int_022",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "Which statement about loud dhikr is correct?",
+  "options": [
+    "Always better",
+    "Always forbidden",
+    "Permissible with moderation and wisdom",
+    "Required for sincerity"
+  ],
+  "correctIndex": 2,
+  "explanation": "Volume is secondary. Wisdom and context matter."
+},
+{
+  "id": "adhkaar_int_023",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "Why is dhikr after sin emphasized?",
+  "options": [
+    "To erase consequences",
+    "To replace repentance",
+    "To soften the heart and prompt tawbah",
+    "To distract from guilt"
+  ],
+  "correctIndex": 2,
+  "explanation": "Remembrance revives awareness and turns the heart back to Allah."
+},
+{
+  "id": "adhkaar_int_024",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "Why are certain adhkār repeated multiple times?",
+  "options": [
+    "To fill time",
+    "To create rhythm",
+    "To deepen focus and intention",
+    "To impress others"
+  ],
+  "correctIndex": 2,
+  "explanation": "Repetition aids concentration and sincerity."
+},
+{
+  "id": "adhkaar_int_025",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "What distinguishes dhikr from positive thinking?",
+  "options": [
+    "Its length",
+    "Its grounding in revelation and divine names",
+    "Its emotional impact",
+    "Its social aspect"
+  ],
+  "correctIndex": 1,
+  "explanation": "Dhikr is worship rooted in revelation, not self-generated optimism."
+},
+{
+  "id": "adhkaar_int_026",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "What distinguishes adhkār al-muṭlaqah from adhkār al-muqayyadah?",
+  "options": [
+    "Muṭlaqah are narrated weakly while muqayyadah are authentic",
+    "Muṭlaqah are unrestricted in time, muqayyadah are tied to specific times or situations",
+    "Muṭlaqah are only for scholars",
+    "Muqayyadah can be said without intention"
+  ],
+  "correctIndex": 1,
+  "explanation": "Adhkār al-muṭlaqah are general remembrances, while al-muqayyadah are legislated for specific times, places, or causes."
+},
+{
+  "id": "adhkaar_int_027",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "What is the ruling on consistently replacing a legislated dhikr with a personal wording?",
+  "options": [
+    "Permissible without dislike",
+    "Recommended if the meaning is correct",
+    "Disliked if it leads to abandoning the legislated wording",
+    "Obligatory to avoid legislated wording"
+  ],
+  "correctIndex": 2,
+  "explanation": "Persistently abandoning prescribed adhkār for personal wording undermines the Sunnah and is considered disliked."
+},
+{
+  "id": "adhkaar_int_028",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "Why did scholars emphasize preserving the exact wording of prophetic adhkār?",
+  "options": [
+    "Because Arabic grammar requires it",
+    "Because reward is attached to the specific wording",
+    "Because translation is prohibited",
+    "Because companions never understood meanings"
+  ],
+  "correctIndex": 1,
+  "explanation": "Many scholars held that specific virtue and reward are tied to the precise prophetic wording."
+},
+{
+  "id": "adhkaar_int_029",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "What principle governs conflicting reports regarding the virtue of a particular dhikr?",
+  "options": [
+    "Preference is given to longer wording",
+    "The report with greater emotional impact is chosen",
+    "Authenticity and strength of narration are prioritized",
+    "Majority practice overrides hadith analysis"
+  ],
+  "correctIndex": 2,
+  "explanation": "Virtues of actions are established based on authenticity and strength of narration."
+},
+{
+  "id": "adhkaar_int_030",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "Which intention best aligns adhkār with correct ‘ibādah?",
+  "options": [
+    "Seeking worldly relief only",
+    "Habitual repetition without awareness",
+    "Seeking closeness to Allah through remembrance",
+    "Reciting for vocal beauty"
+  ],
+  "correctIndex": 2,
+  "explanation": "Adhkār are acts of worship and require intention of drawing closer to Allah."
+},
+{
+  "id": "adhkaar_int_031",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "Why is reflection (tafakkur) encouraged during adhkār?",
+  "options": [
+    "It replaces memorization",
+    "It increases linguistic understanding only",
+    "It strengthens presence of heart and sincerity",
+    "It shortens the duration of dhikr"
+  ],
+  "correctIndex": 2,
+  "explanation": "Presence of heart is a core condition for the spiritual benefit of dhikr."
+},
+{
+  "id": "adhkaar_int_032",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "What danger did scholars warn against regarding collective adhkār with fixed forms?",
+  "options": [
+    "Loud voices invalidate dhikr",
+    "They may resemble legislated acts without evidence",
+    "They require an imam",
+    "They prevent individual intention"
+  ],
+  "correctIndex": 1,
+  "explanation": "Fixing forms or manners without evidence risks introducing bid‘ah."
+},
+{
+  "id": "adhkaar_int_033",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "What is the ruling on using counting tools (e.g. beads) for adhkār?",
+  "options": [
+    "Absolutely prohibited",
+    "Recommended over fingers",
+    "Permissible but fingers are superior",
+    "Obligatory for accuracy"
+  ],
+  "correctIndex": 2,
+  "explanation": "Many scholars allowed counting tools but held counting on fingers to be superior."
+},
+{
+  "id": "adhkaar_int_034",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "Which factor most affects the acceptance of dhikr?",
+  "options": [
+    "Length of time",
+    "Volume of voice",
+    "Sincerity and conformity to the Sunnah",
+    "Physical posture"
+  ],
+  "correctIndex": 2,
+  "explanation": "Acceptance depends on ikhlāṣ (sincerity) and ittibā‘ (conformity)."
+},
+{
+  "id": "adhkaar_int_035",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "Why did the Prophet ﷺ frequently repeat certain adhkār?",
+  "options": [
+    "To teach memorization",
+    "To emphasize their meanings and virtues",
+    "To fill time",
+    "To establish obligation"
+  ],
+  "correctIndex": 1,
+  "explanation": "Repetition reinforces meaning and highlights virtue, not obligation."
+},
+{
+  "id": "adhkaar_int_036",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "What is the ruling on abandoning adhkār due to feeling spiritually dry?",
+  "options": [
+    "Recommended until motivation returns",
+    "Neutral",
+    "Disliked because consistency is key",
+    "Obligatory to stop"
+  ],
+  "correctIndex": 2,
+  "explanation": "Consistency in worship is emphasized even during periods of low motivation."
+},
+{
+  "id": "adhkaar_int_037",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "Which statement best reflects the balance between quantity and quality in dhikr?",
+  "options": [
+    "Quantity matters more than quality",
+    "Quality matters more than quantity, but both are important",
+    "Only quality matters",
+    "Only narrated quantities are allowed"
+  ],
+  "correctIndex": 1,
+  "explanation": "Scholars emphasized presence of heart while also valuing consistency."
+},
+{
+  "id": "adhkaar_int_038",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "Why are morning and evening adhkār especially emphasized?",
+  "options": [
+    "They replace prayer",
+    "They frame the day with remembrance and protection",
+    "They are shorter",
+    "They were practiced only in Madinah"
+  ],
+  "correctIndex": 1,
+  "explanation": "They spiritually guard the servant at the beginning and end of the day."
+},
+{
+  "id": "adhkaar_int_039",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "What principle applies when different authentic adhkār exist for the same situation?",
+  "options": [
+    "One must be chosen permanently",
+    "They should all be abandoned",
+    "Variation should be practiced",
+    "The shortest is preferred"
+  ],
+  "correctIndex": 2,
+  "explanation": "Practicing variation preserves the Sunnah and prevents rigidity."
+},
+{
+  "id": "adhkaar_int_040",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "What is the danger of treating adhkār as mere routines?",
+  "options": [
+    "Loss of reward and presence of heart",
+    "Incorrect pronunciation",
+    "Shortened wording",
+    "Increased forgetfulness"
+  ],
+  "correctIndex": 0,
+  "explanation": "Mechanical repetition weakens spiritual impact and sincerity."
+},
+{
+  "id": "adhkaar_int_041",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "Which category of people benefit most from consistent adhkār?",
+  "options": [
+    "Only scholars",
+    "Only beginners",
+    "Every believer regardless of level",
+    "Only the elderly"
+  ],
+  "correctIndex": 2,
+  "explanation": "Dhikr benefits all believers and is not restricted by level."
+},
+{
+  "id": "adhkaar_int_042",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "What is the ruling on innovating specific numbers for adhkār without evidence?",
+  "options": [
+    "Permissible if intention is good",
+    "Disliked and may reach bid‘ah",
+    "Recommended for discipline",
+    "Obligatory for consistency"
+  ],
+  "correctIndex": 1,
+  "explanation": "Fixing numbers without evidence risks innovation in worship."
+},
+{
+  "id": "adhkaar_int_043",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "Why did Ibn al-Qayyim emphasize dhikr as nourishment of the heart?",
+  "options": [
+    "Because it replaces knowledge",
+    "Because hearts weaken without remembrance",
+    "Because it removes obligations",
+    "Because it ends trials"
+  ],
+  "correctIndex": 1,
+  "explanation": "He likened dhikr to food, without which the heart weakens."
+},
+{
+  "id": "adhkaar_int_044",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "What is the relationship between du‘ā’ and dhikr?",
+  "options": [
+    "They are identical",
+    "Du‘ā’ is a form of dhikr",
+    "Dhikr is prohibited during du‘ā’",
+    "They cannot be combined"
+  ],
+  "correctIndex": 1,
+  "explanation": "Du‘ā’ falls under remembrance of Allah."
+},
+{
+  "id": "adhkaar_int_045",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "Which situation best exemplifies adhkār shaping character?",
+  "options": [
+    "Repeating without understanding",
+    "Using dhikr to impress others",
+    "Dhikr leading to increased patience and humility",
+    "Reciting only in gatherings"
+  ],
+  "correctIndex": 2,
+  "explanation": "True dhikr manifests in improved character and actions."
+},
+{
+  "id": "adhkaar_int_046",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "What role does consistency play in adhkār?",
+  "options": [
+    "It replaces sincerity",
+    "It builds long-term spiritual stability",
+    "It removes hardship",
+    "It shortens worship"
+  ],
+  "correctIndex": 1,
+  "explanation": "Small but consistent deeds are most beloved."
+},
+{
+  "id": "adhkaar_int_047",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "Why did scholars discourage abandoning dhikr after sins?",
+  "options": [
+    "Because sin invalidates dhikr",
+    "Because dhikr helps repentance and return",
+    "Because dhikr is only for the righteous",
+    "Because silence is better"
+  ],
+  "correctIndex": 1,
+  "explanation": "Dhikr is a means of returning to Allah after sin."
+},
+{
+  "id": "adhkaar_int_048",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "Which statement best summarizes the purpose of adhkār?",
+  "options": [
+    "Mental relaxation",
+    "Habitual repetition",
+    "Maintaining constant awareness of Allah",
+    "Replacing obligations"
+  ],
+  "correctIndex": 2,
+  "explanation": "The essence of dhikr is conscious awareness of Allah."
+},
+{
+  "id": "adhkaar_int_049",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "What is the danger of redefining adhkār based on personal experience alone?",
+  "options": [
+    "Loss of linguistic accuracy",
+    "Contradicting established textual guidance",
+    "Increased effort",
+    "Reduced memorization"
+  ],
+  "correctIndex": 1,
+  "explanation": "Worship is defined by revelation, not personal experience."
+},
+{
+  "id": "adhkaar_int_050",
+  "category": "Adhkaar",
+  "level": "Intermediate",
+  "question": "What principle ensures adhkār remain sound acts of worship?",
+  "options": [
+    "Cultural acceptance",
+    "Personal preference",
+    "Sincerity and adherence to revelation",
+    "Length and frequency"
+  ],
+  "correctIndex": 2,
+  "explanation": "Ikhlāṣ and ittibā‘ safeguard all acts of worship."
+},
+  {
+    "id": "arabic_int_001",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "What is the core function of الإعراب in Arabic?",
+    "options": [
+      "To beautify speech",
+      "To indicate grammatical relationships",
+      "To distinguish dialects",
+      "To change word meanings entirely"
+    ],
+    "correctIndex": 1,
+    "explanation": "Iʿrāb clarifies grammatical roles such as subject, object, and predicate."
+  },
+  {
+    "id": "arabic_int_002",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "Which of the following is always مرفوع?",
+    "options": [
+      "المفعول به",
+      "اسم إنّ",
+      "الفاعل",
+      "المضاف إليه"
+    ],
+    "correctIndex": 2,
+    "explanation": "The subject (فاعل) is always in the nominative case."
+  },
+  {
+    "id": "arabic_int_003",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "What is the grammatical status of ما in the sentence: ما جاء زيد؟",
+    "options": [
+      "اسم استفهام",
+      "اسم موصول",
+      "حرف نفي",
+      "اسم شرط"
+    ],
+    "correctIndex": 2,
+    "explanation": "Here ما functions as a particle of negation."
+  },
+  {
+    "id": "arabic_int_004",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "Which type of word can never be مجرور?",
+    "options": [
+      "الاسم",
+      "الفعل",
+      "الصفة",
+      "المضاف إليه"
+    ],
+    "correctIndex": 1,
+    "explanation": "Only nouns can be in the genitive case; verbs cannot."
+  },
+  {
+    "id": "arabic_int_005",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "What causes a فعل مضارع to become منصوب?",
+    "options": [
+      "دخول الجازم",
+      "دخول حرف نصب",
+      "كونه جواب شرط",
+      "دخول أل"
+    ],
+    "correctIndex": 1,
+    "explanation": "Particles of نصب like أن، لن, and كي cause نصب."
+  },
+  {
+    "id": "arabic_int_006",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "Which particle causes جزم of the present tense verb?",
+    "options": [
+      "لن",
+      "أن",
+      "لم",
+      "قد"
+    ],
+    "correctIndex": 2,
+    "explanation": "لم is a particle of negation and jussive."
+  },
+  {
+    "id": "arabic_int_007",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "In the phrase طالبُ العلمِ, what is the relationship between the two words?",
+    "options": [
+      "صفة وموصوف",
+      "مضاف ومضاف إليه",
+      "بدل",
+      "عطف بيان"
+    ],
+    "correctIndex": 1,
+    "explanation": "طالب is مضاف and العلم is مضاف إليه."
+  },
+  {
+    "id": "arabic_int_008",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "Which noun is always منصوب?",
+    "options": [
+      "الخبر",
+      "الحال",
+      "الفاعل",
+      "المبتدأ"
+    ],
+    "correctIndex": 1,
+    "explanation": "Ḥāl is always in the accusative case."
+  },
+  {
+    "id": "arabic_int_009",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "What is the أصل (root) of the word استغفار?",
+    "options": [
+      "غفر",
+      "سفر",
+      "غفار",
+      "استغفر"
+    ],
+    "correctIndex": 0,
+    "explanation": "The root letters are غ-ف-ر."
+  },
+  {
+    "id": "arabic_int_010",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "Which pattern indicates seeking or requesting an action?",
+    "options": [
+      "فَعَلَ",
+      "فَاعَلَ",
+      "اسْتَفْعَلَ",
+      "تَفَعَّلَ"
+    ],
+    "correctIndex": 2,
+    "explanation": "استفعل often implies طلب (seeking)."
+  },
+
+  {
+    "id": "arabic_int_011",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "Which of the following is a حرف مشبه بالفعل?",
+    "options": [
+      "كان",
+      "إنّ",
+      "قد",
+      "سوف"
+    ],
+    "correctIndex": 1,
+    "explanation": "إنّ resembles verbs in function and governs nouns."
+  },
+  {
+    "id": "arabic_int_012",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "What happens to the مبتدأ when إنّ enters the sentence?",
+    "options": [
+      "It becomes مرفوع",
+      "It becomes منصوب",
+      "It becomes مجرور",
+      "It is deleted"
+    ],
+    "correctIndex": 1,
+    "explanation": "اسم إنّ is منصوب."
+  },
+  {
+    "id": "arabic_int_013",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "Which is the correct iʿrāb of زيد in جاء زيدٌ؟",
+    "options": [
+      "مبتدأ",
+      "فاعل",
+      "خبر",
+      "مفعول به"
+    ],
+    "correctIndex": 1,
+    "explanation": "زيد is the subject (فاعل) of the verb جاء."
+  },
+  {
+    "id": "arabic_int_014",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "Which form indicates reciprocity between two parties?",
+    "options": [
+      "فَعَلَ",
+      "فَاعَلَ",
+      "اسْتَفْعَلَ",
+      "تَفَعَّلَ"
+    ],
+    "correctIndex": 1,
+    "explanation": "فَاعَلَ often indicates mutual action."
+  },
+  {
+    "id": "arabic_int_015",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "What type of noun is هذا?",
+    "options": [
+      "اسم موصول",
+      "اسم إشارة",
+      "اسم شرط",
+      "اسم استفهام"
+    ],
+    "correctIndex": 1,
+    "explanation": "هذا is a demonstrative noun."
+  },
+
+  {
+    "id": "arabic_int_016",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "Which word is مبني, not معرب?",
+    "options": [
+      "زيد",
+      "كتاب",
+      "هذا",
+      "طالب"
+    ],
+    "correctIndex": 2,
+    "explanation": "Demonstrative pronouns are مبنية."
+  },
+  {
+    "id": "arabic_int_017",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "What is the function of التنوين?",
+    "options": [
+      "It indicates definiteness",
+      "It replaces a letter",
+      "It indicates indefiniteness",
+      "It causes جزم"
+    ],
+    "correctIndex": 2,
+    "explanation": "Tanwīn indicates indefiniteness."
+  },
+  {
+    "id": "arabic_int_018",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "Which of the following is ممنوع من الصرف?",
+    "options": [
+      "مساجد",
+      "طالب",
+      "كتاب",
+      "رجل"
+    ],
+    "correctIndex": 0,
+    "explanation": "مساجد is a plural pattern that is diptote."
+  },
+  {
+    "id": "arabic_int_019",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "Why does الممنوع من الصرف not take tanwīn?",
+    "options": [
+      "Because it is definite",
+      "Because of its structure",
+      "Because it is a verb",
+      "Because it is مبني"
+    ],
+    "correctIndex": 1,
+    "explanation": "Its morphological structure prevents tanwīn."
+  },
+  {
+    "id": "arabic_int_020",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "Which case remains for الممنوع من الصرف when preceded by أل?",
+    "options": [
+      "نصب فقط",
+      "جر بالفتحة",
+      "جر بالكسرة",
+      "رفع بالياء"
+    ],
+    "correctIndex": 2,
+    "explanation": "أل allows kasrah in the genitive case."
+  },
+
+  {
+    "id": "arabic_int_021",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "What is the أصل of the verb قال?",
+    "options": [
+      "قول",
+      "قال",
+      "قيل",
+      "قوَل"
+    ],
+    "correctIndex": 0,
+    "explanation": "The original root is ق-و-ل."
+  },
+  {
+    "id": "arabic_int_022",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "Which letter is deleted in weak verbs during conjugation?",
+    "options": [
+      "أحد الحروف الأصلية",
+      "حرف العلة",
+      "حرف الجر",
+      "الهمزة دائماً"
+    ],
+    "correctIndex": 1,
+    "explanation": "Weak letters (و، ي، ا) are dropped."
+  },
+  {
+    "id": "arabic_int_023",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "Which sentence contains a حال?",
+    "options": [
+      "جاء زيدٌ راكبًا",
+      "زيدٌ قائمٌ",
+      "كان زيدٌ قائمًا",
+      "إن زيدًا قائمٌ"
+    ],
+    "correctIndex": 0,
+    "explanation": "راكبًا describes the state of زيد."
+  },
+  {
+    "id": "arabic_int_024",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "Which noun follows the number in 3–10?",
+    "options": [
+      "مفرد منصوب",
+      "جمع مجرور",
+      "مفرد مرفوع",
+      "جمع منصوب"
+    ],
+    "correctIndex": 1,
+    "explanation": "Numbers 3–10 require a plural genitive noun."
+  },
+  {
+    "id": "arabic_int_025",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "What is the grammatical status of نعم?",
+    "options": [
+      "اسم",
+      "فعل جامد",
+      "حرف",
+      "اسم فعل"
+    ],
+    "correctIndex": 1,
+    "explanation": "نعم is a جامد verb of praise."
+  },
+
+  {
+    "id": "arabic_int_026",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "Which is an example of أسلوب شرط?",
+    "options": [
+      "إن تجتهد تنجح",
+      "قد أفلح المؤمنون",
+      "ما جاء زيد",
+      "هل حضر الطلاب"
+    ],
+    "correctIndex": 0,
+    "explanation": "إن introduces a conditional structure."
+  },
+  {
+    "id": "arabic_int_027",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "What does قد indicate when used with the past tense?",
+    "options": [
+      "Future",
+      "Possibility",
+      "Certainty or emphasis",
+      "Negation"
+    ],
+    "correctIndex": 2,
+    "explanation": "With past tense, قد indicates emphasis or completion."
+  },
+  {
+    "id": "arabic_int_028",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "Which form expresses exaggeration?",
+    "options": [
+      "اسم فاعل",
+      "صيغة مبالغة",
+      "اسم مفعول",
+      "مصدر"
+    ],
+    "correctIndex": 1,
+    "explanation": "صيغة مبالغة intensifies meaning."
+  },
+  {
+    "id": "arabic_int_029",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "Which is a صيغة مبالغة?",
+    "options": [
+      "كاتب",
+      "مكتوب",
+      "غفّار",
+      "كتب"
+    ],
+    "correctIndex": 2,
+    "explanation": "غفّار is an exaggerated form."
+  },
+  {
+    "id": "arabic_int_030",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "What is the role of بدل?",
+    "options": [
+      "To describe a noun",
+      "To clarify or replace a noun",
+      "To emphasize a verb",
+      "To negate meaning"
+    ],
+    "correctIndex": 1,
+    "explanation": "بدل clarifies or substitutes the noun before it."
+  },
+
+  {
+    "id": "arabic_int_031",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "Which sentence contains بدل كل من كل?",
+    "options": [
+      "زارني أخوك زيدٌ",
+      "جاء الطالبُ المجتهدُ",
+      "رأيت زيدًا",
+      "مررت بزيد"
+    ],
+    "correctIndex": 0,
+    "explanation": "زيد fully replaces أخوك."
+  },
+  {
+    "id": "arabic_int_032",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "What is the أصل pattern of تفاعل?",
+    "options": [
+      "Participation",
+      "Seeking",
+      "Passive",
+      "Singularity"
+    ],
+    "correctIndex": 0,
+    "explanation": "تفاعل often implies mutual action."
+  },
+  {
+    "id": "arabic_int_033",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "Which is an اسم زمان?",
+    "options": [
+      "مكتب",
+      "مشرق",
+      "كاتب",
+      "كتابة"
+    ],
+    "correctIndex": 1,
+    "explanation": "مشرق indicates time or place."
+  },
+  {
+    "id": "arabic_int_034",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "What is the default ruling of الأمر?",
+    "options": [
+      "Recommendation",
+      "Prohibition",
+      "Obligation",
+      "Permissibility"
+    ],
+    "correctIndex": 2,
+    "explanation": "The default of command is obligation unless a qarīnah exists."
+  },
+  {
+    "id": "arabic_int_035",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "Which verb is مبني للمجهول?",
+    "options": [
+      "كَتَبَ",
+      "كُتِبَ",
+      "يكتب",
+      "كاتب"
+    ],
+    "correctIndex": 1,
+    "explanation": "كُتِبَ is passive."
+  },
+
+  {
+    "id": "arabic_int_036",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "Which noun is اسم آلة?",
+    "options": [
+      "مفتاح",
+      "مكتب",
+      "كاتب",
+      "كتابة"
+    ],
+    "correctIndex": 0,
+    "explanation": "مفتاح is a tool noun."
+  },
+  {
+    "id": "arabic_int_037",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "What is the grammatical role of إلا in exception?",
+    "options": [
+      "حرف جر",
+      "أداة استثناء",
+      "اسم موصول",
+      "حرف شرط"
+    ],
+    "correctIndex": 1,
+    "explanation": "إلا introduces exception."
+  },
+  {
+    "id": "arabic_int_038",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "Which exception is متصل?",
+    "options": [
+      "جاء القوم إلا حمارًا",
+      "جاء القوم إلا زيدًا",
+      "ما جاء أحد إلا",
+      "ليس إلا الله"
+    ],
+    "correctIndex": 1,
+    "explanation": "زيد is from the same category as القوم."
+  },
+  {
+    "id": "arabic_int_039",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "Which is an example of أسلوب قصر?",
+    "options": [
+      "إنما الأعمال بالنيات",
+      "جاء زيد",
+      "هل فهمت",
+      "لن ينجح"
+    ],
+    "correctIndex": 0,
+    "explanation": "إنما restricts meaning."
+  },
+  {
+    "id": "arabic_int_040",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "Which word is اسم موصول?",
+    "options": [
+      "الذي",
+      "هذا",
+      "من",
+      "كم"
+    ],
+    "correctIndex": 0,
+    "explanation": "الذي is a relative noun."
+  },
+
+  {
+    "id": "arabic_int_041",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "What must follow an اسم موصول?",
+    "options": [
+      "خبر",
+      "صفة",
+      "صلة",
+      "حال"
+    ],
+    "correctIndex": 2,
+    "explanation": "A relative clause (صلة) must follow."
+  },
+  {
+    "id": "arabic_int_042",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "Which particle negates the future?",
+    "options": [
+      "لم",
+      "لن",
+      "ما",
+      "لا"
+    ],
+    "correctIndex": 1,
+    "explanation": "لن negates future actions."
+  },
+  {
+    "id": "arabic_int_043",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "Which is a حرف عطف?",
+    "options": [
+      "إنّ",
+      "ثمّ",
+      "قد",
+      "لم"
+    ],
+    "correctIndex": 1,
+    "explanation": "ثمّ is a conjunction."
+  },
+  {
+    "id": "arabic_int_044",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "Which noun is always مرفوع?",
+    "options": [
+      "الخبر",
+      "المفعول به",
+      "اسم إنّ",
+      "الحال"
+    ],
+    "correctIndex": 0,
+    "explanation": "The predicate is nominative."
+  },
+  {
+    "id": "arabic_int_045",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "What is the function of لام التعليل?",
+    "options": [
+      "Emphasis",
+      "Cause or purpose",
+      "Negation",
+      "Condition"
+    ],
+    "correctIndex": 1,
+    "explanation": "It indicates purpose."
+  },
+
+  {
+    "id": "arabic_int_046",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "Which is an example of مصدر؟",
+    "options": [
+      "كتب",
+      "كتابة",
+      "كاتب",
+      "مكتوب"
+    ],
+    "correctIndex": 1,
+    "explanation": "كتابة is a verbal noun."
+  },
+  {
+    "id": "arabic_int_047",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "What is the اصل of the word استقامة?",
+    "options": [
+      "قوم",
+      "قام",
+      "قيم",
+      "استقام"
+    ],
+    "correctIndex": 0,
+    "explanation": "The root is ق-و-م."
+  },
+  {
+    "id": "arabic_int_048",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "Which sentence contains توكيد لفظي?",
+    "options": [
+      "جاء زيد زيد",
+      "جاء زيد نفسه",
+      "إن زيد قائم",
+      "جاء زيد فقط"
+    ],
+    "correctIndex": 0,
+    "explanation": "Exact repetition indicates verbal emphasis."
+  },
+  {
+    "id": "arabic_int_049",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "Which sentence contains توكيد معنوي?",
+    "options": [
+      "جاء زيد زيد",
+      "جاء زيد نفسه",
+      "جاء زيد سريعًا",
+      "جاء زيد وحده"
+    ],
+    "correctIndex": 1,
+    "explanation": "نفسه is معنوي emphasis."
+  },
+  {
+    "id": "arabic_int_050",
+    "category": "Arabic",
+    "level": "Intermediate",
+    "question": "What is the primary purpose of studying Naḥw and Ṣarf?",
+    "options": [
+      "To speak fluently only",
+      "To understand Arabic poetry",
+      "To preserve meaning and avoid error",
+      "To memorize rules"
+    ],
+    "correctIndex": 2,
+    "explanation": "Grammar preserves meaning and prevents misinterpretation."
+  }
 ]
+
+
+
