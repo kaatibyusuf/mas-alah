@@ -1157,6 +1157,59 @@ function renderFAQ() {
 
   bindGotoButtons();
 }
+/* =======================
+   Hijri Calendar
+======================= */
+function renderCalendar() {
+  const today = new Date();
+
+  // Use Intl API for Hijri date
+  const hijriFormatter = new Intl.DateTimeFormat("en-TN-u-ca-islamic", {
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  });
+
+  const parts = hijriFormatter.formatToParts(today);
+  const hijriDay = Number(parts.find(p => p.type === "day").value);
+  const hijriMonth = parts.find(p => p.type === "month").value;
+  const hijriYear = parts.find(p => p.type === "year").value;
+
+  app.innerHTML = `
+    <section class="card" style="margin-top:20px;">
+      <h2>Hijri Calendar</h2>
+      <p class="muted" style="margin-top:6px;">
+        ${hijriMonth} ${hijriYear} AH
+      </p>
+
+      <div class="calendar-grid">
+        ${renderHijriMonth(hijriDay)}
+      </div>
+
+      <p class="muted" style="margin-top:12px;">
+        The 13th, 14th, and 15th are the white days (Ayyām al-Bīḍ).
+      </p>
+    </section>
+  `;
+}
+function renderHijriMonth(todayDay) {
+  let html = "";
+
+  for (let d = 1; d <= 30; d++) {
+    const isWhiteDay = d === 13 || d === 14 || d === 15;
+    const isToday = d === todayDay;
+
+    html += `
+      <div class="calendar-day
+        ${isWhiteDay ? "white-day" : ""}
+        ${isToday ? "today" : ""}">
+        ${d}
+      </div>
+    `;
+  }
+
+  return html;
+}
 
 /* =======================
    Routing
@@ -1170,6 +1223,7 @@ async function renderRoute(route) {
   if (r === "progress") return renderProgress();
   if (r === "home") return renderHome();
   if (r === "daily") return renderDaily();
+  if (r === "calendar") return renderCalendar();
 
   return renderWelcome();
 }

@@ -873,3 +873,28 @@ select:focus, textarea:focus{
   box-shadow: 0 14px 34px rgba(255,187,0,.18);
 }
 .timeBar{ background: var(--gold); }
+.calendar-grid {
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+
+.calendar-day {
+  padding: 10px 0;
+  text-align: center;
+  border-radius: 8px;
+  background: rgba(255,255,255,.04);
+  color: var(--text);
+  font-weight: 600;
+}
+
+.calendar-day.white-day {
+  font-weight: 900;
+  color: #FFBB00;
+  border: 1px solid rgba(255,187,0,.35);
+}
+
+.calendar-day.today {
+  outline: 2px solid rgba(255,255,255,.2);
+}
