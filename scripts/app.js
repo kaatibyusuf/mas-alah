@@ -1158,6 +1158,225 @@ function renderFAQ() {
   bindGotoButtons();
 }
 /* =======================
+   Zakat Calculator
+======================= */
+
+function formatMoney(n, currency) {
+  const num = Number(n || 0);
+  return new Intl.NumberFormat(undefined, {
+    style: "currency",
+    currency: currency || "NGN",
+    maximumFractionDigits: 2,
+  }).format(num);
+}
+
+function toNum(v) {
+  const x = Number(String(v || "").replace(/,/g, "").trim());
+  return Number.isFinite(x) ? x : 0;
+}
+
+function calcZakat({ zakatable, nisab }) {
+  const meetsNisab = zakatable >= nisab && zakatable > 0;
+  const zakatDue = meetsNisab ? zakatable * 0.025 : 0;
+  return { meetsNisab, zakatDue };
+}
+
+function renderZakat() {
+  const currencyDefault = "NGN";
+  const methodDefault = "gold"; // gold or silver
+
+  app.innerHTML = `
+    <section class="card">
+      <div class="card-head">
+        <h2>Zakat Calculator</h2>
+        <p class="muted">Estimate zakat on zakatable wealth. Uses 2.5% once you meet nisab and a lunar year has passed.</p>
+      </div>
+
+      <div class="zakat-grid">
+
+        <div class="zakat-box">
+          <h3 class="zakat-title">1) Nisab</h3>
+
+          <div class="field">
+            <label class="label">Currency</label>
+            <input id="zk_currency" class="input" value="${currencyDefault}" placeholder="NGN, USD, GBP..." />
+            <p class="help muted">Use a valid currency code (NGN, USD, GBP, EUR).</p>
+          </div>
+
+          <div class="field">
+            <label class="label">Nisab method</label>
+            <div class="segmented" role="group" aria-label="Nisab method">
+              <button type="button" class="seg-btn is-on" data-zk-method="gold">Gold (85g)</button>
+              <button type="button" class="seg-btn" data-zk-method="silver">Silver (595g)</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label">Price per gram</label>
+            <input id="zk_pricePerGram" class="input" inputmode="decimal" placeholder="Enter current price per gram" />
+            <p class="help muted">Enter today’s market price per gram for your chosen method.</p>
+          </div>
+
+          <div class="field">
+            <label class="label">Hawl completed?</label>
+            <label class="checkline">
+              <input id="zk_hawl" type="checkbox" />
+              <span>Yes, I have held this wealth for one lunar year</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="zakat-box">
+          <h3 class="zakat-title">2) Assets</h3>
+
+          <div class="field">
+            <label class="label">Cash at hand / bank</label>
+            <input id="zk_cash" class="input" inputmode="decimal" placeholder="0" />
+          </div>
+
+          <div class="field">
+            <label class="label">Gold / silver value</label>
+            <input id="zk_metals" class="input" inputmode="decimal" placeholder="0" />
+          </div>
+
+          <div class="field">
+            <label class="label">Investments / shares / crypto</label>
+            <input id="zk_invest" class="input" inputmode="decimal" placeholder="0" />
+          </div>
+
+          <div class="field">
+            <label class="label">Business inventory (resale value)</label>
+            <input id="zk_inventory" class="input" inputmode="decimal" placeholder="0" />
+          </div>
+
+          <div class="field">
+            <label class="label">Money owed to you (likely to be paid)</label>
+            <input id="zk_debtsOwed" class="input" inputmode="decimal" placeholder="0" />
+          </div>
+        </div>
+
+        <div class="zakat-box">
+          <h3 class="zakat-title">3) Liabilities</h3>
+
+          <div class="field">
+            <label class="label">Short-term debts due now</label>
+            <input id="zk_debtsDue" class="input" inputmode="decimal" placeholder="0" />
+            <p class="help muted">Only subtract what is due and payable soon, not long-term future installments.</p>
+          </div>
+
+          <div class="zakat-actions">
+            <button id="zk_calc" class="btn primary" type="button">Calculate</button>
+            <button id="zk_reset" class="btn" type="button">Reset</button>
+          </div>
+
+          <div id="zk_result" class="zakat-result" aria-live="polite"></div>
+        </div>
+
+      </div>
+    </section>
+  `;
+
+  // State for method
+  let method = methodDefault;
+
+  // Segmented controls
+  const segBtns = Array.from(app.querySelectorAll("[data-zk-method]"));
+  segBtns.forEach((b) => {
+    b.addEventListener("click", () => {
+      method = b.dataset.zkMethod;
+      segBtns.forEach((x) => x.classList.toggle("is-on", x === b));
+    });
+  });
+
+  const elCurrency = app.querySelector("#zk_currency");
+  const elPricePerGram = app.querySelector("#zk_pricePerGram");
+  const elHawl = app.querySelector("#zk_hawl");
+
+  const elCash = app.querySelector("#zk_cash");
+  const elMetals = app.querySelector("#zk_metals");
+  const elInvest = app.querySelector("#zk_invest");
+  const elInventory = app.querySelector("#zk_inventory");
+  const elDebtsOwed = app.querySelector("#zk_debtsOwed");
+
+  const elDebtsDue = app.querySelector("#zk_debtsDue");
+
+  const elResult = app.querySelector("#zk_result");
+
+  function computeAndRender() {
+    const currency = (elCurrency.value || currencyDefault).trim().toUpperCase();
+    const pricePerGram = toNum(elPricePerGram.value);
+
+    const nisabGrams = method === "gold" ? 85 : 595;
+    const nisab = pricePerGram > 0 ? pricePerGram * nisabGrams : 0;
+
+    const assets =
+      toNum(elCash.value) +
+      toNum(elMetals.value) +
+      toNum(elInvest.value) +
+      toNum(elInventory.value) +
+      toNum(elDebtsOwed.value);
+
+    const liabilities = toNum(elDebtsDue.value);
+
+    const zakatable = Math.max(0, assets - liabilities);
+    const { meetsNisab, zakatDue } = calcZakat({ zakatable, nisab });
+
+    const hawlOk = !!elHawl.checked;
+
+    const nisabText =
+      nisab > 0
+        ? `${formatMoney(nisab, currency)} (${method} nisab: ${nisabGrams}g)`
+        : "Enter price per gram to compute nisab.";
+
+    const statusLine = !hawlOk
+      ? `<p class="warn">Reminder: zakat is due after a lunar year (hawl) on zakatable wealth. Turn on “Hawl completed” when ready.</p>`
+      : "";
+
+    const dueLine =
+      nisab > 0 && meetsNisab && hawlOk
+        ? `<p class="good"><strong>Zakat due:</strong> ${formatMoney(zakatDue, currency)}</p>`
+        : `<p class="muted"><strong>Zakat due:</strong> ${formatMoney(0, currency)}</p>`;
+
+    const meetsLine =
+      nisab > 0
+        ? `<p class="${meetsNisab ? "good" : "muted"}"><strong>Nisab:</strong> ${nisabText}</p>`
+        : `<p class="muted"><strong>Nisab:</strong> ${nisabText}</p>`;
+
+    elResult.innerHTML = `
+      <div class="zakat-summary">
+        <p><strong>Total assets:</strong> ${formatMoney(assets, currency)}</p>
+        <p><strong>Liabilities deducted:</strong> ${formatMoney(liabilities, currency)}</p>
+        <p><strong>Zakatable amount:</strong> ${formatMoney(zakatable, currency)}</p>
+        ${meetsLine}
+        ${statusLine}
+        ${dueLine}
+      </div>
+    `;
+  }
+
+  app.querySelector("#zk_calc").addEventListener("click", computeAndRender);
+
+  app.querySelector("#zk_reset").addEventListener("click", () => {
+    elCurrency.value = currencyDefault;
+    elPricePerGram.value = "";
+    elHawl.checked = false;
+
+    elCash.value = "";
+    elMetals.value = "";
+    elInvest.value = "";
+    elInventory.value = "";
+    elDebtsOwed.value = "";
+    elDebtsDue.value = "";
+
+    // reset method UI
+    method = methodDefault;
+    segBtns.forEach((x) => x.classList.toggle("is-on", x.dataset.zkMethod === methodDefault));
+
+    elResult.innerHTML = "";
+  });
+}
+
+/* =======================
    Hijri Calendar
 ======================= */
 function renderCalendar() {
@@ -1229,6 +1448,7 @@ async function renderRoute(route) {
   if (r === "home") return renderHome();
   if (r === "daily") return renderDaily();
   if (r === "calendar") return renderCalendar();
+  if (r === "zakat") return renderZakat();
 
   return renderWelcome();
 }
