@@ -888,6 +888,14 @@ select:focus, textarea:focus{
   color: var(--text);
   font-weight: 600;
 }
+.calendar-day {
+  border: 0;
+  cursor: pointer;
+}
+.calendar-day:focus-visible {
+  outline: 2px solid rgba(255,187,0,.45);
+  outline-offset: 2px;
+}
 
 .calendar-day.white-day {
   font-weight: 900;
@@ -897,4 +905,27 @@ select:focus, textarea:focus{
 
 .calendar-day.today {
   outline: 2px solid rgba(255,255,255,.2);
+}
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%) translateY(12px);
+  max-width: min(720px, calc(100vw - 24px));
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(20, 20, 24, 0.92);
+  border: 1px solid rgba(255,255,255,.08);
+  color: rgba(255,255,255,.92);
+  font-weight: 600;
+  line-height: 1.35;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s ease, transform .18s ease;
+  z-index: 9999;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }

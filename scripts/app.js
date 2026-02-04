@@ -1200,16 +1200,21 @@ function renderHijriMonth(todayDay) {
     const isToday = d === todayDay;
 
     html += `
-      <div class="calendar-day
-        ${isWhiteDay ? "white-day" : ""}
-        ${isToday ? "today" : ""}">
+      <button
+        type="button"
+        class="calendar-day ${isWhiteDay ? "white-day" : ""} ${isToday ? "today" : ""}"
+        data-hijri-day="${d}"
+        ${isWhiteDay ? 'data-white-day="1"' : ""}
+        aria-label="Hijri day ${d}"
+      >
         ${d}
-      </div>
+      </button>
     `;
   }
 
   return html;
 }
+
 
 /* =======================
    Routing
@@ -1261,6 +1266,20 @@ window.addEventListener("DOMContentLoaded", () => {
   const initial = (window.location.hash || "").slice(1);
   render(initial || "welcome");
 });
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest(".calendar-day[data-hijri-day]");
+  if (!btn) return;
+
+  const day = Number(btn.dataset.hijriDay);
+  const isWhiteDay = btn.dataset.whiteDay === "1";
+
+  if (!isWhiteDay) {
+    showToast(`Hijri day ${day}. Only 13, 14, 15 are highlighted for the white days.`);
+    return;
+  }
+
+  showToast(`White Day reminder: Today is the ${day}th. Sunnah fasting is recommended on the 13th, 14th, and 15th of each Hijri month.`);
+});
 
 window.addEventListener("hashchange", () => {
   const route = (window.location.hash || "#welcome").slice(1);
@@ -1270,4 +1289,23 @@ window.addEventListener("hashchange", () => {
 function setFooterYear() {
   const el = document.getElementById("year");
   if (el) el.textContent = String(new Date().getFullYear());
+}
+let toastTimer = null;
+
+function showToast(message) {
+  let toast = document.getElementById("toast");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "toast";
+    toast.className = "toast";
+    document.body.appendChild(toast);
+  }
+
+  toast.textContent = message;
+  toast.classList.add("show");
+
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 3500);
 }
