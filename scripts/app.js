@@ -1375,6 +1375,506 @@ function renderZakat() {
     elResult.innerHTML = "";
   });
 }
+/* =======================
+   Private Diary (Local Only)
+======================= */
+
+const DIARY_KEY = "masalah_diary_v1";
+
+function loadDiary() {
+  try {
+    const raw = localStorage.getItem(DIARY_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveDiary(entries) {
+  localStorage.setItem(DIARY_KEY, JSON.stringify(entries));
+}
+
+function todayISODate() {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
+function escapeHtml(s) {
+  return String(s || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function renderDiaryList(entries) {
+  if (!entries.length) {
+    return `<p class="muted">No entries yet. Write something small today. Consistency beats volume.</p>`;
+  }
+
+  // newest first
+  const sorted = [...entries].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+  return `
+    <div class="diary-list">
+      ${sorted
+        .map((e) => {
+          const date = escapeHtml(e.date || "");
+          const title = escapeHtml(e.title || "Untitled");
+          const preview = escapeHtml((e.text || "").slice(0, 140));
+          return `
+            <button class="diary-item" type="button" data-diary-open="${e.id}">
+              <div class="diary-item-top">
+                <span class="diary-date">${date}</span>
+                <span class="diary-title">${title}</span>
+              </div>
+              <div class="diary-preview muted">${preview}${(e.text || "").length > 140 ? "…" : ""}</div>
+            </button>
+          `;
+        })
+        .join("")}
+    </div>
+  `;
+}
+function renderLock() {
+  const pinExists = hasPin();
+  const unlocked = isUnlocked();
+
+  const intended = state.intendedRoute || "home";
+
+  app.innerHTML = `
+    <section class="card">
+      <div class="card-head">
+        <h2>Lock</h2>
+        <p class="muted">Protect Diary and Progress on this device.</p>
+      </div>
+
+      <div class="lock-box">
+        <div class="lock-status">
+          <span class="pill ${unlocked ? "pill-good" : "pill-warn"}">
+            ${unlocked ? "Unlocked" : "Locked"}
+          </span>
+          <span class="muted">
+            ${pinExists ? "PIN is set" : "No PIN yet. Set one now."}
+          </span>
+        </div>
+
+        <div class="field">
+          <label class="label">${pinExists ? "Enter PIN" : "Create a PIN (4-8 digits)"}</label>
+          <input id="lock_pin" class="input" inputmode="numeric" autocomplete="off" placeholder="••••" maxlength="8" />
+          <p class="muted small">Digits only. Keep it simple.</p>
+        </div>
+
+        ${
+          pinExists
+            ? `
+              <div class="lock-actions">
+                <button id="lock_unlock" class="btn primary" type="button">Unlock</button>
+                <button id="lock_locknow" class="btn" type="button">Lock now</button>
+                <button id="lock_change" class="btn" type="button">Change PIN</button>
+              </div>
+            `
+            : `
+              <div class="lock-actions">
+                <button id="lock_set" class="btn primary" type="button">Set PIN</button>
+              </div>
+            `
+        }
+
+        <div id="lock_notice" class="lock-notice" aria-live="polite"></div>
+
+        <div class="lock-foot muted">
+          <p>Unlocked sessions expire automatically (30 minutes).</p>
+          <p>If you clear browser data, your PIN and diary entries can be lost.</p>
+        </div>
+      </div>
+    </section>
+  `;
+
+  const pinEl = app.querySelector("#lock_pin");
+  const noticeEl = app.querySelector("#lock_notice");
+
+  function notice(msg, kind) {
+    noticeEl.textContent = msg || "";
+    noticeEl.classList.remove("is-warn", "is-good");
+    if (kind === "warn") noticeEl.classList.add("is-warn");
+    if (kind === "good") noticeEl.classList.add("is-good");
+  }
+
+  function digitsOnly(val) {
+    return String(val || "").replace(/\D/g, "");
+  }
+
+  pinEl.addEventListener("input", () => {
+    pinEl.value = digitsOnly(pinEl.value).slice(0, 8);
+  });
+
+  const goIntended = () => {
+    const target = state.intendedRoute || intended;
+    state.intendedRoute = null;
+    render(target);
+  };
+
+  // Set PIN
+  const setBtn = app.querySelector("#lock_set");
+  if (setBtn) {
+    setBtn.addEventListener("click", async () => {
+      const pin = digitsOnly(pinEl.value);
+      if (pin.length < 4 || pin.length > 8) {
+        notice("PIN must be 4 to 8 digits.", "warn");
+        return;
+      }
+      await setPin(pin);
+      notice("PIN set. Unlocked.", "good");
+      goIntended();
+    });
+  }
+
+  // Unlock
+  const unlockBtn = app.querySelector("#lock_unlock");
+  if (unlockBtn) {
+    unlockBtn.addEventListener("click", async () => {
+      const pin = digitsOnly(pinEl.value);
+      if (!pin) {
+        notice("Enter your PIN.", "warn");
+        return;
+      }
+
+      const ok = await verifyPin(pin);
+      if (!ok) {
+        notice("Wrong PIN.", "warn");
+        return;
+      }
+
+      // Unlock for 30 minutes
+      localStorage.setItem(LOCK_UNLOCKED_UNTIL_KEY, String(nowMs() + 30 * 60 * 1000));
+      notice("Unlocked.", "good");
+      goIntended();
+    });
+  }
+
+  // Lock now
+  const lockNowBtn = app.querySelector("#lock_locknow");
+  if (lockNowBtn) {
+    lockNowBtn.addEventListener("click", () => {
+      lockNow();
+      notice("Locked.", "good");
+      render("lock");
+    });
+  }
+
+  // Change PIN (requires current PIN)
+  const changeBtn = app.querySelector("#lock_change");
+  if (changeBtn) {
+    changeBtn.addEventListener("click", async () => {
+      const pin = digitsOnly(pinEl.value);
+      if (!pin) {
+        notice("Enter current PIN to change it.", "warn");
+        return;
+      }
+
+      const ok = await verifyPin(pin);
+      if (!ok) {
+        notice("Wrong current PIN.", "warn");
+        return;
+      }
+
+      const newPin = prompt("Enter a new PIN (4-8 digits):") || "";
+      const clean = digitsOnly(newPin);
+
+      if (clean.length < 4 || clean.length > 8) {
+        notice("New PIN must be 4 to 8 digits.", "warn");
+        return;
+      }
+
+      await setPin(clean);
+      notice("PIN changed. Unlocked.", "good");
+    });
+  }
+}
+
+function renderDiary() {
+  const entries = loadDiary();
+
+  app.innerHTML = `
+    <section class="card">
+      <div class="card-head">
+        <h2>Private Diary</h2>
+        <p class="muted">Saved only on this device. If you clear browser data, entries are gone.</p>
+      </div>
+
+      <div class="diary-grid">
+        <div class="diary-box">
+          <div class="diary-formhead">
+            <h3 class="diary-subtitle">New entry</h3>
+            <span class="muted diary-small">Date: <strong>${todayISODate()}</strong></span>
+          </div>
+
+          <div class="field">
+            <label class="label">Title (optional)</label>
+            <input id="diary_title" class="input" placeholder="A short headline..." maxlength="80" />
+          </div>
+
+          <div class="field">
+            <label class="label">Your day</label>
+            <textarea id="diary_text" class="textarea" placeholder="Write freely. No one else sees this." rows="8" maxlength="4000"></textarea>
+            <div class="diary-meta">
+              <span class="muted" id="diary_count">0 / 4000</span>
+              <button id="diary_insert_prompt" class="btn mini" type="button">Add prompts</button>
+            </div>
+          </div>
+
+          <div class="diary-actions">
+            <button id="diary_save" class="btn primary" type="button">Save entry</button>
+            <button id="diary_clear" class="btn" type="button">Clear</button>
+          </div>
+
+          <div id="diary_notice" class="diary-notice" aria-live="polite"></div>
+        </div>
+
+        <div class="diary-box">
+          <div class="diary-formhead">
+            <h3 class="diary-subtitle">Your entries</h3>
+            <button id="diary_export" class="btn" type="button">Export JSON</button>
+          </div>
+
+          <div id="diary_list">
+            ${renderDiaryList(entries)}
+          </div>
+        </div>
+      </div>
+
+      <div class="diary-modal" id="diary_modal" aria-hidden="true">
+        <div class="diary-modal-inner" role="dialog" aria-modal="true" aria-label="Diary entry">
+          <div class="diary-modal-head">
+            <div>
+              <p class="diary-modal-date muted" id="diary_modal_date"></p>
+              <h3 class="diary-modal-title" id="diary_modal_title"></h3>
+            </div>
+            <button class="btn" id="diary_modal_close" type="button">Close</button>
+          </div>
+
+          <div class="diary-modal-body">
+            <pre class="diary-modal-text" id="diary_modal_text"></pre>
+          </div>
+
+          <div class="diary-modal-actions">
+            <button class="btn danger" id="diary_delete" type="button">Delete entry</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  `;
+
+  const elTitle = app.querySelector("#diary_title");
+  const elText = app.querySelector("#diary_text");
+  const elCount = app.querySelector("#diary_count");
+  const elNotice = app.querySelector("#diary_notice");
+  const elList = app.querySelector("#diary_list");
+
+  const elModal = app.querySelector("#diary_modal");
+  const elModalDate = app.querySelector("#diary_modal_date");
+  const elModalTitle = app.querySelector("#diary_modal_title");
+  const elModalText = app.querySelector("#diary_modal_text");
+  const elModalClose = app.querySelector("#diary_modal_close");
+  const elDelete = app.querySelector("#diary_delete");
+
+  let openedId = null;
+
+  function setNotice(msg, kind) {
+    elNotice.textContent = msg || "";
+    elNotice.classList.remove("is-warn", "is-good");
+    if (kind === "warn") elNotice.classList.add("is-warn");
+    if (kind === "good") elNotice.classList.add("is-good");
+  }
+
+  function refreshList() {
+    const latest = loadDiary();
+    elList.innerHTML = renderDiaryList(latest);
+  }
+
+  function updateCount() {
+    elCount.textContent = `${(elText.value || "").length} / 4000`;
+  }
+
+  updateCount();
+  elText.addEventListener("input", updateCount);
+
+  app.querySelector("#diary_insert_prompt").addEventListener("click", () => {
+    const prompts =
+      `\n\nQuick prompts:\n` +
+      `- One thing I’m grateful for today:\n` +
+      `- One thing I learned today:\n` +
+      `- One mistake I won’t repeat:\n` +
+      `- One small win:\n` +
+      `- One thing to improve tomorrow:\n`;
+    elText.value = (elText.value || "") + prompts;
+    updateCount();
+    elText.focus();
+  });
+
+  app.querySelector("#diary_clear").addEventListener("click", () => {
+    elTitle.value = "";
+    elText.value = "";
+    updateCount();
+    setNotice("Cleared.", "good");
+  });
+
+  app.querySelector("#diary_save").addEventListener("click", () => {
+    const title = (elTitle.value || "").trim();
+    const text = (elText.value || "").trim();
+
+    if (!text) {
+      setNotice("Write something first.", "warn");
+      return;
+    }
+
+    const entriesNow = loadDiary();
+    const entry = {
+      id: crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()) + "_" + Math.random().toString(16).slice(2),
+      date: todayISODate(),
+      title: title || "Untitled",
+      text,
+      createdAt: Date.now(),
+    };
+
+    entriesNow.push(entry);
+    saveDiary(entriesNow);
+
+    elTitle.value = "";
+    elText.value = "";
+    updateCount();
+
+    setNotice("Saved on this device.", "good");
+    refreshList();
+  });
+
+  app.querySelector("#diary_export").addEventListener("click", () => {
+    const data = loadDiary();
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `masalah-diary-${todayISODate()}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    URL.revokeObjectURL(url);
+    setNotice("Exported.", "good");
+  });
+
+  function openModal(entry) {
+    openedId = entry.id;
+    elModalDate.textContent = entry.date || "";
+    elModalTitle.textContent = entry.title || "Untitled";
+    elModalText.textContent = entry.text || "";
+
+    elModal.classList.add("is-open");
+    elModal.setAttribute("aria-hidden", "false");
+  }
+
+  function closeModal() {
+    openedId = null;
+    elModal.classList.remove("is-open");
+    elModal.setAttribute("aria-hidden", "true");
+  }
+
+  elModalClose.addEventListener("click", closeModal);
+
+  // close if clicking overlay
+  elModal.addEventListener("click", (e) => {
+    if (e.target === elModal) closeModal();
+  });
+
+  // open entry (event delegation because list re-renders)
+  app.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-diary-open]");
+    if (!btn) return;
+
+    const id = btn.getAttribute("data-diary-open");
+    const data = loadDiary();
+    const entry = data.find((x) => x.id === id);
+    if (!entry) return;
+
+    openModal(entry);
+  });
+
+  elDelete.addEventListener("click", () => {
+    if (!openedId) return;
+
+    const data = loadDiary();
+    const next = data.filter((x) => x.id !== openedId);
+    saveDiary(next);
+
+    closeModal();
+    refreshList();
+    setNotice("Deleted.", "good");
+  });
+}
+/* =======================
+   PIN Lock (Local)
+======================= */
+
+const LOCK_PIN_HASH_KEY = "masalah_pin_hash_v1";
+const LOCK_UNLOCKED_UNTIL_KEY = "masalah_unlocked_until_v1";
+
+// choose what you want protected
+const PROTECTED_ROUTES = new Set(["diary", "progress"]);
+
+function nowMs() {
+  return Date.now();
+}
+
+function isUnlocked() {
+  const until = Number(localStorage.getItem(LOCK_UNLOCKED_UNTIL_KEY) || "0");
+  return nowMs() < until;
+}
+
+function lockNow() {
+  localStorage.removeItem(LOCK_UNLOCKED_UNTIL_KEY);
+}
+
+function hasPin() {
+  return !!localStorage.getItem(LOCK_PIN_HASH_KEY);
+}
+
+// Simple hash. Good enough for casual privacy.
+// If you want stronger later, we can move to WebCrypto PBKDF2.
+async function sha256Hex(text) {
+  const enc = new TextEncoder().encode(text);
+  const buf = await crypto.subtle.digest("SHA-256", enc);
+  return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+async function setPin(pin) {
+  const hash = await sha256Hex(pin);
+  localStorage.setItem(LOCK_PIN_HASH_KEY, hash);
+  // unlock for 30 minutes by default
+  localStorage.setItem(LOCK_UNLOCKED_UNTIL_KEY, String(nowMs() + 30 * 60 * 1000));
+}
+
+async function verifyPin(pin) {
+  const saved = localStorage.getItem(LOCK_PIN_HASH_KEY);
+  if (!saved) return false;
+  const hash = await sha256Hex(pin);
+  return hash === saved;
+}
+
+function requireUnlock(route) {
+  // only block protected routes
+  if (!PROTECTED_ROUTES.has(route)) return false;
+  // if no PIN yet, force lock screen to set it
+  if (!hasPin()) return true;
+  // if PIN exists, require unlock when locked
+  return !isUnlocked();
+}
 
 /* =======================
    Hijri Calendar
@@ -1449,12 +1949,26 @@ async function renderRoute(route) {
   if (r === "daily") return renderDaily();
   if (r === "calendar") return renderCalendar();
   if (r === "zakat") return renderZakat();
+  if (r === "diary") return renderDiary();
+  if (r === "lock") return renderLock();
+
+
 
   return renderWelcome();
 }
 
 function render(route) {
   if (state.isNavigating) return;
+
+  const r = route || "welcome";
+
+  // 👇 Guard protected screens
+  if (requireUnlock(r)) {
+    // Save where user wanted to go, then show lock
+    state.intendedRoute = r;
+    route = "lock";
+  }
+
   state.isNavigating = true;
 
   withTransition(() => {
@@ -1468,6 +1982,7 @@ function render(route) {
     }
   });
 }
+
 
 function bindNavRoutes() {
   document.querySelectorAll("[data-route]").forEach((btn) => {
