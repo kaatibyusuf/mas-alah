@@ -9,6 +9,10 @@
    - Zakat calculator
    - Private diary (local only) + export
    - PIN lock for protected routes (Diary + Progress)
+
+   Added:
+   - Wrong selected option gets .wrong class (your CSS can bold it)
+   - Review mode: Previous / Next navigation with explanations preserved
 */
 
 const app = document.getElementById("app");
@@ -27,24 +31,27 @@ const LOCK_UNLOCKED_UNTIL_KEY = "masalah_unlocked_until_v1";
 const PROTECTED_ROUTES = new Set(["diary", "progress"]);
 
 /* =======================
-   Quiz State
+   App State
 ======================= */
 const state = {
   allQuestions: [],
   quizQuestions: [],
   index: 0,
   score: 0,
+
+  // quiz settings
   timed: true,
   secondsPerQuestion: 20,
   timerId: null,
   timeLeft: 20,
   lastSettings: null, // { category, level, timed, count, mode: "normal"|"daily" }
+
+  // review state
+  answers: [], // each: { selected: number|null, correct: number, isCorrect: boolean, reason?: "timeout" }
+
+  // navigation
   isNavigating: false,
   currentRoute: "welcome",
-
-  answered: false,
-  correctIdx: null,
-
   intendedRoute: null
 };
 
@@ -235,7 +242,7 @@ function startTimer() {
 
     if (state.timeLeft <= 0) {
       clearTimer();
-      showFeedback(null, { reason: "timeout" });
+      recordAnswer(null, { reason: "timeout" });
     }
   }, 1000);
 }
@@ -401,7 +408,7 @@ function handleQuizKeys(e) {
 
   if (key === "enter") {
     const nextBtn = document.getElementById("nextBtn");
-    if (nextBtn && nextBtn.style.display !== "none") {
+    if (nextBtn && !nextBtn.disabled && nextBtn.style.display !== "none") {
       e.preventDefault();
       nextBtn.click();
     }
@@ -725,8 +732,9 @@ function renderHome() {
 
       state.quizQuestions = pickRandom(pool, Math.min(count, pool.length));
       state.index = 0;
-      state.score = 0;
       state.timed = timed;
+      state.answers = new Array(state.quizQuestions.length).fill(null);
+      state.score = 0;
 
       withTransition(renderQuiz);
     } catch (err) {
@@ -814,8 +822,9 @@ async function renderDaily() {
       state.lastSettings = { category, level, timed, count: chosen.length, mode: "daily" };
       state.quizQuestions = chosen;
       state.index = 0;
-      state.score = 0;
       state.timed = timed;
+      state.answers = new Array(state.quizQuestions.length).fill(null);
+      state.score = 0;
 
       withTransition(renderQuiz);
     } catch (err) {
@@ -825,15 +834,21 @@ async function renderDaily() {
 }
 
 /* =======================
-   QUIZ
+   QUIZ (with review)
 ======================= */
+function computeScoreFromAnswers() {
+  state.score = state.answers.reduce((acc, a) => acc + (a && a.isCorrect ? 1 : 0), 0);
+  return state.score;
+}
+
 function renderQuiz() {
   state.currentRoute = "quiz";
-  state.answered = false;
 
   const total = state.quizQuestions.length;
   const q = state.quizQuestions[state.index];
-  state.correctIdx = q.correctIndex;
+  const saved = state.answers[state.index]; // null or { selected, correct, isCorrect, reason }
+
+  computeScoreFromAnswers();
 
   const progressPct = Math.round(((state.index + 1) / total) * 100);
 
@@ -877,22 +892,41 @@ function renderQuiz() {
 
       <div class="grid" id="options">
         ${q.options
-          .map(
-            (opt, idx) => `
-              <button class="optionBtn" data-idx="${idx}" type="button">
+          .map((opt, idx) => {
+            let cls = "optionBtn";
+            if (saved) {
+              if (idx === q.correctIndex) cls += " correct";
+              if (saved.selected !== null && idx === saved.selected && idx !== q.correctIndex) cls += " wrong";
+            }
+            return `
+              <button class="${cls}" data-idx="${idx}" type="button" ${saved ? "disabled" : ""}>
                 <span class="badge">${String.fromCharCode(65 + idx)}</span>
                 <span>${opt}</span>
               </button>
-            `
-          )
+            `;
+          })
           .join("")}
       </div>
 
-      <div id="feedback" class="feedback" style="display:none;"></div>
+      <div id="feedback" class="feedback" style="${saved ? "" : "display:none;"}">
+        ${
+          saved
+            ? `
+              <strong>${
+                saved.reason === "timeout" ? "Time up." : saved.isCorrect ? "Correct." : "Incorrect."
+              }</strong>
+              <div class="muted" style="margin-top:6px;">${q.explanation || ""}</div>
+            `
+            : ""
+        }
+      </div>
 
       <div style="display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;">
         <button id="quitBtn" class="btn" type="button">Quit</button>
-        <button id="nextBtn" class="btn" style="display:none;" type="button">Next</button>
+        <button id="prevBtn" class="btn" type="button" ${state.index === 0 ? "disabled" : ""}>Previous</button>
+        <button id="nextBtn" class="btn" type="button" ${saved ? "" : "disabled"}>
+          ${state.index === total - 1 ? "See Results" : "Next"}
+        </button>
       </div>
     </section>
   `;
@@ -902,34 +936,57 @@ function renderQuiz() {
     go("home");
   });
 
-  document.querySelectorAll(".optionBtn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const selected = Number(btn.dataset.idx);
-      showFeedback(selected);
-    });
+  document.getElementById("prevBtn").addEventListener("click", () => {
+    clearTimer();
+    if (state.index > 0) {
+      state.index -= 1;
+      withTransition(renderQuiz);
+    }
   });
 
-  if (state.timed) startTimer();
+  document.getElementById("nextBtn").addEventListener("click", () => {
+    clearTimer();
+    if (!state.answers[state.index]) return;
+
+    if (state.index >= state.quizQuestions.length - 1) {
+      withTransition(renderResults);
+      return;
+    }
+
+    state.index += 1;
+    withTransition(renderQuiz);
+  });
+
+  // options click only if unanswered
+  if (!saved) {
+    document.querySelectorAll(".optionBtn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const selected = Number(btn.dataset.idx);
+        recordAnswer(selected);
+      });
+    });
+  }
+
+  // start timer only if timed and unanswered
+  if (state.timed && !saved) startTimer();
 }
 
-function showFeedback(selectedIdx, meta = {}) {
-  if (state.answered) return;
-  state.answered = true;
+function recordAnswer(selectedIdx, meta = {}) {
+  // already answered
+  if (state.answers[state.index]) return;
 
   clearTimer();
 
   const q = state.quizQuestions[state.index];
   const correct = q.correctIndex;
-
-  document.querySelectorAll(".optionBtn").forEach((btn) => {
-    btn.disabled = true;
-    const idx = Number(btn.dataset.idx);
-    if (idx === correct) btn.classList.add("correct");
-    if (selectedIdx !== null && idx === selectedIdx && idx !== correct) btn.classList.add("wrong");
-  });
-
   const isCorrect = selectedIdx === correct;
-  if (isCorrect) state.score += 1;
+
+  state.answers[state.index] = {
+    selected: selectedIdx,
+    correct,
+    isCorrect,
+    reason: meta.reason || null
+  };
 
   if (meta.reason === "timeout") {
     vibrate(20);
@@ -937,27 +994,8 @@ function showFeedback(selectedIdx, meta = {}) {
     vibrate(isCorrect ? 15 : [10, 30, 10]);
   }
 
-  const feedback = document.getElementById("feedback");
-  feedback.style.display = "block";
-  feedback.innerHTML = `
-    <strong>${meta.reason === "timeout" ? "Time up." : isCorrect ? "Correct." : "Incorrect."}</strong>
-    <div class="muted" style="margin-top:6px;">${q.explanation || ""}</div>
-  `;
-
-  const nextBtn = document.getElementById("nextBtn");
-  nextBtn.style.display = "inline-block";
-  nextBtn.textContent = state.index === state.quizQuestions.length - 1 ? "See Results" : "Next";
-
-  nextBtn.onclick = () => {
-    feedback.style.display = "none";
-    state.index += 1;
-
-    if (state.index >= state.quizQuestions.length) {
-      withTransition(renderResults);
-      return;
-    }
-    withTransition(renderQuiz);
-  };
+  // re-render to show explanation and enable Next
+  withTransition(renderQuiz);
 }
 
 /* =======================
@@ -967,8 +1005,10 @@ function renderResults() {
   state.currentRoute = "results";
   clearTimer();
 
+  computeScoreFromAnswers();
+
   const total = state.quizQuestions.length;
-  const percent = Math.round((state.score / total) * 100);
+  const percent = total ? Math.round((state.score / total) * 100) : 0;
 
   const progress = loadProgress();
   updateStreak(progress);
@@ -1000,6 +1040,7 @@ function renderResults() {
       </div>
 
       <div style="display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;">
+        <button id="reviewBtn" class="btn" type="button">Review questions</button>
         <button id="tryAgainBtn" class="btn" type="button">Try Again</button>
         <button id="progressBtn" class="btn" type="button">Progress</button>
         <button id="homeBtn" class="btn" type="button">Back Home</button>
@@ -1017,9 +1058,15 @@ function renderResults() {
     }
   });
 
+  document.getElementById("reviewBtn").addEventListener("click", () => {
+    state.index = 0;
+    withTransition(renderQuiz);
+  });
+
   document.getElementById("tryAgainBtn").addEventListener("click", async () => {
     const s = state.lastSettings;
     if (!s) return go("home");
+
     if (s.mode === "daily") return go("daily");
 
     const all = await loadQuestions();
@@ -1028,8 +1075,9 @@ function renderResults() {
 
     state.quizQuestions = chosen;
     state.index = 0;
-    state.score = 0;
     state.timed = s.timed;
+    state.answers = new Array(state.quizQuestions.length).fill(null);
+    state.score = 0;
 
     withTransition(renderQuiz);
   });
@@ -1547,6 +1595,7 @@ function renderDiary() {
           <div class="diary-actions">
             <button id="diary_save" class="btn primary" type="button">Save entry</button>
             <button id="diary_clear" class="btn" type="button">Clear</button>
+            <button id="diary_export" class="btn" type="button">Export</button>
           </div>
 
           <div id="diary_notice" class="diary-notice" aria-live="polite"></div>
@@ -1994,10 +2043,7 @@ function render(route) {
 }
 
 /* =======================
-   Header mobile menu (optional)
-   Works only if you add:
-   - button.nav-toggle
-   - nav#navMenu
+   Header mobile menu
 ======================= */
 document.addEventListener("click", (e) => {
   const toggle = e.target.closest(".nav-toggle");
