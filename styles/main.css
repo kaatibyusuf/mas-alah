@@ -315,6 +315,12 @@ select:focus, textarea:focus, input[type="text"]:focus{
   background: rgba(255,255,255,.02);
   opacity: .88;
 }
+.optionBtn.wrong{
+  border-color: rgba(255,255,255,.18);
+  background: rgba(255,255,255,.02);
+  opacity: .95;
+  font-weight: 900; /* 👈 BOLD wrong answers */
+}
 
 .feedback{
   margin-top:12px;
