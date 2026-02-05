@@ -1,23 +1,56 @@
 /* Mas'alah App
-   Updated:
-   - Warm screen transitions (leave + enter)
-   - Route-safe rendering (handles async daily)
-   - Full FAQ page (styled with your FAQ CSS)
-   - Centralized navigation + CTA bindings
-   - Year auto-fill
-   - Keyboard support: A/B/C/D, Enter for Next
-   - Visual progress bar (top of quiz)
-   - Haptics (mobile): light vibration for correct/wrong/timeout (if supported)
+   Features:
+   - Routing via hash (#welcome, #home, etc.)
+   - Warm transitions (leave + enter)
+   - Daily quiz lock (deterministic, no reroll)
+   - Progress + streaks (localStorage)
+   - Quiz UX: timer, progress bar, keyboard shortcuts
+   - Hijri calendar (bold 13/14/15 in CSS), click reminders
+   - Zakat calculator
+   - Private diary (local only) + export
+   - PIN lock for protected routes (Diary + Progress)
 */
 
 const app = document.getElementById("app");
 
 /* =======================
-   LocalStorage (Progress)
+   LocalStorage keys
 ======================= */
 const STORAGE_KEY = "masalah_progress_v1";
 const DAILY_KEY = "masalah_daily_v1";
+const DIARY_KEY = "masalah_diary_v1";
 
+const LOCK_PIN_HASH_KEY = "masalah_pin_hash_v1";
+const LOCK_UNLOCKED_UNTIL_KEY = "masalah_unlocked_until_v1";
+
+// protect what you want
+const PROTECTED_ROUTES = new Set(["diary", "progress"]);
+
+/* =======================
+   Quiz State
+======================= */
+const state = {
+  allQuestions: [],
+  quizQuestions: [],
+  index: 0,
+  score: 0,
+  timed: true,
+  secondsPerQuestion: 20,
+  timerId: null,
+  timeLeft: 20,
+  lastSettings: null, // { category, level, timed, count, mode: "normal"|"daily" }
+  isNavigating: false,
+  currentRoute: "welcome",
+
+  answered: false,
+  correctIdx: null,
+
+  intendedRoute: null
+};
+
+/* =======================
+   Date helpers
+======================= */
 function todayISO() {
   const d = new Date();
   const y = d.getFullYear();
@@ -26,6 +59,13 @@ function todayISO() {
   return `${y}-${m}-${day}`;
 }
 
+function todayISODate() {
+  return todayISO();
+}
+
+/* =======================
+   Progress storage
+======================= */
 function loadProgress() {
   const raw = localStorage.getItem(STORAGE_KEY);
   if (!raw) return { streakCount: 0, lastActiveDate: null, bestScores: {}, lastAttempt: null };
@@ -63,28 +103,7 @@ function updateStreak(progress) {
 }
 
 /* =======================
-   Quiz State
-======================= */
-const state = {
-  allQuestions: [],
-  quizQuestions: [],
-  index: 0,
-  score: 0,
-  timed: true,
-  secondsPerQuestion: 20,
-  timerId: null,
-  timeLeft: 20,
-  lastSettings: null, // { category, level, timed, count, mode: "normal"|"daily" }
-  isNavigating: false,
-  currentRoute: "welcome",
-
-  // UX touches
-  answered: false,
-  correctIdx: null
-};
-
-/* =======================
-   Data + helpers
+   Questions data
 ======================= */
 async function loadQuestions() {
   if (state.allQuestions.length) return state.allQuestions;
@@ -216,7 +235,6 @@ function startTimer() {
 
     if (state.timeLeft <= 0) {
       clearTimer();
-      // timeout: treat as no selection
       showFeedback(null, { reason: "timeout" });
     }
   }, 1000);
@@ -231,6 +249,29 @@ function vibrate(pattern) {
   try {
     navigator.vibrate(pattern);
   } catch {}
+}
+
+/* =======================
+   Toast
+======================= */
+let toastTimer = null;
+
+function showToast(message) {
+  let toast = document.getElementById("toast");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "toast";
+    toast.className = "toast";
+    document.body.appendChild(toast);
+  }
+
+  toast.textContent = message;
+  toast.classList.add("show");
+
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 3500);
 }
 
 /* =======================
@@ -319,6 +360,12 @@ function bindGotoButtons() {
   });
 }
 
+function bindNavRoutes() {
+  document.querySelectorAll("[data-route]").forEach((btn) => {
+    btn.addEventListener("click", () => go(btn.dataset.route));
+  });
+}
+
 /* =======================
    Screen transitions
 ======================= */
@@ -352,7 +399,6 @@ function handleQuizKeys(e) {
 
   if (isTyping) return;
 
-  // Enter -> Next (only when available)
   if (key === "enter") {
     const nextBtn = document.getElementById("nextBtn");
     if (nextBtn && nextBtn.style.display !== "none") {
@@ -362,7 +408,6 @@ function handleQuizKeys(e) {
     return;
   }
 
-  // A/B/C/D -> options 0-3
   const map = { a: 0, b: 1, c: 2, d: 3 };
   if (key in map) {
     const idx = map[key];
@@ -376,6 +421,51 @@ function handleQuizKeys(e) {
 
 function bindGlobalKeyboard() {
   window.addEventListener("keydown", handleQuizKeys);
+}
+
+/* =======================
+   PIN Lock (Local)
+======================= */
+function nowMs() {
+  return Date.now();
+}
+
+function isUnlocked() {
+  const until = Number(localStorage.getItem(LOCK_UNLOCKED_UNTIL_KEY) || "0");
+  return nowMs() < until;
+}
+
+function lockNow() {
+  localStorage.removeItem(LOCK_UNLOCKED_UNTIL_KEY);
+}
+
+function hasPin() {
+  return !!localStorage.getItem(LOCK_PIN_HASH_KEY);
+}
+
+async function sha256Hex(text) {
+  const enc = new TextEncoder().encode(text);
+  const buf = await crypto.subtle.digest("SHA-256", enc);
+  return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+async function setPin(pin) {
+  const hash = await sha256Hex(pin);
+  localStorage.setItem(LOCK_PIN_HASH_KEY, hash);
+  localStorage.setItem(LOCK_UNLOCKED_UNTIL_KEY, String(nowMs() + 30 * 60 * 1000));
+}
+
+async function verifyPin(pin) {
+  const saved = localStorage.getItem(LOCK_PIN_HASH_KEY);
+  if (!saved) return false;
+  const hash = await sha256Hex(pin);
+  return hash === saved;
+}
+
+function requireUnlock(route) {
+  if (!PROTECTED_ROUTES.has(route)) return false;
+  if (!hasPin()) return true;
+  return !isUnlocked();
 }
 
 /* =======================
@@ -514,7 +604,7 @@ function renderHome() {
       </p>
 
       <div class="grid" style="margin-top:14px;">
-        <div class="grid" style="grid-template-columns: repeat(3, 1fr); gap:12px;">
+        <div class="stats-grid">
           <div class="card" style="box-shadow:none;">
             <p class="muted" style="margin:0;">Streak</p>
             <div style="display:flex; align-items:center; gap:10px; margin-top:8px;">
@@ -545,7 +635,7 @@ function renderHome() {
           </div>
         </div>
 
-        <div class="grid" style="grid-template-columns: 1fr 1fr; gap:12px;">
+        <div class="home-grid">
           <div class="card" style="box-shadow:none;">
             <h3 style="margin:0;">Today’s Quiz</h3>
             <p class="muted" style="margin:8px 0 0 0; line-height:1.6;">
@@ -612,13 +702,6 @@ function renderHome() {
       </div>
     </section>
   `;
-
-  if (window.matchMedia("(max-width: 900px)").matches) {
-    const row = app.querySelector('[style*="repeat(3, 1fr)"]');
-    if (row) row.style.gridTemplateColumns = "1fr";
-    const two = app.querySelector('[style*="1fr 1fr"]');
-    if (two) two.style.gridTemplateColumns = "1fr";
-  }
 
   bindGotoButtons();
 
@@ -848,7 +931,6 @@ function showFeedback(selectedIdx, meta = {}) {
   const isCorrect = selectedIdx === correct;
   if (isCorrect) state.score += 1;
 
-  // Haptics
   if (meta.reason === "timeout") {
     vibrate(20);
   } else {
@@ -1033,7 +1115,7 @@ function renderFAQ() {
 
   app.innerHTML = `
     <section class="faq">
-      <div class="wrap">
+      <div class="faq-shell">
         <div class="faq-head">
           <h2 class="faq-title">FAQ</h2>
           <p class="faq-sub">
@@ -1067,7 +1149,7 @@ function renderFAQ() {
                   <span class="faq-chevron">${icon("check")}</span>
                 </summary>
                 <div class="faq-a">
-                  It is locked for the day. Refreshing does not change the questions, so you can focus on learning, not rerolling.
+                  It is locked for the day. Refreshing does not change the questions, so you can focus on learning.
                 </div>
               </details>
 
@@ -1157,16 +1239,16 @@ function renderFAQ() {
 
   bindGotoButtons();
 }
+
 /* =======================
    Zakat Calculator
 ======================= */
-
 function formatMoney(n, currency) {
   const num = Number(n || 0);
   return new Intl.NumberFormat(undefined, {
     style: "currency",
     currency: currency || "NGN",
-    maximumFractionDigits: 2,
+    maximumFractionDigits: 2
   }).format(num);
 }
 
@@ -1182,8 +1264,10 @@ function calcZakat({ zakatable, nisab }) {
 }
 
 function renderZakat() {
+  state.currentRoute = "zakat";
+
   const currencyDefault = "NGN";
-  const methodDefault = "gold"; // gold or silver
+  const methodDefault = "gold";
 
   app.innerHTML = `
     <section class="card">
@@ -1276,10 +1360,8 @@ function renderZakat() {
     </section>
   `;
 
-  // State for method
   let method = methodDefault;
 
-  // Segmented controls
   const segBtns = Array.from(app.querySelectorAll("[data-zk-method]"));
   segBtns.forEach((b) => {
     b.addEventListener("click", () => {
@@ -1297,7 +1379,6 @@ function renderZakat() {
   const elInvest = app.querySelector("#zk_invest");
   const elInventory = app.querySelector("#zk_inventory");
   const elDebtsOwed = app.querySelector("#zk_debtsOwed");
-
   const elDebtsDue = app.querySelector("#zk_debtsDue");
 
   const elResult = app.querySelector("#zk_result");
@@ -1368,19 +1449,16 @@ function renderZakat() {
     elDebtsOwed.value = "";
     elDebtsDue.value = "";
 
-    // reset method UI
     method = methodDefault;
     segBtns.forEach((x) => x.classList.toggle("is-on", x.dataset.zkMethod === methodDefault));
 
     elResult.innerHTML = "";
   });
 }
+
 /* =======================
-   Private Diary (Local Only)
+   Private Diary (Local)
 ======================= */
-
-const DIARY_KEY = "masalah_diary_v1";
-
 function loadDiary() {
   try {
     const raw = localStorage.getItem(DIARY_KEY);
@@ -1393,14 +1471,6 @@ function loadDiary() {
 
 function saveDiary(entries) {
   localStorage.setItem(DIARY_KEY, JSON.stringify(entries));
-}
-
-function todayISODate() {
-  const d = new Date();
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  return `${y}-${m}-${day}`;
 }
 
 function escapeHtml(s) {
@@ -1417,7 +1487,6 @@ function renderDiaryList(entries) {
     return `<p class="muted">No entries yet. Write something small today. Consistency beats volume.</p>`;
   }
 
-  // newest first
   const sorted = [...entries].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
 
   return `
@@ -1441,164 +1510,10 @@ function renderDiaryList(entries) {
     </div>
   `;
 }
-function renderLock() {
-  const pinExists = hasPin();
-  const unlocked = isUnlocked();
-
-  const intended = state.intendedRoute || "home";
-
-  app.innerHTML = `
-    <section class="card">
-      <div class="card-head">
-        <h2>Lock</h2>
-        <p class="muted">Protect Diary and Progress on this device.</p>
-      </div>
-
-      <div class="lock-box">
-        <div class="lock-status">
-          <span class="pill ${unlocked ? "pill-good" : "pill-warn"}">
-            ${unlocked ? "Unlocked" : "Locked"}
-          </span>
-          <span class="muted">
-            ${pinExists ? "PIN is set" : "No PIN yet. Set one now."}
-          </span>
-        </div>
-
-        <div class="field">
-          <label class="label">${pinExists ? "Enter PIN" : "Create a PIN (4-8 digits)"}</label>
-          <input id="lock_pin" class="input" inputmode="numeric" autocomplete="off" placeholder="••••" maxlength="8" />
-          <p class="muted small">Digits only. Keep it simple.</p>
-        </div>
-
-        ${
-          pinExists
-            ? `
-              <div class="lock-actions">
-                <button id="lock_unlock" class="btn primary" type="button">Unlock</button>
-                <button id="lock_locknow" class="btn" type="button">Lock now</button>
-                <button id="lock_change" class="btn" type="button">Change PIN</button>
-              </div>
-            `
-            : `
-              <div class="lock-actions">
-                <button id="lock_set" class="btn primary" type="button">Set PIN</button>
-              </div>
-            `
-        }
-
-        <div id="lock_notice" class="lock-notice" aria-live="polite"></div>
-
-        <div class="lock-foot muted">
-          <p>Unlocked sessions expire automatically (30 minutes).</p>
-          <p>If you clear browser data, your PIN and diary entries can be lost.</p>
-        </div>
-      </div>
-    </section>
-  `;
-
-  const pinEl = app.querySelector("#lock_pin");
-  const noticeEl = app.querySelector("#lock_notice");
-
-  function notice(msg, kind) {
-    noticeEl.textContent = msg || "";
-    noticeEl.classList.remove("is-warn", "is-good");
-    if (kind === "warn") noticeEl.classList.add("is-warn");
-    if (kind === "good") noticeEl.classList.add("is-good");
-  }
-
-  function digitsOnly(val) {
-    return String(val || "").replace(/\D/g, "");
-  }
-
-  pinEl.addEventListener("input", () => {
-    pinEl.value = digitsOnly(pinEl.value).slice(0, 8);
-  });
-
-  const goIntended = () => {
-    const target = state.intendedRoute || intended;
-    state.intendedRoute = null;
-    render(target);
-  };
-
-  // Set PIN
-  const setBtn = app.querySelector("#lock_set");
-  if (setBtn) {
-    setBtn.addEventListener("click", async () => {
-      const pin = digitsOnly(pinEl.value);
-      if (pin.length < 4 || pin.length > 8) {
-        notice("PIN must be 4 to 8 digits.", "warn");
-        return;
-      }
-      await setPin(pin);
-      notice("PIN set. Unlocked.", "good");
-      goIntended();
-    });
-  }
-
-  // Unlock
-  const unlockBtn = app.querySelector("#lock_unlock");
-  if (unlockBtn) {
-    unlockBtn.addEventListener("click", async () => {
-      const pin = digitsOnly(pinEl.value);
-      if (!pin) {
-        notice("Enter your PIN.", "warn");
-        return;
-      }
-
-      const ok = await verifyPin(pin);
-      if (!ok) {
-        notice("Wrong PIN.", "warn");
-        return;
-      }
-
-      // Unlock for 30 minutes
-      localStorage.setItem(LOCK_UNLOCKED_UNTIL_KEY, String(nowMs() + 30 * 60 * 1000));
-      notice("Unlocked.", "good");
-      goIntended();
-    });
-  }
-
-  // Lock now
-  const lockNowBtn = app.querySelector("#lock_locknow");
-  if (lockNowBtn) {
-    lockNowBtn.addEventListener("click", () => {
-      lockNow();
-      notice("Locked.", "good");
-      render("lock");
-    });
-  }
-
-  // Change PIN (requires current PIN)
-  const changeBtn = app.querySelector("#lock_change");
-  if (changeBtn) {
-    changeBtn.addEventListener("click", async () => {
-      const pin = digitsOnly(pinEl.value);
-      if (!pin) {
-        notice("Enter current PIN to change it.", "warn");
-        return;
-      }
-
-      const ok = await verifyPin(pin);
-      if (!ok) {
-        notice("Wrong current PIN.", "warn");
-        return;
-      }
-
-      const newPin = prompt("Enter a new PIN (4-8 digits):") || "";
-      const clean = digitsOnly(newPin);
-
-      if (clean.length < 4 || clean.length > 8) {
-        notice("New PIN must be 4 to 8 digits.", "warn");
-        return;
-      }
-
-      await setPin(clean);
-      notice("PIN changed. Unlocked.", "good");
-    });
-  }
-}
 
 function renderDiary() {
+  state.currentRoute = "diary";
+
   const entries = loadDiary();
 
   app.innerHTML = `
@@ -1740,7 +1655,7 @@ function renderDiary() {
       date: todayISODate(),
       title: title || "Untitled",
       text,
-      createdAt: Date.now(),
+      createdAt: Date.now()
     };
 
     entriesNow.push(entry);
@@ -1788,12 +1703,11 @@ function renderDiary() {
 
   elModalClose.addEventListener("click", closeModal);
 
-  // close if clicking overlay
   elModal.addEventListener("click", (e) => {
     if (e.target === elModal) closeModal();
   });
 
-  // open entry (event delegation because list re-renders)
+  // open entry (event delegation)
   app.addEventListener("click", (e) => {
     const btn = e.target.closest("[data-diary-open]");
     if (!btn) return;
@@ -1818,71 +1732,172 @@ function renderDiary() {
     setNotice("Deleted.", "good");
   });
 }
+
 /* =======================
-   PIN Lock (Local)
+   Lock screen
 ======================= */
+function renderLock() {
+  state.currentRoute = "lock";
 
-const LOCK_PIN_HASH_KEY = "masalah_pin_hash_v1";
-const LOCK_UNLOCKED_UNTIL_KEY = "masalah_unlocked_until_v1";
+  const pinExists = hasPin();
+  const unlocked = isUnlocked();
+  const intended = state.intendedRoute || "home";
 
-// choose what you want protected
-const PROTECTED_ROUTES = new Set(["diary", "progress"]);
+  app.innerHTML = `
+    <section class="card">
+      <div class="card-head">
+        <h2>Lock</h2>
+        <p class="muted">Protect Diary and Progress on this device.</p>
+      </div>
 
-function nowMs() {
-  return Date.now();
-}
+      <div class="lock-box">
+        <div class="lock-status">
+          <span class="pill ${unlocked ? "pill-good" : "pill-warn"}">
+            ${unlocked ? "Unlocked" : "Locked"}
+          </span>
+          <span class="muted">
+            ${pinExists ? "PIN is set" : "No PIN yet. Set one now."}
+          </span>
+        </div>
 
-function isUnlocked() {
-  const until = Number(localStorage.getItem(LOCK_UNLOCKED_UNTIL_KEY) || "0");
-  return nowMs() < until;
-}
+        <div class="field">
+          <label class="label">${pinExists ? "Enter PIN" : "Create a PIN (4-8 digits)"}</label>
+          <input id="lock_pin" class="input" inputmode="numeric" autocomplete="off" placeholder="••••" maxlength="8" />
+          <p class="muted small">Digits only. Keep it simple.</p>
+        </div>
 
-function lockNow() {
-  localStorage.removeItem(LOCK_UNLOCKED_UNTIL_KEY);
-}
+        ${
+          pinExists
+            ? `
+              <div class="lock-actions">
+                <button id="lock_unlock" class="btn primary" type="button">Unlock</button>
+                <button id="lock_locknow" class="btn" type="button">Lock now</button>
+                <button id="lock_change" class="btn" type="button">Change PIN</button>
+              </div>
+            `
+            : `
+              <div class="lock-actions">
+                <button id="lock_set" class="btn primary" type="button">Set PIN</button>
+              </div>
+            `
+        }
 
-function hasPin() {
-  return !!localStorage.getItem(LOCK_PIN_HASH_KEY);
-}
+        <div id="lock_notice" class="lock-notice" aria-live="polite"></div>
 
-// Simple hash. Good enough for casual privacy.
-// If you want stronger later, we can move to WebCrypto PBKDF2.
-async function sha256Hex(text) {
-  const enc = new TextEncoder().encode(text);
-  const buf = await crypto.subtle.digest("SHA-256", enc);
-  return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
-}
+        <div class="lock-foot muted">
+          <p>Unlocked sessions expire automatically (30 minutes).</p>
+          <p>If you clear browser data, your PIN and diary entries can be lost.</p>
+          <p class="muted">After unlocking, you will be taken to: <strong>${intended}</strong></p>
+        </div>
+      </div>
+    </section>
+  `;
 
-async function setPin(pin) {
-  const hash = await sha256Hex(pin);
-  localStorage.setItem(LOCK_PIN_HASH_KEY, hash);
-  // unlock for 30 minutes by default
-  localStorage.setItem(LOCK_UNLOCKED_UNTIL_KEY, String(nowMs() + 30 * 60 * 1000));
-}
+  const pinEl = app.querySelector("#lock_pin");
+  const noticeEl = app.querySelector("#lock_notice");
 
-async function verifyPin(pin) {
-  const saved = localStorage.getItem(LOCK_PIN_HASH_KEY);
-  if (!saved) return false;
-  const hash = await sha256Hex(pin);
-  return hash === saved;
-}
+  function notice(msg, kind) {
+    noticeEl.textContent = msg || "";
+    noticeEl.classList.remove("is-warn", "is-good");
+    if (kind === "warn") noticeEl.classList.add("is-warn");
+    if (kind === "good") noticeEl.classList.add("is-good");
+  }
 
-function requireUnlock(route) {
-  // only block protected routes
-  if (!PROTECTED_ROUTES.has(route)) return false;
-  // if no PIN yet, force lock screen to set it
-  if (!hasPin()) return true;
-  // if PIN exists, require unlock when locked
-  return !isUnlocked();
+  function digitsOnly(val) {
+    return String(val || "").replace(/\D/g, "");
+  }
+
+  pinEl.addEventListener("input", () => {
+    pinEl.value = digitsOnly(pinEl.value).slice(0, 8);
+  });
+
+  const goIntended = () => {
+    const target = state.intendedRoute || intended;
+    state.intendedRoute = null;
+    render(target);
+  };
+
+  const setBtn = app.querySelector("#lock_set");
+  if (setBtn) {
+    setBtn.addEventListener("click", async () => {
+      const pin = digitsOnly(pinEl.value);
+      if (pin.length < 4 || pin.length > 8) {
+        notice("PIN must be 4 to 8 digits.", "warn");
+        return;
+      }
+      await setPin(pin);
+      notice("PIN set. Unlocked.", "good");
+      goIntended();
+    });
+  }
+
+  const unlockBtn = app.querySelector("#lock_unlock");
+  if (unlockBtn) {
+    unlockBtn.addEventListener("click", async () => {
+      const pin = digitsOnly(pinEl.value);
+      if (!pin) {
+        notice("Enter your PIN.", "warn");
+        return;
+      }
+
+      const ok = await verifyPin(pin);
+      if (!ok) {
+        notice("Wrong PIN.", "warn");
+        return;
+      }
+
+      localStorage.setItem(LOCK_UNLOCKED_UNTIL_KEY, String(nowMs() + 30 * 60 * 1000));
+      notice("Unlocked.", "good");
+      goIntended();
+    });
+  }
+
+  const lockNowBtn = app.querySelector("#lock_locknow");
+  if (lockNowBtn) {
+    lockNowBtn.addEventListener("click", () => {
+      lockNow();
+      notice("Locked.", "good");
+      render("lock");
+    });
+  }
+
+  const changeBtn = app.querySelector("#lock_change");
+  if (changeBtn) {
+    changeBtn.addEventListener("click", async () => {
+      const pin = digitsOnly(pinEl.value);
+      if (!pin) {
+        notice("Enter current PIN to change it.", "warn");
+        return;
+      }
+
+      const ok = await verifyPin(pin);
+      if (!ok) {
+        notice("Wrong current PIN.", "warn");
+        return;
+      }
+
+      const newPin = prompt("Enter a new PIN (4-8 digits):") || "";
+      const clean = digitsOnly(newPin);
+
+      if (clean.length < 4 || clean.length > 8) {
+        notice("New PIN must be 4 to 8 digits.", "warn");
+        return;
+      }
+
+      await setPin(clean);
+      notice("PIN changed. Unlocked.", "good");
+    });
+  }
 }
 
 /* =======================
    Hijri Calendar
 ======================= */
 function renderCalendar() {
+  state.currentRoute = "calendar";
+
   const today = new Date();
 
-  // Use Intl API for Hijri date
   const hijriFormatter = new Intl.DateTimeFormat("en-TN-u-ca-islamic", {
     day: "numeric",
     month: "long",
@@ -1890,9 +1905,9 @@ function renderCalendar() {
   });
 
   const parts = hijriFormatter.formatToParts(today);
-  const hijriDay = Number(parts.find(p => p.type === "day").value);
-  const hijriMonth = parts.find(p => p.type === "month").value;
-  const hijriYear = parts.find(p => p.type === "year").value;
+  const hijriDay = Number(parts.find((p) => p.type === "day")?.value || "1");
+  const hijriMonth = parts.find((p) => p.type === "month")?.value || "";
+  const hijriYear = parts.find((p) => p.type === "year")?.value || "";
 
   app.innerHTML = `
     <section class="card" style="margin-top:20px;">
@@ -1911,6 +1926,7 @@ function renderCalendar() {
     </section>
   `;
 }
+
 function renderHijriMonth(todayDay) {
   let html = "";
 
@@ -1934,7 +1950,6 @@ function renderHijriMonth(todayDay) {
   return html;
 }
 
-
 /* =======================
    Routing
 ======================= */
@@ -1943,16 +1958,14 @@ async function renderRoute(route) {
   setActiveNav(r);
 
   if (r === "welcome") return renderWelcome();
-  if (r === "faq") return renderFAQ();
-  if (r === "progress") return renderProgress();
   if (r === "home") return renderHome();
   if (r === "daily") return renderDaily();
+  if (r === "progress") return renderProgress();
   if (r === "calendar") return renderCalendar();
   if (r === "zakat") return renderZakat();
   if (r === "diary") return renderDiary();
   if (r === "lock") return renderLock();
-
-
+  if (r === "faq") return renderFAQ();
 
   return renderWelcome();
 }
@@ -1962,9 +1975,7 @@ function render(route) {
 
   const r = route || "welcome";
 
-  // 👇 Guard protected screens
   if (requireUnlock(r)) {
-    // Save where user wanted to go, then show lock
     state.intendedRoute = r;
     route = "lock";
   }
@@ -1983,18 +1994,16 @@ function render(route) {
   });
 }
 
-
-function bindNavRoutes() {
-  document.querySelectorAll("[data-route]").forEach((btn) => {
-    btn.addEventListener("click", () => go(btn.dataset.route));
-  });
-}
-// Mobile nav toggle
+/* =======================
+   Header mobile menu (optional)
+   Works only if you add:
+   - button.nav-toggle
+   - nav#navMenu
+======================= */
 document.addEventListener("click", (e) => {
   const toggle = e.target.closest(".nav-toggle");
   const menu = document.getElementById("navMenu");
 
-  // Toggle menu
   if (toggle && menu) {
     const isOpen = menu.dataset.open === "true";
     menu.dataset.open = String(!isOpen);
@@ -2002,7 +2011,6 @@ document.addEventListener("click", (e) => {
     return;
   }
 
-  // Close menu when clicking a route button (or anywhere outside menu)
   if (menu && menu.dataset.open === "true") {
     const clickedRoute = e.target.closest("[data-route]");
     const clickedInsideMenu = e.target.closest("#navMenu");
@@ -2012,6 +2020,42 @@ document.addEventListener("click", (e) => {
       if (btn) btn.setAttribute("aria-expanded", "false");
     }
   }
+});
+
+/* =======================
+   Calendar click reminder
+======================= */
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest(".calendar-day[data-hijri-day]");
+  if (!btn) return;
+
+  const day = Number(btn.dataset.hijriDay);
+  const isWhiteDay = btn.dataset.whiteDay === "1";
+
+  if (!isWhiteDay) {
+    showToast(`Hijri day ${day}. Only 13, 14, 15 are highlighted for the white days.`);
+    return;
+  }
+
+  showToast(
+    `White Day reminder: Today is the ${day}th. Sunnah fasting is recommended on the 13th, 14th, and 15th of each Hijri month.`
+  );
+});
+
+/* =======================
+   Footer year
+======================= */
+function setFooterYear() {
+  const el = document.getElementById("year");
+  if (el) el.textContent = String(new Date().getFullYear());
+}
+
+/* =======================
+   Hash routing
+======================= */
+window.addEventListener("hashchange", () => {
+  const route = (window.location.hash || "#welcome").slice(1);
+  render(route);
 });
 
 /* =======================
@@ -2025,46 +2069,3 @@ window.addEventListener("DOMContentLoaded", () => {
   const initial = (window.location.hash || "").slice(1);
   render(initial || "welcome");
 });
-document.addEventListener("click", (e) => {
-  const btn = e.target.closest(".calendar-day[data-hijri-day]");
-  if (!btn) return;
-
-  const day = Number(btn.dataset.hijriDay);
-  const isWhiteDay = btn.dataset.whiteDay === "1";
-
-  if (!isWhiteDay) {
-    showToast(`Hijri day ${day}. Only 13, 14, 15 are highlighted for the white days.`);
-    return;
-  }
-
-  showToast(`White Day reminder: Today is the ${day}th. Sunnah fasting is recommended on the 13th, 14th, and 15th of each Hijri month.`);
-});
-
-window.addEventListener("hashchange", () => {
-  const route = (window.location.hash || "#welcome").slice(1);
-  render(route);
-});
-
-function setFooterYear() {
-  const el = document.getElementById("year");
-  if (el) el.textContent = String(new Date().getFullYear());
-}
-let toastTimer = null;
-
-function showToast(message) {
-  let toast = document.getElementById("toast");
-  if (!toast) {
-    toast = document.createElement("div");
-    toast.id = "toast";
-    toast.className = "toast";
-    document.body.appendChild(toast);
-  }
-
-  toast.textContent = message;
-  toast.classList.add("show");
-
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => {
-    toast.classList.remove("show");
-  }, 3500);
-}
