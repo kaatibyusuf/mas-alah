@@ -1989,6 +1989,30 @@ function bindNavRoutes() {
     btn.addEventListener("click", () => go(btn.dataset.route));
   });
 }
+// Mobile nav toggle
+document.addEventListener("click", (e) => {
+  const toggle = e.target.closest(".nav-toggle");
+  const menu = document.getElementById("navMenu");
+
+  // Toggle menu
+  if (toggle && menu) {
+    const isOpen = menu.dataset.open === "true";
+    menu.dataset.open = String(!isOpen);
+    toggle.setAttribute("aria-expanded", String(!isOpen));
+    return;
+  }
+
+  // Close menu when clicking a route button (or anywhere outside menu)
+  if (menu && menu.dataset.open === "true") {
+    const clickedRoute = e.target.closest("[data-route]");
+    const clickedInsideMenu = e.target.closest("#navMenu");
+    if (clickedRoute || !clickedInsideMenu) {
+      menu.dataset.open = "false";
+      const btn = document.querySelector(".nav-toggle");
+      if (btn) btn.setAttribute("aria-expanded", "false");
+    }
+  }
+});
 
 /* =======================
    Boot

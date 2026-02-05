@@ -1251,3 +1251,71 @@ select:focus, textarea:focus{
   line-height: 1.45;
 }
 .small{ font-size: 12px; }
+/* Header nav: desktop default */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Hide toggle on desktop */
+.nav-toggle {
+  display: none;
+}
+
+/* Menu container on desktop behaves like normal row */
+.nav-menu {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* Mobile behavior */
+@media (max-width: 720px) {
+  .topbar-inner {
+    gap: 12px;
+  }
+
+  /* Show toggle button */
+  .nav-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.02);
+    color: var(--text);
+    font-weight: 850;
+    cursor: pointer;
+  }
+
+  /* Hide menu by default */
+  .nav-menu {
+    display: none;
+    width: min(260px, 92vw);
+    position: absolute;
+    right: 16px;
+    top: 64px; /* adjust if your header height differs */
+    padding: 10px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: var(--bg);
+    box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    flex-direction: column;
+    gap: 8px;
+    z-index: 50;
+  }
+
+  /* When open */
+  .nav-menu[data-open="true"] {
+    display: flex;
+  }
+
+  /* Make buttons full-width for thumb use */
+  .nav-menu .nav-btn {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}

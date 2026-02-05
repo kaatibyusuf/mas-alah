@@ -24,18 +24,25 @@
         </div>
 
         <nav class="nav" aria-label="Primary navigation">
-          <button class="nav-btn" data-route="welcome" type="button">Welcome</button>
-          <button class="nav-btn" data-route="home" type="button">Home</button>
-          <button class="nav-btn" data-route="daily" type="button">Daily</button>
-          <button class="nav-btn" data-route="progress" type="button">Progress</button>
-          <button class="nav-btn" data-route="calendar" type="button">Calendar</button>
-          <button class="nav-btn" data-route="zakat" type="button">Zakat</button>
-          <button class="nav-btn" data-route="diary" type="button">Diary</button>
-          <button class="nav-btn" data-route="lock" type="button">Lock</button>
-          <button class="nav-btn" data-route="faq" type="button">FAQ</button>
-        </nav>
-      </div>
-    </header>
+  <!-- Mobile menu toggle -->
+  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="navMenu">
+    Menu
+  </button>
+
+  <!-- Menu container -->
+  <div id="navMenu" class="nav-menu" data-open="false">
+    <button class="nav-btn" data-route="welcome" type="button">Welcome</button>
+    <button class="nav-btn" data-route="home" type="button">Home</button>
+    <button class="nav-btn" data-route="daily" type="button">Daily</button>
+    <button class="nav-btn" data-route="progress" type="button">Progress</button>
+    <button class="nav-btn" data-route="calendar" type="button">Calendar</button>
+    <button class="nav-btn" data-route="zakat" type="button">Zakat</button>
+    <button class="nav-btn" data-route="diary" type="button">Diary</button>
+    <button class="nav-btn" data-route="lock" type="button">Lock</button>
+    <button class="nav-btn" data-route="faq" type="button">FAQ</button>
+  </div>
+</nav>
+
 
     <main id="app" class="wrap" role="main" aria-live="polite">
       <!-- App screens render here -->
