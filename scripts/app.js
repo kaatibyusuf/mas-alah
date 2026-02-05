@@ -1520,7 +1520,7 @@ function renderDiary() {
     <section class="card">
       <div class="card-head">
         <h2>Private Diary</h2>
-        <p class="muted">Saved only on this device. If you clear browser data, entries are gone.</p>
+        <p class="muted">Your personal rant page.</p>
       </div>
 
       <div class="diary-grid">
@@ -1555,7 +1555,6 @@ function renderDiary() {
         <div class="diary-box">
           <div class="diary-formhead">
             <h3 class="diary-subtitle">Your entries</h3>
-            <button id="diary_export" class="btn" type="button">Export JSON</button>
           </div>
 
           <div id="diary_list">
