@@ -5,14 +5,12 @@
    - Daily quiz lock (deterministic, no reroll)
    - Progress + streaks (localStorage)
    - Quiz UX: timer, progress bar, keyboard shortcuts
-   - Hijri calendar (bold 13/14/15 in CSS), click reminders
+   - Hijri calendar (English + Arabic Islamic month names), click reminders
    - Zakat calculator
-   - Private diary (local only) + export
+   - Private diary (local only)
    - PIN lock for protected routes (Diary + Progress)
-
-   Added:
-   - Wrong selected option gets .wrong class (your CSS can bold it)
-   - Review mode: Previous / Next navigation with explanations preserved
+   - NEW: wrong questions bolded in Results
+   - NEW: Prev navigation during quiz (review explanations)
 */
 
 const app = document.getElementById("app");
@@ -31,27 +29,26 @@ const LOCK_UNLOCKED_UNTIL_KEY = "masalah_unlocked_until_v1";
 const PROTECTED_ROUTES = new Set(["diary", "progress"]);
 
 /* =======================
-   App State
+   Quiz State
 ======================= */
 const state = {
   allQuestions: [],
   quizQuestions: [],
   index: 0,
   score: 0,
-
-  // quiz settings
   timed: true,
   secondsPerQuestion: 20,
   timerId: null,
   timeLeft: 20,
   lastSettings: null, // { category, level, timed, count, mode: "normal"|"daily" }
-
-  // review state
-  answers: [], // each: { selected: number|null, correct: number, isCorrect: boolean, reason?: "timeout" }
-
-  // navigation
   isNavigating: false,
   currentRoute: "welcome",
+
+  answered: false,
+  correctIdx: null,
+
+  // NEW: store per-question answers for back navigation + results highlighting
+  answers: [], // [{ selectedIdx, correctIdx, isCorrect, reason }]
   intendedRoute: null
 };
 
@@ -65,7 +62,6 @@ function todayISO() {
   const day = String(d.getDate()).padStart(2, "0");
   return `${y}-${m}-${day}`;
 }
-
 function todayISODate() {
   return todayISO();
 }
@@ -242,7 +238,7 @@ function startTimer() {
 
     if (state.timeLeft <= 0) {
       clearTimer();
-      recordAnswer(null, { reason: "timeout" });
+      showFeedback(null, { reason: "timeout" });
     }
   }, 1000);
 }
@@ -358,19 +354,13 @@ function setActiveNav(route) {
 ======================= */
 function go(route) {
   if (!route) return;
-  window.location.hash = `#${route}`;
-}
-
-function bindGotoButtons() {
-  app.querySelectorAll("[data-goto]").forEach((btn) => {
-    btn.addEventListener("click", () => go(btn.dataset.goto));
-  });
-}
-
-function bindNavRoutes() {
-  document.querySelectorAll("[data-route]").forEach((btn) => {
-    btn.addEventListener("click", () => go(btn.dataset.route));
-  });
+  const next = `#${route}`;
+  if (window.location.hash === next) {
+    // force re-render if same hash clicked
+    render(route);
+    return;
+  }
+  window.location.hash = next;
 }
 
 /* =======================
@@ -406,9 +396,18 @@ function handleQuizKeys(e) {
 
   if (isTyping) return;
 
+  if (key === "arrowleft") {
+    const prevBtn = document.getElementById("prevBtn");
+    if (prevBtn && prevBtn.style.display !== "none") {
+      e.preventDefault();
+      prevBtn.click();
+    }
+    return;
+  }
+
   if (key === "enter") {
     const nextBtn = document.getElementById("nextBtn");
-    if (nextBtn && !nextBtn.disabled && nextBtn.style.display !== "none") {
+    if (nextBtn && nextBtn.style.display !== "none") {
       e.preventDefault();
       nextBtn.click();
     }
@@ -578,6 +577,12 @@ function renderWelcome() {
   bindGotoButtons();
 }
 
+function bindGotoButtons() {
+  app.querySelectorAll("[data-goto]").forEach((btn) => {
+    btn.addEventListener("click", () => go(btn.dataset.goto));
+  });
+}
+
 /* =======================
    HOME
 ======================= */
@@ -732,9 +737,9 @@ function renderHome() {
 
       state.quizQuestions = pickRandom(pool, Math.min(count, pool.length));
       state.index = 0;
-      state.timed = timed;
-      state.answers = new Array(state.quizQuestions.length).fill(null);
+      state.answers = [];
       state.score = 0;
+      state.timed = timed;
 
       withTransition(renderQuiz);
     } catch (err) {
@@ -822,9 +827,9 @@ async function renderDaily() {
       state.lastSettings = { category, level, timed, count: chosen.length, mode: "daily" };
       state.quizQuestions = chosen;
       state.index = 0;
-      state.timed = timed;
-      state.answers = new Array(state.quizQuestions.length).fill(null);
+      state.answers = [];
       state.score = 0;
+      state.timed = timed;
 
       withTransition(renderQuiz);
     } catch (err) {
@@ -834,11 +839,10 @@ async function renderDaily() {
 }
 
 /* =======================
-   QUIZ (with review)
+   QUIZ
 ======================= */
 function computeScoreFromAnswers() {
-  state.score = state.answers.reduce((acc, a) => acc + (a && a.isCorrect ? 1 : 0), 0);
-  return state.score;
+  state.score = (state.answers || []).filter((a) => a && a.isCorrect).length;
 }
 
 function renderQuiz() {
@@ -846,11 +850,13 @@ function renderQuiz() {
 
   const total = state.quizQuestions.length;
   const q = state.quizQuestions[state.index];
-  const saved = state.answers[state.index]; // null or { selected, correct, isCorrect, reason }
-
-  computeScoreFromAnswers();
+  state.correctIdx = q.correctIndex;
 
   const progressPct = Math.round(((state.index + 1) / total) * 100);
+  const existingAns = state.answers[state.index] || null;
+
+  // if revisiting answered question, do not restart timer
+  state.answered = !!existingAns;
 
   app.innerHTML = `
     <section class="card" style="margin-top:20px;">
@@ -892,41 +898,23 @@ function renderQuiz() {
 
       <div class="grid" id="options">
         ${q.options
-          .map((opt, idx) => {
-            let cls = "optionBtn";
-            if (saved) {
-              if (idx === q.correctIndex) cls += " correct";
-              if (saved.selected !== null && idx === saved.selected && idx !== q.correctIndex) cls += " wrong";
-            }
-            return `
-              <button class="${cls}" data-idx="${idx}" type="button" ${saved ? "disabled" : ""}>
+          .map(
+            (opt, idx) => `
+              <button class="optionBtn" data-idx="${idx}" type="button">
                 <span class="badge">${String.fromCharCode(65 + idx)}</span>
                 <span>${opt}</span>
               </button>
-            `;
-          })
+            `
+          )
           .join("")}
       </div>
 
-      <div id="feedback" class="feedback" style="${saved ? "" : "display:none;"}">
-        ${
-          saved
-            ? `
-              <strong>${
-                saved.reason === "timeout" ? "Time up." : saved.isCorrect ? "Correct." : "Incorrect."
-              }</strong>
-              <div class="muted" style="margin-top:6px;">${q.explanation || ""}</div>
-            `
-            : ""
-        }
-      </div>
+      <div id="feedback" class="feedback" style="display:none;"></div>
 
       <div style="display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;">
         <button id="quitBtn" class="btn" type="button">Quit</button>
-        <button id="prevBtn" class="btn" type="button" ${state.index === 0 ? "disabled" : ""}>Previous</button>
-        <button id="nextBtn" class="btn" type="button" ${saved ? "" : "disabled"}>
-          ${state.index === total - 1 ? "See Results" : "Next"}
-        </button>
+        <button id="prevBtn" class="btn" type="button" ${state.index === 0 ? 'style="display:none;"' : ""}>Prev</button>
+        <button id="nextBtn" class="btn" style="display:none;" type="button">Next</button>
       </div>
     </section>
   `;
@@ -936,57 +924,83 @@ function renderQuiz() {
     go("home");
   });
 
-  document.getElementById("prevBtn").addEventListener("click", () => {
-    clearTimer();
-    if (state.index > 0) {
-      state.index -= 1;
-      withTransition(renderQuiz);
-    }
+  const prevBtn = document.getElementById("prevBtn");
+  if (prevBtn) {
+    prevBtn.addEventListener("click", () => {
+      clearTimer();
+      if (state.index > 0) {
+        state.index -= 1;
+        withTransition(renderQuiz);
+      }
+    });
+  }
+
+  document.querySelectorAll(".optionBtn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const selected = Number(btn.dataset.idx);
+      showFeedback(selected);
+    });
   });
 
-  document.getElementById("nextBtn").addEventListener("click", () => {
-    clearTimer();
-    if (!state.answers[state.index]) return;
+  // If revisiting an answered question, restore state (highlight + explanation)
+  if (existingAns) {
+    restoreAnsweredUI(existingAns);
+    return;
+  }
 
+  if (state.timed) startTimer();
+}
+
+function restoreAnsweredUI(ans) {
+  clearTimer();
+
+  const q = state.quizQuestions[state.index];
+  const correct = q.correctIndex;
+
+  document.querySelectorAll(".optionBtn").forEach((btn) => {
+    btn.disabled = true;
+    const idx = Number(btn.dataset.idx);
+    if (idx === correct) btn.classList.add("correct");
+    if (ans.selectedIdx !== null && idx === ans.selectedIdx && idx !== correct) btn.classList.add("wrong");
+  });
+
+  const feedback = document.getElementById("feedback");
+  feedback.style.display = "block";
+  feedback.innerHTML = `
+    <strong>${ans.reason === "timeout" ? "Time up." : ans.isCorrect ? "Correct." : "Incorrect."}</strong>
+    <div class="muted" style="margin-top:6px;">${q.explanation || ""}</div>
+  `;
+
+  const nextBtn = document.getElementById("nextBtn");
+  nextBtn.style.display = "inline-block";
+  nextBtn.textContent = state.index === state.quizQuestions.length - 1 ? "See Results" : "Next";
+
+  nextBtn.onclick = () => {
     if (state.index >= state.quizQuestions.length - 1) {
       withTransition(renderResults);
       return;
     }
-
     state.index += 1;
     withTransition(renderQuiz);
-  });
-
-  // options click only if unanswered
-  if (!saved) {
-    document.querySelectorAll(".optionBtn").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const selected = Number(btn.dataset.idx);
-        recordAnswer(selected);
-      });
-    });
-  }
-
-  // start timer only if timed and unanswered
-  if (state.timed && !saved) startTimer();
+  };
 }
 
-function recordAnswer(selectedIdx, meta = {}) {
-  // already answered
-  if (state.answers[state.index]) return;
+function showFeedback(selectedIdx, meta = {}) {
+  if (state.answers[state.index]) return; // already answered, do not double count
 
   clearTimer();
 
   const q = state.quizQuestions[state.index];
   const correct = q.correctIndex;
-  const isCorrect = selectedIdx === correct;
 
-  state.answers[state.index] = {
-    selected: selectedIdx,
-    correct,
-    isCorrect,
-    reason: meta.reason || null
-  };
+  document.querySelectorAll(".optionBtn").forEach((btn) => {
+    btn.disabled = true;
+    const idx = Number(btn.dataset.idx);
+    if (idx === correct) btn.classList.add("correct");
+    if (selectedIdx !== null && idx === selectedIdx && idx !== correct) btn.classList.add("wrong");
+  });
+
+  const isCorrect = selectedIdx === correct;
 
   if (meta.reason === "timeout") {
     vibrate(20);
@@ -994,8 +1008,34 @@ function recordAnswer(selectedIdx, meta = {}) {
     vibrate(isCorrect ? 15 : [10, 30, 10]);
   }
 
-  // re-render to show explanation and enable Next
-  withTransition(renderQuiz);
+  // store answer
+  state.answers[state.index] = {
+    selectedIdx,
+    correctIdx: correct,
+    isCorrect,
+    reason: meta.reason || ""
+  };
+  computeScoreFromAnswers();
+
+  const feedback = document.getElementById("feedback");
+  feedback.style.display = "block";
+  feedback.innerHTML = `
+    <strong>${meta.reason === "timeout" ? "Time up." : isCorrect ? "Correct." : "Incorrect."}</strong>
+    <div class="muted" style="margin-top:6px;">${q.explanation || ""}</div>
+  `;
+
+  const nextBtn = document.getElementById("nextBtn");
+  nextBtn.style.display = "inline-block";
+  nextBtn.textContent = state.index === state.quizQuestions.length - 1 ? "See Results" : "Next";
+
+  nextBtn.onclick = () => {
+    if (state.index >= state.quizQuestions.length - 1) {
+      withTransition(renderResults);
+      return;
+    }
+    state.index += 1;
+    withTransition(renderQuiz);
+  };
 }
 
 /* =======================
@@ -1005,10 +1045,9 @@ function renderResults() {
   state.currentRoute = "results";
   clearTimer();
 
-  computeScoreFromAnswers();
-
   const total = state.quizQuestions.length;
-  const percent = total ? Math.round((state.score / total) * 100) : 0;
+  computeScoreFromAnswers();
+  const percent = Math.round((state.score / total) * 100);
 
   const progress = loadProgress();
   updateStreak(progress);
@@ -1022,6 +1061,30 @@ function renderResults() {
 
   progress.lastAttempt = { date: todayISO(), category, level, score: state.score, total, percent };
   saveProgress(progress);
+
+  const breakdown = state.quizQuestions
+    .map((q, i) => {
+      const a = state.answers[i];
+      const isWrong = a ? !a.isCorrect : true;
+      const label = `Q${i + 1}`;
+      return `
+        <div class="card" style="box-shadow:none; padding:12px; border-radius:14px;">
+          <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
+            <div>
+              <div class="muted" style="font-size:12px;">${label}</div>
+              <div style="${isWrong ? "font-weight:950;" : "font-weight:800;"}">${q.question}</div>
+              <div class="muted" style="margin-top:6px; font-size:12px;">
+                ${a ? (a.isCorrect ? "Correct" : "Wrong") : "Not answered"}
+              </div>
+            </div>
+          </div>
+          <div class="muted" style="margin-top:8px; line-height:1.6; font-size:13px;">
+            ${q.explanation || ""}
+          </div>
+        </div>
+      `;
+    })
+    .join("");
 
   app.innerHTML = `
     <section class="card" style="margin-top:20px;">
@@ -1039,8 +1102,14 @@ function renderResults() {
         <p id="copyStatus" class="muted" style="margin-top:8px;"></p>
       </div>
 
+      <div class="card" style="margin-top:12px; box-shadow:none;">
+        <p class="muted" style="margin:0 0 10px 0;">Review (wrong questions are bold)</p>
+        <div style="display:grid; gap:10px;">
+          ${breakdown}
+        </div>
+      </div>
+
       <div style="display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;">
-        <button id="reviewBtn" class="btn" type="button">Review questions</button>
         <button id="tryAgainBtn" class="btn" type="button">Try Again</button>
         <button id="progressBtn" class="btn" type="button">Progress</button>
         <button id="homeBtn" class="btn" type="button">Back Home</button>
@@ -1058,15 +1127,9 @@ function renderResults() {
     }
   });
 
-  document.getElementById("reviewBtn").addEventListener("click", () => {
-    state.index = 0;
-    withTransition(renderQuiz);
-  });
-
   document.getElementById("tryAgainBtn").addEventListener("click", async () => {
     const s = state.lastSettings;
     if (!s) return go("home");
-
     if (s.mode === "daily") return go("daily");
 
     const all = await loadQuestions();
@@ -1075,9 +1138,9 @@ function renderResults() {
 
     state.quizQuestions = chosen;
     state.index = 0;
-    state.timed = s.timed;
-    state.answers = new Array(state.quizQuestions.length).fill(null);
+    state.answers = [];
     state.score = 0;
+    state.timed = s.timed;
 
     withTransition(renderQuiz);
   });
@@ -1595,7 +1658,6 @@ function renderDiary() {
           <div class="diary-actions">
             <button id="diary_save" class="btn primary" type="button">Save entry</button>
             <button id="diary_clear" class="btn" type="button">Clear</button>
-            <button id="diary_export" class="btn" type="button">Export</button>
           </div>
 
           <div id="diary_notice" class="diary-notice" aria-live="polite"></div>
@@ -1715,22 +1777,6 @@ function renderDiary() {
 
     setNotice("Saved on this device.", "good");
     refreshList();
-  });
-
-  app.querySelector("#diary_export").addEventListener("click", () => {
-    const data = loadDiary();
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `masalah-diary-${todayISODate()}.json`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-
-    URL.revokeObjectURL(url);
-    setNotice("Exported.", "good");
   });
 
   function openModal(entry) {
@@ -1939,33 +1985,65 @@ function renderLock() {
 }
 
 /* =======================
-   Hijri Calendar
+   Hijri Calendar (English + Arabic Islamic month names)
 ======================= */
-function renderCalendar() {
-  state.currentRoute = "calendar";
+function getUserTimeZone() {
+  return Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+}
 
-  const today = new Date();
+function getHijriInfo(date = new Date()) {
+  const timeZone = getUserTimeZone();
 
-  const hijriFormatter = new Intl.DateTimeFormat("en-TN-u-ca-islamic", {
+  const en = new Intl.DateTimeFormat("en-u-ca-islamic", {
+    timeZone,
     day: "numeric",
     month: "long",
     year: "numeric"
   });
 
-  const parts = hijriFormatter.formatToParts(today);
-  const hijriDay = Number(parts.find((p) => p.type === "day")?.value || "1");
-  const hijriMonth = parts.find((p) => p.type === "month")?.value || "";
-  const hijriYear = parts.find((p) => p.type === "year")?.value || "";
+  const ar = new Intl.DateTimeFormat("ar-u-ca-islamic", {
+    timeZone,
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  });
+
+  const enParts = en.formatToParts(date);
+  const arParts = ar.formatToParts(date);
+
+  const get = (parts, type) => parts.find((p) => p.type === type)?.value || "";
+
+  return {
+    day: Number(get(enParts, "day") || "1"),
+    monthEn: get(enParts, "month"),
+    yearEn: get(enParts, "year"),
+    monthAr: get(arParts, "month"),
+    yearAr: get(arParts, "year"),
+    timeZone
+  };
+}
+
+
+function renderCalendar() {
+  state.currentRoute = "calendar";
+
+  const info = getHijriInfo(new Date());
 
   app.innerHTML = `
     <section class="card" style="margin-top:20px;">
       <h2>Hijri Calendar</h2>
-      <p class="muted" style="margin-top:6px;">
-        ${hijriMonth} ${hijriYear} AH
+
+      <p class="muted" style="margin-top:6px; line-height:1.6;">
+        <strong>${info.monthEn} ${info.yearEn} AH</strong><br />
+        <strong dir="rtl">${info.monthAr} ${info.yearAr} هـ</strong><br />
+        <span class="muted" style="font-size:12px;">Timezone: ${info.timeZone}</span><br />
+        <span style="display:inline-block; margin-top:6px;">
+          Today: <strong>${info.day}</strong>
+        </span>
       </p>
 
       <div class="calendar-grid">
-        ${renderHijriMonth(hijriDay)}
+        ${renderHijriMonth(info.day)}
       </div>
 
       <p class="muted" style="margin-top:12px;">
@@ -1974,6 +2052,7 @@ function renderCalendar() {
     </section>
   `;
 }
+
 
 function renderHijriMonth(todayDay) {
   let html = "";
@@ -1990,13 +2069,14 @@ function renderHijriMonth(todayDay) {
         ${isWhiteDay ? 'data-white-day="1"' : ""}
         aria-label="Hijri day ${d}"
       >
-        ${d}
+        ${isToday ? `<strong>${d}</strong>` : `${d}`}
       </button>
     `;
   }
 
   return html;
 }
+
 
 /* =======================
    Routing
@@ -2023,15 +2103,16 @@ function render(route) {
 
   const r = route || "welcome";
 
+  let actual = r;
   if (requireUnlock(r)) {
     state.intendedRoute = r;
-    route = "lock";
+    actual = "lock";
   }
 
   state.isNavigating = true;
 
   withTransition(() => {
-    const maybePromise = renderRoute(route);
+    const maybePromise = renderRoute(actual);
     if (maybePromise && typeof maybePromise.then === "function") {
       maybePromise.finally(() => {
         state.isNavigating = false;
@@ -2043,7 +2124,7 @@ function render(route) {
 }
 
 /* =======================
-   Header mobile menu
+   Mobile menu toggle
 ======================= */
 document.addEventListener("click", (e) => {
   const toggle = e.target.closest(".nav-toggle");
@@ -2096,6 +2177,27 @@ function setFooterYear() {
 }
 
 /* =======================
+   FIX: Event-delegated routing for ALL nav/footer buttons
+   This is what makes Calendar open reliably.
+======================= */
+document.addEventListener("click", (e) => {
+  const routeBtn = e.target.closest("[data-route]");
+  if (routeBtn) {
+    e.preventDefault();
+    const route = routeBtn.dataset.route;
+    go(route);
+    return;
+  }
+
+  const gotoBtn = e.target.closest("[data-goto]");
+  if (gotoBtn) {
+    e.preventDefault();
+    const route = gotoBtn.dataset.goto;
+    go(route);
+  }
+});
+
+/* =======================
    Hash routing
 ======================= */
 window.addEventListener("hashchange", () => {
@@ -2107,7 +2209,6 @@ window.addEventListener("hashchange", () => {
    Boot
 ======================= */
 window.addEventListener("DOMContentLoaded", () => {
-  bindNavRoutes();
   bindGlobalKeyboard();
   setFooterYear();
 

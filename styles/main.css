@@ -1426,3 +1426,8 @@ html, body { overflow-x: hidden; }
     padding: 10px 12px;
   }
 }
+.calendar-day.today {
+  font-weight: 950;
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
