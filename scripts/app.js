@@ -1,17 +1,16 @@
-/* Mas'alah App
+/* Mas'alah App (app.js)
    Features:
    - Routing via hash (#welcome, #home, etc.)
    - Warm transitions (leave + enter)
    - Daily quiz lock (deterministic, no reroll)
    - Progress + streaks (localStorage)
    - Quiz UX: timer, progress bar, keyboard shortcuts
-   - Hijri calendar (English + Arabic Islamic month names), click reminders
+   - Hijri calendar (English + Arabic Islamic month names), click reminders, user timezone
    - Zakat calculator
    - Private diary (local only) + export
    - PIN lock for protected routes (Diary + Progress)
-   - NEW: wrong questions bolded in Results
+   - NEW: wrong questions bolded in Results + clickable review
    - NEW: Prev navigation during quiz (review explanations)
-   - NEW: Gurfah (local groups, chat, question set builder)
 */
 
 const app = document.getElementById("app");
@@ -26,8 +25,6 @@ const DIARY_KEY = "masalah_diary_v1";
 const LOCK_PIN_HASH_KEY = "masalah_pin_hash_v1";
 const LOCK_UNLOCKED_UNTIL_KEY = "masalah_unlocked_until_v1";
 
-const GURFAH_KEY = "masalah_gurfah_v1";
-
 // protect what you want
 const PROTECTED_ROUTES = new Set(["diary", "progress"]);
 
@@ -38,25 +35,19 @@ const state = {
   allQuestions: [],
   quizQuestions: [],
   index: 0,
-  score: 0,
   timed: true,
   secondsPerQuestion: 20,
   timerId: null,
   timeLeft: 20,
   lastSettings: null, // { category, level, timed, count, mode: "normal"|"daily" }
+
+  // NEW: per-question records so we can go back
+  answers: [], // [{ selectedIdx: number|null, isCorrect: boolean, timedOut: boolean }]
+  reviewing: false, // when reviewing from results, prevent changing answers
+
   isNavigating: false,
   currentRoute: "welcome",
-
-  answered: false,
-  correctIdx: null,
-
-  intendedRoute: null,
-
-  // Gurfah
-  gurfah: {
-    activeGroupId: null,
-    activeTab: "chat", // "chat" | "sets"
-  },
+  intendedRoute: null
 };
 
 /* =======================
@@ -74,21 +65,6 @@ function todayISODate() {
   return todayISO();
 }
 
-function formatTime(ts) {
-  try {
-    const d = new Date(ts);
-    return d.toLocaleString(undefined, {
-      year: "numeric",
-      month: "short",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  } catch {
-    return "";
-  }
-}
-
 /* =======================
    Progress storage
 ======================= */
@@ -101,7 +77,7 @@ function loadProgress() {
       streakCount: parsed.streakCount ?? 0,
       lastActiveDate: parsed.lastActiveDate ?? null,
       bestScores: parsed.bestScores ?? {},
-      lastAttempt: parsed.lastAttempt ?? null,
+      lastAttempt: parsed.lastAttempt ?? null
     };
   } catch {
     return { streakCount: 0, lastActiveDate: null, bestScores: {}, lastAttempt: null };
@@ -358,35 +334,6 @@ function icon(name) {
       );
     case "check":
       return wrap(`<path ${common} d="M20 6L9 17l-5-5"/>`);
-    case "users":
-      return wrap(
-        `<path ${common} d="M16 11a4 4 0 1 0-8 0 4 4 0 0 0 8 0z"/>` +
-          `<path ${common} d="M3 22a9 9 0 0 1 18 0"/>`
-      );
-    case "chat":
-      return wrap(
-        `<path ${common} d="M21 11.5a8 8 0 0 1-8 8H7l-4 3 1.2-4.6A8 8 0 1 1 21 11.5z"/>`
-      );
-    case "plus":
-      return wrap(`<path ${common} d="M12 5v14M5 12h14"/>`);
-    case "download":
-      return wrap(
-        `<path ${common} d="M12 3v12"/>` +
-          `<path ${common} d="M7 10l5 5 5-5"/>` +
-          `<path ${common} d="M5 21h14"/>`
-      );
-    case "upload":
-      return wrap(
-        `<path ${common} d="M12 21V9"/>` +
-          `<path ${common} d="M7 14l5-5 5 5"/>` +
-          `<path ${common} d="M5 3h14"/>`
-      );
-    case "trash":
-      return wrap(
-        `<path ${common} d="M3 6h18"/>` +
-          `<path ${common} d="M8 6V4h8v2"/>` +
-          `<path ${common} d="M6 6l1 16h10l1-16"/>`
-      );
     default:
       return wrap(`<circle ${common} cx="12" cy="12" r="9"/>`);
   }
@@ -463,6 +410,11 @@ function handleQuizKeys(e) {
     return;
   }
 
+  // allow A-D only if current question not answered (or not reviewing)
+  const rec = state.answers[state.index];
+  const canAnswer = !state.reviewing && !(rec && rec.selectedIdx !== undefined);
+  if (!canAnswer) return;
+
   const map = { a: 0, b: 1, c: 2, d: 3 };
   if (key in map) {
     const idx = map[key];
@@ -524,981 +476,18 @@ function requireUnlock(route) {
 }
 
 /* =======================
-   GURFAH (Local community hub)
-   - Groups
-   - Chat inside group
-   - Question set builder inside group
+   Quiz scoring from records
 ======================= */
-function gurfahDefaultState() {
-  return {
-    profile: { displayName: "Guest" },
-    groups: [],
-  };
+function computeScoreFromAnswers() {
+  return (state.answers || []).reduce((acc, r) => acc + (r && r.isCorrect ? 1 : 0), 0);
 }
 
-function loadGurfah() {
-  try {
-    const raw = localStorage.getItem(GURFAH_KEY);
-    if (!raw) return gurfahDefaultState();
-    const parsed = JSON.parse(raw);
-    if (!parsed || typeof parsed !== "object") return gurfahDefaultState();
-
-    const profile = parsed.profile && typeof parsed.profile === "object" ? parsed.profile : {};
-    const displayName = String(profile.displayName || "Guest").trim() || "Guest";
-
-    const groups = Array.isArray(parsed.groups) ? parsed.groups : [];
-    return {
-      profile: { displayName },
-      groups,
-    };
-  } catch {
-    return gurfahDefaultState();
-  }
-}
-
-function saveGurfah(data) {
-  localStorage.setItem(GURFAH_KEY, JSON.stringify(data));
-}
-
-function uid(prefix = "id") {
-  const base =
-    crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()) + "_" + Math.random().toString(16).slice(2);
-  return `${prefix}_${base}`;
-}
-
-function findGroup(data, groupId) {
-  return data.groups.find((g) => g.id === groupId) || null;
-}
-
-function ensureActiveGroup(data) {
-  if (data.groups.length === 0) return null;
-  if (state.gurfah.activeGroupId && findGroup(data, state.gurfah.activeGroupId)) {
-    return state.gurfah.activeGroupId;
-  }
-  state.gurfah.activeGroupId = data.groups[0].id;
-  return state.gurfah.activeGroupId;
-}
-
-function exportJsonDownload(obj, filename) {
-  const blob = new Blob([JSON.stringify(obj, null, 2)], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
-function renderGurfah() {
-  state.currentRoute = "gurfah";
-
-  const data = loadGurfah();
-  ensureActiveGroup(data);
-
-  const active = state.gurfah.activeGroupId ? findGroup(data, state.gurfah.activeGroupId) : null;
-  const tab = state.gurfah.activeTab || "chat";
-
-  app.innerHTML = `
-    <section class="card" style="margin-top:20px;">
-      <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap;">
-        <div>
-          <h2 style="margin:0; display:flex; align-items:center; gap:10px;">
-            ${icon("users")} Gurfah
-          </h2>
-          <p class="muted" style="margin:8px 0 0 0; line-height:1.6;">
-            Groups, chat, and question sets. Local-only for now. Export and move it later.
-          </p>
-        </div>
-
-        <div class="card" style="box-shadow:none; padding:12px; min-width:min(380px, 100%);">
-          <div class="grid" style="gap:10px;">
-            <label class="field" style="margin:0;">
-              <span>Your display name</span>
-              <input id="gf_name" type="text" value="${escapeHtml(data.profile.displayName)}" placeholder="Your name" />
-            </label>
-
-            <div style="display:flex; gap:10px; flex-wrap:wrap;">
-              <button id="gf_export" class="btn" type="button">
-                <span class="btn-inner">${icon("download")}Export</span>
-              </button>
-              <button id="gf_import" class="btn" type="button">
-                <span class="btn-inner">${icon("upload")}Import</span>
-              </button>
-              <button id="gf_reset" class="btn" type="button">
-                <span class="btn-inner">${icon("trash")}Reset</span>
-              </button>
-            </div>
-
-            <p class="muted" style="margin:0; font-size:12px;">
-              Export saves your groups as JSON. Import restores them.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <hr class="hr" />
-
-      <div class="grid" style="grid-template-columns: 1fr 2fr; gap:12px;">
-        <div class="card" style="box-shadow:none;">
-          <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
-            <h3 style="margin:0;">Groups</h3>
-            <button id="gf_new_group" class="btn" type="button" title="New group">
-              <span class="btn-inner">${icon("plus")}New</span>
-            </button>
-          </div>
-
-          <div id="gf_group_list" style="margin-top:12px;">
-            ${renderGurfahGroupList(data)}
-          </div>
-        </div>
-
-        <div class="card" style="box-shadow:none;">
-          ${
-            active
-              ? renderGurfahGroupPanel(active, tab, data.profile.displayName)
-              : `
-                <h3 style="margin:0;">No group yet</h3>
-                <p class="muted" style="margin-top:8px; line-height:1.6;">
-                  Create your first Gurfah group to start chatting and building question sets.
-                </p>
-                <button id="gf_make_first" class="primary" type="button" style="margin-top:10px;">
-                  <span class="btn-inner">${icon("plus")}Create a group</span>
-                </button>
-              `
-          }
-        </div>
-      </div>
-
-      <div id="gf_notice" class="muted" style="margin-top:12px;"></div>
-    </section>
-  `;
-
-  // widen layout on small screens
-  if (window.innerWidth <= 900) {
-    const grid = app.querySelector(".grid");
-    if (grid) grid.style.gridTemplateColumns = "1fr";
-  }
-
-  // Profile name save
-  const nameEl = app.querySelector("#gf_name");
-  if (nameEl) {
-    nameEl.addEventListener("change", () => {
-      const fresh = loadGurfah();
-      fresh.profile.displayName = (nameEl.value || "").trim() || "Guest";
-      saveGurfah(fresh);
-      showToast("Saved.");
-    });
-  }
-
-  // Export
-  const exportBtn = app.querySelector("#gf_export");
-  if (exportBtn) {
-    exportBtn.addEventListener("click", () => {
-      const fresh = loadGurfah();
-      exportJsonDownload(fresh, `masalah-gurfah-${todayISODate()}.json`);
-      showToast("Exported.");
-    });
-  }
-
-  // Import (file picker)
-  const importBtn = app.querySelector("#gf_import");
-  if (importBtn) {
-    importBtn.addEventListener("click", () => {
-      const input = document.createElement("input");
-      input.type = "file";
-      input.accept = "application/json";
-      input.onchange = async () => {
-        const file = input.files?.[0];
-        if (!file) return;
-
-        try {
-          const text = await file.text();
-          const parsed = JSON.parse(text);
-
-          // Validate minimal structure
-          const next = gurfahDefaultState();
-          if (parsed && typeof parsed === "object") {
-            if (parsed.profile && typeof parsed.profile === "object") {
-              next.profile.displayName = String(parsed.profile.displayName || "Guest").trim() || "Guest";
-            }
-            if (Array.isArray(parsed.groups)) {
-              next.groups = parsed.groups;
-            }
-          }
-
-          saveGurfah(next);
-          state.gurfah.activeGroupId = null;
-          state.gurfah.activeTab = "chat";
-          withTransition(renderGurfah);
-          showToast("Imported.");
-        } catch {
-          showToast("Import failed. Invalid JSON.");
-        }
-      };
-      input.click();
-    });
-  }
-
-  // Reset
-  const resetBtn = app.querySelector("#gf_reset");
-  if (resetBtn) {
-    resetBtn.addEventListener("click", () => {
-      const ok = confirm("Reset Gurfah? This clears groups and chats on this device.");
-      if (!ok) return;
-      localStorage.removeItem(GURFAH_KEY);
-      state.gurfah.activeGroupId = null;
-      state.gurfah.activeTab = "chat";
-      withTransition(renderGurfah);
-      showToast("Reset.");
-    });
-  }
-
-  // Create group buttons
-  const newGroupBtn = app.querySelector("#gf_new_group");
-  if (newGroupBtn) newGroupBtn.addEventListener("click", () => gfCreateGroupFlow());
-
-  const makeFirstBtn = app.querySelector("#gf_make_first");
-  if (makeFirstBtn) makeFirstBtn.addEventListener("click", () => gfCreateGroupFlow());
-
-  function gfCreateGroupFlow() {
-    const name = (prompt("Group name:") || "").trim();
-    if (!name) return;
-
-    const about = (prompt("Short description (optional):") || "").trim();
-
-    const fresh = loadGurfah();
-    const group = {
-      id: uid("grp"),
-      name,
-      about,
-      createdAt: Date.now(),
-      messages: [],
-      sets: [],
-    };
-    fresh.groups.unshift(group);
-    saveGurfah(fresh);
-
-    state.gurfah.activeGroupId = group.id;
-    state.gurfah.activeTab = "chat";
-    withTransition(renderGurfah);
-    showToast("Group created.");
-  }
-
-  // Group list interactions
-  app.querySelectorAll("[data-gf-open]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const gid = btn.getAttribute("data-gf-open");
-      state.gurfah.activeGroupId = gid;
-      state.gurfah.activeTab = "chat";
-      withTransition(renderGurfah);
-    });
-  });
-
-  app.querySelectorAll("[data-gf-del]").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const gid = btn.getAttribute("data-gf-del");
-      const ok = confirm("Delete this group? This also deletes its chat and sets on this device.");
-      if (!ok) return;
-
-      const fresh = loadGurfah();
-      fresh.groups = fresh.groups.filter((g) => g.id !== gid);
-      saveGurfah(fresh);
-
-      if (state.gurfah.activeGroupId === gid) state.gurfah.activeGroupId = null;
-      withTransition(renderGurfah);
-      showToast("Deleted.");
-    });
-  });
-
-  // Panel interactions if active group exists
-  if (active) {
-    // Tab switch
-    const chatTab = app.querySelector("#gf_tab_chat");
-    const setsTab = app.querySelector("#gf_tab_sets");
-    if (chatTab) {
-      chatTab.addEventListener("click", () => {
-        state.gurfah.activeTab = "chat";
-        withTransition(renderGurfah);
-      });
-    }
-    if (setsTab) {
-      setsTab.addEventListener("click", () => {
-        state.gurfah.activeTab = "sets";
-        withTransition(renderGurfah);
-      });
-    }
-
-    // Send chat
-    const sendBtn = app.querySelector("#gf_send");
-    const msgEl = app.querySelector("#gf_msg");
-    if (sendBtn && msgEl) {
-      const send = () => {
-        const text = (msgEl.value || "").trim();
-        if (!text) return;
-
-        const fresh = loadGurfah();
-        const g = findGroup(fresh, active.id);
-        if (!g) return;
-
-        g.messages = Array.isArray(g.messages) ? g.messages : [];
-        g.messages.push({
-          id: uid("msg"),
-          name: (fresh.profile.displayName || "Guest").trim() || "Guest",
-          text,
-          ts: Date.now(),
-        });
-
-        saveGurfah(fresh);
-        msgEl.value = "";
-        withTransition(renderGurfah);
-      };
-
-      sendBtn.addEventListener("click", send);
-      msgEl.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" && !e.shiftKey) {
-          e.preventDefault();
-          send();
-        }
-      });
-    }
-
-    // Clear chat
-    const clearChatBtn = app.querySelector("#gf_clear_chat");
-    if (clearChatBtn) {
-      clearChatBtn.addEventListener("click", () => {
-        const ok = confirm("Clear chat messages for this group?");
-        if (!ok) return;
-        const fresh = loadGurfah();
-        const g = findGroup(fresh, active.id);
-        if (!g) return;
-        g.messages = [];
-        saveGurfah(fresh);
-        withTransition(renderGurfah);
-        showToast("Chat cleared.");
-      });
-    }
-
-    // Create new set
-    const newSetBtn = app.querySelector("#gf_new_set");
-    if (newSetBtn) {
-      newSetBtn.addEventListener("click", () => {
-        state.gurfah.activeTab = "sets";
-        withTransition(() => renderGurfahSetBuilder(active.id));
-      });
-    }
-
-    // Open set
-    app.querySelectorAll("[data-gf-open-set]").forEach((b) => {
-      b.addEventListener("click", () => {
-        const setId = b.getAttribute("data-gf-open-set");
-        withTransition(() => renderGurfahSetViewer(active.id, setId));
-      });
-    });
-
-    // Delete set
-    app.querySelectorAll("[data-gf-del-set]").forEach((b) => {
-      b.addEventListener("click", (e) => {
-        e.stopPropagation();
-        const setId = b.getAttribute("data-gf-del-set");
-        const ok = confirm("Delete this set?");
-        if (!ok) return;
-
-        const fresh = loadGurfah();
-        const g = findGroup(fresh, active.id);
-        if (!g) return;
-        g.sets = Array.isArray(g.sets) ? g.sets : [];
-        g.sets = g.sets.filter((s) => s.id !== setId);
-        saveGurfah(fresh);
-        withTransition(renderGurfah);
-        showToast("Set deleted.");
-      });
-    });
-  }
-}
-
-function renderGurfahGroupList(data) {
-  if (!data.groups.length) {
-    return `<p class="muted" style="margin:0;">No groups yet. Create one.</p>`;
-  }
-
-  const activeId = state.gurfah.activeGroupId;
-
-  return `
-    <div class="grid" style="gap:10px;">
-      ${data.groups
-        .map((g) => {
-          const isActive = g.id === activeId;
-          const about = (g.about || "").trim();
-          const lastMsg = Array.isArray(g.messages) && g.messages.length ? g.messages[g.messages.length - 1] : null;
-
-          return `
-            <button
-              type="button"
-              class="card"
-              data-gf-open="${g.id}"
-              style="text-align:left; padding:12px; box-shadow:none; border-color:${
-                isActive ? "rgba(255,187,0,.45)" : "rgba(255,255,255,.10)"
-              };"
-            >
-              <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
-                <div>
-                  <div style="font-weight:950; letter-spacing:.2px;">${escapeHtml(g.name || "Untitled")}</div>
-                  <div class="muted" style="font-size:12px; margin-top:4px;">
-                    ${about ? escapeHtml(about) : "No description."}
-                  </div>
-                  <div class="muted" style="font-size:12px; margin-top:6px;">
-                    ${lastMsg ? `Last: ${escapeHtml(lastMsg.name || "")}` : "No chat yet."}
-                  </div>
-                </div>
-
-                <button class="btn" data-gf-del="${g.id}" type="button" style="padding:8px 10px; border-radius:12px;">
-                  ${icon("trash")}
-                </button>
-              </div>
-            </button>
-          `;
-        })
-        .join("")}
-    </div>
-  `;
-}
-
-function renderGurfahGroupPanel(group, tab, displayName) {
-  const chatOn = tab === "chat";
-  const setsOn = tab === "sets";
-
-  const msgs = Array.isArray(group.messages) ? group.messages : [];
-  const sets = Array.isArray(group.sets) ? group.sets : [];
-
-  const chatHtml = `
-    <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px; flex-wrap:wrap;">
-      <div>
-        <h3 style="margin:0;">${escapeHtml(group.name || "Group")}</h3>
-        <p class="muted" style="margin:6px 0 0 0; font-size:12px;">
-          You: <strong>${escapeHtml(displayName || "Guest")}</strong>
-        </p>
-      </div>
-
-      <div style="display:flex; gap:10px; flex-wrap:wrap;">
-        <button id="gf_new_set" class="btn" type="button">
-          <span class="btn-inner">${icon("plus")}New set</span>
-        </button>
-        <button id="gf_clear_chat" class="btn" type="button">
-          <span class="btn-inner">${icon("trash")}Clear chat</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="card" style="margin-top:12px; box-shadow:none; padding:12px;">
-      <div style="max-height: 360px; overflow:auto; display:grid; gap:10px;">
-        ${
-          msgs.length
-            ? msgs
-                .slice(-120)
-                .map((m) => {
-                  const isMe = (m.name || "") === (displayName || "");
-                  return `
-                    <div style="border:1px solid rgba(255,255,255,.10); background: rgba(255,255,255,.03); border-radius:14px; padding:10px 12px;">
-                      <div style="display:flex; justify-content:space-between; gap:10px; align-items:baseline;">
-                        <strong style="font-size:13px; color:${isMe ? "var(--gold)" : "var(--text)"};">
-                          ${escapeHtml(m.name || "Guest")}
-                        </strong>
-                        <span class="muted" style="font-size:11px;">${escapeHtml(formatTime(m.ts || 0))}</span>
-                      </div>
-                      <div style="margin-top:6px; white-space:pre-wrap; word-break:break-word;">
-                        ${escapeHtml(m.text || "")}
-                      </div>
-                    </div>
-                  `;
-                })
-                .join("")
-            : `<p class="muted" style="margin:0;">No messages yet. Start it.</p>`
-        }
-      </div>
-
-      <div class="hr"></div>
-
-      <div class="grid" style="gap:10px;">
-        <label class="field" style="margin:0;">
-          <span>Message</span>
-          <textarea id="gf_msg" rows="3" placeholder="Write and press Enter. Shift+Enter for new line."></textarea>
-        </label>
-
-        <div style="display:flex; justify-content:flex-end;">
-          <button id="gf_send" class="primary" type="button">
-            <span class="btn-inner">${icon("chat")}Send</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  `;
-
-  const setsHtml = `
-    <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px; flex-wrap:wrap;">
-      <div>
-        <h3 style="margin:0;">${escapeHtml(group.name || "Group")} Sets</h3>
-        <p class="muted" style="margin:6px 0 0 0; line-height:1.6;">
-          Build question sets here. Later, you can publish them into Mas’alah quizzes.
-        </p>
-      </div>
-
-      <button id="gf_new_set" class="primary" type="button">
-        <span class="btn-inner">${icon("plus")}Create set</span>
-      </button>
-    </div>
-
-    <div style="margin-top:12px; display:grid; gap:10px;">
-      ${
-        sets.length
-          ? sets
-              .slice()
-              .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0))
-              .map((s) => {
-                const qCount = Array.isArray(s.questions) ? s.questions.length : 0;
-                return `
-                  <button class="card" data-gf-open-set="${s.id}" type="button" style="text-align:left; padding:12px; box-shadow:none;">
-                    <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
-                      <div>
-                        <div style="font-weight:950;">${escapeHtml(s.title || "Untitled Set")}</div>
-                        <div class="muted" style="font-size:12px; margin-top:4px;">
-                          ${escapeHtml(s.category || "Unknown")} • ${escapeHtml(s.level || "Unknown")} • ${qCount} question${qCount === 1 ? "" : "s"}
-                        </div>
-                        <div class="muted" style="font-size:12px; margin-top:6px;">
-                          ${escapeHtml(formatTime(s.createdAt || 0))}
-                        </div>
-                      </div>
-
-                      <button class="btn" data-gf-del-set="${s.id}" type="button" style="padding:8px 10px; border-radius:12px;">
-                        ${icon("trash")}
-                      </button>
-                    </div>
-                  </button>
-                `;
-              })
-              .join("")
-          : `<p class="muted" style="margin:0;">No sets yet. Create one.</p>`
-      }
-    </div>
-  `;
-
-  return `
-    <div style="display:flex; justify-content:space-between; gap:10px; align-items:center; flex-wrap:wrap;">
-      <div class="nav" style="padding:6px; border-radius:999px;">
-        <button id="gf_tab_chat" class="nav-btn ${chatOn ? "active" : ""}" type="button">Chat</button>
-        <button id="gf_tab_sets" class="nav-btn ${setsOn ? "active" : ""}" type="button">Question Sets</button>
-      </div>
-
-      <div class="muted" style="font-size:12px;">
-        Local-only MVP
-      </div>
-    </div>
-
-    <div style="margin-top:12px;">
-      ${chatOn ? chatHtml : setsHtml}
-    </div>
-  `;
-}
-
-function renderGurfahSetBuilder(groupId) {
-  state.currentRoute = "gurfah"; // still inside Gurfah
-  state.gurfah.activeGroupId = groupId;
-  state.gurfah.activeTab = "sets";
-
-  const data = loadGurfah();
-  const group = findGroup(data, groupId);
-
-  if (!group) {
-    withTransition(renderGurfah);
-    return;
-  }
-
-  const categories = ["Qur’an", "Seerah", "Fiqh", "Tawheed", "Arabic", "Adhkaar"];
-  const levels = ["Beginner", "Intermediate", "Advanced"];
-
-  const draft = {
-    title: "",
-    category: "Fiqh",
-    level: "Beginner",
-    questions: [],
-  };
-
-  app.innerHTML = `
-    <section class="card" style="margin-top:20px;">
-      <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap;">
-        <div>
-          <h2 style="margin:0;">New Question Set</h2>
-          <p class="muted" style="margin:8px 0 0 0;">Group: <strong>${escapeHtml(group.name || "")}</strong></p>
-        </div>
-        <button id="gf_back" class="btn" type="button">Back</button>
-      </div>
-
-      <hr class="hr" />
-
-      <div class="grid" style="grid-template-columns: 1fr 1fr; gap:12px;">
-        <div class="card" style="box-shadow:none;">
-          <h3 style="margin:0;">Set details</h3>
-
-          <div class="grid" style="margin-top:12px;">
-            <label class="field">
-              <span>Title</span>
-              <input id="set_title" type="text" placeholder="e.g. Fiqh of Wudu" maxlength="80" />
-            </label>
-
-            <label class="field">
-              <span>Category</span>
-              <select id="set_category">
-                ${categories.map((c) => `<option>${escapeHtml(c)}</option>`).join("")}
-              </select>
-            </label>
-
-            <label class="field">
-              <span>Level</span>
-              <select id="set_level">
-                ${levels.map((l) => `<option>${escapeHtml(l)}</option>`).join("")}
-              </select>
-            </label>
-
-            <button id="add_q" class="btn" type="button">
-              <span class="btn-inner">${icon("plus")}Add a question</span>
-            </button>
-
-            <div id="q_count" class="muted" style="font-size:12px;">0 questions</div>
-          </div>
-        </div>
-
-        <div class="card" style="box-shadow:none;">
-          <h3 style="margin:0;">Questions</h3>
-          <div id="q_list" style="margin-top:12px; display:grid; gap:10px;">
-            <p class="muted" style="margin:0;">No questions yet.</p>
-          </div>
-        </div>
-      </div>
-
-      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
-        <button id="save_set" class="primary" type="button">Save set</button>
-        <button id="export_draft" class="btn" type="button">Export draft</button>
-      </div>
-
-      <div id="gf_builder_notice" class="muted" style="margin-top:10px;"></div>
-    </section>
-  `;
-
-  const backBtn = app.querySelector("#gf_back");
-  backBtn.addEventListener("click", () => withTransition(renderGurfah));
-
-  const elTitle = app.querySelector("#set_title");
-  const elCat = app.querySelector("#set_category");
-  const elLvl = app.querySelector("#set_level");
-  const elList = app.querySelector("#q_list");
-  const elCount = app.querySelector("#q_count");
-  const noticeEl = app.querySelector("#gf_builder_notice");
-
-  function notice(msg) {
-    noticeEl.textContent = msg || "";
-  }
-
-  function refreshQuestions() {
-    elCount.textContent = `${draft.questions.length} question${draft.questions.length === 1 ? "" : "s"}`;
-
-    if (!draft.questions.length) {
-      elList.innerHTML = `<p class="muted" style="margin:0;">No questions yet.</p>`;
-      return;
-    }
-
-    elList.innerHTML = draft.questions
-      .map((q, idx) => {
-        const correctLetter = String.fromCharCode(65 + (q.correctIndex || 0));
-        return `
-          <div class="card" style="box-shadow:none; padding:12px;">
-            <div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;">
-              <div style="min-width:0;">
-                <div style="font-weight:950;">Q${idx + 1}. ${escapeHtml(q.q || "")}</div>
-                <div class="muted" style="font-size:12px; margin-top:6px;">
-                  Correct: <strong>${correctLetter}</strong>
-                </div>
-              </div>
-              <div style="display:flex; gap:8px;">
-                <button class="btn" data-q-edit="${idx}" type="button" style="padding:8px 10px; border-radius:12px;">Edit</button>
-                <button class="btn" data-q-del="${idx}" type="button" style="padding:8px 10px; border-radius:12px;">Delete</button>
-              </div>
-            </div>
-          </div>
-        `;
-      })
-      .join("");
-
-    elList.querySelectorAll("[data-q-del]").forEach((b) => {
-      b.addEventListener("click", () => {
-        const i = Number(b.getAttribute("data-q-del"));
-        draft.questions.splice(i, 1);
-        refreshQuestions();
-      });
-    });
-
-    elList.querySelectorAll("[data-q-edit]").forEach((b) => {
-      b.addEventListener("click", () => {
-        const i = Number(b.getAttribute("data-q-edit"));
-        openQuestionEditor(i);
-      });
-    });
-  }
-
-  function openQuestionEditor(editIndex = null) {
-    const existing = editIndex !== null ? draft.questions[editIndex] : null;
-
-    const qObj = existing
-      ? JSON.parse(JSON.stringify(existing))
-      : {
-          q: "",
-          options: ["", "", "", ""],
-          correctIndex: 0,
-          explanation: "",
-        };
-
-    const modal = document.createElement("div");
-    modal.className = "diary-modal is-open";
-    modal.style.display = "flex";
-    modal.innerHTML = `
-      <div class="diary-modal-inner" role="dialog" aria-modal="true" aria-label="Question editor">
-        <div class="diary-modal-head">
-          <div>
-            <p class="diary-modal-date muted" style="margin:0;">Question editor</p>
-            <h3 class="diary-modal-title" style="margin:4px 0 0;">${editIndex === null ? "Add question" : "Edit question"}</h3>
-          </div>
-          <button class="btn" type="button" id="qe_close">Close</button>
-        </div>
-
-        <div class="diary-modal-body">
-          <div class="grid" style="gap:10px;">
-            <label class="field">
-              <span>Question</span>
-              <textarea id="qe_q" rows="3" placeholder="Write the question...">${escapeHtml(qObj.q)}</textarea>
-            </label>
-
-            ${[0, 1, 2, 3]
-              .map(
-                (i) => `
-                  <label class="field">
-                    <span>Option ${String.fromCharCode(65 + i)}</span>
-                    <input id="qe_opt_${i}" type="text" value="${escapeHtml(qObj.options[i] || "")}" placeholder="Option ${String.fromCharCode(
-                  65 + i
-                )}" />
-                  </label>
-                `
-              )
-              .join("")}
-
-            <label class="field">
-              <span>Correct option</span>
-              <select id="qe_correct">
-                <option value="0" ${qObj.correctIndex === 0 ? "selected" : ""}>A</option>
-                <option value="1" ${qObj.correctIndex === 1 ? "selected" : ""}>B</option>
-                <option value="2" ${qObj.correctIndex === 2 ? "selected" : ""}>C</option>
-                <option value="3" ${qObj.correctIndex === 3 ? "selected" : ""}>D</option>
-              </select>
-            </label>
-
-            <label class="field">
-              <span>Explanation</span>
-              <textarea id="qe_expl" rows="4" placeholder="Short explanation...">${escapeHtml(qObj.explanation || "")}</textarea>
-            </label>
-          </div>
-        </div>
-
-        <div class="diary-modal-actions" style="justify-content:space-between;">
-          <button class="btn" type="button" id="qe_cancel">Cancel</button>
-          <button class="primary" type="button" id="qe_save">Save</button>
-        </div>
-      </div>
-    `;
-
-    document.body.appendChild(modal);
-
-    const close = () => {
-      modal.remove();
-    };
-
-    modal.addEventListener("click", (e) => {
-      if (e.target === modal) close();
-    });
-
-    modal.querySelector("#qe_close").addEventListener("click", close);
-    modal.querySelector("#qe_cancel").addEventListener("click", close);
-
-    modal.querySelector("#qe_save").addEventListener("click", () => {
-      const qText = (modal.querySelector("#qe_q").value || "").trim();
-      const opts = [0, 1, 2, 3].map((i) => (modal.querySelector(`#qe_opt_${i}`).value || "").trim());
-      const correctIndex = Number(modal.querySelector("#qe_correct").value || "0");
-      const explanation = (modal.querySelector("#qe_expl").value || "").trim();
-
-      if (!qText) {
-        showToast("Question text is required.");
-        return;
-      }
-      if (opts.some((x) => !x)) {
-        showToast("All 4 options are required.");
-        return;
-      }
-
-      const payload = { q: qText, options: opts, correctIndex, explanation };
-      if (editIndex === null) {
-        draft.questions.push(payload);
-      } else {
-        draft.questions[editIndex] = payload;
-      }
-
-      refreshQuestions();
-      close();
-      showToast("Saved.");
-    });
-  }
-
-  app.querySelector("#add_q").addEventListener("click", () => openQuestionEditor(null));
-
-  app.querySelector("#export_draft").addEventListener("click", () => {
-    draft.title = (elTitle.value || "").trim();
-    draft.category = elCat.value;
-    draft.level = elLvl.value;
-
-    exportJsonDownload(
-      { type: "gurfah_set_draft", createdAt: Date.now(), groupId, draft },
-      `masalah-gurfah-set-draft-${todayISODate()}.json`
-    );
-    showToast("Draft exported.");
-  });
-
-  app.querySelector("#save_set").addEventListener("click", () => {
-    draft.title = (elTitle.value || "").trim();
-    draft.category = elCat.value;
-    draft.level = elLvl.value;
-
-    if (!draft.title) {
-      notice("Add a title for this set.");
-      return;
-    }
-    if (!draft.questions.length) {
-      notice("Add at least one question.");
-      return;
-    }
-
-    const fresh = loadGurfah();
-    const g = findGroup(fresh, groupId);
-    if (!g) return;
-
-    g.sets = Array.isArray(g.sets) ? g.sets : [];
-    g.sets.push({
-      id: uid("set"),
-      title: draft.title,
-      category: draft.category,
-      level: draft.level,
-      createdAt: Date.now(),
-      questions: draft.questions,
-    });
-
-    saveGurfah(fresh);
-    showToast("Set saved.");
-    withTransition(renderGurfah);
-  });
-
-  refreshQuestions();
-}
-
-function renderGurfahSetViewer(groupId, setId) {
-  state.currentRoute = "gurfah";
-  state.gurfah.activeGroupId = groupId;
-  state.gurfah.activeTab = "sets";
-
-  const data = loadGurfah();
-  const group = findGroup(data, groupId);
-  if (!group) return withTransition(renderGurfah);
-
-  const sets = Array.isArray(group.sets) ? group.sets : [];
-  const set = sets.find((s) => s.id === setId);
-  if (!set) return withTransition(renderGurfah);
-
-  const qList = Array.isArray(set.questions) ? set.questions : [];
-  const correctLetter = (i) => String.fromCharCode(65 + i);
-
-  app.innerHTML = `
-    <section class="card" style="margin-top:20px;">
-      <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap;">
-        <div>
-          <h2 style="margin:0;">${escapeHtml(set.title || "Set")}</h2>
-          <p class="muted" style="margin:8px 0 0 0;">
-            ${escapeHtml(set.category || "")} • ${escapeHtml(set.level || "")} • ${qList.length} question${qList.length === 1 ? "" : "s"}
-          </p>
-          <p class="muted" style="margin:6px 0 0 0; font-size:12px;">
-            Group: <strong>${escapeHtml(group.name || "")}</strong> • ${escapeHtml(formatTime(set.createdAt || 0))}
-          </p>
-        </div>
-
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          <button id="gv_back" class="btn" type="button">Back</button>
-          <button id="gv_export" class="btn" type="button">
-            <span class="btn-inner">${icon("download")}Export set</span>
-          </button>
-        </div>
-      </div>
-
-      <hr class="hr" />
-
-      <div style="display:grid; gap:10px;">
-        ${
-          qList.length
-            ? qList
-                .map((q, idx) => {
-                  return `
-                    <div class="card" style="box-shadow:none; padding:12px;">
-                      <div style="font-weight:950;">Q${idx + 1}. ${escapeHtml(q.q || "")}</div>
-                      <div style="margin-top:10px; display:grid; gap:8px;">
-                        ${q.options
-                          .map(
-                            (opt, i) => `
-                              <div class="card" style="box-shadow:none; padding:10px 12px; background: rgba(255,255,255,.02);">
-                                <span class="badge">${correctLetter(i)}</span>
-                                <span style="font-weight:${i === q.correctIndex ? "950" : "700"};">
-                                  ${escapeHtml(opt || "")}
-                                </span>
-                                ${
-                                  i === q.correctIndex
-                                    ? `<span class="muted" style="margin-left:8px; font-size:12px;">(Correct)</span>`
-                                    : ``
-                                }
-                              </div>
-                            `
-                          )
-                          .join("")}
-                      </div>
-
-                      ${
-                        q.explanation
-                          ? `<div class="feedback" style="margin-top:10px;">
-                               <strong>Explanation</strong>
-                               <div class="muted" style="margin-top:6px;">${escapeHtml(q.explanation)}</div>
-                             </div>`
-                          : ``
-                      }
-                    </div>
-                  `;
-                })
-                .join("")
-            : `<p class="muted" style="margin:0;">No questions inside this set.</p>`
-        }
-      </div>
-    </section>
-  `;
-
-  app.querySelector("#gv_back").addEventListener("click", () => withTransition(renderGurfah));
-  app.querySelector("#gv_export").addEventListener("click", () => {
-    exportJsonDownload(
-      { type: "gurfah_set", groupId, set },
-      `masalah-gurfah-set-${(set.title || "set").toLowerCase().replace(/\s+/g, "-")}-${todayISODate()}.json`
-    );
-    showToast("Exported set.");
-  });
+function initAnswerRecords() {
+  state.answers = new Array(state.quizQuestions.length).fill(null).map(() => ({
+    selectedIdx: undefined,
+    isCorrect: false,
+    timedOut: false
+  }));
 }
 
 /* =======================
@@ -1680,7 +669,7 @@ function renderHome() {
                 <span class="btn-inner">${icon("bolt")}Open daily</span>
               </button>
               <button class="btn" type="button" data-goto="welcome">Welcome</button>
-              <button class="btn" type="button" data-goto="gurfah">Gurfah</button>
+              <button class="btn" type="button" data-goto="calendar">Calendar</button>
             </div>
           </div>
 
@@ -1747,6 +736,7 @@ function renderHome() {
     const status = document.getElementById("status");
 
     state.lastSettings = { category, level, timed, count, mode: "normal" };
+    state.reviewing = false;
 
     try {
       const all = await loadQuestions();
@@ -1759,8 +749,8 @@ function renderHome() {
 
       state.quizQuestions = pickRandom(pool, Math.min(count, pool.length));
       state.index = 0;
-      state.score = 0;
       state.timed = timed;
+      initAnswerRecords();
 
       withTransition(renderQuiz);
     } catch (err) {
@@ -1834,6 +824,8 @@ async function renderDaily() {
     const status = document.getElementById("dailyStatus");
     const count = 20;
 
+    state.reviewing = false;
+
     try {
       const daily = await getOrCreateDailyQuiz(category, level, count);
 
@@ -1848,8 +840,8 @@ async function renderDaily() {
       state.lastSettings = { category, level, timed, count: chosen.length, mode: "daily" };
       state.quizQuestions = chosen;
       state.index = 0;
-      state.score = 0;
       state.timed = timed;
+      initAnswerRecords();
 
       withTransition(renderQuiz);
     } catch (err) {
@@ -1860,17 +852,19 @@ async function renderDaily() {
 
 /* =======================
    QUIZ
-   - Prev navigation enabled
 ======================= */
 function renderQuiz() {
   state.currentRoute = "quiz";
-  state.answered = false;
 
   const total = state.quizQuestions.length;
   const q = state.quizQuestions[state.index];
-  state.correctIdx = q.correctIndex;
+  const rec = state.answers[state.index];
+  const answeredAlready = rec && rec.selectedIdx !== undefined;
 
+  const scoreNow = computeScoreFromAnswers();
   const progressPct = Math.round(((state.index + 1) / total) * 100);
+
+  const canAnswer = !state.reviewing && !answeredAlready;
 
   app.innerHTML = `
     <section class="card" style="margin-top:20px;">
@@ -1888,21 +882,23 @@ function renderQuiz() {
       <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
         <div>
           <h2 style="margin:0;">Question ${state.index + 1} / ${total}</h2>
-          <p class="muted" style="margin:6px 0 0 0;">Score: ${state.score}</p>
+          <p class="muted" style="margin:6px 0 0 0;">Score: ${scoreNow}</p>
           ${
-            state.lastSettings?.mode === "daily"
-              ? `<p class="muted" style="margin:6px 0 0 0;">Mode: Today’s Quiz</p>`
-              : ``
+            state.reviewing
+              ? `<p class="muted" style="margin:6px 0 0 0;">Review mode</p>`
+              : state.lastSettings?.mode === "daily"
+                ? `<p class="muted" style="margin:6px 0 0 0;">Mode: Today’s Quiz</p>`
+                : ``
           }
         </div>
 
         ${
-          state.timed
+          state.timed && canAnswer
             ? `<div style="min-width:220px;">
                  <div class="muted">Time left: <strong id="timeLeft">${state.secondsPerQuestion}</strong>s</div>
                  <div class="timeTrack"><div id="timeBar" class="timeBar"></div></div>
                </div>`
-            : `<div class="muted">Practice mode</div>`
+            : `<div class="muted">${state.timed ? "Timer paused (answered)" : "Practice mode"}</div>`
         }
       </div>
 
@@ -1914,7 +910,7 @@ function renderQuiz() {
         ${q.options
           .map(
             (opt, idx) => `
-              <button class="optionBtn" data-idx="${idx}" type="button">
+              <button class="optionBtn" data-idx="${idx}" type="button" ${canAnswer ? "" : "disabled"}>
                 <span class="badge">${String.fromCharCode(65 + idx)}</span>
                 <span>${opt}</span>
               </button>
@@ -1926,53 +922,97 @@ function renderQuiz() {
       <div id="feedback" class="feedback" style="display:none;"></div>
 
       <div style="display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;">
-        <button id="quitBtn" class="btn" type="button">Quit</button>
-        <button id="prevBtn" class="btn" ${state.index === 0 ? "disabled" : ""} type="button">Prev</button>
-        <button id="nextBtn" class="btn" style="display:none;" type="button">Next</button>
+        <button id="quitBtn" class="btn" type="button">${state.reviewing ? "Back to Results" : "Quit"}</button>
+        <button id="prevBtn" class="btn" type="button" ${state.index === 0 ? "disabled" : ""}>Prev</button>
+        <button id="nextBtn" class="btn" type="button" style="display:none;">Next</button>
       </div>
-
-      <p class="muted" style="margin:10px 0 0 0; font-size:12px;">
-        Tip: Use A/B/C/D keys. Enter goes Next after answering.
-      </p>
     </section>
   `;
 
   document.getElementById("quitBtn").addEventListener("click", () => {
     clearTimer();
+    if (state.reviewing) {
+      withTransition(renderResults);
+      return;
+    }
     go("home");
   });
 
-  const prevBtn = document.getElementById("prevBtn");
-  prevBtn.addEventListener("click", () => {
-    if (state.index === 0) return;
+  document.getElementById("prevBtn").addEventListener("click", () => {
     clearTimer();
+    if (state.index === 0) return;
     state.index -= 1;
     withTransition(renderQuiz);
   });
-  if (state.index === 0) {
-    prevBtn.disabled = true;
-    prevBtn.style.opacity = "0.6";
-    prevBtn.style.pointerEvents = "none";
-  }
 
   document.querySelectorAll(".optionBtn").forEach((btn) => {
     btn.addEventListener("click", () => {
+      if (!canAnswer) return;
       const selected = Number(btn.dataset.idx);
       showFeedback(selected);
     });
   });
 
-  if (state.timed) startTimer();
+  // If already answered, show stored feedback and highlight
+  if (answeredAlready) {
+    paintFeedbackFromRecord(q, rec);
+    showNextButtonLabel();
+  } else {
+    if (state.timed) startTimer();
+  }
+}
+
+function paintFeedbackFromRecord(q, rec) {
+  const correct = q.correctIndex;
+
+  document.querySelectorAll(".optionBtn").forEach((btn) => {
+    const idx = Number(btn.dataset.idx);
+    if (idx === correct) btn.classList.add("correct");
+    if (rec.selectedIdx !== null && idx === rec.selectedIdx && idx !== correct) btn.classList.add("wrong");
+  });
+
+  const feedback = document.getElementById("feedback");
+  feedback.style.display = "block";
+  const headline = rec.timedOut ? "Time up." : rec.isCorrect ? "Correct." : "Incorrect.";
+  feedback.innerHTML = `
+    <strong>${headline}</strong>
+    <div class="muted" style="margin-top:6px;">${q.explanation || ""}</div>
+  `;
+}
+
+function showNextButtonLabel() {
+  const nextBtn = document.getElementById("nextBtn");
+  if (!nextBtn) return;
+  nextBtn.style.display = "inline-block";
+  nextBtn.textContent = state.index === state.quizQuestions.length - 1 ? "See Results" : "Next";
+  nextBtn.onclick = () => {
+    clearTimer();
+    if (state.index >= state.quizQuestions.length - 1) {
+      withTransition(renderResults);
+      return;
+    }
+    state.index += 1;
+    withTransition(renderQuiz);
+  };
 }
 
 function showFeedback(selectedIdx, meta = {}) {
-  if (state.answered) return;
-  state.answered = true;
+  // guard: only first-time answering
+  const rec = state.answers[state.index];
+  if (!rec || rec.selectedIdx !== undefined) return;
 
   clearTimer();
 
   const q = state.quizQuestions[state.index];
   const correct = q.correctIndex;
+
+  const isCorrect = selectedIdx === correct;
+  const timedOut = meta.reason === "timeout";
+
+  // store record
+  rec.selectedIdx = selectedIdx;
+  rec.isCorrect = isCorrect;
+  rec.timedOut = timedOut;
 
   document.querySelectorAll(".optionBtn").forEach((btn) => {
     btn.disabled = true;
@@ -1981,98 +1021,71 @@ function showFeedback(selectedIdx, meta = {}) {
     if (selectedIdx !== null && idx === selectedIdx && idx !== correct) btn.classList.add("wrong");
   });
 
-  const isCorrect = selectedIdx === correct;
-  if (isCorrect) state.score += 1;
-
-  if (meta.reason === "timeout") {
+  if (timedOut) {
     vibrate(20);
   } else {
     vibrate(isCorrect ? 15 : [10, 30, 10]);
   }
 
-  // Store per-question attempt info for Results review
-  q.__attempt = {
-    selectedIndex: selectedIdx,
-    correctIndex: correct,
-    isCorrect,
-    at: Date.now(),
-  };
-
   const feedback = document.getElementById("feedback");
   feedback.style.display = "block";
   feedback.innerHTML = `
-    <strong>${meta.reason === "timeout" ? "Time up." : isCorrect ? "Correct." : "Incorrect."}</strong>
+    <strong>${timedOut ? "Time up." : isCorrect ? "Correct." : "Incorrect."}</strong>
     <div class="muted" style="margin-top:6px;">${q.explanation || ""}</div>
   `;
 
-  const nextBtn = document.getElementById("nextBtn");
-  nextBtn.style.display = "inline-block";
-  nextBtn.textContent = state.index === state.quizQuestions.length - 1 ? "See Results" : "Next";
-
-  nextBtn.onclick = () => {
-    feedback.style.display = "none";
-    state.index += 1;
-
-    if (state.index >= state.quizQuestions.length) {
-      withTransition(renderResults);
-      return;
-    }
-    withTransition(renderQuiz);
-  };
+  showNextButtonLabel();
 }
 
 /* =======================
    RESULTS
-   - Wrong questions bolded
-   - Review explanations with jump buttons
 ======================= */
 function renderResults() {
   state.currentRoute = "results";
   clearTimer();
 
   const total = state.quizQuestions.length;
-  const percent = Math.round((state.score / total) * 100);
+  const score = computeScoreFromAnswers();
+  const percent = total ? Math.round((score / total) * 100) : 0;
 
-  const progress = loadProgress();
-  updateStreak(progress);
+  // Save progress only if not reviewing
+  if (!state.reviewing) {
+    const progress = loadProgress();
+    updateStreak(progress);
 
-  const category = state.lastSettings?.category || "Unknown";
-  const level = state.lastSettings?.level || "Unknown";
-  const key = `${category}|${level}`;
+    const category = state.lastSettings?.category || "Unknown";
+    const level = state.lastSettings?.level || "Unknown";
+    const key = `${category}|${level}`;
 
-  const prevBest = progress.bestScores[key] ?? 0;
-  progress.bestScores[key] = Math.max(prevBest, percent);
+    const prevBest = progress.bestScores[key] ?? 0;
+    progress.bestScores[key] = Math.max(prevBest, percent);
 
-  progress.lastAttempt = { date: todayISO(), category, level, score: state.score, total, percent };
-  saveProgress(progress);
+    progress.lastAttempt = { date: todayISO(), category, level, score, total, percent };
+    saveProgress(progress);
+  }
 
-  const reviewRows = state.quizQuestions
-    .map((q, idx) => {
-      const a = q.__attempt;
-      const isWrong = a && a.selectedIndex !== null && a.isCorrect === false;
-      const timedOut = a && a.selectedIndex === null;
-      const label = timedOut ? "Timed out" : isWrong ? "Wrong" : a?.isCorrect ? "Correct" : "Unanswered";
-      const weight = isWrong || timedOut ? "950" : "800";
-
+  // Build review list. Wrong ones bolded.
+  const items = state.quizQuestions
+    .map((q, i) => {
+      const rec = state.answers[i];
+      const correct = !!(rec && rec.isCorrect);
+      const answered = rec && rec.selectedIdx !== undefined;
+      const label = answered ? (correct ? "Correct" : "Wrong") : "Unanswered";
+      const title = correct ? q.question : `<strong>${q.question}</strong>`;
       return `
-        <button type="button" class="card" data-review="${idx}" style="box-shadow:none; padding:12px; text-align:left;">
-          <div style="display:flex; justify-content:space-between; gap:10px; align-items:baseline;">
-            <div style="font-weight:${weight};">
-              Q${idx + 1}. ${escapeHtml(q.question || "")}
-            </div>
-            <span class="muted" style="font-size:12px;">${label}</span>
+        <button class="diary-item" type="button" data-review-index="${i}" style="cursor:pointer;">
+          <div class="diary-item-top">
+            <span class="diary-date">Q${i + 1}</span>
+            <span class="diary-title">${label}</span>
           </div>
-          ${
-            q.explanation
-              ? `<div class="muted" style="margin-top:6px; font-size:12px; line-height:1.45;">
-                   ${escapeHtml(String(q.explanation).slice(0, 140))}${String(q.explanation).length > 140 ? "…" : ""}
-                 </div>`
-              : ``
-          }
+          <div class="diary-preview muted">${title}</div>
         </button>
       `;
     })
     .join("");
+
+  const category = state.lastSettings?.category || "Unknown";
+  const level = state.lastSettings?.level || "Unknown";
 
   app.innerHTML = `
     <section class="card" style="margin-top:20px;">
@@ -2080,24 +1093,21 @@ function renderResults() {
       <p class="muted">Score</p>
 
       <div style="font-size:34px; font-weight:950; margin:10px 0;">
-        ${state.score} / ${total} (${percent}%)
-      </div>
-
-      <div class="card" style="margin-top:12px; box-shadow:none;">
-        <p class="muted" style="margin:0 0 8px 0;">Review</p>
-        <p class="muted" style="margin:0 0 10px 0; font-size:12px;">
-          Wrong (and timed-out) questions are bold. Tap any question to review explanation.
-        </p>
-        <div style="display:grid; gap:10px;">
-          ${reviewRows || `<p class="muted" style="margin:0;">No review data yet.</p>`}
-        </div>
+        ${score} / ${total} (${percent}%)
       </div>
 
       <div class="card" style="margin-top:12px; box-shadow:none;">
         <p class="muted" style="margin:0 0 8px 0;">Share</p>
-        <textarea id="shareText" rows="3">I scored ${state.score}/${total} in Mas'alah. ${category} (${level}). Can you beat that?</textarea>
+        <textarea id="shareText" rows="3">I scored ${score}/${total} in Mas'alah. ${category} (${level}). Can you beat that?</textarea>
         <button id="copyBtn" class="btn" style="margin-top:10px;" type="button">Copy</button>
         <p id="copyStatus" class="muted" style="margin-top:8px;"></p>
+      </div>
+
+      <div class="card" style="margin-top:12px; box-shadow:none;">
+        <p class="muted" style="margin:0 0 8px 0;">Review (wrong questions are bold)</p>
+        <div class="diary-list">
+          ${items || `<p class="muted">No questions to review.</p>`}
+        </div>
       </div>
 
       <div style="display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;">
@@ -2107,15 +1117,6 @@ function renderResults() {
       </div>
     </section>
   `;
-
-  // review jump
-  app.querySelectorAll("[data-review]").forEach((b) => {
-    b.addEventListener("click", () => {
-      const idx = Number(b.getAttribute("data-review"));
-      state.index = Math.max(0, Math.min(idx, state.quizQuestions.length - 1));
-      withTransition(renderQuizReview);
-    });
-  });
 
   document.getElementById("copyBtn").addEventListener("click", async () => {
     const text = document.getElementById("shareText").value;
@@ -2130,6 +1131,9 @@ function renderResults() {
   document.getElementById("tryAgainBtn").addEventListener("click", async () => {
     const s = state.lastSettings;
     if (!s) return go("home");
+
+    state.reviewing = false;
+
     if (s.mode === "daily") return go("daily");
 
     const all = await loadQuestions();
@@ -2138,117 +1142,25 @@ function renderResults() {
 
     state.quizQuestions = chosen;
     state.index = 0;
-    state.score = 0;
     state.timed = s.timed;
+    initAnswerRecords();
 
     withTransition(renderQuiz);
   });
 
   document.getElementById("progressBtn").addEventListener("click", () => go("progress"));
   document.getElementById("homeBtn").addEventListener("click", () => go("home"));
-}
 
-// Review mode: allow prev/next and show explanation without changing score
-function renderQuizReview() {
-  state.currentRoute = "quiz";
-
-  const total = state.quizQuestions.length;
-  const q = state.quizQuestions[state.index];
-  const a = q.__attempt || null;
-
-  const correct = q.correctIndex;
-  const selected = a ? a.selectedIndex : null;
-
-  const progressPct = Math.round(((state.index + 1) / total) * 100);
-
-  app.innerHTML = `
-    <section class="card" style="margin-top:20px;">
-      <div class="quiz-progress">
-        <div class="muted" style="display:flex; justify-content:space-between; gap:10px; margin-bottom:8px;">
-          <span>Review ${state.index + 1} of ${total}</span>
-          <span>${progressPct}%</span>
-        </div>
-        <div class="quiz-progress-bar">
-          <div class="quiz-progress-fill" style="width:${progressPct}%"></div>
-        </div>
-      </div>
-
-      <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
-        <div>
-          <h2 style="margin:0;">Review</h2>
-          <p class="muted" style="margin:6px 0 0 0;">Tap Prev/Next to browse explanations.</p>
-        </div>
-        <div class="muted" style="font-size:12px;">Score saved already</div>
-      </div>
-
-      <hr class="hr" />
-
-      <h3 style="margin-top:0;">${escapeHtml(q.question || "")}</h3>
-
-      <div class="grid">
-        ${q.options
-          .map((opt, idx) => {
-            const isCorrect = idx === correct;
-            const isChosenWrong = selected !== null && idx === selected && idx !== correct;
-            const cls = isCorrect ? "optionBtn correct" : isChosenWrong ? "optionBtn wrong" : "optionBtn";
-            return `
-              <div class="${cls}" style="cursor:default;">
-                <span class="badge">${String.fromCharCode(65 + idx)}</span>
-                <span>${escapeHtml(opt)}</span>
-              </div>
-            `;
-          })
-          .join("")}
-      </div>
-
-      <div class="feedback" style="margin-top:12px;">
-        <strong>
-          ${
-            selected === null
-              ? "Timed out."
-              : selected === correct
-              ? "Correct."
-              : "Incorrect."
-          }
-        </strong>
-        <div class="muted" style="margin-top:6px;">${escapeHtml(q.explanation || "")}</div>
-      </div>
-
-      <div style="display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;">
-        <button id="backResults" class="btn" type="button">Back to Results</button>
-        <button id="prevReview" class="btn" type="button" ${state.index === 0 ? "disabled" : ""}>Prev</button>
-        <button id="nextReview" class="btn" type="button" ${state.index === total - 1 ? "disabled" : ""}>Next</button>
-      </div>
-    </section>
-  `;
-
-  app.querySelector("#backResults").addEventListener("click", () => withTransition(renderResults));
-
-  const prevBtn = app.querySelector("#prevReview");
-  const nextBtn = app.querySelector("#nextReview");
-
-  prevBtn.addEventListener("click", () => {
-    if (state.index === 0) return;
-    state.index -= 1;
-    withTransition(renderQuizReview);
+  // click to review question
+  app.querySelectorAll("[data-review-index]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const i = Number(btn.dataset.reviewIndex);
+      if (!Number.isFinite(i)) return;
+      state.index = i;
+      state.reviewing = true;
+      withTransition(renderQuiz);
+    });
   });
-
-  nextBtn.addEventListener("click", () => {
-    if (state.index >= total - 1) return;
-    state.index += 1;
-    withTransition(renderQuizReview);
-  });
-
-  if (state.index === 0) {
-    prevBtn.disabled = true;
-    prevBtn.style.opacity = "0.6";
-    prevBtn.style.pointerEvents = "none";
-  }
-  if (state.index === total - 1) {
-    nextBtn.disabled = true;
-    nextBtn.style.opacity = "0.6";
-    nextBtn.style.pointerEvents = "none";
-  }
 }
 
 /* =======================
@@ -2418,19 +1330,6 @@ function renderFAQ() {
                 </div>
               </details>
 
-              <details class="faq-item">
-                <summary>
-                  <span class="faq-q">
-                    <span class="faq-dot">${icon("users")}</span>
-                    What is Gurfah?
-                  </span>
-                  <span class="faq-chevron">${icon("check")}</span>
-                </summary>
-                <div class="faq-a">
-                  Gurfah is the community space. Create groups, chat, and build question sets. It is local-only in this version.
-                </div>
-              </details>
-
             </div>
           </div>
 
@@ -2446,9 +1345,6 @@ function renderFAQ() {
                 </button>
                 <button class="btn" type="button" data-goto="home">
                   <span class="btn-inner">${icon("target")}Open home</span>
-                </button>
-                <button class="btn" type="button" data-goto="gurfah">
-                  <span class="btn-inner">${icon("users")}Open Gurfah</span>
                 </button>
               </div>
             </div>
@@ -2477,7 +1373,7 @@ function formatMoney(n, currency) {
   return new Intl.NumberFormat(undefined, {
     style: "currency",
     currency: currency || "NGN",
-    maximumFractionDigits: 2,
+    maximumFractionDigits: 2
   }).format(num);
 }
 
@@ -2687,7 +1583,6 @@ function renderZakat() {
 
 /* =======================
    Private Diary (Local)
-   (Your existing diary code goes here unchanged)
 ======================= */
 function loadDiary() {
   try {
@@ -2712,16 +1607,494 @@ function escapeHtml(s) {
     .replaceAll("'", "&#039;");
 }
 
-/* NOTE:
-   Your diary, lock, calendar functions can remain as you already have them.
-   Keep your existing:
-   - renderDiary()
-   - renderLock()
-   - renderCalendar() + renderHijriMonth()
-   - renderFAQ()
-   - calendar click listener
-   - footer year
-*/
+function renderDiaryList(entries) {
+  if (!entries.length) {
+    return `<p class="muted">No entries yet. Write something small today. Consistency beats volume.</p>`;
+  }
+
+  const sorted = [...entries].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+  return `
+    <div class="diary-list">
+      ${sorted
+        .map((e) => {
+          const date = escapeHtml(e.date || "");
+          const title = escapeHtml(e.title || "Untitled");
+          const preview = escapeHtml((e.text || "").slice(0, 140));
+          return `
+            <button class="diary-item" type="button" data-diary-open="${e.id}">
+              <div class="diary-item-top">
+                <span class="diary-date">${date}</span>
+                <span class="diary-title">${title}</span>
+              </div>
+              <div class="diary-preview muted">${preview}${(e.text || "").length > 140 ? "…" : ""}</div>
+            </button>
+          `;
+        })
+        .join("")}
+    </div>
+  `;
+}
+
+function renderDiary() {
+  state.currentRoute = "diary";
+
+  const entries = loadDiary();
+
+  app.innerHTML = `
+    <section class="card">
+      <div class="card-head">
+        <h2>Private Diary</h2>
+        <p class="muted">Your personal rant page.</p>
+      </div>
+
+      <div class="diary-grid">
+        <div class="diary-box">
+          <div class="diary-formhead">
+            <h3 class="diary-subtitle">New entry</h3>
+            <span class="muted diary-small">Date: <strong>${todayISODate()}</strong></span>
+          </div>
+
+          <div class="field">
+            <label class="label">Title (optional)</label>
+            <input id="diary_title" class="input" placeholder="A short headline..." maxlength="80" />
+          </div>
+
+          <div class="field">
+            <label class="label">Your day</label>
+            <textarea id="diary_text" class="textarea" placeholder="Write freely. No one else sees this." rows="10" maxlength="4000"></textarea>
+            <div class="diary-meta">
+              <span class="muted" id="diary_count">0 / 4000</span>
+              <button id="diary_insert_prompt" class="btn mini" type="button">Add prompts</button>
+            </div>
+          </div>
+
+          <div class="diary-actions">
+            <button id="diary_save" class="btn primary" type="button">Save entry</button>
+            <button id="diary_clear" class="btn" type="button">Clear</button>
+            <button id="diary_export" class="btn" type="button">Export</button>
+          </div>
+
+          <div id="diary_notice" class="diary-notice" aria-live="polite"></div>
+        </div>
+
+        <div class="diary-box">
+          <div class="diary-formhead">
+            <h3 class="diary-subtitle">Your entries</h3>
+          </div>
+
+          <div id="diary_list">
+            ${renderDiaryList(entries)}
+          </div>
+        </div>
+      </div>
+
+      <div class="diary-modal" id="diary_modal" aria-hidden="true">
+        <div class="diary-modal-inner" role="dialog" aria-modal="true" aria-label="Diary entry">
+          <div class="diary-modal-head">
+            <div>
+              <p class="diary-modal-date muted" id="diary_modal_date"></p>
+              <h3 class="diary-modal-title" id="diary_modal_title"></h3>
+            </div>
+            <button class="btn" id="diary_modal_close" type="button">Close</button>
+          </div>
+
+          <div class="diary-modal-body">
+            <pre class="diary-modal-text" id="diary_modal_text"></pre>
+          </div>
+
+          <div class="diary-modal-actions">
+            <button class="btn danger" id="diary_delete" type="button">Delete entry</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  `;
+
+  const elTitle = app.querySelector("#diary_title");
+  const elText = app.querySelector("#diary_text");
+  const elCount = app.querySelector("#diary_count");
+  const elNotice = app.querySelector("#diary_notice");
+  const elList = app.querySelector("#diary_list");
+
+  const elModal = app.querySelector("#diary_modal");
+  const elModalDate = app.querySelector("#diary_modal_date");
+  const elModalTitle = app.querySelector("#diary_modal_title");
+  const elModalText = app.querySelector("#diary_modal_text");
+  const elModalClose = app.querySelector("#diary_modal_close");
+  const elDelete = app.querySelector("#diary_delete");
+
+  let openedId = null;
+
+  function setNotice(msg, kind) {
+    elNotice.textContent = msg || "";
+    elNotice.classList.remove("is-warn", "is-good");
+    if (kind === "warn") elNotice.classList.add("is-warn");
+    if (kind === "good") elNotice.classList.add("is-good");
+  }
+
+  function refreshList() {
+    const latest = loadDiary();
+    elList.innerHTML = renderDiaryList(latest);
+  }
+
+  function updateCount() {
+    elCount.textContent = `${(elText.value || "").length} / 4000`;
+  }
+
+  updateCount();
+  elText.addEventListener("input", updateCount);
+
+  app.querySelector("#diary_insert_prompt").addEventListener("click", () => {
+    const prompts =
+      `\n\nQuick prompts:\n` +
+      `- One thing I’m grateful for today:\n` +
+      `- One thing I learned today:\n` +
+      `- One mistake I won’t repeat:\n` +
+      `- One small win:\n` +
+      `- One thing to improve tomorrow:\n`;
+    elText.value = (elText.value || "") + prompts;
+    updateCount();
+    elText.focus();
+  });
+
+  app.querySelector("#diary_clear").addEventListener("click", () => {
+    elTitle.value = "";
+    elText.value = "";
+    updateCount();
+    setNotice("Cleared.", "good");
+  });
+
+  app.querySelector("#diary_save").addEventListener("click", () => {
+    const title = (elTitle.value || "").trim();
+    const text = (elText.value || "").trim();
+
+    if (!text) {
+      setNotice("Write something first.", "warn");
+      return;
+    }
+
+    const entriesNow = loadDiary();
+    const entry = {
+      id: crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()) + "_" + Math.random().toString(16).slice(2),
+      date: todayISODate(),
+      title: title || "Untitled",
+      text,
+      createdAt: Date.now()
+    };
+
+    entriesNow.push(entry);
+    saveDiary(entriesNow);
+
+    elTitle.value = "";
+    elText.value = "";
+    updateCount();
+
+    setNotice("Saved on this device.", "good");
+    refreshList();
+  });
+
+  app.querySelector("#diary_export").addEventListener("click", () => {
+    const data = loadDiary();
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `masalah-diary-${todayISODate()}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    URL.revokeObjectURL(url);
+    setNotice("Exported.", "good");
+  });
+
+  function openModal(entry) {
+    openedId = entry.id;
+    elModalDate.textContent = entry.date || "";
+    elModalTitle.textContent = entry.title || "Untitled";
+    elModalText.textContent = entry.text || "";
+
+    elModal.classList.add("is-open");
+    elModal.setAttribute("aria-hidden", "false");
+  }
+
+  function closeModal() {
+    openedId = null;
+    elModal.classList.remove("is-open");
+    elModal.setAttribute("aria-hidden", "true");
+  }
+
+  elModalClose.addEventListener("click", closeModal);
+
+  elModal.addEventListener("click", (e) => {
+    if (e.target === elModal) closeModal();
+  });
+
+  // open entry (event delegation)
+  app.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-diary-open]");
+    if (!btn) return;
+
+    const id = btn.getAttribute("data-diary-open");
+    const data = loadDiary();
+    const entry = data.find((x) => x.id === id);
+    if (!entry) return;
+
+    openModal(entry);
+  });
+
+  elDelete.addEventListener("click", () => {
+    if (!openedId) return;
+
+    const data = loadDiary();
+    const next = data.filter((x) => x.id !== openedId);
+    saveDiary(next);
+
+    closeModal();
+    refreshList();
+    setNotice("Deleted.", "good");
+  });
+}
+
+/* =======================
+   Lock screen
+======================= */
+function renderLock() {
+  state.currentRoute = "lock";
+
+  const pinExists = hasPin();
+  const unlocked = isUnlocked();
+  const intended = state.intendedRoute || "home";
+
+  app.innerHTML = `
+    <section class="card">
+      <div class="card-head">
+        <h2>Lock</h2>
+        <p class="muted">Protect Diary and Progress on this device.</p>
+      </div>
+
+      <div class="lock-box">
+        <div class="lock-status">
+          <span class="pill ${unlocked ? "pill-good" : "pill-warn"}">
+            ${unlocked ? "Unlocked" : "Locked"}
+          </span>
+          <span class="muted">
+            ${pinExists ? "PIN is set" : "No PIN yet. Set one now."}
+          </span>
+        </div>
+
+        <div class="field">
+          <label class="label">${pinExists ? "Enter PIN" : "Create a PIN (4-8 digits)"}</label>
+          <input id="lock_pin" class="input" inputmode="numeric" autocomplete="off" placeholder="••••" maxlength="8" />
+          <p class="muted small">Digits only. Keep it simple.</p>
+        </div>
+
+        ${
+          pinExists
+            ? `
+              <div class="lock-actions">
+                <button id="lock_unlock" class="btn primary" type="button">Unlock</button>
+                <button id="lock_locknow" class="btn" type="button">Lock now</button>
+                <button id="lock_change" class="btn" type="button">Change PIN</button>
+              </div>
+            `
+            : `
+              <div class="lock-actions">
+                <button id="lock_set" class="btn primary" type="button">Set PIN</button>
+              </div>
+            `
+        }
+
+        <div id="lock_notice" class="lock-notice" aria-live="polite"></div>
+
+        <div class="lock-foot muted">
+          <p>Unlocked sessions expire automatically (30 minutes).</p>
+          <p>If you clear browser data, your PIN and diary entries can be lost.</p>
+          <p class="muted">After unlocking, you will be taken to: <strong>${intended}</strong></p>
+        </div>
+      </div>
+    </section>
+  `;
+
+  const pinEl = app.querySelector("#lock_pin");
+  const noticeEl = app.querySelector("#lock_notice");
+
+  function notice(msg, kind) {
+    noticeEl.textContent = msg || "";
+    noticeEl.classList.remove("is-warn", "is-good");
+    if (kind === "warn") noticeEl.classList.add("is-warn");
+    if (kind === "good") noticeEl.classList.add("is-good");
+  }
+
+  function digitsOnly(val) {
+    return String(val || "").replace(/\D/g, "");
+  }
+
+  pinEl.addEventListener("input", () => {
+    pinEl.value = digitsOnly(pinEl.value).slice(0, 8);
+  });
+
+  const goIntended = () => {
+    const target = state.intendedRoute || intended;
+    state.intendedRoute = null;
+    render(target);
+  };
+
+  const setBtn = app.querySelector("#lock_set");
+  if (setBtn) {
+    setBtn.addEventListener("click", async () => {
+      const pin = digitsOnly(pinEl.value);
+      if (pin.length < 4 || pin.length > 8) {
+        notice("PIN must be 4 to 8 digits.", "warn");
+        return;
+      }
+      await setPin(pin);
+      notice("PIN set. Unlocked.", "good");
+      goIntended();
+    });
+  }
+
+  const unlockBtn = app.querySelector("#lock_unlock");
+  if (unlockBtn) {
+    unlockBtn.addEventListener("click", async () => {
+      const pin = digitsOnly(pinEl.value);
+      if (!pin) {
+        notice("Enter your PIN.", "warn");
+        return;
+      }
+
+      const ok = await verifyPin(pin);
+      if (!ok) {
+        notice("Wrong PIN.", "warn");
+        return;
+      }
+
+      localStorage.setItem(LOCK_UNLOCKED_UNTIL_KEY, String(nowMs() + 30 * 60 * 1000));
+      notice("Unlocked.", "good");
+      goIntended();
+    });
+  }
+
+  const lockNowBtn = app.querySelector("#lock_locknow");
+  if (lockNowBtn) {
+    lockNowBtn.addEventListener("click", () => {
+      lockNow();
+      notice("Locked.", "good");
+      render("lock");
+    });
+  }
+
+  const changeBtn = app.querySelector("#lock_change");
+  if (changeBtn) {
+    changeBtn.addEventListener("click", async () => {
+      const pin = digitsOnly(pinEl.value);
+      if (!pin) {
+        notice("Enter current PIN to change it.", "warn");
+        return;
+      }
+
+      const ok = await verifyPin(pin);
+      if (!ok) {
+        notice("Wrong current PIN.", "warn");
+        return;
+      }
+
+      const newPin = prompt("Enter a new PIN (4-8 digits):") || "";
+      const clean = digitsOnly(newPin);
+
+      if (clean.length < 4 || clean.length > 8) {
+        notice("New PIN must be 4 to 8 digits.", "warn");
+        return;
+      }
+
+      await setPin(clean);
+      notice("PIN changed. Unlocked.", "good");
+    });
+  }
+}
+
+/* =======================
+   Hijri Calendar (English + Arabic)
+======================= */
+function safeTimeZone() {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+  } catch {
+    return "UTC";
+  }
+}
+
+function getHijriParts(date, locale) {
+  const tz = safeTimeZone();
+  const fmt = new Intl.DateTimeFormat(locale, {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: tz
+  });
+  const parts = fmt.formatToParts(date);
+  const day = Number(parts.find((p) => p.type === "day")?.value || "1");
+  const month = parts.find((p) => p.type === "month")?.value || "";
+  const year = parts.find((p) => p.type === "year")?.value || "";
+  return { day, month, year, tz };
+}
+
+function renderCalendar() {
+  state.currentRoute = "calendar";
+
+  const now = new Date();
+
+  const en = getHijriParts(now, "en-TN-u-ca-islamic");
+  const ar = getHijriParts(now, "ar-SA-u-ca-islamic");
+
+  app.innerHTML = `
+    <section class="card" style="margin-top:20px;">
+      <h2>Hijri Calendar</h2>
+      <p class="muted" style="margin-top:6px;">
+        <strong>${en.month}</strong> ${en.year} AH
+        <span class="muted" style="margin-left:8px;">•</span>
+        <strong dir="rtl" style="margin-left:8px;">${ar.month}</strong> <span dir="rtl">${ar.year}</span>
+      </p>
+      <p class="muted" style="margin-top:6px; font-size:12px;">
+        Using your timezone: <strong>${en.tz}</strong>
+      </p>
+
+      <div class="calendar-grid">
+        ${renderHijriMonth(en.day)}
+      </div>
+
+      <p class="muted" style="margin-top:12px;">
+        The 13th, 14th, and 15th are the white days (Ayyām al-Bīḍ).
+      </p>
+    </section>
+  `;
+}
+
+function renderHijriMonth(todayDay) {
+  let html = "";
+
+  for (let d = 1; d <= 30; d++) {
+    const isWhiteDay = d === 13 || d === 14 || d === 15;
+    const isToday = d === todayDay;
+
+    html += `
+      <button
+        type="button"
+        class="calendar-day ${isWhiteDay ? "white-day" : ""} ${isToday ? "today" : ""}"
+        data-hijri-day="${d}"
+        ${isWhiteDay ? 'data-white-day="1"' : ""}
+        aria-label="Hijri day ${d}"
+        style="${isToday ? "font-weight:900;" : ""}"
+      >
+        ${d}
+      </button>
+    `;
+  }
+
+  return html;
+}
 
 /* =======================
    Routing
@@ -2739,7 +2112,6 @@ async function renderRoute(route) {
   if (r === "diary") return renderDiary();
   if (r === "lock") return renderLock();
   if (r === "faq") return renderFAQ();
-  if (r === "gurfah") return renderGurfah();
 
   return renderWelcome();
 }
@@ -2826,6 +2198,7 @@ function setFooterYear() {
 ======================= */
 window.addEventListener("hashchange", () => {
   const route = (window.location.hash || "#welcome").slice(1);
+  state.reviewing = false; // normal route changes exit review mode
   render(route);
 });
 
