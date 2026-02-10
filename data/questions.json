@@ -8165,6 +8165,715 @@
     ],
     "correctIndex": 2,
     "explanation": "All prophetic missions fundamentally restored tawḥīd."
+  },
+  {
+    "id": "hadith_adv_001",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "In the ḥadīth 'Actions are only by intentions', the strongest implication for fiqh is that:",
+    "options": [
+      "Every act becomes worship automatically if done by a Muslim",
+      "The ruling (ṣiḥḥah/invalidity) of many acts depends on intent when the act is not purely ritual by nature",
+      "Intention is required only for ṣalāh and ṣawm",
+      "Intention is required only when the act is sinful"
+    ],
+    "correctIndex": 1,
+    "explanation": "The ḥadīth is a foundational principle: intention affects validity and reward, especially in acts where intent distinguishes worship from habit."
+  },
+  {
+    "id": "hadith_adv_002",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "A narrator is described as 'ṣadūq yahimu' in rijāl terminology. The most accurate implication is:",
+    "options": [
+      "His narrations are rejected absolutely",
+      "His narrations are accepted without scrutiny",
+      "He is generally truthful but makes mistakes, so his reports need corroboration or careful comparison",
+      "He is a liar who fabricates occasionally"
+    ],
+    "correctIndex": 2,
+    "explanation": "Ṣadūq yahimu implies honesty with occasional errors. Such reports are weighed, supported, and compared."
+  },
+  {
+    "id": "hadith_adv_003",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "If a report in Bulūgh al-Marām is labeled 'muttafaq ʿalayh', the most precise meaning is:",
+    "options": [
+      "Agreed upon by all four madhāhib",
+      "Collected by both al-Bukhārī and Muslim",
+      "Narrated by ten companions or more",
+      "Established by the practice of Madīnah"
+    ],
+    "correctIndex": 1,
+    "explanation": "Muttafaq ʿalayh means recorded by both al-Bukhārī and Muslim."
+  },
+  {
+    "id": "hadith_adv_004",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "In sanad analysis, the strongest reason a 'muʿḍal' chain is more problematic than a 'munqaṭiʿ' is:",
+    "options": [
+      "Muʿḍal has a missing narrator anywhere in the chain",
+      "Muʿḍal has two or more consecutive missing narrators",
+      "Muʿḍal has a hidden defect while munqaṭiʿ does not",
+      "Munqaṭiʿ indicates fabrication while muʿḍal does not"
+    ],
+    "correctIndex": 1,
+    "explanation": "Muʿḍal = two or more consecutive missing narrators, increasing uncertainty."
+  },
+  {
+    "id": "hadith_adv_005",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "From the ḥadīth 'The religion is sincere counsel (naṣīḥah)', the most rigorous methodological lesson is:",
+    "options": [
+      "Naṣīḥah is optional etiquette, not a religious duty",
+      "Naṣīḥah applies only to rulers and scholars",
+      "The concept is comprehensive: to Allah, His Book, His Messenger, leaders, and common Muslims, each with a distinct meaning",
+      "Naṣīḥah means only exposing wrongdoing publicly"
+    ],
+    "correctIndex": 2,
+    "explanation": "The ḥadīth defines naṣīḥah broadly with specific applications to each category."
+  },
+
+  {
+    "id": "hadith_adv_006",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "A narrator’s 'ḍabṭ' primarily refers to:",
+    "options": [
+      "His piety and avoidance of major sins",
+      "His precision in retaining and transmitting what he heard",
+      "His seniority among scholars of his time",
+      "His ability to derive legal rulings"
+    ],
+    "correctIndex": 1,
+    "explanation": "Ḍabṭ = accuracy/precision (memory or written preservation) in transmission."
+  },
+  {
+    "id": "hadith_adv_007",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "If two reliable narrators conflict in a specific word addition (ziyādah) and one is known to be stronger in ḍabṭ, the default hadith-critical approach is:",
+    "options": [
+      "Automatically accept the addition without conditions",
+      "Prefer the stronger narrator’s version, while assessing whether the addition can be reconciled",
+      "Reject both versions and suspend judgment",
+      "Treat the addition as fabricated by default"
+    ],
+    "correctIndex": 1,
+    "explanation": "Ziyādah of a reliable narrator may be accepted, but strength and reconciliation matter. Stronger ḍabṭ is preferred."
+  },
+  {
+    "id": "hadith_adv_008",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "In ʿUmdat al-Aḥkām, the author’s selection principle is best described as:",
+    "options": [
+      "Only narrations from the Musnad of Aḥmad",
+      "Only narrations from Ṣaḥīḥ al-Bukhārī and Ṣaḥīḥ Muslim",
+      "Only narrations from the Sunan works",
+      "Only narrations with complete takhrīj and full jarḥ/taʿdīl notes"
+    ],
+    "correctIndex": 1,
+    "explanation": "ʿUmdat al-Aḥkām is centered on narrations from al-Bukhārī and Muslim (or their combined corpus)."
+  },
+  {
+    "id": "hadith_adv_009",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "From the ḥadīth 'Leave what makes you doubt for what does not make you doubt', the most accurate fiqh application is:",
+    "options": [
+      "Certainty is removed by doubt",
+      "Doubt is removed by certainty",
+      "All doubtful matters are always haram",
+      "Doubt always cancels worship"
+    ],
+    "correctIndex": 1,
+    "explanation": "It supports the principle: certainty is not removed by doubt, and one shifts to what is clearer."
+  },
+  {
+    "id": "hadith_adv_010",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "A report is described as 'shādhdh'. This most precisely means:",
+    "options": [
+      "A weak narrator fabricated it",
+      "A reliable narrator contradicts those more reliable than him",
+      "The chain has a missing link",
+      "It is narrated only in one city"
+    ],
+    "correctIndex": 1,
+    "explanation": "Shādhdh: contradiction by a trustworthy narrator against stronger authorities."
+  },
+
+  {
+    "id": "hadith_adv_011",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "The ḥadīth of Jibrīl (Islam, Iman, Ihsan) is most critical for which disciplinary classification?",
+    "options": [
+      "Only fiqh",
+      "Only ʿaqīdah",
+      "Only taṣawwuf",
+      "A جامع text covering dīn’s core domains: practice, belief, and excellence"
+    ],
+    "correctIndex": 3,
+    "explanation": "It is a جامع ḥadīth combining major foundations of dīn."
+  },
+  {
+    "id": "hadith_adv_012",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "In Bulūgh al-Marām, when Ibn Ḥajar says 'rawāhu al-khamsah', he most commonly intends:",
+    "options": [
+      "The five books: Bukhārī, Muslim, Abū Dāwūd, Tirmidhī, Nasāʾī",
+      "The five Sunan/Musnad group: Abū Dāwūd, Tirmidhī, Nasāʾī, Ibn Mājah, and Aḥmad",
+      "The five: Mālik, Shāfiʿī, Aḥmad, Abū Ḥanīfah, Sufyān",
+      "Five narrations from one companion"
+    ],
+    "correctIndex": 1,
+    "explanation": "In this context, al-khamsah typically refers to the four Sunan plus Musnad Aḥmad."
+  },
+  {
+    "id": "hadith_adv_013",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "A 'mursal' report is defined most accurately as:",
+    "options": [
+      "A tābiʿī narrates directly from the Prophet ﷺ, omitting the companion",
+      "A companion narrates from another companion",
+      "A narrator omits two consecutive narrators",
+      "A report with hidden defects"
+    ],
+    "correctIndex": 0,
+    "explanation": "Mursal: tābiʿī attributes directly to the Prophet ﷺ, skipping the ṣaḥābī."
+  },
+  {
+    "id": "hadith_adv_014",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "Which statement best captures 'ʿillah' (hidden defect) in hadith criticism?",
+    "options": [
+      "Any obvious weakness in the chain",
+      "A subtle flaw that impacts authenticity though the chain may appear sound",
+      "A narrator being unknown",
+      "A chain that is short"
+    ],
+    "correctIndex": 1,
+    "explanation": "ʿIlal are subtle defects discovered through deep comparison of routes."
+  },
+  {
+    "id": "hadith_adv_015",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "From the ḥadīth 'Whoever believes in Allah and the Last Day, let him speak good or remain silent', the strictest inference is:",
+    "options": [
+      "Silence is always superior to speech",
+      "Speech is only permitted if it is worship",
+      "Speech is governed by a binary: beneficial/good or harmful/idle, with accountability",
+      "Speech is irrelevant to īmān"
+    ],
+    "correctIndex": 2,
+    "explanation": "It sets a high ethic of speech: either خير or silence."
+  },
+
+  {
+    "id": "hadith_adv_016",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "A narrator is 'majhūl al-ʿayn'. The most accurate implication is:",
+    "options": [
+      "He is known by name but no one narrated from him",
+      "Only one person narrated from him and no clear tawthīq exists",
+      "He is accused of lying",
+      "He is a companion"
+    ],
+    "correctIndex": 1,
+    "explanation": "Majhūl al-ʿayn: typically only one transmitter is known from him and he lacks established evaluation."
+  },
+  {
+    "id": "hadith_adv_017",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "In reconciling apparently conflicting texts (taʿāruḍ), the usual order is closest to:",
+    "options": [
+      "Tarjīḥ first, then jamʿ",
+      "Jamʿ (reconciliation) first, then nasḫ, then tarjīḥ, then tawqīf",
+      "Nasḫ first, then jamʿ",
+      "Reject one text immediately"
+    ],
+    "correctIndex": 1,
+    "explanation": "Standard approach: reconcile if possible, then consider abrogation, then preference, then suspend if unresolved."
+  },
+  {
+    "id": "hadith_adv_018",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "The ḥadīth 'Do not harm and do not reciprocate harm' is best treated as:",
+    "options": [
+      "A narrow rule limited to trade contracts",
+      "A legal maxim that branches into many rulings across fiqh",
+      "A spiritual advice without legal implications",
+      "A rule that cancels all punishments"
+    ],
+    "correctIndex": 1,
+    "explanation": "It underpins broad legal reasoning and fiqh maxims."
+  },
+  {
+    "id": "hadith_adv_019",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "A chain is 'muʿallaq'. The most precise meaning is:",
+    "options": [
+      "A narrator omitted the companion only",
+      "The compiler omitted one or more narrators from the beginning of the chain",
+      "Two consecutive narrators are missing in the middle",
+      "A narrator is hidden behind a kunyah"
+    ],
+    "correctIndex": 1,
+    "explanation": "Muʿallaq: missing from the beginning (near the compiler)."
+  },
+  {
+    "id": "hadith_adv_020",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "In hadith usage, a report being 'ṣaḥīḥ' guarantees:",
+    "options": [
+      "It is the strongest evidence over Qur’an",
+      "It is authentic in attribution, but juristic application may still involve context and reconciliation",
+      "It is always acted upon literally",
+      "It is agreed upon by all scholars"
+    ],
+    "correctIndex": 1,
+    "explanation": "Ṣaḥīḥ = sound attribution. Applying it requires fiqh al-ḥadīth, context, and reconciliation."
+  },
+
+  {
+    "id": "hadith_adv_021",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "From Nawawī’s ḥadīth 'The lawful is clear and the unlawful is clear', the most rigorous reading implies:",
+    "options": [
+      "The doubtful (shubuhāt) are always haram",
+      "Avoiding shubuhāt protects dīn and honor, and the heart’s state influences outward choices",
+      "Shubuhāt are irrelevant to piety",
+      "Only scholars may avoid shubuhāt"
+    ],
+    "correctIndex": 1,
+    "explanation": "It links guarding boundaries with safeguarding faith and reputation, tied to the heart."
+  },
+  {
+    "id": "hadith_adv_022",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "The term 'mudallis' in rijāl criticism most directly points to:",
+    "options": [
+      "A narrator who lies openly",
+      "A narrator who practices tadlīs, obscuring the true source by ambiguous transmission wording",
+      "A narrator with weak memory",
+      "A narrator whose book was lost"
+    ],
+    "correctIndex": 1,
+    "explanation": "Tadlīs hides the intermediary. It affects acceptance unless explicitly hearing is stated."
+  },
+  {
+    "id": "hadith_adv_023",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "If a mudallis narrates with 'ʿan' (ʿanʿanah), the strictest hadith-critical stance is:",
+    "options": [
+      "Accept unconditionally",
+      "Reject unconditionally",
+      "Accept only if known that he met the shaykh and is not known for tadlīs in that route, or if explicit سماع is proven",
+      "Convert it automatically to mursal"
+    ],
+    "correctIndex": 2,
+    "explanation": "ʿAnʿanah from a mudallis requires caution and proof of direct hearing or reliable meeting conditions."
+  },
+  {
+    "id": "hadith_adv_024",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "Which concept best explains why a single report may be ṣaḥīḥ yet not acted upon in a specific case?",
+    "options": [
+      "Naskh, تخصيص, or contextual limitation",
+      "Because ṣaḥīḥ means it is always abrogated",
+      "Because the Qur’an overrides all ḥadīth always",
+      "Because jurists ignore ḥadīth"
+    ],
+    "correctIndex": 0,
+    "explanation": "Sound attribution does not erase possibility of specification, context, or abrogation."
+  },
+  {
+    "id": "hadith_adv_025",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "In Bulūgh al-Marām, Ibn Ḥajar’s frequent practice of mentioning grading (like 'ṣaḥḥaḥahu') primarily serves to:",
+    "options": [
+      "Replace sanad study entirely",
+      "Provide a quick hadith-status signal while still requiring fiqh and reconciliation",
+      "Prove the narrator is a companion",
+      "Make the book only for beginners"
+    ],
+    "correctIndex": 1,
+    "explanation": "It offers guidance on status, not a replacement for deeper study."
+  },
+
+  {
+    "id": "hadith_adv_026",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "The ḥadīth 'There should be neither harming nor reciprocating harm' is most directly connected to which fiqh mechanism?",
+    "options": [
+      "Sadd al-dharā’iʿ and removal of harm in rulings",
+      "Only worship rituals",
+      "Only criminal punishments",
+      "Only inheritance distribution"
+    ],
+    "correctIndex": 0,
+    "explanation": "Removing harm is a core legal objective and leads to preventative and corrective rulings."
+  },
+  {
+    "id": "hadith_adv_027",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "In ʿUmdat al-Aḥkām, the heavy focus on Bukhārī and Muslim most strongly supports which teaching strategy?",
+    "options": [
+      "Prioritize authenticity before branching into ikhtilāf-heavy evidences",
+      "Ignore all other collections",
+      "Teach only sīrah and ethics",
+      "Eliminate all juristic disagreement"
+    ],
+    "correctIndex": 0,
+    "explanation": "It provides a high-confidence evidence base for foundational fiqh learning."
+  },
+  {
+    "id": "hadith_adv_028",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "A report is 'ḥasan li-ghayrih'. The most accurate explanation is:",
+    "options": [
+      "Strong by itself, no support needed",
+      "Weak by itself but strengthened by corroborating routes until acceptable",
+      "Fabricated but famous",
+      "Only accepted in virtues, never in rulings"
+    ],
+    "correctIndex": 1,
+    "explanation": "Ḥasan li-ghayrih: originally weak, elevated by multiple supports."
+  },
+  {
+    "id": "hadith_adv_029",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "Which is the strongest definition of 'marfūʿ'?",
+    "options": [
+      "Attributed to a companion only",
+      "Attributed to the Prophet ﷺ in statement, action, approval, or description",
+      "A report missing a narrator",
+      "A report narrated by many companions"
+    ],
+    "correctIndex": 1,
+    "explanation": "Marfūʿ: raised to the Prophet ﷺ."
+  },
+  {
+    "id": "hadith_adv_030",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "Which is the strongest definition of 'mawqūf'?",
+    "options": [
+      "Attributed to a tābiʿī",
+      "Attributed to the Prophet ﷺ",
+      "Attributed to a companion",
+      "A chain with hidden defect"
+    ],
+    "correctIndex": 2,
+    "explanation": "Mawqūf: stops at a companion."
+  },
+
+  {
+    "id": "hadith_adv_031",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "The ḥadīth 'Whoever introduces into this matter of ours what is not from it, it is rejected' is strongest as:",
+    "options": [
+      "A principle for filtering innovations in worship and legal practice",
+      "A principle limited to business contracts",
+      "A principle that cancels ijtihād",
+      "A statement only about politics"
+    ],
+    "correctIndex": 0,
+    "explanation": "It is a foundational text in rejecting bidʿah and invalid additions."
+  },
+  {
+    "id": "hadith_adv_032",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "In hadith methodology, 'iḍṭirāb' (اضطراب) refers to:",
+    "options": [
+      "A narrator forgetting his teacher’s name",
+      "Significant inconsistency in narrations with no way to reconcile or prefer one reliably",
+      "A chain that is too long",
+      "A narrator being accused of lying"
+    ],
+    "correctIndex": 1,
+    "explanation": "Iḍṭirāb is irreconcilable contradiction, weakening the report."
+  },
+  {
+    "id": "hadith_adv_033",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "From the ḥadīth 'Allah is pure and accepts only what is pure', the strict fiqh implication is closest to:",
+    "options": [
+      "Rizq purity affects acceptance of deeds and duʿāʾ",
+      "Only clothing purity matters",
+      "Purity refers only to wudūʾ",
+      "Purity is symbolic only"
+    ],
+    "correctIndex": 0,
+    "explanation": "The ḥadīth links wholesome earnings and consumption to acceptance of worship and supplication."
+  },
+  {
+    "id": "hadith_adv_034",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "In Bulūgh al-Marām, the author’s arrangement is best characterized as:",
+    "options": [
+      "Pure rijāl order by narrators",
+      "Strict chronological seerah order",
+      "Fiqh chapter arrangement with evidences",
+      "Alphabetical by matn"
+    ],
+    "correctIndex": 2,
+    "explanation": "Bulūgh is arranged by fiqh topics."
+  },
+  {
+    "id": "hadith_adv_035",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "A 'muʿāraḍah' where two ṣaḥīḥ texts conflict outwardly, and reconciliation is possible via تخصيص, implies:",
+    "options": [
+      "One must be weak",
+      "One is automatically abrogated",
+      "Both remain valid, with one specifying the other",
+      "Both are dropped"
+    ],
+    "correctIndex": 2,
+    "explanation": "Specification resolves many apparent conflicts without rejection."
+  },
+
+  {
+    "id": "hadith_adv_036",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "From the ḥadīth 'The Muslim is the one from whose tongue and hand Muslims are safe', the sharpest usūl inference is:",
+    "options": [
+      "Leaving harm is part of īmān’s perfection, not merely etiquette",
+      "It applies only to family members",
+      "It applies only in masjid",
+      "It is unrelated to legal accountability"
+    ],
+    "correctIndex": 0,
+    "explanation": "It indicates harm avoidance is integral to īmān’s completeness and social obligations."
+  },
+  {
+    "id": "hadith_adv_037",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "A narrator is described as 'thiqah' but known for 'tashayyuʿ' (mild Shi'i leaning). The default scholarly approach is:",
+    "options": [
+      "Reject all his narrations",
+      "Accept if he is truthful and the narration does not support his bidʿah or he is not an extreme partisan, with scrutiny",
+      "Accept without scrutiny",
+      "Consider him unknown"
+    ],
+    "correctIndex": 1,
+    "explanation": "Bidʿah does not automatically invalidate if reliability is established and extremism/propaganda is absent, though scrutiny remains."
+  },
+  {
+    "id": "hadith_adv_038",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "In the ḥadīth of the angel writing the stages of the embryo, the most rigorous legal lesson is:",
+    "options": [
+      "Every pregnancy is exactly identical in timing",
+      "Qadar and the writing of provisions and lifespan are affirmed, while medical timelines are not treated as legal exactness without other proofs",
+      "It negates human effort",
+      "It proves infallibility of midwives"
+    ],
+    "correctIndex": 1,
+    "explanation": "It affirms qadar and writing, while juristic precision requires combining texts and contexts."
+  },
+  {
+    "id": "hadith_adv_039",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "Which pairing best matches the term with its meaning?",
+    "options": [
+      "Mutawātir: narrated by one chain only",
+      "ʿAzīz: narrated by at least two at every level",
+      "Gharīb: narrated by many companions",
+      "Mashhūr: narrated by one tābiʿī only"
+    ],
+    "correctIndex": 1,
+    "explanation": "ʿAzīz commonly refers to a report narrated by at least two transmitters at some level."
+  },
+  {
+    "id": "hadith_adv_040",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "The ḥadīth 'Fear Allah wherever you are...' is best treated as:",
+    "options": [
+      "Only a spiritual counsel with no outward legal effect",
+      "A جامع principle combining taqwā, tawbah (erasing sins), and social excellence",
+      "A rule about fasting only",
+      "A prohibition of friendship"
+    ],
+    "correctIndex": 1,
+    "explanation": "It combines inner duty, repentance, and outward character."
+  },
+
+  {
+    "id": "hadith_adv_041",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "In sanad terms, 'muʿanʿan' narration is most precisely:",
+    "options": [
+      "A narration where the narrator says 'ḥaddathanā' explicitly",
+      "A narration using 'ʿan' between narrators",
+      "A narration missing two narrators",
+      "A narration whose matn is strange"
+    ],
+    "correctIndex": 1,
+    "explanation": "Muʿanʿan refers to chains connected with 'ʿan'."
+  },
+  {
+    "id": "hadith_adv_042",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "From the ḥadīth 'Allah does not look at your forms... but your hearts and deeds', the strongest correction to a common error is:",
+    "options": [
+      "Outward deeds are meaningless",
+      "Only the heart matters, deeds do not matter",
+      "Both inner state and outward action matter, and outward obligations remain binding",
+      "Beauty is haram"
+    ],
+    "correctIndex": 2,
+    "explanation": "It refutes superficiality, not obligation. Deeds remain required."
+  },
+  {
+    "id": "hadith_adv_043",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "A 'munkar' report is most accurately described as:",
+    "options": [
+      "Any report with a long chain",
+      "A weak narrator contradicts trustworthy narrators",
+      "A reliable narrator adds a detail",
+      "A report narrated by a companion"
+    ],
+    "correctIndex": 1,
+    "explanation": "Munkar: weak narrator opposing stronger narrators."
+  },
+  {
+    "id": "hadith_adv_044",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "Which is the most accurate statement about Bulūgh al-Marām as a fiqh evidence text?",
+    "options": [
+      "It is only about manners",
+      "It is arranged to support legal chapters and often includes grading cues, but still needs usūl for deriving rulings",
+      "It replaces Qur’anic evidences",
+      "It contains only mutawātir reports"
+    ],
+    "correctIndex": 1,
+    "explanation": "Bulūgh is a fiqh-evidence manual; deriving rulings requires usūl and fiqh."
+  },
+  {
+    "id": "hadith_adv_045",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "From the ḥadīth 'None of you truly believes until he loves for his brother what he loves for himself', the most exact statement is:",
+    "options": [
+      "It negates Islam if violated once",
+      "It points to perfection/completion of īmān in interpersonal ethics",
+      "It applies only to blood relatives",
+      "It cancels competition in business"
+    ],
+    "correctIndex": 1,
+    "explanation": "The text indicates completeness of īmān and high ethical standard."
+  },
+
+  {
+    "id": "hadith_adv_046",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "Which description best fits 'tadlīs al-isnād'?",
+    "options": [
+      "Changing the matn while keeping the chain",
+      "Omitting a weak shaykh and narrating from his teacher with ambiguous wording",
+      "Narrating from a companion without meeting him",
+      "Adding extra companions"
+    ],
+    "correctIndex": 1,
+    "explanation": "Tadlīs al-isnād often involves dropping an intermediary and using ambiguous transmission."
+  },
+  {
+    "id": "hadith_adv_047",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "Which is the most accurate pairing for acceptance conditions of ṣaḥīḥ ḥadīth?",
+    "options": [
+      "ʿAdālah + ḍabṭ + ittiṣāl + عدم الشذوذ + عدم العلة",
+      "Kashf + ilhām + karāmah + ikhlāṣ",
+      "Fame + popularity + practice of one city",
+      "Only short chain length"
+    ],
+    "correctIndex": 0,
+    "explanation": "These are the classic criteria for ṣaḥīḥ: integrity, precision, connected chain, no shudhūdh, no hidden defect."
+  },
+  {
+    "id": "hadith_adv_048",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "A report appears with a connected chain but is shown to be 'mursal' through route comparison. This most directly illustrates:",
+    "options": [
+      "That connected chains are always false",
+      "The role of comparative analysis (muqāranah) in detecting ʿilal",
+      "That mursal is always ṣaḥīḥ",
+      "That matn analysis is forbidden"
+    ],
+    "correctIndex": 1,
+    "explanation": "Comparing routes reveals subtle defects and true connection status."
+  },
+  {
+    "id": "hadith_adv_049",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "In practice, why does Bulūgh al-Marām include multiple narrations on one issue?",
+    "options": [
+      "To confuse readers intentionally",
+      "To indicate different evidences, levels of strength, and points of istidlāl across madhāhib",
+      "Because the author had no access to stronger sources",
+      "To replace the Qur’an"
+    ],
+    "correctIndex": 1,
+    "explanation": "Multiple routes clarify scope, strength, and juristic reasoning across schools."
+  },
+  {
+    "id": "hadith_adv_050",
+    "category": "Hadeeth",
+    "level": "Advanced",
+    "question": "A jurist acts on a ḥasan li-ghayrih report in a practical ruling. The strongest justification is:",
+    "options": [
+      "Weak reports are always binding in law",
+      "It has risen to acceptable strength through corroboration, and no stronger opposing evidence blocks it",
+      "Because it is popular on social media",
+      "Because it is narrated by a single narrator only"
+    ],
+    "correctIndex": 1,
+    "explanation": "Ḥasan li-ghayrih can be acted upon when strengthened and not opposed by stronger evidence."
   }
 ]
 
