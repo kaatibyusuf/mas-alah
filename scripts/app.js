@@ -109,6 +109,26 @@ function updateStreak(progress) {
 ======================= */
 async function loadQuestions() {
   if (state.allQuestions.length) return state.allQuestions;
+  function shuffleOptionsDeterministic(question) {
+  const idxs = [0, 1, 2, 3];
+  const seed = `opt_${question.id}_${question.category}_${question.level}`;
+
+  // reuse your seededShuffle + hashStringToInt
+  const perm = seededShuffle(idxs, seed);
+
+  const newOptions = perm.map((i) => question.options[i]);
+  const newCorrectIndex = perm.indexOf(question.correctIndex);
+
+  return {
+    ...question,
+    options: newOptions,
+    correctIndex: newCorrectIndex
+  };
+}
+
+// inside loadQuestions(), after JSON load:
+state.allQuestions = (await res.json()).map(shuffleOptionsDeterministic);
+
 
   const res = await fetch("data/questions.json");
   if (!res.ok) throw new Error("Could not load data/questions.json");

@@ -5345,8 +5345,707 @@
     ],
     "correctIndex": 2,
     "explanation": "Grammar preserves meaning and prevents misinterpretation."
+  },
+  {
+    "id": "FIQH-ADV-001",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person notices dried blood already on his sleeve while in ṣalāh, with no knowledge when it got there. Which ruling is most accurate in principle?",
+    "options": [
+      "Ṣalāh is invalid in all cases because najāsah was discovered during prayer.",
+      "Ṣalāh remains valid because certainty is not removed by doubt, so the garment is treated as pure.",
+      "Validity depends on whether the blood is excused and whether removal is possible without invalidating the prayer.",
+      "Ṣalāh is valid only if he repeats wuḍū’ after finishing, because blood breaks wuḍū’."
+    ],
+    "correctIndex": 2,
+    "explanation": "This is about najāsah on clothing, not wuḍū’. Across madhāhib, the most controlled answer is conditional: amount, excusability, and ability to remove/switch garment. Blood does not automatically break wuḍū’ merely by being on clothes."
+  },
+  {
+    "id": "FIQH-ADV-002",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "Which pairing correctly matches uṣūl terms?",
+    "options": [
+      "Sabab: condition external to ruling. Shart: what entails the ruling’s existence.",
+      "Sabab: what entails the ruling’s application when present. Shart: what the ruling depends on while not being part of it.",
+      "Maniʿ: what entails the ruling’s application. Sabab: what prevents the ruling.",
+      "Shart: what prevents the ruling. Maniʿ: what completes it."
+    ],
+    "correctIndex": 1,
+    "explanation": "Sabab triggers the ruling’s applicability. Shart is a prerequisite external to the ruling. Maniʿ prevents the ruling despite the sabab."
+  },
+  {
+    "id": "FIQH-ADV-003",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person deliberately breaks a Ramaḍān fast with food, then later that same day begins valid travel that would allow ifṭār. Which statement is strongest?",
+    "options": [
+      "The later excuse removes sin and cancels kaffārah.",
+      "Sin remains, but kaffārah drops because the excuse occurred within the same day.",
+      "Sin remains and the consequence remains, because the violation occurred before the excuse.",
+      "Sin drops but qaḍā’ remains, because travel retroactively changes the ruling."
+    ],
+    "correctIndex": 2,
+    "explanation": "The deliberate violation happened under obligation, before the excuse. Later travel does not retroactively erase that act. Details differ by madhhab on what becomes obligatory afterward, but the core principle stands."
+  },
+  {
+    "id": "FIQH-ADV-004",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person enters masjid and finds the imam in the last tashahhud. What is the most accurate fiqh characterization of his joining?",
+    "options": [
+      "He has caught the jamāʿah only if he catches rukūʿ in any rakʿah.",
+      "He has caught the jamāʿah by joining before salām, even if no rukūʿ is caught, but has not caught a rakʿah.",
+      "He has caught the rakʿah if he says takbīrat al-iḥrām before salām, even without rukūʿ.",
+      "He should not join at all and must wait for a new jamāʿah."
+    ],
+    "correctIndex": 1,
+    "explanation": "Catching a rakʿah is tied to rukūʿ, but joining before salām still counts as participation in jamāʿah in many treatments. The distinction is between إدراك الركعة and إدراك الجماعة."
+  },
+  {
+    "id": "FIQH-ADV-005",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "In Mālikī fiqh, wiping over khuffayn (leather socks) is generally treated as:",
+    "options": [
+      "The default, and washing feet is only for hardship.",
+      "A rukhṣah (concession) whose scope is narrower than in some other madhāhib.",
+      "Obligatory for travelers and disliked for residents.",
+      "Invalid unless the khuff is below the ankle."
+    ],
+    "correctIndex": 1,
+    "explanation": "The Mālikī school generally treats masḥ over khuffayn as a concession with conditions, and its practical scope is often narrower than in other madhāhib."
+  },
+  {
+    "id": "FIQH-ADV-006",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person prays ʿAṣr, then later realizes he was in major impurity (janābah) during the prayer. Which is correct?",
+    "options": [
+      "No makeup is needed because the time has passed.",
+      "Only wuḍū’ is needed and the prayer remains valid due to ignorance.",
+      "Ghusl is required and the prayer must be repeated, because ṭahārah from janābah is a condition for ṣalāh.",
+      "Repeat only if he remembered within one hour."
+    ],
+    "correctIndex": 2,
+    "explanation": "Ṭahārah from major impurity is a shart for ṣalāh. Forgetfulness/ignorance does not validate ṣalāh without it across madhāhib."
+  },
+  {
+    "id": "FIQH-ADV-007",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person makes wuḍū’, then sees a large amount of blood on clothes (not from a current flow). What is the most accurate baseline distinction?",
+    "options": [
+      "Blood on clothes affects purity of garment, not necessarily the validity of wuḍū’.",
+      "Any blood on clothes always breaks wuḍū’ by consensus.",
+      "Blood on clothes does not matter for ṣalāh if it is dry.",
+      "Blood on clothes invalidates ṣalāh but only for men."
+    ],
+    "correctIndex": 0,
+    "explanation": "Key separation: ḥadath vs najāsah. Blood on garments is najāsah. Wuḍū’ validity is a separate question with its own madhhab details."
+  },
+  {
+    "id": "FIQH-ADV-008",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "In Mālikī fiqh, the default regarding breaking wuḍū’ by touch between man and woman is best described as:",
+    "options": [
+      "Touch always breaks wuḍū’ regardless of desire.",
+      "Touch never breaks wuḍū’ under any circumstances.",
+      "Touch breaks wuḍū’ when accompanied by desire or when it is a type of touch that typically involves desire, with detailed conditions.",
+      "Touch breaks wuḍū’ only if it is accidental."
+    ],
+    "correctIndex": 2,
+    "explanation": "Mālikī discussions revolve around touch with shahwah (desire) and its indicators. This differs from Shāfiʿī, where mere skin contact is often emphasized."
+  },
+  {
+    "id": "FIQH-ADV-009",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person is uncertain whether he prayed three or four rakʿāt in a four-rakʿah prayer. Which approach is most aligned with the general juristic principle?",
+    "options": [
+      "Assume the higher number because worship should be minimized.",
+      "Assume the lower number because certainty is the lower, then complete and perform sujūd al-sahw as applicable.",
+      "Restart the prayer immediately in all cases.",
+      "Ignore the doubt if it occurred after salām, even if he is sure it happened during prayer."
+    ],
+    "correctIndex": 1,
+    "explanation": "Certainty is what is established. Doubt is resolved by building on the certain minimum, then rectifying with sujūd al-sahw according to school details."
+  },
+  {
+    "id": "FIQH-ADV-010",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person prays behind an imam, then realizes after salām that he lacked wuḍū’. Which statement is strongest?",
+    "options": [
+      "Both imam and followers must repeat because one invalid prayer spoils the whole jamāʿah.",
+      "Only he repeats because his own condition failed; the imam and others are unaffected.",
+      "No one repeats because following an imam lifts individual conditions.",
+      "He repeats only if he was in the first row."
+    ],
+    "correctIndex": 1,
+    "explanation": "His personal condition failed. The imam’s prayer and other followers’ prayers are not invalidated by an individual follower’s missing ṭahārah."
+  },
+  {
+    "id": "FIQH-ADV-011",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "In the Mālikī school, wiping the head in wuḍū’ is best described as:",
+    "options": [
+      "Wiping any small part of the head is sufficient like a token.",
+      "Wiping the entire head is required, with detailed discussion about what counts as the head and hair coverage.",
+      "Wiping is optional; it is sunnah only.",
+      "Wiping is replaced by washing for residents."
+    ],
+    "correctIndex": 1,
+    "explanation": "Mālikī fiqh is known for requiring wiping the whole head, unlike the minimalist approach in some other madhāhib."
+  },
+  {
+    "id": "FIQH-ADV-012",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person starts ṣalāh, then remembers he missed witr from last night. Which is most correct?",
+    "options": [
+      "He must break the current farḍ prayer to pray witr first.",
+      "He completes the farḍ prayer; witr is made up later according to school details, without breaking an ongoing farḍ.",
+      "Witr can never be made up, so it is ignored.",
+      "He should convert the farḍ into nafl and then pray witr."
+    ],
+    "correctIndex": 1,
+    "explanation": "Do not disrupt an obligatory prayer for a missed non-obligatory one. Makeup rulings for witr vary by madhhab, but breaking farḍ is not the baseline."
+  },
+  {
+    "id": "FIQH-ADV-013",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person delays Ẓuhr until the end of its time without excuse. Which is the strongest statement?",
+    "options": [
+      "It is valid but sinful, with no effect on validity if completed within time.",
+      "It becomes invalid because delaying itself nullifies the prayer.",
+      "It turns into qaḍā’ even if performed within time near the end.",
+      "It is recommended because it resembles waiting for jamāʿah."
+    ],
+    "correctIndex": 0,
+    "explanation": "Performing within the time is valid. Unjustified delay can be sinful. Details of recommended delay depend on prayer and circumstance."
+  },
+  {
+    "id": "FIQH-ADV-014",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A traveler reaches his home city while still in the time of a shortened prayer that he has not prayed yet. What is most accurate?",
+    "options": [
+      "He prays qaṣr because he had intended travel earlier.",
+      "He prays full because he is now resident at the moment of performance.",
+      "He chooses either qaṣr or full, both equal.",
+      "He must combine prayers instead."
+    ],
+    "correctIndex": 1,
+    "explanation": "The ruling follows the state at the time of أداء. Upon becoming resident, the default is full prayer. Madhhab detail exists, but this is the strongest general frame."
+  },
+  {
+    "id": "FIQH-ADV-015",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person finds water after having prayed with tayammum, and the prayer time is still in. What is the strongest general answer?",
+    "options": [
+      "He must repeat immediately because tayammum was only temporary.",
+      "He never repeats because he already prayed validly.",
+      "It depends on whether he lacked water at the start of the time or only during it, and on madhhab positions regarding إعادة داخل الوقت.",
+      "He repeats only if the prayer was Maghrib."
+    ],
+    "correctIndex": 2,
+    "explanation": "This is a classic اختلاف: some consider repeating within time in some scenarios, others do not. The strongest “exam” answer acknowledges conditionality and madhhab variance."
+  },
+  {
+    "id": "FIQH-ADV-016",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "Which scenario most clearly fits ‘ʿudhr’ (legal excuse) for breaking a fast in Ramaḍān across the madhāhib?",
+    "options": [
+      "Feeling mild hunger and fatigue.",
+      "Fear of definite harm or strong likelihood of harm due to illness.",
+      "Being busy with exams.",
+      "Wanting to join friends for lunch to maintain ties."
+    ],
+    "correctIndex": 1,
+    "explanation": "Illness with credible harm is a recognized excuse. Exams and social reasons are not legal excuses by themselves."
+  },
+  {
+    "id": "FIQH-ADV-017",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person prays with a bandage on the arm covering a wound. Which statement is most accurate?",
+    "options": [
+      "He must remove it even if it harms him, because washing is always mandatory.",
+      "He wipes over it if removal causes harm, and completes ṭahārah based on the wound rules in his madhhab.",
+      "He abandons wuḍū’ entirely and uses tayammum only.",
+      "He delays ṣalāh until the wound heals."
+    ],
+    "correctIndex": 1,
+    "explanation": "Masḥ over bandage/jabīrah is a recognized avenue when washing harms. Exact conditions differ among madhāhib."
+  },
+  {
+    "id": "FIQH-ADV-018",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "In Mālikī fiqh, which best characterizes wiping over socks that are not leather (ordinary cloth socks)?",
+    "options": [
+      "Unrestrictedly permitted like leather.",
+      "Generally not treated the same as khuffayn, with stricter conditions and common non-permission for ordinary socks.",
+      "Obligatory if socks are thick.",
+      "Permitted only for women."
+    ],
+    "correctIndex": 1,
+    "explanation": "Mālikī treatment is generally stricter than some contemporary fatāwā in other schools regarding non-leather socks."
+  },
+  {
+    "id": "FIQH-ADV-019",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person joins the imam in rukūʿ and says takbīrat al-iḥrām while bending, then catches rukūʿ with the imam. Which is the most accurate issue at stake?",
+    "options": [
+      "Whether takbīrat al-iḥrām must be in standing (qiyām) when able.",
+      "Whether rukūʿ itself is optional in jamāʿah.",
+      "Whether recitation is always required even for the follower.",
+      "Whether sujūd is counted twice."
+    ],
+    "correctIndex": 0,
+    "explanation": "The core is validity of takbīrat al-iḥrām position and ability. School conditions differ. The exam point is identifying the controlling variable."
+  },
+  {
+    "id": "FIQH-ADV-020",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "Which statement best captures the fiqh difference between ‘ʿayn al-najāsah’ and ‘ḥukm al-najāsah’?",
+    "options": [
+      "Both mean the same. The terms are stylistic only.",
+      "ʿAyn is the physical substance itself. Ḥukm is the legal status that may remain even when traces are difficult to remove, depending on rules of removal.",
+      "ʿAyn refers to smell only. Ḥukm refers to color only.",
+      "ʿAyn is for ḥadath. Ḥukm is for ṣalāh times."
+    ],
+    "correctIndex": 1,
+    "explanation": "This is a precision-definition point in ṭahārah chapters. It affects how removal is assessed when traces linger."
+  },
+  {
+    "id": "FIQH-ADV-021",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person prays, then doubts after finishing whether he made wuḍū’ at all. What is the strongest general approach?",
+    "options": [
+      "Repeat because doubt after worship invalidates it.",
+      "No repetition because doubt after completion is ignored unless certainty arises, applying certainty principles to established performance.",
+      "Repeat only if he is a student of knowledge.",
+      "Repeat only if it was Fajr."
+    ],
+    "correctIndex": 1,
+    "explanation": "Doubts after completion are often treated differently from doubts during the act. The baseline: ignore mere doubt unless certainty of invalidation arises."
+  },
+  {
+    "id": "FIQH-ADV-022",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person fasts while in janābah at Fajr (had not done ghusl yet). Which statement is strongest?",
+    "options": [
+      "Fast is invalid by consensus because major impurity breaks the fast.",
+      "Fast is valid, but he must do ghusl for ṣalāh. Janābah itself does not invalidate fasting.",
+      "Fast is valid only if he performs tayammum at Fajr.",
+      "Fast is invalid unless he renews intention after ghusl."
+    ],
+    "correctIndex": 1,
+    "explanation": "Janābah affects ṣalāh, not the validity of the fast itself. This is a classic separation of conditions."
+  },
+  {
+    "id": "FIQH-ADV-023",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "In Mālikī fiqh, which is most accurate about basmalah in al-Fātiḥah in audible prayers?",
+    "options": [
+      "It is obligatory to recite aloud in every rakʿah.",
+      "It is never recited in any prayer.",
+      "It is generally not treated as part of al-Fātiḥah, and its audible recitation is not the baseline.",
+      "It is required silently, but invalid aloud."
+    ],
+    "correctIndex": 2,
+    "explanation": "Mālikī positions generally do not count basmalah as an āyah of al-Fātiḥah, and do not treat loud basmalah as the norm in jahri prayers."
+  },
+  {
+    "id": "FIQH-ADV-024",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person in wuḍū’ wipes a small portion of his head hair only. Which option reflects the key madhhab divergence most cleanly?",
+    "options": [
+      "All madhāhib require wiping the whole head, so wuḍū’ is invalid.",
+      "All madhāhib accept any tiny wipe, so wuḍū’ is valid.",
+      "Some madhāhib accept wiping part of the head, while Mālikīs generally require wiping the whole head.",
+      "Mālikīs accept part, while Ḥanafīs require the whole."
+    ],
+    "correctIndex": 2,
+    "explanation": "This tests recognition of divergence: Mālikī typically whole-head wipe. Others allow partial wipe with defined minimums."
+  },
+  {
+    "id": "FIQH-ADV-025",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person breaks wuḍū’ by passing wind during ṣalāh. What is the strongest immediate ruling?",
+    "options": [
+      "He continues quietly to avoid embarrassment; the prayer remains valid.",
+      "He must stop the prayer and renew wuḍū’, then restart the prayer.",
+      "He makes sujūd al-sahw at the end and completes.",
+      "He waits until salām, then repeats only that rakʿah."
+    ],
+    "correctIndex": 1,
+    "explanation": "Ḥadath nullifies ṣalāh. The correct action is to terminate prayer, renew ṭahārah, and repeat."
+  },
+  {
+    "id": "FIQH-ADV-026",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person is in ṣalāh and realizes he prayed without facing the qiblah due to a clear mistake (not ijtihād). Which is strongest?",
+    "options": [
+      "Complete the prayer then repeat, because facing qiblah is shart and was missed.",
+      "No repeat because ignorance excuses all conditions.",
+      "Only repeat if it was farḍ, not nafl.",
+      "Make sujūd al-sahw and finish."
+    ],
+    "correctIndex": 0,
+    "explanation": "Facing qiblah is a condition when able. A clear mistake (not valid ijtihād) requires repetition."
+  },
+  {
+    "id": "FIQH-ADV-027",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "Which is the most accurate statement about niyyah (intention) in wuḍū’ across madhāhib with Mālikī focus?",
+    "options": [
+      "Niyyah is universally a sunnah, never required.",
+      "Niyyah is a condition in Mālikī fiqh and emphasized as a shart for valid wuḍū’.",
+      "Niyyah must be verbalized for validity.",
+      "Niyyah is only required for ghusl, not wuḍū’."
+    ],
+    "correctIndex": 1,
+    "explanation": "Mālikī fiqh treats niyyah as central in ṭahārah. Some other madhāhib differ in where they place it in the validity structure."
+  },
+  {
+    "id": "FIQH-ADV-028",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person performs tayammum due to lack of water, then finds water before starting ṣalāh. What is strongest?",
+    "options": [
+      "He must use water because the excuse is removed before performance.",
+      "He may pray with tayammum because tayammum was already done.",
+      "He may choose either because both are valid.",
+      "He must repeat tayammum, not wuḍū’."
+    ],
+    "correctIndex": 0,
+    "explanation": "If water becomes available before beginning ṣalāh, the cause for tayammum is removed, so return to water-based ṭahārah."
+  },
+  {
+    "id": "FIQH-ADV-029",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person prays while carrying a small child who has najāsah on their diaper. Which is most accurate in principle?",
+    "options": [
+      "Prayer is valid because the najāsah is on the child, not on the praying person.",
+      "Prayer is invalid if the najāsah is carried in a way that is considered carried by the praying person, subject to excused amounts and school detail.",
+      "Prayer is always valid with children regardless of najāsah.",
+      "Prayer is invalid only in farḍ prayers."
+    ],
+    "correctIndex": 1,
+    "explanation": "Carrying najāsah can affect prayer. The control points are carriage, excused quantities, and ability to avoid it. Madhhab detail exists."
+  },
+  {
+    "id": "FIQH-ADV-030",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "In Mālikī fiqh, the status of dogs regarding najāsah is commonly summarized as:",
+    "options": [
+      "Dog saliva and body are both intrinsically najis like a severe najāsah requiring seven washes universally.",
+      "Dog is treated as pure in itself, with discussion focusing on specific texts and practical rulings, differing from Shāfiʿī treatment.",
+      "Dog is always haram to keep, so purity is irrelevant.",
+      "Dog makes wuḍū’ invalid by mere proximity."
+    ],
+    "correctIndex": 1,
+    "explanation": "Mālikī treatment is known to differ from the Shāfiʿī severity on saliva. This is a classic comparative fiqh marker."
+  },
+  {
+    "id": "FIQH-ADV-031",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person eats forgetfully while fasting in Ramaḍān. Which is strongest?",
+    "options": [
+      "Fast is invalid and requires qaḍā’ and kaffārah.",
+      "Fast remains valid; he continues fasting, with no kaffārah, and school details may discuss qaḍā’ but the baseline is validity.",
+      "Fast is invalid but no kaffārah.",
+      "Fast is valid only if he immediately spits out food and rinses mouth."
+    ],
+    "correctIndex": 1,
+    "explanation": "The baseline is that forgetful eating does not invalidate the fast. No kaffārah. Some details differ, but the core is continued fasting."
+  },
+  {
+    "id": "FIQH-ADV-032",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person intentionally vomits in Ramaḍān. What is the key issue juristically?",
+    "options": [
+      "Any vomiting breaks the fast regardless of intention.",
+      "Only intentional vomiting is treated differently from involuntary, and consequences depend on madhhab detail.",
+      "Vomiting never breaks the fast.",
+      "Vomiting breaks wuḍū’ only, not fasting."
+    ],
+    "correctIndex": 1,
+    "explanation": "The controlling distinction is intentional vs involuntary vomiting. How far it affects validity and qaḍā’ is a madhhab-detail question."
+  },
+  {
+    "id": "FIQH-ADV-033",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person misses Jumuʿah without excuse and prays Ẓuhr instead. Which statement is strongest?",
+    "options": [
+      "He has fulfilled obligation fully; no sin remains.",
+      "He fulfills the ṣalāh obligation by Ẓuhr but is sinful for missing Jumuʿah without excuse.",
+      "His Ẓuhr is invalid because Jumuʿah was obligatory.",
+      "He must pray both Jumuʿah and Ẓuhr."
+    ],
+    "correctIndex": 1,
+    "explanation": "Missing Jumuʿah without excuse is sinful. Praying Ẓuhr fulfills the time’s prayer obligation in the aftermath."
+  },
+  {
+    "id": "FIQH-ADV-034",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person arrives late and finds the imam in sujūd. He joins in sujūd. Which is correct?",
+    "options": [
+      "He has caught the rakʿah by catching any posture.",
+      "He has not caught the rakʿah because catching rakʿah is tied to catching rukūʿ.",
+      "He must not join until the imam stands.",
+      "He has caught the rakʿah only if he says takbīr twice."
+    ],
+    "correctIndex": 1,
+    "explanation": "Catching a rakʿah is tied to rukūʿ. Joining in sujūd is still joining jamāʿah, but not that rakʿah."
+  },
+  {
+    "id": "FIQH-ADV-035",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "In prayer, a person laughs audibly (qahqahah). Which is strongest generally?",
+    "options": [
+      "It invalidates ṣalāh, and some madhāhib discuss its effect on wuḍū’.",
+      "It never affects ṣalāh because it is unintentional.",
+      "It only requires sujūd al-sahw.",
+      "It invalidates only nafl prayers."
+    ],
+    "correctIndex": 0,
+    "explanation": "Audible laughter invalidates the prayer. The wuḍū’ discussion is madhhab-dependent (classic comparative point)."
+  },
+  {
+    "id": "FIQH-ADV-036",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person begins ṣalāh with an intention for Ẓuhr, then mid-prayer realizes it is actually ʿAṣr time. What is strongest?",
+    "options": [
+      "He can switch intention mid-prayer and it becomes ʿAṣr automatically.",
+      "He must restart because the identified farḍ prayer was incorrect at entry, and this cannot be repaired by mid-prayer switching in the baseline treatment.",
+      "He completes it as Ẓuhr then prays ʿAṣr.",
+      "He cancels the prayer and makes tayammum."
+    ],
+    "correctIndex": 1,
+    "explanation": "This tests niyyah specificity for farḍ and whether intention-switching repairs it. Baseline: restart for the correct farḍ."
+  },
+  {
+    "id": "FIQH-ADV-037",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "Which case most clearly requires ‘qaḍā’’ rather than ‘iʿādah’ in standard fiqh language?",
+    "options": [
+      "Repeating a prayer within its time due to a discovered defect.",
+      "Repeating a prayer after its time due to missing it.",
+      "Performing sujūd al-sahw after salām.",
+      "Praying nafl after farḍ."
+    ],
+    "correctIndex": 1,
+    "explanation": "Iʿādah is repetition within time. Qaḍā’ is making up after the time has exited."
+  },
+  {
+    "id": "FIQH-ADV-038",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person prays Maghrib behind an imam praying ʿIshā’ (4 rakʿāt). Which is the central fiqh problem?",
+    "options": [
+      "Difference in number of rakʿāt between imam and follower and how the follower exits after 3.",
+      "Difference in qirā’ah language.",
+      "Difference in adhkār after prayer.",
+      "Difference in witr rulings."
+    ],
+    "correctIndex": 0,
+    "explanation": "This is a classic imāmah scenario: اختلاف نية الإمام والمأموم and mismatch in rakʿāt. Madhhab solutions differ, but this is the controlling variable."
+  },
+  {
+    "id": "FIQH-ADV-039",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person in ṣalāh remembers he has najāsah on his shoe. He can remove the shoe easily without major movement. What is strongest?",
+    "options": [
+      "He must continue with the shoe; removing it invalidates prayer.",
+      "He removes the shoe and continues, because removing najāsah without excessive movement preserves validity.",
+      "He must break the prayer and restart no matter what.",
+      "He ignores it because shoes are exempt from najāsah."
+    ],
+    "correctIndex": 1,
+    "explanation": "If removal is possible without excessive movement and without exposing ʿawrah, continuing is generally supported. Exact school details apply."
+  },
+  {
+    "id": "FIQH-ADV-040",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A woman experiences continuous irregular bleeding (istiḥāḍah). What is the key fiqh classification point?",
+    "options": [
+      "Treat all blood as ḥayḍ and stop ṣalāh indefinitely.",
+      "Distinguish ḥayḍ from istiḥāḍah based on habit/signs or fixed maximums depending on madhhab, then apply ṭahārah and prayer rules accordingly.",
+      "Ignore all bleeding and pray without any purification.",
+      "Treat it as janābah."
+    ],
+    "correctIndex": 1,
+    "explanation": "This is a technical chapter: distinguishing valid menses from irregular bleeding using ʿādah (habit), ṣifāt (signs), and madhhab limits, then applying rulings."
+  },
+  {
+    "id": "FIQH-ADV-041",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person makes wuḍū’ and doubts whether he washed his left arm. He is still in the act of wuḍū’. What is strongest?",
+    "options": [
+      "Ignore the doubt and finish, because doubt is always ignored.",
+      "Return and wash the left arm because doubt during performance is treated differently than after completion.",
+      "Restart the whole wuḍū’ because one limb was doubted.",
+      "Continue only if he has wiped the head already."
+    ],
+    "correctIndex": 1,
+    "explanation": "Doubt during the act is generally treated as needing correction. Doubt after completion is treated more strictly as waswasah in many treatments."
+  },
+  {
+    "id": "FIQH-ADV-042",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person gives zakāh in advance before completion of the ḥawl. Which is the strongest general statement?",
+    "options": [
+      "It is invalid by consensus because zakāh is only after ḥawl.",
+      "Some madhāhib allow taʿjīl az-zakāh under conditions, while others are stricter. The safest answer is conditional permissibility with constraints.",
+      "It is always obligatory to pay in advance.",
+      "It becomes ṣadaqah only and never counts as zakāh."
+    ],
+    "correctIndex": 1,
+    "explanation": "Taʿjīl is a known issue. Many jurists permit under conditions. Mālikī positions can be stricter in some frames. The best exam answer is ‘conditional, madhhab-dependent’."
+  },
+  {
+    "id": "FIQH-ADV-043",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person prays in congregation but does not hear the imam and is far. What is the core condition being tested for following the imam?",
+    "options": [
+      "The follower must see the imam directly.",
+      "The follower must be able to know the imam’s movements via sound, sight, or reliable relay within valid connection, per madhhab conditions.",
+      "The follower must be within one meter of the imam.",
+      "The follower must memorize the imam’s recitation."
+    ],
+    "correctIndex": 1,
+    "explanation": "Following requires اتصال and the ability to track movements in a valid way. Schools differ on thresholds, but the principle is correct linkage and awareness."
+  },
+  {
+    "id": "FIQH-ADV-044",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person breaks an oath (yamīn) intentionally. Which is strongest about kaffārah?",
+    "options": [
+      "There is no kaffārah for intentional oath-breaking.",
+      "Kaffārah is required, and sequence involves feeding/clothing/freeing, and fasting if unable, with madhhab details on measurement and conditions.",
+      "Only fasting is valid as kaffārah.",
+      "Kaffārah is only for forgotten oaths."
+    ],
+    "correctIndex": 1,
+    "explanation": "Kaffārat al-yamīn is established, with detailed conditions and sequence. The hard part is precise execution, not the existence of kaffārah."
+  },
+  {
+    "id": "FIQH-ADV-045",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person says: “If you enter this house, you are divorced.” The wife enters. Which is the core fiqh classification that governs outcomes across schools?",
+    "options": [
+      "This is always an explicit ṭalāq with no relation to intention.",
+      "This is treated under conditional divorce and/or oath-like utterances depending on wording and intent, and madhhab methodology governs whether it counts as ṭalāq or kaffārah.",
+      "This is invalid speech and has no consequence.",
+      "This only affects financial rights, not marital status."
+    ],
+    "correctIndex": 1,
+    "explanation": "This is a hard chapter: taʿlīq (conditional divorce) and its relationship with aymān, intent, and madhhab method. Mālikī and others have distinct approaches."
+  },
+  {
+    "id": "FIQH-ADV-046",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person forgets one rakʿah and gives salām early. Then he remembers shortly after. Which is strongest generally?",
+    "options": [
+      "He restarts the whole prayer immediately, no matter what.",
+      "He completes the missing part and performs sujūd al-sahw according to his madhhab’s placement (before/after salām).",
+      "He ignores it because memory after salām does not count.",
+      "He only makes sujūd al-sahw without adding rakʿāt."
+    ],
+    "correctIndex": 1,
+    "explanation": "He completes the missing rakʿah(s) and rectifies with sujūd al-sahw. Placement differs by madhhab and type of mistake."
+  },
+  {
+    "id": "FIQH-ADV-047",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person prays in a garment made from an animal that died without proper slaughter. Which is strongest?",
+    "options": [
+      "Prayer is valid because clothing material has no effect.",
+      "It depends on whether tanning (dibāgh) applies to that hide and the madhhab’s scope for which hides become pure after tanning.",
+      "All tanning makes all hides pure by consensus, so it is always valid.",
+      "No tanning ever purifies any hide, so it is always invalid."
+    ],
+    "correctIndex": 1,
+    "explanation": "Dibāgh is a classic comparative fiqh issue. Which hides become pure after tanning and exceptions differ by madhhab."
+  },
+  {
+    "id": "FIQH-ADV-048",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person is afflicted with constant passing of wind (incontinence of wind). What is the correct framework?",
+    "options": [
+      "He abandons ṣalāh until cured.",
+      "He follows the maʿdhūr framework: purify and pray for each prayer time within madhhab conditions, and ignore recurring nullifiers within that time frame as treated by the school.",
+      "He makes one wuḍū’ per day only.",
+      "He must repeat every prayer twice."
+    ],
+    "correctIndex": 1,
+    "explanation": "This is باب أصحاب الأعذار. The structure is time-based purification and controlled disregard of ongoing events under conditions."
+  },
+  {
+    "id": "FIQH-ADV-049",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "A person prays behind an imam whose recitation contains a mistake that changes meaning. Which is the strongest general answer?",
+    "options": [
+      "Prayer is always valid because the imam bears everything.",
+      "It may affect validity depending on the type of error, whether it changes meaning, and madhhab rules on laḥn (major/minor errors).",
+      "Prayer is always invalid because any mistake nullifies.",
+      "Only the imam’s prayer is invalid, not the followers."
+    ],
+    "correctIndex": 1,
+    "explanation": "This is a technical recitation-fiḳh junction. Major errors that alter meaning can affect validity, but assessment is not blanket. Madhhab criteria apply."
+  },
+  {
+    "id": "FIQH-ADV-050",
+    "category": "Fiqh",
+    "level": "Advanced",
+    "question": "Which statement best reflects Mālikī emphasis in resolving competing evidences (tarjīḥ) in fiqh practice?",
+    "options": [
+      "Mālikīs prioritize qiyās over all other evidence without exception.",
+      "Mālikīs are known to weigh ʿamal ahl al-Madīnah as a significant proof in relevant domains, alongside Qur’ān, Sunnah, ijmāʿ, and other uṣūl tools.",
+      "Mālikīs reject Sunnah unless it is mutawātir.",
+      "Mālikīs treat custom as stronger than Qur’ān."
+    ],
+    "correctIndex": 1,
+    "explanation": "A defining uṣūl feature is the weight given to ʿamal of Madīnah (with its scope and conditions) as a proof, not as a replacement for revelation."
   }
 ]
-
 
 
