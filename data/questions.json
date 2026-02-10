@@ -9451,8 +9451,709 @@
     ],
     "correctIndex": 2,
     "explanation": "Adhkār and ruqyah are acts of worship rooted in tawḥīd, not rituals or magic."
+  },
+  {
+    "id": "quran_adv_001",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "The verse {لَيْسَ الْبِرَّ أَنْ تُوَلُّوا وُجُوهَكُمْ قِبَلَ الْمَشْرِقِ وَالْمَغْرِبِ} was revealed primarily to address:",
+    "options": [
+      "A theological debate with Christians",
+      "A misunderstanding about righteousness after the change of qiblah",
+      "The invalidity of physical acts in worship",
+      "The abrogation of facing Bayt al-Maqdis"
+    ],
+    "correctIndex": 1,
+    "explanation": "The verse clarifies that righteousness is not limited to direction after the qiblah change."
+  },
+  {
+    "id": "quran_adv_002",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "According to the strongest tafsīr position, the سبب النزول of {وَلَا تَقُولُوا لِمَنْ أَلْقَىٰ إِلَيْكُمُ السَّلَامَ لَسْتَ مُؤْمِنًا} relates to:",
+    "options": [
+      "A hypocrite hiding disbelief",
+      "A companion killing a man who outwardly accepted Islam in battle",
+      "Treaties with Jewish tribes",
+      "The etiquette of greeting generally"
+    ],
+    "correctIndex": 1,
+    "explanation": "Revealed after Usāmah b. Zayd killed a man who declared Islam during combat."
+  },
+  {
+    "id": "quran_adv_003",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "In tafsīr, the phrase {وَمَا أَدْرَاكَ مَا الْحُطَمَةُ} serves what primary rhetorical function?",
+    "options": [
+      "Literal clarification",
+      "Negation of metaphor",
+      "Magnification and terrorisation",
+      "Abrogation of prior meanings"
+    ],
+    "correctIndex": 2,
+    "explanation": "This صيغة is used to magnify and instill fear regarding Hellfire."
+  },
+  {
+    "id": "quran_adv_004",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "The سبب النزول of Sūrat al-Mujādilah directly establishes which legal principle?",
+    "options": [
+      "Invalidity of oaths",
+      "Prohibition of ẓihār and its expiation",
+      "Limits of marital speech",
+      "Abrogation of pre-Islamic divorce"
+    ],
+    "correctIndex": 1,
+    "explanation": "The surah was revealed concerning Khawlah bint Thaʿlabah and the ruling of ẓihār."
+  },
+  {
+    "id": "quran_adv_005",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "According to Ibn Kathīr, the verse {عَبَسَ وَتَوَلَّىٰ} demonstrates which tafsīr principle?",
+    "options": [
+      "Infallibility of prophets in all actions",
+      "Permissibility of concealment",
+      "Divine correction without negating prophethood",
+      "Equality of daʿwah priorities"
+    ],
+    "correctIndex": 2,
+    "explanation": "Allah corrected the Prophet ﷺ while affirming his status."
+  },
+  {
+    "id": "quran_adv_006",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "The verse {لَا تَقْرَبُوا الصَّلَاةَ وَأَنْتُمْ سُكَارَىٰ} illustrates which stage of legal development?",
+    "options": [
+      "Immediate prohibition",
+      "Permissibility with conditions",
+      "Gradualism in legislation",
+      "Abrogation without replacement"
+    ],
+    "correctIndex": 2,
+    "explanation": "Alcohol prohibition occurred gradually in stages."
+  },
+  {
+    "id": "quran_adv_007",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "In tafsīr, the عام لفظ but خاص سبب principle means:",
+    "options": [
+      "The ruling applies only to the cause",
+      "The wording restricts the ruling",
+      "The ruling is general despite a specific cause",
+      "The cause nullifies the wording"
+    ],
+    "correctIndex": 2,
+    "explanation": "The ruling follows the general wording, not the specific incident."
+  },
+  {
+    "id": "quran_adv_008",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "Which surah’s revelation context is most closely tied to the Battle of Badr?",
+    "options": [
+      "Sūrat al-Anfāl",
+      "Sūrat al-Hashr",
+      "Sūrat al-Fatḥ",
+      "Sūrat al-Tawbah"
+    ],
+    "correctIndex": 0,
+    "explanation": "Sūrat al-Anfāl addresses spoils, strategy, and divine aid at Badr."
+  },
+  {
+    "id": "quran_adv_009",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "According to classical mufassirūn, {إِنَّمَا الْأَعْمَالُ بِالنِّيَّاتِ} is absent from the Qurʾān, yet its meaning is strongly reflected in which verse?",
+    "options": [
+      "{وَمَا أُمِرُوا إِلَّا لِيَعْبُدُوا اللَّهَ مُخْلِصِينَ}",
+      "{وَأَقِيمُوا الصَّلَاةَ}",
+      "{إِنَّ اللَّهَ غَفُورٌ رَحِيمٌ}",
+      "{وَلَا تَزِرُ وَازِرَةٌ}"
+    ],
+    "correctIndex": 0,
+    "explanation": "Ikhlāṣ is explicitly commanded in this verse."
+  },
+  {
+    "id": "quran_adv_010",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "The سبب النزول of {يَا أَيُّهَا الَّذِينَ آمَنُوا لَا تَرْفَعُوا أَصْوَاتَكُمْ} relates to:",
+    "options": [
+      "Disrespect in gatherings",
+      "A dispute between Abū Bakr and ʿUmar in the Prophet’s presence",
+      "Masjid etiquette generally",
+      "Hypocrites mocking the Prophet"
+    ],
+    "correctIndex": 1,
+    "explanation": "Revealed after voices were raised in discussion before the Prophet ﷺ."
+  },
+  {
+    "id": "quran_adv_011",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "The verse {قَدْ سَمِعَ اللَّهُ قَوْلَ الَّتِي تُجَادِلُكَ فِي زَوْجِهَا} is best classified (in terms of subject) as:",
+    "options": [
+      "Purely theological (ʿaqīdah)",
+      "A legal-ethical response grounded in a real case",
+      "A Makkan warning discourse",
+      "A story of a previous nation"
+    ],
+    "correctIndex": 1,
+    "explanation": "It responds to a specific marital case and establishes a legal ruling with ethics."
+  },
+  {
+    "id": "quran_adv_012",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "In the strongest asbāb narration, {وَيَسْأَلُونَكَ عَنِ الرُّوحِ} was revealed in response to:",
+    "options": [
+      "Quraysh asking to test the Prophet ﷺ based on Jewish counsel",
+      "A debate between Muslims about angels",
+      "The hypocrites questioning revelation",
+      "A question from Christians about Trinity"
+    ],
+    "correctIndex": 0,
+    "explanation": "Quraysh consulted Jewish scholars to test the Prophet ﷺ, including the question of the rūḥ."
+  },
+  {
+    "id": "quran_adv_013",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "Which pair is most accurately linked: verse topic and سبب النزول?",
+    "options": [
+      "{وَلَا تَجْهَرْ بِصَلَاتِكَ} and loud adhān in Madīnah",
+      "{لَيْسَ عَلَيْكُمْ جُنَاحٌ أَنْ تَبْتَغُوا فَضْلًا} and trade during Ḥajj",
+      "{قُلْ هُوَ اللَّهُ أَحَدٌ} and dispute about inheritance",
+      "{الْيَوْمَ أَكْمَلْتُ لَكُمْ} and change of qiblah"
+    ],
+    "correctIndex": 1,
+    "explanation": "This verse addresses the pre-Islamic concern about commerce during Ḥajj."
+  },
+  {
+    "id": "quran_adv_014",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "In tafsīr methodology, the phrase 'العبرة بعموم اللفظ لا بخصوص السبب' means the ruling is taken from:",
+    "options": [
+      "Only the story that triggered revelation",
+      "The broader wording even if the cause was specific",
+      "Only Medinan verses",
+      "Only verses with explicit commands"
+    ],
+    "correctIndex": 1,
+    "explanation": "The general wording governs even if the cause of revelation was a specific incident."
+  },
+  {
+    "id": "quran_adv_015",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "Which scenario most correctly fits {وَلَا تَسُبُّوا الَّذِينَ يَدْعُونَ مِنْ دُونِ اللَّهِ}?",
+    "options": [
+      "A blanket ban on refuting shirk publicly",
+      "A prohibition when insult leads to greater harm through reciprocal blasphemy",
+      "A ruling restricted to hypocrites only",
+      "A Makkan command to avoid daʿwah"
+    ],
+    "correctIndex": 1,
+    "explanation": "It prohibits insulting idols when it predictably leads to greater evil: they insult Allah in return."
+  },
+  {
+    "id": "quran_adv_016",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "The verse {وَلَا تَقْفُ مَا لَيْسَ لَكَ بِهِ عِلْمٌ} is most directly invoked in tafsīr for:",
+    "options": [
+      "Prohibiting speculative claims and unverified narration",
+      "Banning ijtihād in fiqh",
+      "Prohibiting speaking Arabic incorrectly",
+      "Negating all forms of probability"
+    ],
+    "correctIndex": 0,
+    "explanation": "It targets following and asserting without knowledge, including rumor and unjustified claims."
+  },
+  {
+    "id": "quran_adv_017",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "Which verse is most closely tied to the حادثة الإفك (the slander against ʿĀʾishah رضي الله عنها)?",
+    "options": [
+      "{إِنَّ الَّذِينَ جَاءُوا بِالْإِفْكِ عُصْبَةٌ مِنْكُمْ}",
+      "{وَالَّذِينَ يَرْمُونَ الْمُحْصَنَاتِ}",
+      "{لَا تَدْخُلُوا بُيُوتًا غَيْرَ بُيُوتِكُمْ}",
+      "{يَا أَيُّهَا الَّذِينَ آمَنُوا إِذَا جَاءَكُمْ فَاسِقٌ}"
+    ],
+    "correctIndex": 0,
+    "explanation": "Sūrat al-Nūr addresses the إفك directly and sets ethical-legal standards for speech."
+  },
+  {
+    "id": "quran_adv_018",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "Which interpretation is strongest for {الْفِتْنَةُ أَشَدُّ مِنَ الْقَتْلِ} in its context?",
+    "options": [
+      "Any personal hardship is worse than killing",
+      "Shirk and persecution that turns people from dīn is worse than killing",
+      "Temptation in general is worse than murder",
+      "Civil disagreement is worse than war"
+    ],
+    "correctIndex": 1,
+    "explanation": "In context of persecution and preventing worship, fitnah refers to religious persecution and shirk."
+  },
+  {
+    "id": "quran_adv_019",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "The strongest sabab report for {وَمَا كَانَ اللَّهُ لِيُضِيعَ إِيمَانَكُمْ} relates to:",
+    "options": [
+      "Charity being wasted without intention",
+      "Prayers offered toward Bayt al-Maqdis before qiblah change",
+      "The martyrs of Uḥud",
+      "Fasting before Ramadan legislation"
+    ],
+    "correctIndex": 1,
+    "explanation": "It reassured believers about earlier prayers toward Jerusalem after qiblah change."
+  },
+  {
+    "id": "quran_adv_020",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "Which verse is classically used to establish that Allah does not burden beyond capacity, and why is its placement significant?",
+    "options": [
+      "{لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا} as the conclusion of al-Baqarah after heavy obligations",
+      "{فَإِنَّ مَعَ الْعُسْرِ يُسْرًا} because it is Makkan",
+      "{إِنَّمَا الْمُؤْمِنُونَ إِخْوَةٌ} because it is Madinan",
+      "{وَالْعَصْرِ} because it is short"
+    ],
+    "correctIndex": 0,
+    "explanation": "It comes after major legal and faith discussions, functioning as a concluding divine mercy."
+  },
+  {
+    "id": "quran_adv_021",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "The verse {إِنَّ الصَّفَا وَالْمَرْوَةَ مِنْ شَعَائِرِ اللَّهِ} addressed which misunderstanding?",
+    "options": [
+      "That saʿy is optional in all cases",
+      "That saʿy resembled a pre-Islamic practice tied to idols, so some hesitated",
+      "That ṭawāf cannot be done at night",
+      "That Zamzam is a bidʿah"
+    ],
+    "correctIndex": 1,
+    "explanation": "Some disliked saʿy due to pre-Islamic associations; the verse clarified it as a divine rite."
+  },
+  {
+    "id": "quran_adv_022",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "Which pairing of Makkan style vs Madinan style is most accurate in tafsīr studies?",
+    "options": [
+      "Makkan: detailed inheritance laws. Madinan: short oaths and vivid imagery",
+      "Makkan: establishing tawḥīd and ākhirah. Madinan: legislation and community rules",
+      "Makkan: treaties with People of the Book. Madinan: early prophet stories only",
+      "Makkan: zakāh percentages. Madinan: rhetorical questions only"
+    ],
+    "correctIndex": 1,
+    "explanation": "This is the dominant pattern, though there are exceptions."
+  },
+  {
+    "id": "quran_adv_023",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "In the story of Ādam, the phrase {فَتَلَقَّىٰ آدَمُ مِنْ رَبِّهِ كَلِمَاتٍ} is most strongly interpreted as:",
+    "options": [
+      "Specific words of repentance taught by Allah",
+      "Any general regret without wording",
+      "A metaphor for physical hardship",
+      "A reference to later Qurʾānic verses only"
+    ],
+    "correctIndex": 0,
+    "explanation": "Classical tafsīr treats it as specific words/phrases of tawbah taught to Ādam."
+  },
+  {
+    "id": "quran_adv_024",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "Which verse is most central in tafsīr for the principle that guidance is from Allah while human responsibility remains?",
+    "options": [
+      "{إِنَّكَ لَا تَهْدِي مَنْ أَحْبَبْتَ وَلَٰكِنَّ اللَّهَ يَهْدِي مَنْ يَشَاءُ}",
+      "{وَلَقَدْ يَسَّرْنَا الْقُرْآنَ لِلذِّكْرِ}",
+      "{قَدْ أَفْلَحَ مَنْ زَكَّاهَا}",
+      "{وَاصْبِرْ وَمَا صَبْرُكَ إِلَّا بِاللَّهِ}"
+    ],
+    "correctIndex": 0,
+    "explanation": "It clarifies the Prophet ﷺ does not control tawfīq-guidance, while humans still choose and are accountable."
+  },
+  {
+    "id": "quran_adv_025",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "The verse {لَيْسَ لَكَ مِنَ الْأَمْرِ شَيْءٌ} is most strongly linked to which event?",
+    "options": [
+      "Badr and spoils distribution",
+      "Uḥud and the Prophet ﷺ supplicating against certain individuals",
+      "The Hijrah to Madīnah",
+      "The treaty of Ḥudaybiyah"
+    ],
+    "correctIndex": 1,
+    "explanation": "Linked to Uḥud and divine instruction about outcomes and judgment belonging to Allah."
+  },
+  {
+    "id": "quran_adv_026",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "Which tafsīr approach best describes interpreting Qurʾān by Qurʾān?",
+    "options": [
+      "Using Isra’iliyyat primarily",
+      "Explaining a verse through another verse that clarifies or restricts it",
+      "Relying only on language without reports",
+      "Ignoring sabab because it weakens generality"
+    ],
+    "correctIndex": 1,
+    "explanation": "Tafsīr al-Qurʾān bil-Qurʾān uses internal clarification, restriction, and contextual linkage."
+  },
+  {
+    "id": "quran_adv_027",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "A common tafsīr pitfall is assuming every 'كُلّ' is absolute. Which verse is a standard example where 'كُلّ' is contextually restricted?",
+    "options": [
+      "{تُدَمِّرُ كُلَّ شَيْءٍ بِأَمْرِ رَبِّهَا}",
+      "{كُلُّ نَفْسٍ ذَائِقَةُ الْمَوْتِ}",
+      "{وَكُلُّهُمْ آتِيهِ يَوْمَ الْقِيَامَةِ فَرْدًا}",
+      "{كُلُّ مَنْ عَلَيْهَا فَانٍ}"
+    ],
+    "correctIndex": 0,
+    "explanation": "The wind destroyed 'everything' in the people’s path, not literally everything in existence."
+  },
+  {
+    "id": "quran_adv_028",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "Which claim is strongest regarding {الْيَوْمَ أَكْمَلْتُ لَكُمْ دِينَكُمْ}?",
+    "options": [
+      "It is Makkan, revealed before Hijrah",
+      "It is tied to ʿArafah during the Farewell Ḥajj in many reports",
+      "It abrogates all prior legislation",
+      "It negates any need for scholarly ijtihād"
+    ],
+    "correctIndex": 1,
+    "explanation": "It is widely reported as revealed during the Farewell Ḥajj on ʿArafah."
+  },
+  {
+    "id": "quran_adv_029",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "In tafsīr, {وَالسَّابِقُونَ السَّابِقُونَ} is best understood as:",
+    "options": [
+      "Those who arrived first physically to a place",
+      "Those foremost in īmān and obedience with precedence in ranks",
+      "Angels only",
+      "Prophets only"
+    ],
+    "correctIndex": 1,
+    "explanation": "It refers to those foremost in faith and deeds, attaining highest ranks."
+  },
+  {
+    "id": "quran_adv_030",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "The verse {إِذَا جَاءَكُمْ فَاسِقٌ بِنَبَإٍ فَتَبَيَّنُوا} was revealed in connection to:",
+    "options": [
+      "A general command about hadith authentication",
+      "A specific incident involving a collector sent to a tribe and a mistaken report",
+      "A command about battle strategy at Badr",
+      "A rule about qirāʾāt differences"
+    ],
+    "correctIndex": 1,
+    "explanation": "Asbāb reports link it to a messenger who feared a tribe and returned with incorrect information."
+  },
+  {
+    "id": "quran_adv_031",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "Which verse is most directly used in tafsīr to affirm that prophets can experience human emotions without implying imperfection in risālah?",
+    "options": [
+      "{وَتَوَلَّىٰ عَنْهُمْ وَقَالَ يَا أَسَفَىٰ عَلَىٰ يُوسُفَ}",
+      "{وَإِنَّكَ لَعَلَىٰ خُلُقٍ عَظِيمٍ}",
+      "{قُلْ هُوَ اللَّهُ أَحَدٌ}",
+      "{لَمْ يَلِدْ وَلَمْ يُولَدْ}"
+    ],
+    "correctIndex": 0,
+    "explanation": "Yaʿqūb’s grief is described as human sorrow without negating prophethood."
+  },
+  {
+    "id": "quran_adv_032",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "A verse often misused for unconditional tolerance is {لَكُمْ دِينُكُمْ وَلِيَ دِينِ}. In its strongest tafsīr context, it primarily signifies:",
+    "options": [
+      "Recognition of all religions as equally true",
+      "A declaration of separation and disavowal of shirk after persistent rejection",
+      "A command to abandon daʿwah",
+      "A legal treaty clause of permanent peace"
+    ],
+    "correctIndex": 1,
+    "explanation": "It is a Makkan declaration of separation after refusal, not religious relativism."
+  },
+  {
+    "id": "quran_adv_033",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "Which verse’s sabab is most directly related to the change in inheritance treatment of adopted children (تبنّي)?",
+    "options": [
+      "{ادْعُوهُمْ لِآبَائِهِمْ هُوَ أَقْسَطُ عِندَ اللَّهِ}",
+      "{وَآتُوا الْيَتَامَىٰ أَمْوَالَهُمْ}",
+      "{وَلَا تَقْرَبُوا مَالَ الْيَتِيمِ}",
+      "{وَأُولُو الْأَرْحَامِ بَعْضُهُمْ أَوْلَىٰ}"
+    ],
+    "correctIndex": 0,
+    "explanation": "This verse in al-Aḥzāb corrected lineage attribution and the system of adoption."
+  },
+  {
+    "id": "quran_adv_034",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "Which option best reflects the tafsīr of {فَاقْرَءُوا مَا تَيَسَّرَ مِنْهُ} in its original context in Sūrat al-Muzzammil?",
+    "options": [
+      "A command to recite the whole Qurʾān daily",
+      "A mitigation after the initial burden of prolonged night prayer",
+      "A command for silent recitation only",
+      "A Madinan instruction about tarāwīḥ"
+    ],
+    "correctIndex": 1,
+    "explanation": "It came as easing after the early command of heavy night worship."
+  },
+  {
+    "id": "quran_adv_035",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "Which is the strongest understanding of {الرِّجَالُ قَوَّامُونَ عَلَى النِّسَاءِ} when read with tafsīr and context?",
+    "options": [
+      "Unconditional superiority of men in every field",
+      "Responsibility and maintenance tied to financial obligation and leadership duties",
+      "A purely cultural statement with no legal implication",
+      "A Makkan verse addressing Quraysh customs only"
+    ],
+    "correctIndex": 1,
+    "explanation": "Qiwāmah is responsibility tied to nafqah and protective leadership, not absolute superiority."
+  },
+  {
+    "id": "quran_adv_036",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "Which verse is central to the tafsīr principle that commands can be for recommendation when contextual indicators exist?",
+    "options": [
+      "{فَإِذَا قُضِيَتِ الصَّلَاةُ فَانتَشِرُوا فِي الْأَرْضِ}",
+      "{أَقِيمُوا الصَّلَاةَ}",
+      "{كُتِبَ عَلَيْكُمُ الصِّيَامُ}",
+      "{حُرِّمَتْ عَلَيْكُمُ الْمَيْتَةُ}"
+    ],
+    "correctIndex": 0,
+    "explanation": "Dispersing after Jumuʿah is treated as permission/recommendation, not obligation, due to context."
+  },
+  {
+    "id": "quran_adv_037",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "Which explanation is strongest for {وَإِنْ تُبْدُوا مَا فِي أَنْفُسِكُمْ أَوْ تُخْفُوهُ يُحَاسِبْكُم بِهِ اللَّهُ} and its relation to later verses?",
+    "options": [
+      "It was never applied, purely rhetorical",
+      "It was abrogated completely with no residue",
+      "It caused fear, then was clarified/eased by {لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا}",
+      "It applies only to hypocrites"
+    ],
+    "correctIndex": 2,
+    "explanation": "Reports mention believers were distressed and the ending of al-Baqarah clarified the capacity principle."
+  },
+  {
+    "id": "quran_adv_038",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "In the narrative sequencing of earliest prophets, which is the most accurate Qurʾānic pattern?",
+    "options": [
+      "The Qurʾān always narrates chronologically",
+      "The Qurʾān narrates selectively, often prioritising thematic lessons over chronology",
+      "The Qurʾān only narrates post-Mūsā prophets",
+      "The Qurʾān narrates with fixed details identical to Biblical accounts"
+    ],
+    "correctIndex": 1,
+    "explanation": "Qurʾānic storytelling is thematic and selective, not a strict chronological biography."
+  },
+  {
+    "id": "quran_adv_039",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "Which statement best reflects the tafsīr of {وَإِذْ قَالَ رَبُّكَ لِلْمَلَائِكَةِ إِنِّي جَاعِلٌ فِي الْأَرْضِ خَلِيفَةً}?",
+    "options": [
+      "Khalīfah refers exclusively to a specific political office",
+      "Khalīfah indicates a successor generation on earth and stewardship",
+      "Khalīfah means angels will rule earth",
+      "Khalīfah is a metaphor for prophecy only"
+    ],
+    "correctIndex": 1,
+    "explanation": "It is commonly interpreted as human succession and stewardship on earth."
+  },
+  {
+    "id": "quran_adv_040",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "Which verse is most directly connected to the incident of some Companions mistaking a permissibility as a hardship in Ramadan nights?",
+    "options": [
+      "{أُحِلَّ لَكُمْ لَيْلَةَ الصِّيَامِ الرَّفَثُ إِلَىٰ نِسَائِكُمْ}",
+      "{كُتِبَ عَلَيْكُمُ الصِّيَامُ}",
+      "{وَعَلَى الَّذِينَ يُطِيقُونَهُ فِدْيَةٌ}",
+      "{فَمَنْ شَهِدَ مِنْكُمُ الشَّهْرَ فَلْيَصُمْهُ}"
+    ],
+    "correctIndex": 0,
+    "explanation": "Asbāb narrations connect it to easing after initial restriction/misunderstanding regarding nights of fasting."
+  },
+  {
+    "id": "quran_adv_041",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "Which tafsīr conclusion is strongest about {وَالْمُطَلَّقَاتُ يَتَرَبَّصْنَ بِأَنفُسِهِنَّ ثَلَاثَةَ قُرُوءٍ} given the known اختلاف over قروء?",
+    "options": [
+      "It unanimously means three menses with no dispute",
+      "It is disputed: quruʾ can mean menses or purity depending on madhhab evidences",
+      "It means three days only",
+      "It means three months in all cases"
+    ],
+    "correctIndex": 1,
+    "explanation": "Classically disputed: quruʾ is interpreted differently across schools using linguistic and hadith evidences."
+  },
+  {
+    "id": "quran_adv_042",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "Which verse is a central textual anchor in tafsīr for the prohibition of riba while distinguishing sale from riba?",
+    "options": [
+      "{وَأَحَلَّ اللَّهُ الْبَيْعَ وَحَرَّمَ الرِّبَا}",
+      "{وَأَقِيمُوا الْوَزْنَ بِالْقِسْطِ}",
+      "{لَا تَأْكُلُوا أَمْوَالَكُم بَيْنَكُم بِالْبَاطِلِ}",
+      "{وَلَا تُبَذِّرْ تَبْذِيرًا}"
+    ],
+    "correctIndex": 0,
+    "explanation": "This verse explicitly differentiates lawful trade from riba."
+  },
+  {
+    "id": "quran_adv_043",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "Which is the strongest tafsīr reading of {مَا نَنسَخْ مِنْ آيَةٍ أَوْ نُنسِهَا} regarding abrogation debates?",
+    "options": [
+      "It proves every difficult verse is abrogated",
+      "It establishes the concept of naskh, but its application is limited and evidential",
+      "It cancels the Sunnah entirely",
+      "It only refers to forgetting Qurʾān by humans"
+    ],
+    "correctIndex": 1,
+    "explanation": "Naskh exists but is not a shortcut. It requires strong evidence and is not indiscriminately applied."
+  },
+  {
+    "id": "quran_adv_044",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "Which verse is most directly tied to the concept of 'sunnat Allah' in the fate of nations (patterns of divine dealing)?",
+    "options": [
+      "{فَهَلْ يَنظُرُونَ إِلَّا سُنَّتَ الْأَوَّلِينَ}",
+      "{وَاللَّهُ يَرْزُقُ مَن يَشَاءُ}",
+      "{قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ}",
+      "{وَالضُّحَىٰ}"
+    ],
+    "correctIndex": 0,
+    "explanation": "It points to historical patterns in how nations are treated when they persist in rejection."
+  },
+  {
+    "id": "quran_adv_045",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "Which tafsīr linkage is strongest regarding {وَمَن لَّمْ يَحْكُم بِمَا أَنزَلَ اللَّهُ} and takfīr misuse?",
+    "options": [
+      "Any sin equals disbelief absolutely",
+      "The verse must be read with tafsīr distinctions between major kufr and minor kufr depending on intent/denial",
+      "It applies only to Jews historically and never to Muslims",
+      "It abrogates all other legal verses"
+    ],
+    "correctIndex": 1,
+    "explanation": "Classical tafsīr distinguishes between denial/rejection vs sinful failure while affirming the seriousness."
+  },
+  {
+    "id": "quran_adv_046",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "Which statement best reflects the tafsīr of {وَتِلْكَ الْأَيَّامُ نُدَاوِلُهَا بَيْنَ النَّاسِ} in context?",
+    "options": [
+      "A philosophical claim denying divine will",
+      "A reminder that victory and defeat rotate as tests, linked to Uḥud lessons",
+      "A verse about trade cycles",
+      "A Makkan verse about drought"
+    ],
+    "correctIndex": 1,
+    "explanation": "In Āl ʿImrān, it frames outcomes as tests and lessons, especially after Uḥud."
+  },
+  {
+    "id": "quran_adv_047",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "Which verse most directly supports the tafsīr principle that meanings of Qurʾānic words may have شرعي meanings beyond لغوي meanings?",
+    "options": [
+      "{وَأَقِيمُوا الصَّلَاةَ}",
+      "{وَالشَّمْسِ وَضُحَاهَا}",
+      "{تَبَّتْ يَدَا أَبِي لَهَبٍ}",
+      "{وَالْجِبَالَ أَرْسَاهَا}"
+    ],
+    "correctIndex": 0,
+    "explanation": "Ṣalāh linguistically can mean duʿāʾ, but sharʿan is a defined act with conditions and pillars."
+  },
+  {
+    "id": "quran_adv_048",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "Which tafsīr conclusion is strongest about {إِنَّمَا يُرِيدُ اللَّهُ لِيُذْهِبَ عَنكُمُ الرِّجْسَ أَهْلَ الْبَيْتِ} when considering سياق and خطاب?",
+    "options": [
+      "It is cut off from context and must be read independently",
+      "Contextually it sits within خطاب to the Prophet’s household, and tafsīr discussions include both context and reports",
+      "It exclusively refers to all Muslims without exception",
+      "It is Makkan and unrelated to household rulings"
+    ],
+    "correctIndex": 1,
+    "explanation": "The verse sits in a passage addressing the Prophet’s household, while reports expand tafsīr discussion."
+  },
+  {
+    "id": "quran_adv_049",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "Which verse is most strongly linked to the principle of consultation (shūrā) as a community practice in tafsīr?",
+    "options": [
+      "{وَشَاوِرْهُمْ فِي الْأَمْرِ}",
+      "{وَلَا تَنَازَعُوا}",
+      "{وَاعْتَصِمُوا بِحَبْلِ اللَّهِ}",
+      "{وَقُومُوا لِلَّهِ قَانِتِينَ}"
+    ],
+    "correctIndex": 0,
+    "explanation": "The command to consult is explicit and used in tafsīr for governance and communal decision-making."
+  },
+  {
+    "id": "quran_adv_050",
+    "category": "Qur'an",
+    "level": "Advanced",
+    "question": "Which statement best reflects the advanced tafsīr handling of 'apparent contradiction' between verses?",
+    "options": [
+      "Declare one verse false",
+      "Assume abrogation immediately",
+      "Reconcile through context, specification (takhsīs), restriction (taqyīd), and chronology only when proven",
+      "Reject hadith and rely on language only"
+    ],
+    "correctIndex": 2,
+    "explanation": "Methodologically: jamʿ (reconciliation) first, then takhsīs/taqyīd, then naskh only with proof."
   }
 ]
+
 
 
 
