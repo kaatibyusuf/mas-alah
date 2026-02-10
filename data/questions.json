@@ -7457,6 +7457,714 @@
     ],
     "correctIndex": 1,
     "explanation": "سكوتَ المريب: مصدر يبيّن نوع السكوت، فهو مفعول مطلق مبين للنوع."
+  },
+  {
+    "id": "seerah_adv_001",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "According to the strongest scholarly position, which prophet is the first to whom Allah sent a formal shari‘ah after widespread shirk appeared?",
+    "options": [
+      "Ādam عليه السلام",
+      "Idrīs عليه السلام",
+      "Nūḥ عليه السلام",
+      "Ibrāhīm عليه السلام"
+    ],
+    "correctIndex": 2,
+    "explanation": "Shirk first appeared among the people of Nūḥ, making him the first rasūl sent with a clear warning after deviation."
+  },
+  {
+    "id": "seerah_adv_002",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which event best marks the transition from pure tawḥīd to organized shirk among the descendants of Ādam?",
+    "options": [
+      "The death of Idrīs عليه السلام",
+      "The construction of statues of the righteous",
+      "The migration to Mesopotamia",
+      "The Flood of Nūḥ"
+    ],
+    "correctIndex": 1,
+    "explanation": "Statues initially made for remembrance later became objects of worship."
+  },
+  {
+    "id": "seerah_adv_003",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which group of righteous figures later became idols worshipped by the people of Nūḥ?",
+    "options": [
+      "Hūd, Ṣāliḥ, Shuʿayb, Lūṭ",
+      "Wadd, Suwāʿ, Yaghūth, Yaʿūq, Nasr",
+      "Hārūt and Mārūt",
+      "Āzar and his sons"
+    ],
+    "correctIndex": 1,
+    "explanation": "These were originally righteous men whose images became idols over generations."
+  },
+  {
+    "id": "seerah_adv_004",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "How long did Nūḥ عليه السلام call his people according to the Qur’an?",
+    "options": [
+      "950 years",
+      "950 years excluding childhood",
+      "950 lunar years",
+      "950 solar years of daʿwah"
+    ],
+    "correctIndex": 0,
+    "explanation": "The Qur’an explicitly states 950 years of daʿwah."
+  },
+  {
+    "id": "seerah_adv_005",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which theological principle is most clearly demonstrated by the drowning of Nūḥ’s son?",
+    "options": [
+      "Lineage guarantees salvation",
+      "Prophethood extends to family",
+      "Faith overrides blood ties",
+      "Intercession prevents divine decree"
+    ],
+    "correctIndex": 2,
+    "explanation": "Faith, not lineage, is the criterion before Allah."
+  },
+  {
+    "id": "seerah_adv_006",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet is most strongly associated with early advancements in writing and stitching according to reports?",
+    "options": [
+      "Ādam عليه السلام",
+      "Idrīs عليه السلام",
+      "Nūḥ عليه السلام",
+      "Hūd عليه السلام"
+    ],
+    "correctIndex": 1,
+    "explanation": "Idrīs is traditionally associated with writing and tailoring."
+  },
+  {
+    "id": "seerah_adv_007",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which people were destroyed by a violent wind over several days?",
+    "options": [
+      "People of Nūḥ",
+      "People of Ṣāliḥ",
+      "People of Hūd",
+      "People of Shuʿayb"
+    ],
+    "correctIndex": 2,
+    "explanation": "The people of ʿĀd were destroyed by a fierce wind."
+  },
+  {
+    "id": "seerah_adv_008",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "What unique architectural trait characterized the people of ʿĀd?",
+    "options": [
+      "Mountain-carved dwellings",
+      "Pyramidal tombs",
+      "Lofty pillars and monuments",
+      "Underground cities"
+    ],
+    "correctIndex": 2,
+    "explanation": "They were known for constructing towering structures."
+  },
+  {
+    "id": "seerah_adv_009",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet directly warned against arrogance rooted in physical strength?",
+    "options": [
+      "Ṣāliḥ عليه السلام",
+      "Hūd عليه السلام",
+      "Ibrāhīm عليه السلام",
+      "Lūṭ عليه السلام"
+    ],
+    "correctIndex": 1,
+    "explanation": "Hūd addressed the arrogance of ʿĀd regarding strength."
+  },
+  {
+    "id": "seerah_adv_010",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet’s miracle involved a she-camel with a divinely decreed drinking schedule?",
+    "options": [
+      "Hūd عليه السلام",
+      "Ṣāliḥ عليه السلام",
+      "Shuʿayb عليه السلام",
+      "Mūsā عليه السلام"
+    ],
+    "correctIndex": 1,
+    "explanation": "The she-camel of Ṣāliḥ was a clear sign."
+  },
+
+  {
+    "id": "seerah_adv_011",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "What crime ultimately sealed the fate of Thamūd?",
+    "options": [
+      "Mockery of revelation",
+      "Killing the she-camel",
+      "Denial of resurrection",
+      "Economic fraud"
+    ],
+    "correctIndex": 1,
+    "explanation": "They hamstrung the she-camel, violating Allah’s command."
+  },
+  {
+    "id": "seerah_adv_012",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which punishment befell the people of Ṣāliḥ?",
+    "options": [
+      "Flood",
+      "Earthquake and blast",
+      "Windstorm",
+      "Rain of stones"
+    ],
+    "correctIndex": 1,
+    "explanation": "They were destroyed by a blast and earthquake."
+  },
+  {
+    "id": "seerah_adv_013",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet is uniquely described as Allah’s khalīl (close friend)?",
+    "options": [
+      "Mūsā عليه السلام",
+      "Īsā عليه السلام",
+      "Ibrāhīm عليه السلام",
+      "Muḥammad ﷺ"
+    ],
+    "correctIndex": 2,
+    "explanation": "Ibrāhīm was taken as a khalīl."
+  },
+  {
+    "id": "seerah_adv_014",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which event chronologically precedes the building of the Kaʿbah?",
+    "options": [
+      "Sacrifice of Ismāʿīl",
+      "Migration to Egypt",
+      "Settlement in Bakkah",
+      "Destruction of Nimrod"
+    ],
+    "correctIndex": 2,
+    "explanation": "Ismāʿīl and Hājar settled in Makkah before the Kaʿbah was raised."
+  },
+  {
+    "id": "seerah_adv_015",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which argument did Ibrāhīm use to refute star worship?",
+    "options": [
+      "Stars are created beings",
+      "Stars disappear and set",
+      "Stars cannot speak",
+      "Stars are smaller than humans"
+    ],
+    "correctIndex": 1,
+    "explanation": "He argued that what sets cannot be divine."
+  },
+
+  {
+    "id": "seerah_adv_016",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet openly challenged economic injustice as a primary sin?",
+    "options": [
+      "Lūṭ عليه السلام",
+      "Shuʿayb عليه السلام",
+      "Hūd عليه السلام",
+      "Yūsuf عليه السلام"
+    ],
+    "correctIndex": 1,
+    "explanation": "Shuʿayb warned against cheating in trade."
+  },
+  {
+    "id": "seerah_adv_017",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which sin was added to the immorality of the people of Lūṭ?",
+    "options": [
+      "Highway robbery",
+      "Idolatry",
+      "Oppression of prophets",
+      "Interest-based trade"
+    ],
+    "correctIndex": 0,
+    "explanation": "They committed public highway crimes alongside immorality."
+  },
+  {
+    "id": "seerah_adv_018",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which punishment was unique to the people of Lūṭ?",
+    "options": [
+      "Wind",
+      "Flood",
+      "Earth overturned and stones",
+      "Fire"
+    ],
+    "correctIndex": 2,
+    "explanation": "Their land was flipped and rained with stones."
+  },
+  {
+    "id": "seerah_adv_019",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet is directly associated with the origin of Arab genealogy?",
+    "options": [
+      "Hūd عليه السلام",
+      "Isḥāq عليه السلام",
+      "Ismāʿīl عليه السلام",
+      "Yaʿqūb عليه السلام"
+    ],
+    "correctIndex": 2,
+    "explanation": "The Mustaʿribah Arabs descend from Ismāʿīl."
+  },
+  {
+    "id": "seerah_adv_020",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet’s story introduces systematic famine management?",
+    "options": [
+      "Yaʿqūb عليه السلام",
+      "Yūsuf عليه السلام",
+      "Mūsā عليه السلام",
+      "Dāwūd عليه السلام"
+    ],
+    "correctIndex": 1,
+    "explanation": "Yūsuf implemented economic planning in Egypt."
+  },
+
+  {
+    "id": "seerah_adv_021",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet explicitly forgave his brothers despite their crime?",
+    "options": [
+      "Isḥāq عليه السلام",
+      "Yūsuf عليه السلام",
+      "Mūsā عليه السلام",
+      "Hārūn عليه السلام"
+    ],
+    "correctIndex": 1,
+    "explanation": "Yūsuf forgave his brothers upon reunion."
+  },
+  {
+    "id": "seerah_adv_022",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet’s life demonstrates patience under prolonged family grief?",
+    "options": [
+      "Ibrāhīm عليه السلام",
+      "Yaʿqūb عليه السلام",
+      "Zakariyyā عليه السلام",
+      "Ayyūb عليه السلام"
+    ],
+    "correctIndex": 1,
+    "explanation": "Yaʿqūb grieved for Yūsuf yet remained patient."
+  },
+  {
+    "id": "seerah_adv_023",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet is associated with both kingship and prophethood?",
+    "options": [
+      "Dāwūd عليه السلام",
+      "Ismāʿīl عليه السلام",
+      "Hūd عليه السلام",
+      "Shuʿayb عليه السلام"
+    ],
+    "correctIndex": 0,
+    "explanation": "Dāwūd was both a king and a prophet."
+  },
+  {
+    "id": "seerah_adv_024",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet was tested with extreme illness and loss?",
+    "options": [
+      "Zakariyyā عليه السلام",
+      "Ayyūb عليه السلام",
+      "Yūnus عليه السلام",
+      "Nūḥ عليه السلام"
+    ],
+    "correctIndex": 1,
+    "explanation": "Ayyūb is the archetype of patience."
+  },
+  {
+    "id": "seerah_adv_025",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet left his people without permission and was swallowed by a creature?",
+    "options": [
+      "Mūsā عليه السلام",
+      "Yūnus عليه السلام",
+      "Īsā عليه السلام",
+      "Hūd عليه السلام"
+    ],
+    "correctIndex": 1,
+    "explanation": "Yūnus left before being commanded and repented."
+  },
+
+  {
+    "id": "seerah_adv_026",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which duʿāʾ is associated with deliverance from layered darkness?",
+    "options": [
+      "Duʿāʾ of Ayyūb",
+      "Duʿāʾ of Zakariyyā",
+      "Duʿāʾ of Yūnus",
+      "Duʿāʾ of Ibrāhīm"
+    ],
+    "correctIndex": 2,
+    "explanation": "Yūnus called upon Allah from three layers of darkness."
+  },
+  {
+    "id": "seerah_adv_027",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet is described as possessing soft iron as a miracle?",
+    "options": [
+      "Sulaymān عليه السلام",
+      "Dāwūd عليه السلام",
+      "Mūsā عليه السلام",
+      "Nūḥ عليه السلام"
+    ],
+    "correctIndex": 1,
+    "explanation": "Iron was made pliable for Dāwūd."
+  },
+  {
+    "id": "seerah_adv_028",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet controlled jinn by Allah’s permission?",
+    "options": [
+      "Dāwūd عليه السلام",
+      "Sulaymān عليه السلام",
+      "Īsā عليه السلام",
+      "Mūsā عليه السلام"
+    ],
+    "correctIndex": 1,
+    "explanation": "Sulaymān was granted authority over jinn."
+  },
+  {
+    "id": "seerah_adv_029",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet’s test involved judgment between disputing parties?",
+    "options": [
+      "Sulaymān عليه السلام",
+      "Dāwūd عليه السلام",
+      "Both A and B",
+      "Neither"
+    ],
+    "correctIndex": 2,
+    "explanation": "Both Dāwūd and Sulaymān judged cases."
+  },
+  {
+    "id": "seerah_adv_030",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet was raised without a father?",
+    "options": [
+      "Yaḥyā عليه السلام",
+      "Īsā عليه السلام",
+      "Isḥāq عليه السلام",
+      "Ismāʿīl عليه السلام"
+    ],
+    "correctIndex": 1,
+    "explanation": "Īsā was created miraculously without a father."
+  },
+
+  {
+    "id": "seerah_adv_031",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet spoke in defense of his mother while still an infant?",
+    "options": [
+      "Īsā عليه السلام",
+      "Mūsā عليه السلام",
+      "Yūsuf عليه السلام",
+      "Yaḥyā عليه السلام"
+    ],
+    "correctIndex": 0,
+    "explanation": "Īsā spoke from the cradle."
+  },
+  {
+    "id": "seerah_adv_032",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet was given wisdom as a child?",
+    "options": [
+      "Īsā عليه السلام",
+      "Yaḥyā عليه السلام",
+      "Isḥāq عليه السلام",
+      "Sulaymān عليه السلام"
+    ],
+    "correctIndex": 1,
+    "explanation": "Yaḥyā was granted wisdom early."
+  },
+  {
+    "id": "seerah_adv_033",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet’s people repented collectively before punishment descended?",
+    "options": [
+      "Hūd عليه السلام",
+      "Ṣāliḥ عليه السلام",
+      "Yūnus عليه السلام",
+      "Shuʿayb عليه السلام"
+    ],
+    "correctIndex": 2,
+    "explanation": "The people of Yūnus repented in time."
+  },
+  {
+    "id": "seerah_adv_034",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet’s life best demonstrates reconciliation between spiritual authority and governance?",
+    "options": [
+      "Mūsā عليه السلام",
+      "Dāwūd عليه السلام",
+      "Sulaymān عليه السلام",
+      "Both B and C"
+    ],
+    "correctIndex": 3,
+    "explanation": "Both ruled with divine guidance."
+  },
+  {
+    "id": "seerah_adv_035",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet was explicitly tested with fear, hunger, and loss?",
+    "options": [
+      "Ayyūb عليه السلام",
+      "Ibrāhīm عليه السلام",
+      "Mūsā عليه السلام",
+      "Multiple prophets"
+    ],
+    "correctIndex": 3,
+    "explanation": "These trials are shared across multiple prophetic narratives."
+  },
+
+  {
+    "id": "seerah_adv_036",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet confronted a tyrant claiming divinity?",
+    "options": [
+      "Ibrāhīm عليه السلام",
+      "Mūsā عليه السلام",
+      "Both A and B",
+      "Neither"
+    ],
+    "correctIndex": 2,
+    "explanation": "Ibrāhīm confronted Nimrod, Mūsā confronted Pharaoh."
+  },
+  {
+    "id": "seerah_adv_037",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which miracle directly countered sorcery?",
+    "options": [
+      "Staff turning into serpent",
+      "Splitting of the sea",
+      "Fire becoming cool",
+      "Wind control"
+    ],
+    "correctIndex": 0,
+    "explanation": "Mūsā’s staff nullified sorcery."
+  },
+  {
+    "id": "seerah_adv_038",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet requested death while remaining content with divine decree?",
+    "options": [
+      "Yūsuf عليه السلام",
+      "Ayyūb عليه السلام",
+      "Yūnus عليه السلام",
+      "Yaʿqūb عليه السلام"
+    ],
+    "correctIndex": 0,
+    "explanation": "Yūsuf asked to die upon Islam."
+  },
+  {
+    "id": "seerah_adv_039",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet is most associated with succession planning in leadership?",
+    "options": [
+      "Mūsā عليه السلام",
+      "Dāwūd عليه السلام",
+      "Sulaymān عليه السلام",
+      "Zakariyyā عليه السلام"
+    ],
+    "correctIndex": 3,
+    "explanation": "Zakariyyā asked for a righteous successor."
+  },
+  {
+    "id": "seerah_adv_040",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet’s story emphasizes knowledge over brute power?",
+    "options": [
+      "Ṭālūt",
+      "Dāwūd",
+      "Sulaymān",
+      "Mūsā"
+    ],
+    "correctIndex": 0,
+    "explanation": "Ṭālūt was chosen for knowledge and physique."
+  },
+
+  {
+    "id": "seerah_adv_041",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet experienced direct divine speech?",
+    "options": [
+      "Ibrāhīm عليه السلام",
+      "Mūsā عليه السلام",
+      "Īsā عليه السلام",
+      "Muḥammad ﷺ"
+    ],
+    "correctIndex": 1,
+    "explanation": "Mūsā is Kalīmullāh."
+  },
+  {
+    "id": "seerah_adv_042",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet’s mission focused heavily on social justice?",
+    "options": [
+      "Hūd عليه السلام",
+      "Shuʿayb عليه السلام",
+      "Ṣāliḥ عليه السلام",
+      "Nūḥ عليه السلام"
+    ],
+    "correctIndex": 1,
+    "explanation": "Shuʿayb emphasized fair trade."
+  },
+  {
+    "id": "seerah_adv_043",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet was given Zabūr?",
+    "options": [
+      "Mūsā عليه السلام",
+      "Sulaymān عليه السلام",
+      "Dāwūd عليه السلام",
+      "Īsā عليه السلام"
+    ],
+    "correctIndex": 2,
+    "explanation": "Zabūr was revealed to Dāwūd."
+  },
+  {
+    "id": "seerah_adv_044",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet combined mercy with strict adherence to divine law?",
+    "options": [
+      "Yūsuf عليه السلام",
+      "Mūsā عليه السلام",
+      "Sulaymān عليه السلام",
+      "Multiple prophets"
+    ],
+    "correctIndex": 3,
+    "explanation": "This trait is shared across many prophets."
+  },
+  {
+    "id": "seerah_adv_045",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet’s people were destroyed after rejecting a visible sign?",
+    "options": [
+      "Ṣāliḥ عليه السلام",
+      "Nūḥ عليه السلام",
+      "Hūd عليه السلام",
+      "All of the above"
+    ],
+    "correctIndex": 3,
+    "explanation": "All rejected clear signs."
+  },
+
+  {
+    "id": "seerah_adv_046",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet’s narrative most directly informs fiqh al-sabr?",
+    "options": [
+      "Ayyūb عليه السلام",
+      "Yūnus عليه السلام",
+      "Yaʿqūb عليه السلام",
+      "All of the above"
+    ],
+    "correctIndex": 3,
+    "explanation": "Each demonstrates patience in distinct contexts."
+  },
+  {
+    "id": "seerah_adv_047",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet’s life best illustrates tawḥīd in isolation?",
+    "options": [
+      "Nūḥ عليه السلام",
+      "Ibrāhīm عليه السلام",
+      "Mūsā عليه السلام",
+      "Īsā عليه السلام"
+    ],
+    "correctIndex": 1,
+    "explanation": "Ibrāhīm stood alone against his society."
+  },
+  {
+    "id": "seerah_adv_048",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet’s test involved delayed divine response?",
+    "options": [
+      "Zakariyyā عليه السلام",
+      "Ayyūb عليه السلام",
+      "Yaʿqūb عليه السلام",
+      "All of the above"
+    ],
+    "correctIndex": 3,
+    "explanation": "All experienced delay in relief."
+  },
+  {
+    "id": "seerah_adv_049",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which prophet’s narrative directly addresses misuse of intellect?",
+    "options": [
+      "Ibrāhīm عليه السلام",
+      "Nūḥ عليه السلام",
+      "Mūsā عليه السلام",
+      "Dāwūd عليه السلام"
+    ],
+    "correctIndex": 0,
+    "explanation": "Ibrāhīm dismantled false rational worship."
+  },
+  {
+    "id": "seerah_adv_050",
+    "category": "Seerah",
+    "level": "Advanced",
+    "question": "Which overarching theme unites the stories of the earliest prophets?",
+    "options": [
+      "Political reform",
+      "Economic development",
+      "Restoration of tawḥīd",
+      "Scientific advancement"
+    ],
+    "correctIndex": 2,
+    "explanation": "All prophetic missions fundamentally restored tawḥīd."
   }
 ]
 
