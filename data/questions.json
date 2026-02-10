@@ -6045,7 +6045,711 @@
     ],
     "correctIndex": 1,
     "explanation": "A defining uṣūl feature is the weight given to ʿamal of Madīnah (with its scope and conditions) as a proof, not as a replacement for revelation."
+  },
+  {
+    "id": "taw_adv_001",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which statement best captures the relationship between al-asbāb (means) and tawakkul according to Ahlus-Sunnah?",
+    "options": [
+      "Tawakkul is perfected by abandoning means because reliance must be purely on Allah",
+      "Taking means is permissible only when necessity is proven, otherwise it weakens tawakkul",
+      "Taking means is part of tawakkul when the heart relies on Allah and the limbs act with lawful means",
+      "Taking means is unrelated to tawakkul since tawakkul is purely an inward act"
+    ],
+    "correctIndex": 2,
+    "explanation": "Ahlus-Sunnah combine reliance of the heart on Allah with lawful means by the limbs. Abandoning means is not the Sunnah, and means without reliance is also deficient."
+  },
+  {
+    "id": "taw_adv_002",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "A person says: “Only Allah creates and provides, but calling upon the dead is just tawassul, not duʿā.” Which is the most accurate classification?",
+    "options": [
+      "Correct. It is merely tawassul and never enters shirk",
+      "Incorrect. Calling upon the dead is duʿā to other than Allah, which is major shirk",
+      "Incorrect only if the caller believes the dead independently controls outcomes",
+      "Correct if the dead was righteous and the request is small"
+    ],
+    "correctIndex": 1,
+    "explanation": "Duʿā is ʿibādah. Directly calling upon the dead for needs is directing worship to other than Allah, even if one affirms Allah as Creator."
+  },
+  {
+    "id": "taw_adv_003",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which pairing is most precise in explaining rubūbiyyah and ulūhiyyah?",
+    "options": [
+      "Rubūbiyyah: Allah alone deserves worship. Ulūhiyyah: Allah alone creates",
+      "Rubūbiyyah: Allah’s names and attributes. Ulūhiyyah: Allah’s decree and will",
+      "Rubūbiyyah: Allah’s lordship over creation. Ulūhiyyah: Allah’s exclusive right to worship",
+      "Rubūbiyyah: unseen matters only. Ulūhiyyah: visible rituals only"
+    ],
+    "correctIndex": 2,
+    "explanation": "Rubūbiyyah is lordship (creation, provision, control). Ulūhiyyah is singling Allah out in worship."
+  },
+  {
+    "id": "taw_adv_004",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which statement reflects the methodology of Ahl al-Sunnah regarding Allah’s attributes (ṣifāt)?",
+    "options": [
+      "Affirm meanings and deny the wording to avoid anthropomorphism",
+      "Affirm what Allah affirmed without taḥrīf, taʿṭīl, takyīf, or tamthīl",
+      "Deny attributes that imply action, affirm only attributes of essence",
+      "Interpret every attribute metaphorically to preserve transcendence"
+    ],
+    "correctIndex": 1,
+    "explanation": "Ahl al-Sunnah affirm the attributes as they came, without distortion, denial, asking how, or likening to creation."
+  },
+  {
+    "id": "taw_adv_005",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "A person wears an amulet believing it is a cause (sabab) but not independently effective. What is the strongest ruling?",
+    "options": [
+      "Permissible if intention is good and heart relies on Allah",
+      "Minor shirk if the amulet is not established as a sharʿī or natural cause",
+      "Major shirk only if worn on the right arm",
+      "Makrūh only, since belief is not independent efficacy"
+    ],
+    "correctIndex": 1,
+    "explanation": "Treating something as a cause without evidence (sharʿī or experiential) is a type of shirk in asbāb, generally classified as minor shirk."
+  },
+  {
+    "id": "taw_adv_006",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which is the most accurate description of the statement: “If not for Allah and you, I would have failed”?",
+    "options": [
+      "Always kufr because it mentions creation",
+      "Always permissible because it acknowledges Allah first",
+      "Problematic due to equating in wording. Correct form is “then you” (thumma) or “Allah then you”",
+      "Permissible if said casually without belief"
+    ],
+    "correctIndex": 2,
+    "explanation": "Using “and” can imply equal association. The Sunnah guidance is “Allah then you” to preserve the hierarchy of causation."
+  },
+  {
+    "id": "taw_adv_007",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "What is the core issue in seeking judgement from non-Islamic law (taḥākum) in the books of creed?",
+    "options": [
+      "It is always major kufr without any detail",
+      "It is always permissible if it achieves justice",
+      "Its ruling depends on belief, preference, and denial or affirmation of Allah’s ruling, alongside compulsion and context",
+      "It is minor shirk only, never kufr"
+    ],
+    "correctIndex": 2,
+    "explanation": "The issue is not a single blanket ruling in every case. Belief and intent matter, plus compulsion and circumstances."
+  },
+  {
+    "id": "taw_adv_008",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Ahl al-Sunnah define īmān primarily as:",
+    "options": [
+      "Belief in the heart only",
+      "Speech only",
+      "Actions only",
+      "Belief of the heart, speech of the tongue, and actions of the limbs; it increases and decreases"
+    ],
+    "correctIndex": 3,
+    "explanation": "This is the classic definition in Sunni creed."
+  },
+  {
+    "id": "taw_adv_009",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which is the most accurate way to describe the difference between shirk in rubūbiyyah and shirk in ulūhiyyah historically?",
+    "options": [
+      "The Arabs denied Allah as Creator but worshipped Him alone",
+      "The Arabs affirmed Allah’s lordship generally but committed shirk by worshipping intermediaries",
+      "The Arabs committed shirk only in names and attributes",
+      "The Arabs were atheists and had no concept of divinity"
+    ],
+    "correctIndex": 1,
+    "explanation": "The mushrikūn often affirmed Allah as Creator and Provider, yet worshipped others as intercessors."
+  },
+  {
+    "id": "taw_adv_010",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which statement about al-Qadar is most sound in Sunni theology?",
+    "options": [
+      "Man creates his own actions independently",
+      "Allah forces actions and humans have no will at all",
+      "Allah’s decree includes everything, and humans have real will and choice under Allah’s will",
+      "Allah knows actions after they happen"
+    ],
+    "correctIndex": 2,
+    "explanation": "Sunni creed affirms Allah’s comprehensive decree and knowledge, while affirming human choice under Allah’s will."
+  },
+  {
+    "id": "taw_adv_011",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "In the hierarchy of shirk, which is most correct?",
+    "options": [
+      "Minor shirk is always forgiven without tawbah",
+      "Major shirk is forgiven if the person is ignorant, automatically",
+      "Major shirk nullifies Islām if conditions are met and impediments removed. Minor shirk is grave but not expelling from Islām",
+      "Minor shirk is worse than major shirk because it is subtle"
+    ],
+    "correctIndex": 2,
+    "explanation": "Major shirk expels from Islām when established. Minor shirk is severe but does not expel from Islām."
+  },
+  {
+    "id": "taw_adv_012",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "The strongest principle regarding takfīr (declaring a specific person kāfir) is:",
+    "options": [
+      "Takfīr is forbidden absolutely",
+      "Takfīr is mandatory whenever a statement sounds like kufr to you",
+      "Takfīr is done only after establishing proof, fulfilling conditions, and removing impediments by qualified scholars/judges",
+      "Takfīr is a personal right of every Muslim"
+    ],
+    "correctIndex": 2,
+    "explanation": "Sunni methodology distinguishes between general rulings and applying them to individuals with conditions/impediments."
+  },
+  {
+    "id": "taw_adv_013",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which is the best description of al-walāʾ wa al-barāʾ in balanced Sunni understanding?",
+    "options": [
+      "Absolute hatred of all non-Muslims without any justice or good conduct",
+      "Loyalty to disbelief if it benefits Muslims materially",
+      "Love and loyalty to faith and its people, and disavowal of disbelief and its ways, while maintaining justice and good conduct",
+      "Neutrality toward all religions in belief and practice"
+    ],
+    "correctIndex": 2,
+    "explanation": "It is a creed principle with justice and ethics. It does not justify ظلم or betrayal of Islamic morals."
+  },
+  {
+    "id": "taw_adv_014",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "A person says: “I believe Allah is above the Throne, but I imagine how.” This falls into:",
+    "options": [
+      "Takyīf (asking how), which is prohibited",
+      "Taʿṭīl (denial), which is required",
+      "Taḥrīf (distortion), which is recommended",
+      "Tamthīl (likening), which is the only safe way"
+    ],
+    "correctIndex": 0,
+    "explanation": "Takyīf is affirming a ‘how’ for Allah’s attributes. We affirm without asking how."
+  },
+  {
+    "id": "taw_adv_015",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which statement best represents the Sunni approach to ambiguous verses (mutashābih) about attributes?",
+    "options": [
+      "We deny them entirely",
+      "We believe their wording is meaningless",
+      "We affirm their meanings in a manner befitting Allah, and refer the ‘how’ to Allah, without distorting",
+      "We must reinterpret them away from their apparent meanings in every case"
+    ],
+    "correctIndex": 2,
+    "explanation": "Affirmation without distortion and without asking how. This is the middle path."
+  },
+  {
+    "id": "taw_adv_016",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which is the strongest example of shirk in ulūhiyyah (worship)?",
+    "options": [
+      "Believing rain comes from clouds by Allah’s decree",
+      "Swearing by something other than Allah",
+      "Calling upon a saint for forgiveness of sins",
+      "Taking medicine to treat illness"
+    ],
+    "correctIndex": 2,
+    "explanation": "Seeking forgiveness as worship (and duʿā) from other than Allah is major shirk."
+  },
+  {
+    "id": "taw_adv_017",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "The phrase “lā ḥawla wa lā quwwata illā billāh” most directly reinforces which aspect?",
+    "options": [
+      "Pure rubūbiyyah without any link to worship",
+      "Reliance and seeking help from Allah, tied to worship (istiʿānah)",
+      "Denial of causes entirely",
+      "That humans have no actions at all"
+    ],
+    "correctIndex": 1,
+    "explanation": "It affirms that all ability and movement are by Allah, strengthening istiʿānah and tawakkul."
+  },
+  {
+    "id": "taw_adv_018",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which is the most accurate statement about istiġāthah (seeking rescue/help)?",
+    "options": [
+      "It is always shirk regardless of context",
+      "It is always permissible because people can help",
+      "It depends. Seeking help from creation in what they are able is permissible. Seeking unseen help or worship-like rescue is shirk",
+      "It is only permissible from prophets, not ordinary people"
+    ],
+    "correctIndex": 2,
+    "explanation": "Permissible in worldly, possible matters. Shirk when it is duʿā for what only Allah can do or in unseen matters."
+  },
+  {
+    "id": "taw_adv_019",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which is the best description of the ‘illah (effective cause) in a shirk-based act?",
+    "options": [
+      "The mere presence of Arabic wording",
+      "The absence of scholarly approval",
+      "Directing an act of ʿibādah to other than Allah or treating a non-cause as a cause in a religious sense",
+      "Being emotional while performing an act"
+    ],
+    "correctIndex": 2,
+    "explanation": "Shirk is about worship direction and false causation, not language or emotion alone."
+  },
+  {
+    "id": "taw_adv_020",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which statement best explains why the mushrikūn’s affirmation of Allah’s creation did not enter them into Islām?",
+    "options": [
+      "Because they did not believe in angels",
+      "Because tawḥīd requires ulūhiyyah. Affirming rubūbiyyah alone is insufficient",
+      "Because they had no scriptures",
+      "Because they lacked Arabic language mastery"
+    ],
+    "correctIndex": 1,
+    "explanation": "Tawḥīd is worshiping Allah alone. Many affirmed Allah’s lordship but worshipped others."
+  },
+
+  {
+    "id": "taw_adv_021",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "A person says: “I do not deny Allah, but I reject the obligation of ṣalāh.” The strongest classification in creed discussions is:",
+    "options": [
+      "Always minor sin only",
+      "A dispute of fiqh only, no creed relevance",
+      "Rejection of a known obligation can be kufr if established and not due to ignorance/impediment",
+      "Always acceptable if the heart believes"
+    ],
+    "correctIndex": 2,
+    "explanation": "Denying a known obligation is a creed issue. Individual ruling depends on proof and impediments."
+  },
+  {
+    "id": "taw_adv_022",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which best describes the Sunni stance on reason (ʿaql) and revelation (naql) in creed?",
+    "options": [
+      "Reason overrules revelation whenever conflict is perceived",
+      "Revelation overrules reason always, therefore reason is useless",
+      "Sound reason never contradicts authentic revelation. Perceived conflict comes from faulty reasoning or weak transmission",
+      "Reason and revelation are equal sources, each can cancel the other"
+    ],
+    "correctIndex": 2,
+    "explanation": "Ahl al-Sunnah affirm harmony between sound ʿaql and ṣaḥīḥ naql."
+  },
+  {
+    "id": "taw_adv_023",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "What is the best characterization of riā’ (showing off) in worship?",
+    "options": [
+      "Always major shirk that expels from Islām",
+      "A type of minor shirk when it contaminates worship intended for Allah",
+      "Not related to tawḥīd at all",
+      "Permissible if it encourages others"
+    ],
+    "correctIndex": 1,
+    "explanation": "Riā’ is minor shirk because it directs worship toward people’s approval, not Allah alone."
+  },
+  {
+    "id": "taw_adv_024",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which is the most accurate definition of ʿibādah in creed literature?",
+    "options": [
+      "Only rituals done in masjid",
+      "Any act done with hardship",
+      "A comprehensive term for all that Allah loves and is pleased with of statements and actions, inward and outward",
+      "Only duʿā and ṣalāh"
+    ],
+    "correctIndex": 2,
+    "explanation": "This is the standard Sunni definition: inward/outward, statements/actions, what Allah loves and is pleased with."
+  },
+  {
+    "id": "taw_adv_025",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which pairing is the most accurate regarding ‘ilm and shahādah in tawḥīd?",
+    "options": [
+      "Knowledge without acceptance is sufficient, acceptance is optional",
+      "Shahādah without knowledge is always sufficient",
+      "Knowledge, certainty, acceptance, submission, truthfulness, sincerity, and love are conditions mentioned by scholars for the shahādah",
+      "Only pronunciation matters"
+    ],
+    "correctIndex": 2,
+    "explanation": "Scholars mention conditions of shahādah to explain its meaning and implications."
+  },
+  {
+    "id": "taw_adv_026",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which statement best describes bidʿah’s danger to tawḥīd?",
+    "options": [
+      "Bidʿah is always smaller than sins and never leads to shirk",
+      "Bidʿah can corrupt worship, alter religion, and open doors to shirk by introducing acts without proof",
+      "Bidʿah is only a cultural issue",
+      "Bidʿah is good if it feels spiritual"
+    ],
+    "correctIndex": 1,
+    "explanation": "Bidʿah changes worship and may become a gateway to shirk and major deviations."
+  },
+  {
+    "id": "taw_adv_027",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which statement is most precise about ‘seeking barakah’ (tabarruk)?",
+    "options": [
+      "All forms are shirk",
+      "It is only valid from anything associated with righteous people",
+      "It is restricted to what the Sharīʿah established as a source of barakah, otherwise it becomes innovation or shirk-like practice",
+      "It is valid if one feels peace"
+    ],
+    "correctIndex": 2,
+    "explanation": "Tabarruk is regulated. Not everything can be treated as a source of barakah without proof."
+  },
+  {
+    "id": "taw_adv_028",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which is the strongest description of ḥukm (judgement) belonging to Allah in tawḥīd discussions?",
+    "options": [
+      "Only spiritual judgement belongs to Allah, worldly judgement belongs to people",
+      "Allah’s ḥukm includes legislation and decree. Rejecting His right to legislate can be kufr depending on belief and proof",
+      "It only means Allah judges on the Day of Judgement",
+      "It has no relation to creed"
+    ],
+    "correctIndex": 1,
+    "explanation": "Allah’s judgement includes legislation and decree. Ruling on individuals requires conditions/impediments."
+  },
+  {
+    "id": "taw_adv_029",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which is most accurate about ‘seeking intercession’ (shafāʿah)?",
+    "options": [
+      "Intercession belongs to Allah. Seeking it must be through Allah in a way He permitted, not by worshiping intermediaries",
+      "Intercession is denied entirely in Sunni creed",
+      "Intercession is automatic for all sinners",
+      "Intercession can be demanded from graves without issue"
+    ],
+    "correctIndex": 0,
+    "explanation": "Shafāʿah is by Allah’s permission. It must not become worship of intermediaries."
+  },
+  {
+    "id": "taw_adv_030",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "What is the most accurate way to treat a phrase that can carry kufr meaning but may also be intended differently?",
+    "options": [
+      "Immediately apply takfīr to the speaker",
+      "Ignore it always to avoid conflict",
+      "Investigate intent, clarify wording, and apply principles of conditions and impediments",
+      "Assume the worst interpretation by default"
+    ],
+    "correctIndex": 2,
+    "explanation": "Sunni methodology: clarify, establish proof, and apply conditions/impediments."
+  },
+
+  {
+    "id": "taw_adv_031",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which is the most accurate distinction between love (maḥabbah) that is worship and love that is natural?",
+    "options": [
+      "All love is worship",
+      "Worship-love involves humility, submission, and prioritizing Allah’s commands. Natural love does not carry that worship aspect",
+      "Natural love is always harām",
+      "Only love of parents counts as worship"
+    ],
+    "correctIndex": 1,
+    "explanation": "Worship-love includes submission and deference as an act of ʿibādah, unlike natural affection."
+  },
+  {
+    "id": "taw_adv_032",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "A person seeks ruqyah using Qur’an. Which condition best preserves tawḥīd?",
+    "options": [
+      "Believing the reciter has a special spiritual power",
+      "Believing the ruqyah works independently of Allah",
+      "Believing healing is from Allah, and ruqyah is a permissible means",
+      "Using any unknown words to increase effect"
+    ],
+    "correctIndex": 2,
+    "explanation": "Ruqyah is a means. Healing is from Allah. Unknown words can introduce shirk or forbidden elements."
+  },
+  {
+    "id": "taw_adv_033",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which is most accurate regarding the unseen (ghayb)?",
+    "options": [
+      "Anyone can access the unseen through spiritual exercises",
+      "The unseen is known only to Allah except what He reveals to whom He wills",
+      "The unseen is known to the awliyāʾ by default",
+      "The unseen is known through astrology"
+    ],
+    "correctIndex": 1,
+    "explanation": "Ghayb is Allah’s domain, except what He discloses by revelation."
+  },
+  {
+    "id": "taw_adv_034",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which description of ‘Sunnah’ vs ‘bidʿah’ is most creed-relevant?",
+    "options": [
+      "Sunnah is optional and bidʿah is acceptable if intentions are good",
+      "Sunnah is what the Prophet taught and practiced. Bidʿah introduces worship without evidence, risking deviation",
+      "Bidʿah is only in worldly affairs",
+      "Sunnah is only cultural identity"
+    ],
+    "correctIndex": 1,
+    "explanation": "Bidʿah is in worship matters without proof. Intentions do not legalize invented worship."
+  },
+  {
+    "id": "taw_adv_035",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which best explains why oath-taking (ḥalaf) by other than Allah is dangerous?",
+    "options": [
+      "Because it is impolite",
+      "Because it is a type of minor shirk by magnifying creation like Allah in a matter reserved for Him",
+      "Because it is only a local custom issue",
+      "Because it breaks fasts"
+    ],
+    "correctIndex": 1,
+    "explanation": "Swearing by other than Allah is a minor shirk, because oaths are acts of magnification tied to worship."
+  },
+  {
+    "id": "taw_adv_036",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which is the most precise stance on metaphorical interpretation (taʾwīl) of attributes among later theologians?",
+    "options": [
+      "All taʾwīl is kufr",
+      "No one ever did taʾwīl in Islamic history",
+      "Ahl al-Sunnah affirm the attributes as they came. Some scholars did taʾwīl in certain contexts, but the safest methodology is affirmation without distortion",
+      "Taʾwīl is obligatory for every attribute"
+    ],
+    "correctIndex": 2,
+    "explanation": "Sunni approach is affirmation without taḥrīf/takyīf/tamthīl. Historical nuance exists, but the default methodology is clear."
+  },
+  {
+    "id": "taw_adv_037",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which is most accurate about the statement: “Allah is everywhere” (as a general statement)?",
+    "options": [
+      "Always correct and must be taught",
+      "Always harmless because it intends closeness",
+      "An imprecise statement. Sunni creed affirms Allah’s exaltedness above creation, and His knowledge encompasses all. Wording should be corrected",
+      "Correct only if said in Arabic"
+    ],
+    "correctIndex": 2,
+    "explanation": "The statement is ambiguous and commonly misleads. Correct creed: Allah is above creation as befits Him, while His knowledge encompasses all."
+  },
+  {
+    "id": "taw_adv_038",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which is most accurate about duʿā and ṣalāh as proofs for tawḥīd?",
+    "options": [
+      "They are social rituals and not related to creed",
+      "They are core acts of worship that define ulūhiyyah. Directing them to other than Allah is shirk",
+      "They are optional for those with strong hearts",
+      "They are only for scholars"
+    ],
+    "correctIndex": 1,
+    "explanation": "Duʿā and ṣalāh are central worship acts. Directing them to other than Allah violates tawḥīd al-ulūhiyyah."
+  },
+  {
+    "id": "taw_adv_039",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "A person believes certain numbers bring luck and avoids others. This is closest to:",
+    "options": [
+      "Tiyarah (superstition/omen-taking), which is sinful and can be minor shirk depending on belief",
+      "Pure rubūbiyyah",
+      "A harmless culture",
+      "A form of charity"
+    ],
+    "correctIndex": 0,
+    "explanation": "Tiyarah and superstitions conflict with tawḥīd and proper reliance."
+  },
+  {
+    "id": "taw_adv_040",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which is most accurate regarding obedience to leaders in Sunni creed?",
+    "options": [
+      "Obey leaders in all cases even in sin",
+      "Rebel in all cases of injustice",
+      "Obedience is in maʿrūf (what is right). No obedience in sin. Patience and counsel are emphasized with legal principles",
+      "Obedience is irrelevant"
+    ],
+    "correctIndex": 2,
+    "explanation": "No obedience in disobedience to Allah. Sunni approach includes patience, advice, and avoidance of chaos under fiqh principles."
+  },
+
+  {
+    "id": "taw_adv_041",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which is the strongest description of the relationship between fear (khawf) and worship?",
+    "options": [
+      "All fear is worship",
+      "Fear becomes worship when it is fear of the unseen harm/power that only Allah controls, directed to other than Allah",
+      "Fear is always forbidden",
+      "Fear has no link to creed"
+    ],
+    "correctIndex": 1,
+    "explanation": "Natural fear is normal. Worship-fear is the fear of unseen harm/power in a way that is reserved for Allah."
+  },
+  {
+    "id": "taw_adv_042",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which best captures the meaning of “ikhlāṣ” in tawḥīd contexts?",
+    "options": [
+      "Doing actions only in public",
+      "Purifying intention such that worship is for Allah alone, not for people, status, or worldly aims",
+      "Avoiding all worldly work",
+      "Never smiling"
+    ],
+    "correctIndex": 1,
+    "explanation": "Ikhlāṣ is sincerity, directing worship to Allah alone."
+  },
+  {
+    "id": "taw_adv_043",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which is the most accurate general rule about seeking help from jinn?",
+    "options": [
+      "Permissible if it works",
+      "Permissible if the jinn claims to be Muslim",
+      "Generally forbidden and can enter shirk because it involves unseen dependence and opens doors to deception",
+      "Recommended for protection"
+    ],
+    "correctIndex": 2,
+    "explanation": "Seeking help from jinn commonly involves unseen reliance and deception, and can become major shirk."
+  },
+  {
+    "id": "taw_adv_044",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which statement about Allah’s knowledge is most accurate in Sunni creed?",
+    "options": [
+      "Allah’s knowledge changes as events occur",
+      "Allah learns new facts over time",
+      "Allah’s knowledge is complete, eternal, and encompasses what was, is, will be, and what would be under different conditions",
+      "Allah only knows generalities, not particulars"
+    ],
+    "correctIndex": 2,
+    "explanation": "Sunni creed affirms Allah’s complete and eternal knowledge, including counterfactuals as appropriate."
+  },
+  {
+    "id": "taw_adv_045",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which is most accurate about “حق الله على العباد” in tawḥīd teaching?",
+    "options": [
+      "Allah’s right is that they worship Him alone and do not associate partners with Him",
+      "Allah’s right is that they simply believe He exists",
+      "Allah’s right is that they make Islam culture",
+      "Allah’s right is that they never commit any sin"
+    ],
+    "correctIndex": 0,
+    "explanation": "The core right is worshiping Allah alone without shirk."
+  },
+  {
+    "id": "taw_adv_046",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which is the best description of “istighfār” in relation to tawḥīd?",
+    "options": [
+      "It is a worldly habit only",
+      "It is worship that affirms Allah’s lordship and right to forgive. Seeking it from others in worship sense is shirk",
+      "It is only for major sins",
+      "It replaces repentance"
+    ],
+    "correctIndex": 1,
+    "explanation": "Istighfār is worship tied to Allah’s forgiveness. Directing it to other than Allah is shirk."
+  },
+  {
+    "id": "taw_adv_047",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which is most accurate about “Asking the Prophet after his death for needs”?",
+    "options": [
+      "Permissible because prophets are alive in their graves",
+      "Permissible if it is only for small matters",
+      "It is directing duʿā to other than Allah, which is major shirk",
+      "Makrūh only"
+    ],
+    "correctIndex": 2,
+    "explanation": "Duʿā is worship. After death, asking the Prophet for needs is not the Sharʿī form of tawassul and enters shirk."
+  },
+  {
+    "id": "taw_adv_048",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which statement best summarizes the Sunni stance toward the grave as a place of worship activities?",
+    "options": [
+      "Graves are ideal places to increase worship because they soften the heart",
+      "One may pray to Allah while facing a grave to gain barakah",
+      "Graves are visited for reminders and duʿā for the deceased. Turning graves into worship sites is forbidden and a pathway to shirk",
+      "Building domes over graves is Sunnah"
+    ],
+    "correctIndex": 2,
+    "explanation": "Visitation is legislated for remembrance and duʿā for the dead. Making graves worship-sites is forbidden and historically leads to shirk."
+  },
+  {
+    "id": "taw_adv_049",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which is the most accurate description of ‘kufr’ as used in Sunnī texts?",
+    "options": [
+      "Any sin is kufr",
+      "Kufr is only atheism",
+      "Kufr can be major or minor depending on evidence and usage. Not every use implies exiting Islām",
+      "Kufr is only for hypocrites"
+    ],
+    "correctIndex": 2,
+    "explanation": "Texts use kufr in different ways. Scholars distinguish major vs minor kufr based on context and proof."
+  },
+  {
+    "id": "taw_adv_050",
+    "category": "Tawheed",
+    "level": "Advanced",
+    "question": "Which approach best protects a student from ghulūw (extremism) and tafrīṭ (neglect) in creed?",
+    "options": [
+      "Taking creed from social media debates",
+      "Rejecting all scholars to avoid bias",
+      "Learning from Qur’an and Sunnah upon the understanding of the Salaf, with qualified teachers and careful methodology",
+      "Choosing what feels spiritual"
+    ],
+    "correctIndex": 2,
+    "explanation": "Balanced creed learning needs authentic sources, Salaf understanding, qualified teachers, and disciplined method."
   }
 ]
+
 
 
