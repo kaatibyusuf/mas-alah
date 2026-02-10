@@ -8874,8 +8874,586 @@
     ],
     "correctIndex": 1,
     "explanation": "Ḥasan li-ghayrih can be acted upon when strengthened and not opposed by stronger evidence."
+  },
+  {
+    "id": "adhkaar_adv_001",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "Which statement most accurately reflects the prophetic approach to ruqyah?",
+    "options": [
+      "Ruqyah is discouraged unless illness is severe",
+      "Ruqyah is permissible when it contains shirk-free wording, reliance upon Allah, and known meanings",
+      "Ruqyah requires a specific lineage or spiritual rank",
+      "Ruqyah replaces medical treatment entirely"
+    ],
+    "correctIndex": 1,
+    "explanation": "The Prophet ﷺ permitted ruqyah provided it is free of shirk, understandable, and rooted in reliance upon Allah."
+  },
+  {
+    "id": "adhkaar_adv_002",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "Which adhkār are explicitly reported as protection against Shayṭān when recited in the morning and evening?",
+    "options": [
+      "Āyat al-Kursī alone",
+      "The Muʿawwidhāt (al-Ikhlāṣ, al-Falaq, an-Nās)",
+      "Sūrat al-Baqarah in entirety",
+      "All voluntary duʿāʾ without restriction"
+    ],
+    "correctIndex": 1,
+    "explanation": "The Muʿawwidhāt are specifically reported for protection when recited in the morning and evening."
+  },
+  {
+    "id": "adhkaar_adv_003",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "Which duʿāʾ was taught by the Prophet ﷺ for seeking refuge from sudden calamities?",
+    "options": [
+      "Allahumma inni as’aluka al-ʿāfiyah",
+      "Allahumma inni aʿūdhu bika min zawāli niʿmatik",
+      "Allahumma bārak lī fīmā aʿṭayt",
+      "Hasbiyallāhu lā ilāha illā Huwa"
+    ],
+    "correctIndex": 1,
+    "explanation": "This duʿāʾ explicitly mentions seeking refuge from the removal of blessings and sudden afflictions."
+  },
+  {
+    "id": "adhkaar_adv_004",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "Which practice is authentically reported as a nightly protection from jinn and Shayṭān?",
+    "options": [
+      "Reciting Āyat al-Kursī before sleep",
+      "Reciting Sūrat al-Kahf nightly",
+      "Performing ruqyah on others before sleep",
+      "Remaining silent until sleep"
+    ],
+    "correctIndex": 0,
+    "explanation": "Āyat al-Kursī before sleep is explicitly mentioned as protection until morning."
+  },
+  {
+    "id": "adhkaar_adv_005",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "Which statement regarding ruqyah using Qur’ān is most precise?",
+    "options": [
+      "Only specific verses may be used",
+      "Any Qur’ānic recitation with correct belief and intention is permissible",
+      "Only al-Fātiḥah may be used",
+      "Qur’ānic ruqyah requires audible shouting"
+    ],
+    "correctIndex": 1,
+    "explanation": "The Qur’ān as a whole is shifāʾ, provided it is used with sound belief and practice."
+  },
+
+  {
+    "id": "adhkaar_adv_006",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "The duʿāʾ 'Aʿūdhu bi-kalimātillāh al-tāmmāt…' is reported to protect from:",
+    "options": [
+      "Only physical illness",
+      "Every harmful creation, including jinn and poison",
+      "Only nightmares",
+      "Only envy"
+    ],
+    "correctIndex": 1,
+    "explanation": "The wording is comprehensive: protection from all harmful creations."
+  },
+  {
+    "id": "adhkaar_adv_007",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "Which action best aligns with prophetic ruqyah methodology?",
+    "options": [
+      "Combining Qur’ān with unknown incantations",
+      "Blowing lightly after recitation and wiping over the body",
+      "Fixing ruqyah to specific numerological patterns",
+      "Requiring payment before ruqyah"
+    ],
+    "correctIndex": 1,
+    "explanation": "The Prophet ﷺ would recite, blow lightly, and wipe over himself."
+  },
+  {
+    "id": "adhkaar_adv_008",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "Which adhkār are specifically linked to protection from the evil eye?",
+    "options": [
+      "Only Sūrat Yā-Sīn",
+      "The Muʿawwidhāt and duʿāʾ for barakah",
+      "Sūrat al-Mulk",
+      "Tasbīḥ after ṣalāh only"
+    ],
+    "correctIndex": 1,
+    "explanation": "Protection from ʿayn is established through seeking refuge and invoking barakah."
+  },
+  {
+    "id": "adhkaar_adv_009",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "Which statement is most accurate regarding ruqyah performed by non-Arabic speakers?",
+    "options": [
+      "It is invalid unless in Arabic",
+      "It is permissible if the meaning is correct and free from shirk",
+      "It requires translation approval",
+      "It is inferior and discouraged"
+    ],
+    "correctIndex": 1,
+    "explanation": "The condition is correctness of meaning and absence of shirk, not language alone."
+  },
+  {
+    "id": "adhkaar_adv_010",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "Which duʿāʾ was frequently used by the Prophet ﷺ to seek comprehensive well-being?",
+    "options": [
+      "Rabbi zidni ʿilmā",
+      "Allahumma inni as’aluka al-ʿāfiyah",
+      "Allahumma ihdinī fīman hadayt",
+      "Allahumma ajirnī min an-nār"
+    ],
+    "correctIndex": 1,
+    "explanation": "Al-ʿāfiyah includes protection in dīn, body, and worldly affairs."
+  },
+
+  {
+    "id": "adhkaar_adv_011",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "Which timing is most emphasized for protection-related adhkār?",
+    "options": [
+      "After ʿAṣr only",
+      "Morning and evening",
+      "Only before sleeping",
+      "After Jumuʿah"
+    ],
+    "correctIndex": 1,
+    "explanation": "Morning and evening adhkār are repeatedly emphasized for protection."
+  },
+  {
+    "id": "adhkaar_adv_012",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "Which duʿāʾ explicitly seeks refuge from Shayṭān’s whispering?",
+    "options": [
+      "Aʿūdhu billāhi min ash-shayṭān ir-rajīm",
+      "Allahumma barik lī",
+      "Rabbi hab lī min ladunka raḥmah",
+      "Hasbiyallāhu wa niʿma al-wakīl"
+    ],
+    "correctIndex": 0,
+    "explanation": "This istiʿādhah directly seeks refuge from Shayṭān."
+  },
+  {
+    "id": "adhkaar_adv_013",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "Which principle governs combining duʿāʾ with medicine or treatment?",
+    "options": [
+      "Duʿāʾ negates medicine",
+      "Medicine negates duʿāʾ",
+      "Both are means, and reliance remains upon Allah",
+      "Only duʿāʾ is sunnah"
+    ],
+    "correctIndex": 2,
+    "explanation": "The prophetic approach affirms taking means while relying upon Allah."
+  },
+  {
+    "id": "adhkaar_adv_014",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "Which adhkār were used by the Prophet ﷺ for children’s protection?",
+    "options": [
+      "Al-Fātiḥah only",
+      "Aʿūdhu bi-kalimātillāh al-tāmmāt",
+      "Tasbīḥ 100 times",
+      "Duʿāʾ after ʿIshāʾ"
+    ],
+    "correctIndex": 1,
+    "explanation": "The Prophet ﷺ used this duʿāʾ for al-Ḥasan and al-Ḥusayn."
+  },
+  {
+    "id": "adhkaar_adv_015",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "Which mistake most undermines ruqyah effectiveness?",
+    "options": [
+      "Low voice",
+      "Weak reliance upon Allah",
+      "Repetition",
+      "Reciting alone"
+    ],
+    "correctIndex": 1,
+    "explanation": "Ruqyah is an act of ʿibādah. Weak reliance undermines it."
+  },
+
+  {
+    "id": "adhkaar_adv_016",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "Which duʿāʾ is authentically linked to protection from debt and grief?",
+    "options": [
+      "Allahumma inni aʿūdhu bika min al-hamm wal-ḥazan",
+      "Allahumma inni as’aluka al-jannah",
+      "Rabbi yassir wa lā tuʿassir",
+      "Subḥānallāh wa bi-ḥamdih"
+    ],
+    "correctIndex": 0,
+    "explanation": "This duʿāʾ specifically addresses anxiety, sorrow, debt, and oppression."
+  },
+  {
+    "id": "adhkaar_adv_017",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "Which concept best explains why repeated adhkār are effective?",
+    "options": [
+      "Psychological conditioning only",
+      "Magical repetition",
+      "Persistence in remembrance and renewal of reliance",
+      "Numerical secrecy"
+    ],
+    "correctIndex": 2,
+    "explanation": "Repetition renews tawakkul and presence of heart."
+  },
+  {
+    "id": "adhkaar_adv_018",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "Which verse is explicitly described as a cure (shifāʾ)?",
+    "options": [
+      "Āyat al-Kursī",
+      "Al-Fātiḥah",
+      "Al-Ikhlāṣ",
+      "Āyah of Light"
+    ],
+    "correctIndex": 1,
+    "explanation": "Al-Fātiḥah is explicitly described as ruqyah and shifāʾ."
+  },
+  {
+    "id": "adhkaar_adv_019",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "Which practice best reflects balance in ruqyah?",
+    "options": [
+      "Relying only on healers",
+      "Self-ruqyah with Qur’ān and duʿāʾ",
+      "Avoiding ruqyah entirely",
+      "Using talismans"
+    ],
+    "correctIndex": 1,
+    "explanation": "The Prophet ﷺ practiced self-ruqyah regularly."
+  },
+  {
+    "id": "adhkaar_adv_020",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "Which duʿāʾ was taught for fear or distress at night?",
+    "options": [
+      "Aʿūdhu bi-kalimātillāh al-tāmmāt",
+      "Rabbi zidni ʿilmā",
+      "Allahumma barik lī",
+      "Lā ilāha illā anta subḥānaka"
+    ],
+    "correctIndex": 0,
+    "explanation": "This duʿāʾ is reported for night-time fear and protection."
+  },
+  {
+    "id": "adhkaar_adv_030",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "A person experiences sudden fear at night without a clear cause. Which response aligns most closely with prophetic guidance?",
+    "options": [
+      "Reciting any long supplication to calm the heart",
+      "Reciting Aʿūdhu bi-kalimātillāh al-tāmmāt before sleep",
+      "Seeking a ruqyah practitioner immediately",
+      "Repeating istighfār without specific intention"
+    ],
+    "correctIndex": 1,
+    "explanation": "This duʿāʾ is specifically reported for protection from night-time fear and unseen harm."
+  },
+  {
+    "id": "adhkaar_adv_031",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "A person recites Qur’ān as ruqyah but believes the sound itself repels jinn regardless of intention. This belief is best classified as:",
+    "options": [
+      "Valid reliance upon the Qur’ān",
+      "Incomplete understanding but acceptable",
+      "A form of impermissible belief resembling talismanic thinking",
+      "An encouraged spiritual insight"
+    ],
+    "correctIndex": 2,
+    "explanation": "Attributing independent power to sound resembles talismanic belief rather than tawḥīd."
+  },
+  {
+    "id": "adhkaar_adv_032",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "Which duʿāʾ is most appropriate when one fears harm from envy after receiving praise?",
+    "options": [
+      "Allahumma inni as’aluka al-ʿāfiyah",
+      "Tabārakallāh, Allahumma bārik",
+      "Aʿūdhu billāhi min ash-shayṭān ir-rajīm",
+      "Rabbi ishraḥ lī ṣadrī"
+    ],
+    "correctIndex": 1,
+    "explanation": "Invoking barakah directly addresses the harm of the evil eye."
+  },
+  {
+    "id": "adhkaar_adv_033",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "A ruqyah practitioner insists on fixed numbers (e.g. 41 recitations) claiming prophetic secrecy. This practice is:",
+    "options": [
+      "Sunnah-based but misunderstood",
+      "Permissible if Qur’ān is used",
+      "Bidʿah due to specification without evidence",
+      "Makrūh but tolerated"
+    ],
+    "correctIndex": 2,
+    "explanation": "Fixing numbers without evidence constitutes bidʿah in acts of worship."
+  },
+  {
+    "id": "adhkaar_adv_034",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "Which duʿāʾ best applies to persistent waswās during ṣalāh?",
+    "options": [
+      "Allahumma inni aʿūdhu bika min al-hamm wal-ḥazan",
+      "Aʿūdhu billāhi min ash-shayṭān ir-rajīm with light spitting to the left",
+      "Hasbiyallāhu wa niʿma al-wakīl",
+      "Allahumma ihdinī fīman hadayt"
+    ],
+    "correctIndex": 1,
+    "explanation": "This method is explicitly reported for waswās in prayer."
+  },
+  {
+    "id": "adhkaar_adv_035",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "A person avoids medical treatment claiming ruqyah alone is superior. This stance is:",
+    "options": [
+      "A sign of strong tawakkul",
+      "Consistent with prophetic medicine",
+      "Contrary to the prophetic balance of means and reliance",
+      "Permissible but discouraged"
+    ],
+    "correctIndex": 2,
+    "explanation": "The Prophet ﷺ combined ruqyah with taking lawful means."
+  },
+  {
+    "id": "adhkaar_adv_036",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "Which adhkār combination is most complete for evening protection?",
+    "options": [
+      "Āyat al-Kursī alone",
+      "Al-Ikhlāṣ, al-Falaq, an-Nās three times",
+      "Tasbīḥ, taḥmīd, takbīr",
+      "General duʿāʾ without specification"
+    ],
+    "correctIndex": 1,
+    "explanation": "The Muʿawwidhāt are specifically prescribed for morning and evening protection."
+  },
+  {
+    "id": "adhkaar_adv_037",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "A person writes Qur’ānic verses on paper and wears them for protection. The strongest ruling is:",
+    "options": [
+      "Permissible since Qur’ān is used",
+      "Disliked but allowed",
+      "Impermissible due to resemblance to amulets",
+      "Recommended by early scholars"
+    ],
+    "correctIndex": 2,
+    "explanation": "Wearing written verses as protection falls under prohibited amulets."
+  },
+  {
+    "id": "adhkaar_adv_038",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "Which duʿāʾ best applies when one fears sudden calamity or loss?",
+    "options": [
+      "Allahumma inni aʿūdhu bika min zawāli niʿmatik",
+      "Rabbi zidni ʿilmā",
+      "Allahumma ajirnī min an-nār",
+      "Subḥānallāh wa bi-ḥamdih"
+    ],
+    "correctIndex": 0,
+    "explanation": "This duʿāʾ explicitly seeks refuge from sudden loss of blessings."
+  },
+  {
+    "id": "adhkaar_adv_039",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "A person performs ruqyah using unknown phrases mixed with Qur’ān. The ruling is:",
+    "options": [
+      "Valid if Qur’ān dominates",
+      "Permissible with good intention",
+      "Impermissible due to unknown meanings",
+      "Makrūh only"
+    ],
+    "correctIndex": 2,
+    "explanation": "Unknown phrases violate the condition of clear, shirk-free meaning."
+  },
+  {
+    "id": "adhkaar_adv_040",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "Which scenario best reflects sunnah-based self-ruqyah?",
+    "options": [
+      "Reciting Qur’ān silently without focus",
+      "Reciting, blowing lightly, and wiping over the body",
+      "Listening to recorded ruqyah only",
+      "Requesting ruqyah without self-effort"
+    ],
+    "correctIndex": 1,
+    "explanation": "This is the established prophetic method."
+  },
+  {
+    "id": "adhkaar_adv_041",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "A person believes ruqyah works only if performed by a 'special' individual. This belief is:",
+    "options": [
+      "Sound due to spiritual hierarchy",
+      "Encouraged by tradition",
+      "A misunderstanding that undermines tawḥīd",
+      "Permissible if culturally accepted"
+    ],
+    "correctIndex": 2,
+    "explanation": "Ruqyah effectiveness depends on tawḥīd and reliance, not status."
+  },
+  {
+    "id": "adhkaar_adv_042",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "Which duʿāʾ is most relevant when overwhelmed by anxiety and debt?",
+    "options": [
+      "Allahumma inni aʿūdhu bika min al-hamm wal-ḥazan",
+      "Allahumma barik lī",
+      "Rabbi ishraḥ lī ṣadrī",
+      "Hasbiyallāhu lā ilāha illā Huwa"
+    ],
+    "correctIndex": 0,
+    "explanation": "This duʿāʾ directly addresses anxiety, sorrow, and debt."
+  },
+  {
+    "id": "adhkaar_adv_043",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "Which practice most clearly constitutes bidʿah in ruqyah?",
+    "options": [
+      "Repeating Qur’ān multiple times",
+      "Reciting in a low voice",
+      "Assigning specific times without evidence",
+      "Blowing lightly after recitation"
+    ],
+    "correctIndex": 2,
+    "explanation": "Specifying times without evidence adds to the religion."
+  },
+  {
+    "id": "adhkaar_adv_044",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "A person seeks ruqyah but continues persistent sin without repentance. The primary issue is:",
+    "options": [
+      "Invalid ruqyah wording",
+      "Weak reliance and contradiction of obedience",
+      "Lack of repetition",
+      "Insufficient volume of recitation"
+    ],
+    "correctIndex": 1,
+    "explanation": "Persistent sin weakens reliance and spiritual protection."
+  },
+  {
+    "id": "adhkaar_adv_045",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "Which duʿāʾ is most fitting when entering a place feared to be inhabited by jinn?",
+    "options": [
+      "Bismillāh alladhī lā yaḍurru maʿasmihī shay’",
+      "Aʿūdhu bi-kalimātillāh al-tāmmāt min sharri mā khalaq",
+      "Allahumma inni as’aluka al-ʿāfiyah",
+      "Subḥānallāh wa bi-ḥamdih"
+    ],
+    "correctIndex": 1,
+    "explanation": "This duʿāʾ is reported for protection when stopping or entering unknown places."
+  },
+  {
+    "id": "adhkaar_adv_046",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "Which belief most accurately reflects Ahl al-Sunnah regarding ruqyah outcomes?",
+    "options": [
+      "Ruqyah guarantees healing",
+      "Ruqyah works only if repeated daily",
+      "Ruqyah is a means; Allah alone grants cure",
+      "Ruqyah replaces all other acts of worship"
+    ],
+    "correctIndex": 2,
+    "explanation": "Healing is from Allah; ruqyah is a means."
+  },
+  {
+    "id": "adhkaar_adv_047",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "Which duʿāʾ is most appropriate when overwhelmed by fear of people’s harm?",
+    "options": [
+      "Hasbiyallāhu wa niʿma al-wakīl",
+      "Rabbi zidni ʿilmā",
+      "Allahumma barik lī",
+      "Subḥānallāh wa bi-ḥamdih"
+    ],
+    "correctIndex": 0,
+    "explanation": "This duʿāʾ expresses reliance when fearing others."
+  },
+  {
+    "id": "adhkaar_adv_048",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "Which mistake most commonly turns ruqyah into superstition?",
+    "options": [
+      "Quiet recitation",
+      "Lack of Arabic fluency",
+      "Attributing independent power to objects or words",
+      "Short supplications"
+    ],
+    "correctIndex": 2,
+    "explanation": "Superstition arises when means are given independent power."
+  },
+  {
+    "id": "adhkaar_adv_049",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "Which practice is closest to prophetic protection for children?",
+    "options": [
+      "Amulets around the neck",
+      "Daily Muʿawwidhāt with duʿāʾ",
+      "Written verses under pillows",
+      "Numerical chants"
+    ],
+    "correctIndex": 1,
+    "explanation": "The Prophet ﷺ regularly sought protection for children with specific duʿāʾ."
+  },
+  {
+    "id": "adhkaar_adv_050",
+    "category": "Adhkaar",
+    "level": "Advanced",
+    "question": "Which statement best summarizes the prophetic philosophy of adhkār and ruqyah?",
+    "options": [
+      "They are symbolic rituals",
+      "They operate independently of belief",
+      "They are acts of worship grounded in tawḥīd and reliance",
+      "They are cultural spiritual tools"
+    ],
+    "correctIndex": 2,
+    "explanation": "Adhkār and ruqyah are acts of worship rooted in tawḥīd, not rituals or magic."
   }
 ]
+
 
 
 
