@@ -41,8 +41,8 @@ const state = {
   timeLeft: 20,
   lastSettings: null, // { category, level, timed, count, mode: "normal"|"daily" }
 
-  // NEW: per-question records so we can go back
-  answers: [], // [{ selectedIdx: number|null, isCorrect: boolean, timedOut: boolean }]
+  // per-question records so we can go back
+  answers: [], // [{ selectedIdx: number|null|undefined, isCorrect: boolean, timedOut: boolean }]
   reviewing: false, // when reviewing from results, prevent changing answers
 
   isNavigating: false,
@@ -105,47 +105,6 @@ function updateStreak(progress) {
 }
 
 /* =======================
-   Questions data
-======================= */
-async function loadQuestions() {
-  if (state.allQuestions.length) return state.allQuestions;
-  function shuffleOptionsDeterministic(question) {
-  const idxs = [0, 1, 2, 3];
-  const seed = `opt_${question.id}_${question.category}_${question.level}`;
-
-  // reuse your seededShuffle + hashStringToInt
-  const perm = seededShuffle(idxs, seed);
-
-  const newOptions = perm.map((i) => question.options[i]);
-  const newCorrectIndex = perm.indexOf(question.correctIndex);
-
-  return {
-    ...question,
-    options: newOptions,
-    correctIndex: newCorrectIndex
-  };
-}
-
-// inside loadQuestions(), after JSON load:
-state.allQuestions = (await res.json()).map(shuffleOptionsDeterministic);
-
-
-  const res = await fetch("data/questions.json");
-  if (!res.ok) throw new Error("Could not load data/questions.json");
-  state.allQuestions = await res.json();
-  return state.allQuestions;
-}
-
-function pickRandom(arr, n) {
-  const copy = [...arr];
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy.slice(0, n);
-}
-
-/* =======================
    Deterministic helpers
 ======================= */
 function hashStringToInt(str) {
@@ -167,6 +126,81 @@ function seededShuffle(arr, seedStr) {
     [copy[i], copy[j]] = [copy[j], copy[i]];
   }
   return copy;
+}
+
+/* =======================
+   Questions data (FIXED)
+   - No "res before initialization"
+   - Defensive shuffle to avoid undefined options errors
+   - Normalizes questions to 4 options only
+======================= */
+function normalizeQuestion(q) {
+  const out = { ...q };
+
+  // options
+  if (!Array.isArray(out.options)) out.options = [];
+  out.options = out.options.map((x) => String(x ?? ""));
+
+  // ensure exactly 4 options (pad or trim)
+  if (out.options.length < 4) {
+    while (out.options.length < 4) out.options.push("—");
+  }
+  if (out.options.length > 4) out.options = out.options.slice(0, 4);
+
+  // correctIndex
+  if (typeof out.correctIndex !== "number" || !Number.isFinite(out.correctIndex)) out.correctIndex = 0;
+  if (out.correctIndex < 0 || out.correctIndex > 3) out.correctIndex = 0;
+
+  // other fields
+  out.id = String(out.id ?? "");
+  out.category = String(out.category ?? "");
+  out.level = String(out.level ?? "");
+  out.question = String(out.question ?? "");
+  out.explanation = String(out.explanation ?? "");
+
+  return out;
+}
+
+function shuffleOptionsDeterministic(question) {
+  const q = normalizeQuestion(question);
+
+  // If question is empty, just return normalized version
+  if (!q.id || !q.category || !q.level) return q;
+
+  const idxs = [0, 1, 2, 3];
+  const seed = `opt_${q.id}_${q.category}_${q.level}`;
+  const perm = seededShuffle(idxs, seed);
+
+  const newOptions = perm.map((i) => q.options[i]);
+  const newCorrectIndex = perm.indexOf(q.correctIndex);
+
+  return {
+    ...q,
+    options: newOptions,
+    correctIndex: newCorrectIndex
+  };
+}
+
+async function loadQuestions() {
+  if (state.allQuestions.length) return state.allQuestions;
+
+  const res = await fetch("data/questions.json");
+  if (!res.ok) throw new Error("Could not load data/questions.json");
+
+  const json = await res.json();
+  if (!Array.isArray(json)) throw new Error("questions.json must be an array of questions");
+
+  state.allQuestions = json.map(shuffleOptionsDeterministic);
+  return state.allQuestions;
+}
+
+function pickRandom(arr, n) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy.slice(0, n);
 }
 
 /* =======================
@@ -430,7 +464,6 @@ function handleQuizKeys(e) {
     return;
   }
 
-  // allow A-D only if current question not answered (or not reviewing)
   const rec = state.answers[state.index];
   const canAnswer = !state.reviewing && !(rec && rec.selectedIdx !== undefined);
   if (!canAnswer) return;
@@ -630,7 +663,9 @@ function renderHome() {
   if (bestEntries.length) {
     bestEntries.sort((a, b) => b[1] - a[1]);
     const [key, val] = bestEntries[0];
-    const [cat, lvl] = key.split("|");
+    const parts = String(key || "").split("|");
+    const cat = parts[0] || "Unknown";
+    const lvl = parts[1] || "Unknown";
     bestHeadline = `${val}%`;
     bestSub = `${cat} (${lvl})`;
   }
@@ -774,7 +809,7 @@ function renderHome() {
 
       withTransition(renderQuiz);
     } catch (err) {
-      status.textContent = String(err.message || err);
+      status.textContent = String(err?.message || err);
     }
   });
 }
@@ -865,7 +900,7 @@ async function renderDaily() {
 
       withTransition(renderQuiz);
     } catch (err) {
-      status.textContent = String(err.message || err);
+      status.textContent = String(err?.message || err);
     }
   });
 }
@@ -878,6 +913,23 @@ function renderQuiz() {
 
   const total = state.quizQuestions.length;
   const q = state.quizQuestions[state.index];
+
+  if (!q) {
+    app.innerHTML = `
+      <section class="card" style="margin-top:20px;">
+        <h2>Quiz error</h2>
+        <p class="muted">No question found at this index. Check your questions.json.</p>
+        <button class="btn" type="button" data-goto="home">Back Home</button>
+      </section>
+    `;
+    bindGotoButtons();
+    return;
+  }
+
+  // Normalize just in case something slipped through
+  const nq = normalizeQuestion(q);
+  state.quizQuestions[state.index] = nq;
+
   const rec = state.answers[state.index];
   const answeredAlready = rec && rec.selectedIdx !== undefined;
 
@@ -924,10 +976,10 @@ function renderQuiz() {
 
       <hr class="hr" />
 
-      <h3 style="margin-top:0;">${q.question}</h3>
+      <h3 style="margin-top:0;">${nq.question}</h3>
 
       <div class="grid" id="options">
-        ${q.options
+        ${nq.options
           .map(
             (opt, idx) => `
               <button class="optionBtn" data-idx="${idx}" type="button" ${canAnswer ? "" : "disabled"}>
@@ -973,9 +1025,8 @@ function renderQuiz() {
     });
   });
 
-  // If already answered, show stored feedback and highlight
   if (answeredAlready) {
-    paintFeedbackFromRecord(q, rec);
+    paintFeedbackFromRecord(nq, rec);
     showNextButtonLabel();
   } else {
     if (state.timed) startTimer();
@@ -1017,20 +1068,20 @@ function showNextButtonLabel() {
 }
 
 function showFeedback(selectedIdx, meta = {}) {
-  // guard: only first-time answering
   const rec = state.answers[state.index];
   if (!rec || rec.selectedIdx !== undefined) return;
 
   clearTimer();
 
-  const q = state.quizQuestions[state.index];
+  const q = normalizeQuestion(state.quizQuestions[state.index]);
+  state.quizQuestions[state.index] = q;
+
   const correct = q.correctIndex;
 
   const isCorrect = selectedIdx === correct;
   const timedOut = meta.reason === "timeout";
 
-  // store record
-  rec.selectedIdx = selectedIdx;
+  rec.selectedIdx = selectedIdx; // can be null
   rec.isCorrect = isCorrect;
   rec.timedOut = timedOut;
 
@@ -1041,11 +1092,8 @@ function showFeedback(selectedIdx, meta = {}) {
     if (selectedIdx !== null && idx === selectedIdx && idx !== correct) btn.classList.add("wrong");
   });
 
-  if (timedOut) {
-    vibrate(20);
-  } else {
-    vibrate(isCorrect ? 15 : [10, 30, 10]);
-  }
+  if (timedOut) vibrate(20);
+  else vibrate(isCorrect ? 15 : [10, 30, 10]);
 
   const feedback = document.getElementById("feedback");
   feedback.style.display = "block";
@@ -1068,7 +1116,6 @@ function renderResults() {
   const score = computeScoreFromAnswers();
   const percent = total ? Math.round((score / total) * 100) : 0;
 
-  // Save progress only if not reviewing
   if (!state.reviewing) {
     const progress = loadProgress();
     updateStreak(progress);
@@ -1084,9 +1131,9 @@ function renderResults() {
     saveProgress(progress);
   }
 
-  // Build review list. Wrong ones bolded.
   const items = state.quizQuestions
-    .map((q, i) => {
+    .map((qq, i) => {
+      const q = normalizeQuestion(qq);
       const rec = state.answers[i];
       const correct = !!(rec && rec.isCorrect);
       const answered = rec && rec.selectedIdx !== undefined;
@@ -1171,7 +1218,6 @@ function renderResults() {
   document.getElementById("progressBtn").addEventListener("click", () => go("progress"));
   document.getElementById("homeBtn").addEventListener("click", () => go("home"));
 
-  // click to review question
   app.querySelectorAll("[data-review-index]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const i = Number(btn.dataset.reviewIndex);
@@ -1224,7 +1270,9 @@ function renderProgress() {
               ? `<div style="margin-top:10px; display:grid; gap:8px;">
                    ${bestEntries
                      .map(([key, val]) => {
-                       const [cat, lvl] = key.split("|");
+                       const parts = String(key || "").split("|");
+                       const cat = parts[0] || "Unknown";
+                       const lvl = parts[1] || "Unknown";
                        return `<div style="display:flex; justify-content:space-between; gap:10px;">
                                  <span>${cat} • ${lvl}</span>
                                  <strong>${val}%</strong>
@@ -1852,18 +1900,22 @@ function renderDiary() {
     if (e.target === elModal) closeModal();
   });
 
-  // open entry (event delegation)
-  app.addEventListener("click", (e) => {
-    const btn = e.target.closest("[data-diary-open]");
-    if (!btn) return;
+  // open entry (event delegation) - bind once per render, scoped to this app node
+  app.addEventListener(
+    "click",
+    (e) => {
+      const btn = e.target.closest("[data-diary-open]");
+      if (!btn) return;
 
-    const id = btn.getAttribute("data-diary-open");
-    const data = loadDiary();
-    const entry = data.find((x) => x.id === id);
-    if (!entry) return;
+      const id = btn.getAttribute("data-diary-open");
+      const data = loadDiary();
+      const entry = data.find((x) => x.id === id);
+      if (!entry) return;
 
-    openModal(entry);
-  });
+      openModal(entry);
+    },
+    { passive: true }
+  );
 
   elDelete.addEventListener("click", () => {
     if (!openedId) return;
@@ -2218,7 +2270,7 @@ function setFooterYear() {
 ======================= */
 window.addEventListener("hashchange", () => {
   const route = (window.location.hash || "#welcome").slice(1);
-  state.reviewing = false; // normal route changes exit review mode
+  state.reviewing = false;
   render(route);
 });
 
