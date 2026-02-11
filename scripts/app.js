@@ -21,9 +21,81 @@ const app = document.getElementById("app");
 const STORAGE_KEY = "masalah_progress_v1";
 const DAILY_KEY = "masalah_daily_v1";
 const DIARY_KEY = "masalah_diary_v1";
+const DAILY_DECK_KEY = "masalah_daily_decks_v1";
+
 
 const LOCK_PIN_HASH_KEY = "masalah_pin_hash_v1";
 const LOCK_UNLOCKED_UNTIL_KEY = "masalah_unlocked_until_v1";
+const DECK_KEY = "masalah_decks_v1";
+
+function loadDecks(){
+  try { return JSON.parse(localStorage.getItem(DECK_KEY) || "{}"); }
+  catch { return {}; }
+}
+
+function saveDecks(decks){
+  localStorage.setItem(DECK_KEY, JSON.stringify(decks));
+}
+
+function deckKey(category, level){
+  return `${category}|${level}`;
+}
+
+// Fisher-Yates
+function shuffle(arr){
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+/**
+ * Draw N questions from a persistent deck so you don't repeat immediately.
+ * It cycles through all questions before repeating.
+ */
+function drawFromDeck(allPool, category, level, n){
+  const decks = loadDecks();
+  const k = deckKey(category, level);
+
+  // init deck if missing or invalid
+  if (!decks[k] || !Array.isArray(decks[k].remaining) || !Array.isArray(decks[k].used)) {
+    const ids = allPool.map(q => q.id);
+    decks[k] = { remaining: shuffle(ids), used: [] };
+  }
+
+  const deck = decks[k];
+
+  // if not enough remaining, recycle used into remaining (reshuffle)
+  if (deck.remaining.length < n){
+    const recycled = shuffle([...deck.used, ...deck.remaining]);
+    deck.remaining = recycled;
+    deck.used = [];
+  }
+
+  const chosenIds = deck.remaining.splice(0, n);
+  deck.used.push(...chosenIds);
+
+  decks[k] = deck;
+  saveDecks(decks);
+
+  // turn ids into questions in the same order
+  const map = new Map(allPool.map(q => [q.id, q]));
+  return chosenIds.map(id => map.get(id)).filter(Boolean);
+}
+function loadDailyDecks(){
+  try { return JSON.parse(localStorage.getItem(DAILY_DECK_KEY) || "{}"); }
+  catch { return {}; }
+}
+
+function saveDailyDecks(decks){
+  localStorage.setItem(DAILY_DECK_KEY, JSON.stringify(decks));
+}
+
+function dailyDeckKey(category, level){
+  return `${category}|${level}`;
+}
 
 // protect what you want
 const PROTECTED_ROUTES = new Set(["diary", "progress"]);
@@ -36,9 +108,9 @@ const state = {
   quizQuestions: [],
   index: 0,
   timed: true,
-  secondsPerQuestion: 20,
+  secondsPerQuestion: 60,
   timerId: null,
-  timeLeft: 20,
+  timeLeft: 60,
   lastSettings: null, // { category, level, timed, count, mode: "normal"|"daily" }
 
   // per-question records so we can go back
@@ -220,10 +292,11 @@ function saveDailyState(daily) {
   localStorage.setItem(DAILY_KEY, JSON.stringify(daily));
 }
 
-async function getOrCreateDailyQuiz(category, level, count) {
+async function getOrCreateDailyQuiz(category, level, count){
   const today = todayISO();
   const existing = loadDailyState();
 
+  // If today's quiz already exists, return it
   if (
     existing &&
     existing.date === today &&
@@ -232,28 +305,59 @@ async function getOrCreateDailyQuiz(category, level, count) {
     existing.count === count &&
     Array.isArray(existing.questionIds) &&
     existing.questionIds.length
-  ) {
+  ){
     return existing;
   }
 
   const all = await loadQuestions();
-  const pool = all.filter((q) => q.category === category && q.level === level);
+  const pool = all.filter(q => q.category === category && q.level === level);
 
-  if (!pool.length) {
+  if (!pool.length){
     const empty = { date: today, category, level, count, questionIds: [] };
     saveDailyState(empty);
     return empty;
   }
 
-  const seed = `masalah_daily_${today}_${category}_${level}`;
-  const shuffled = seededShuffle(pool, seed);
-  const chosen = shuffled.slice(0, Math.min(count, shuffled.length));
-  const questionIds = chosen.map((q) => q.id);
+  const decks = loadDailyDecks();
+  const key = dailyDeckKey(category, level);
 
-  const daily = { date: today, category, level, count, questionIds };
+  // Initialize deck if missing
+  if (!decks[key] || !Array.isArray(decks[key].remaining) || !Array.isArray(decks[key].used)){
+    const ids = pool.map(q => q.id);
+    decks[key] = {
+      remaining: shuffle(ids),
+      used: []
+    };
+  }
+
+  const deck = decks[key];
+
+  // If not enough remaining, recycle
+  if (deck.remaining.length < count){
+    const recycled = shuffle([...deck.used, ...deck.remaining]);
+    deck.remaining = recycled;
+    deck.used = [];
+  }
+
+  const chosenIds = deck.remaining.splice(0, count);
+  deck.used.push(...chosenIds);
+
+  decks[key] = deck;
+  saveDailyDecks(decks);
+
+  const daily = {
+    date: today,
+    category,
+    level,
+    count,
+    questionIds: chosenIds
+  };
+
   saveDailyState(daily);
+
   return daily;
 }
+
 
 function buildQuestionsByIds(all, ids) {
   const map = new Map(all.map((q) => [q.id, q]));
@@ -802,7 +906,9 @@ function renderHome() {
         return;
       }
 
-      state.quizQuestions = pickRandom(pool, Math.min(count, pool.length));
+      const n = Math.min(count, pool.length);
+state.quizQuestions = drawFromDeck(pool, category, level, n);
+
       state.index = 0;
       state.timed = timed;
       initAnswerRecords();
