@@ -9452,9 +9452,10 @@
     "correctIndex": 2,
     "explanation": "Adhkār and ruqyah are acts of worship rooted in tawḥīd, not rituals or magic."
   },
+
   {
     "id": "quran_adv_001",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "The verse {لَيْسَ الْبِرَّ أَنْ تُوَلُّوا وُجُوهَكُمْ قِبَلَ الْمَشْرِقِ وَالْمَغْرِبِ} was revealed primarily to address:",
     "options": [
@@ -9468,7 +9469,7 @@
   },
   {
     "id": "quran_adv_002",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "According to the strongest tafsīr position, the سبب النزول of {وَلَا تَقُولُوا لِمَنْ أَلْقَىٰ إِلَيْكُمُ السَّلَامَ لَسْتَ مُؤْمِنًا} relates to:",
     "options": [
@@ -9482,7 +9483,7 @@
   },
   {
     "id": "quran_adv_003",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "In tafsīr, the phrase {وَمَا أَدْرَاكَ مَا الْحُطَمَةُ} serves what primary rhetorical function?",
     "options": [
@@ -9496,7 +9497,7 @@
   },
   {
     "id": "quran_adv_004",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "The سبب النزول of Sūrat al-Mujādilah directly establishes which legal principle?",
     "options": [
@@ -9510,7 +9511,7 @@
   },
   {
     "id": "quran_adv_005",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "According to Ibn Kathīr, the verse {عَبَسَ وَتَوَلَّىٰ} demonstrates which tafsīr principle?",
     "options": [
@@ -9524,7 +9525,7 @@
   },
   {
     "id": "quran_adv_006",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "The verse {لَا تَقْرَبُوا الصَّلَاةَ وَأَنْتُمْ سُكَارَىٰ} illustrates which stage of legal development?",
     "options": [
@@ -9538,7 +9539,7 @@
   },
   {
     "id": "quran_adv_007",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "In tafsīr, the عام لفظ but خاص سبب principle means:",
     "options": [
@@ -9552,21 +9553,21 @@
   },
   {
     "id": "quran_adv_008",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "Which surah’s revelation context is most closely tied to the Battle of Badr?",
     "options": [
-      "Sūrat al-Anfāl",
-      "Sūrat al-Hashr",
-      "Sūrat al-Fatḥ",
-      "Sūrat al-Tawbah"
+      "Sūratul-Anfāl",
+      "Sūratul-Hashr",
+      "Sūratul-Fatḥ",
+      "Sūratul-Tawbah"
     ],
     "correctIndex": 0,
     "explanation": "Sūrat al-Anfāl addresses spoils, strategy, and divine aid at Badr."
   },
   {
     "id": "quran_adv_009",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "According to classical mufassirūn, {إِنَّمَا الْأَعْمَالُ بِالنِّيَّاتِ} is absent from the Qurʾān, yet its meaning is strongly reflected in which verse?",
     "options": [
@@ -9580,7 +9581,7 @@
   },
   {
     "id": "quran_adv_010",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "The سبب النزول of {يَا أَيُّهَا الَّذِينَ آمَنُوا لَا تَرْفَعُوا أَصْوَاتَكُمْ} relates to:",
     "options": [
@@ -9594,11 +9595,11 @@
   },
   {
     "id": "quran_adv_011",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "The verse {قَدْ سَمِعَ اللَّهُ قَوْلَ الَّتِي تُجَادِلُكَ فِي زَوْجِهَا} is best classified (in terms of subject) as:",
     "options": [
-      "Purely theological (ʿaqīdah)",
+      "Purely theological (ʿaqeedah)",
       "A legal-ethical response grounded in a real case",
       "A Makkan warning discourse",
       "A story of a previous nation"
@@ -9608,7 +9609,7 @@
   },
   {
     "id": "quran_adv_012",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "In the strongest asbāb narration, {وَيَسْأَلُونَكَ عَنِ الرُّوحِ} was revealed in response to:",
     "options": [
@@ -9622,7 +9623,7 @@
   },
   {
     "id": "quran_adv_013",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "Which pair is most accurately linked: verse topic and سبب النزول?",
     "options": [
@@ -9636,7 +9637,7 @@
   },
   {
     "id": "quran_adv_014",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "In tafsīr methodology, the phrase 'العبرة بعموم اللفظ لا بخصوص السبب' means the ruling is taken from:",
     "options": [
@@ -9650,7 +9651,7 @@
   },
   {
     "id": "quran_adv_015",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "Which scenario most correctly fits {وَلَا تَسُبُّوا الَّذِينَ يَدْعُونَ مِنْ دُونِ اللَّهِ}?",
     "options": [
@@ -9664,7 +9665,7 @@
   },
   {
     "id": "quran_adv_016",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "The verse {وَلَا تَقْفُ مَا لَيْسَ لَكَ بِهِ عِلْمٌ} is most directly invoked in tafsīr for:",
     "options": [
@@ -9678,7 +9679,7 @@
   },
   {
     "id": "quran_adv_017",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "Which verse is most closely tied to the حادثة الإفك (the slander against ʿĀʾishah رضي الله عنها)?",
     "options": [
@@ -9692,7 +9693,7 @@
   },
   {
     "id": "quran_adv_018",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "Which interpretation is strongest for {الْفِتْنَةُ أَشَدُّ مِنَ الْقَتْلِ} in its context?",
     "options": [
@@ -9706,7 +9707,7 @@
   },
   {
     "id": "quran_adv_019",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "The strongest sabab report for {وَمَا كَانَ اللَّهُ لِيُضِيعَ إِيمَانَكُمْ} relates to:",
     "options": [
@@ -9720,7 +9721,7 @@
   },
   {
     "id": "quran_adv_020",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "Which verse is classically used to establish that Allah does not burden beyond capacity, and why is its placement significant?",
     "options": [
@@ -9734,7 +9735,7 @@
   },
   {
     "id": "quran_adv_021",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "The verse {إِنَّ الصَّفَا وَالْمَرْوَةَ مِنْ شَعَائِرِ اللَّهِ} addressed which misunderstanding?",
     "options": [
@@ -9748,7 +9749,7 @@
   },
   {
     "id": "quran_adv_022",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "Which pairing of Makkan style vs Madinan style is most accurate in tafsīr studies?",
     "options": [
@@ -9762,7 +9763,7 @@
   },
   {
     "id": "quran_adv_023",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "In the story of Ādam, the phrase {فَتَلَقَّىٰ آدَمُ مِنْ رَبِّهِ كَلِمَاتٍ} is most strongly interpreted as:",
     "options": [
@@ -9776,7 +9777,7 @@
   },
   {
     "id": "quran_adv_024",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "Which verse is most central in tafsīr for the principle that guidance is from Allah while human responsibility remains?",
     "options": [
@@ -9790,7 +9791,7 @@
   },
   {
     "id": "quran_adv_025",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "The verse {لَيْسَ لَكَ مِنَ الْأَمْرِ شَيْءٌ} is most strongly linked to which event?",
     "options": [
@@ -9804,7 +9805,7 @@
   },
   {
     "id": "quran_adv_026",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "Which tafsīr approach best describes interpreting Qurʾān by Qurʾān?",
     "options": [
@@ -9818,7 +9819,7 @@
   },
   {
     "id": "quran_adv_027",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "A common tafsīr pitfall is assuming every 'كُلّ' is absolute. Which verse is a standard example where 'كُلّ' is contextually restricted?",
     "options": [
@@ -9832,7 +9833,7 @@
   },
   {
     "id": "quran_adv_028",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "Which claim is strongest regarding {الْيَوْمَ أَكْمَلْتُ لَكُمْ دِينَكُمْ}?",
     "options": [
@@ -9846,7 +9847,7 @@
   },
   {
     "id": "quran_adv_029",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "In tafsīr, {وَالسَّابِقُونَ السَّابِقُونَ} is best understood as:",
     "options": [
@@ -9860,7 +9861,7 @@
   },
   {
     "id": "quran_adv_030",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "The verse {إِذَا جَاءَكُمْ فَاسِقٌ بِنَبَإٍ فَتَبَيَّنُوا} was revealed in connection to:",
     "options": [
@@ -9874,7 +9875,7 @@
   },
   {
     "id": "quran_adv_031",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "Which verse is most directly used in tafsīr to affirm that prophets can experience human emotions without implying imperfection in risālah?",
     "options": [
@@ -9888,7 +9889,7 @@
   },
   {
     "id": "quran_adv_032",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "A verse often misused for unconditional tolerance is {لَكُمْ دِينُكُمْ وَلِيَ دِينِ}. In its strongest tafsīr context, it primarily signifies:",
     "options": [
@@ -9902,7 +9903,7 @@
   },
   {
     "id": "quran_adv_033",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "Which verse’s sabab is most directly related to the change in inheritance treatment of adopted children (تبنّي)?",
     "options": [
@@ -9916,7 +9917,7 @@
   },
   {
     "id": "quran_adv_034",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "Which option best reflects the tafsīr of {فَاقْرَءُوا مَا تَيَسَّرَ مِنْهُ} in its original context in Sūrat al-Muzzammil?",
     "options": [
@@ -9930,7 +9931,7 @@
   },
   {
     "id": "quran_adv_035",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "Which is the strongest understanding of {الرِّجَالُ قَوَّامُونَ عَلَى النِّسَاءِ} when read with tafsīr and context?",
     "options": [
@@ -9944,7 +9945,7 @@
   },
   {
     "id": "quran_adv_036",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "Which verse is central to the tafsīr principle that commands can be for recommendation when contextual indicators exist?",
     "options": [
@@ -9958,7 +9959,7 @@
   },
   {
     "id": "quran_adv_037",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "Which explanation is strongest for {وَإِنْ تُبْدُوا مَا فِي أَنْفُسِكُمْ أَوْ تُخْفُوهُ يُحَاسِبْكُم بِهِ اللَّهُ} and its relation to later verses?",
     "options": [
@@ -9972,7 +9973,7 @@
   },
   {
     "id": "quran_adv_038",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "In the narrative sequencing of earliest prophets, which is the most accurate Qurʾānic pattern?",
     "options": [
@@ -9986,7 +9987,7 @@
   },
   {
     "id": "quran_adv_039",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "Which statement best reflects the tafsīr of {وَإِذْ قَالَ رَبُّكَ لِلْمَلَائِكَةِ إِنِّي جَاعِلٌ فِي الْأَرْضِ خَلِيفَةً}?",
     "options": [
@@ -10000,7 +10001,7 @@
   },
   {
     "id": "quran_adv_040",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "Which verse is most directly connected to the incident of some Companions mistaking a permissibility as a hardship in Ramadan nights?",
     "options": [
@@ -10014,7 +10015,7 @@
   },
   {
     "id": "quran_adv_041",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "Which tafsīr conclusion is strongest about {وَالْمُطَلَّقَاتُ يَتَرَبَّصْنَ بِأَنفُسِهِنَّ ثَلَاثَةَ قُرُوءٍ} given the known اختلاف over قروء?",
     "options": [
@@ -10028,7 +10029,7 @@
   },
   {
     "id": "quran_adv_042",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "Which verse is a central textual anchor in tafsīr for the prohibition of riba while distinguishing sale from riba?",
     "options": [
@@ -10042,7 +10043,7 @@
   },
   {
     "id": "quran_adv_043",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "Which is the strongest tafsīr reading of {مَا نَنسَخْ مِنْ آيَةٍ أَوْ نُنسِهَا} regarding abrogation debates?",
     "options": [
@@ -10056,7 +10057,7 @@
   },
   {
     "id": "quran_adv_044",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "Which verse is most directly tied to the concept of 'sunnat Allah' in the fate of nations (patterns of divine dealing)?",
     "options": [
@@ -10070,7 +10071,7 @@
   },
   {
     "id": "quran_adv_045",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "Which tafsīr linkage is strongest regarding {وَمَن لَّمْ يَحْكُم بِمَا أَنزَلَ اللَّهُ} and takfīr misuse?",
     "options": [
@@ -10084,7 +10085,7 @@
   },
   {
     "id": "quran_adv_046",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "Which statement best reflects the tafsīr of {وَتِلْكَ الْأَيَّامُ نُدَاوِلُهَا بَيْنَ النَّاسِ} in context?",
     "options": [
@@ -10098,7 +10099,7 @@
   },
   {
     "id": "quran_adv_047",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "Which verse most directly supports the tafsīr principle that meanings of Qurʾānic words may have شرعي meanings beyond لغوي meanings?",
     "options": [
@@ -10112,7 +10113,7 @@
   },
   {
     "id": "quran_adv_048",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "Which tafsīr conclusion is strongest about {إِنَّمَا يُرِيدُ اللَّهُ لِيُذْهِبَ عَنكُمُ الرِّجْسَ أَهْلَ الْبَيْتِ} when considering سياق and خطاب?",
     "options": [
@@ -10126,7 +10127,7 @@
   },
   {
     "id": "quran_adv_049",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "Which verse is most strongly linked to the principle of consultation (shūrā) as a community practice in tafsīr?",
     "options": [
@@ -10140,7 +10141,7 @@
   },
   {
     "id": "quran_adv_050",
-    "category": "Qur'an",
+    "category": "Qur’an",
     "level": "Advanced",
     "question": "Which statement best reflects the advanced tafsīr handling of 'apparent contradiction' between verses?",
     "options": [
@@ -10153,8 +10154,3 @@
     "explanation": "Methodologically: jamʿ (reconciliation) first, then takhsīs/taqyīd, then naskh only with proof."
   }
 ]
-
-
-
-
-
