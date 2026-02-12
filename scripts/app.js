@@ -2249,6 +2249,99 @@ function renderCalendar() {
     </section>
   `;
 }
+function renderLearning() {
+  state.currentRoute = "learning";
+
+  app.innerHTML = `
+    <section class="card" style="margin-top:20px;">
+      <h2>Learning Space</h2>
+      <p class="muted">
+        Study together. Ask questions. Leave voice reflections.
+      </p>
+
+      <div class="learning-box" style="margin-top:16px;">
+
+        <div class="field">
+          <label class="label">Your message</label>
+          <textarea id="learn_text" class="textarea"
+            placeholder="Ask a question or share a reflection..."
+            rows="4"></textarea>
+        </div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button id="learn_send" class="primary" type="button">
+            Send Message
+          </button>
+
+          <button id="learn_voice" class="btn" type="button">
+            🎙 Record Voice
+          </button>
+        </div>
+
+        <div id="learn_messages" style="margin-top:20px;">
+          <p class="muted">No messages yet.</p>
+        </div>
+
+      </div>
+    </section>
+  `;
+
+  bindLearning();
+}
+const LEARNING_KEY = "masalah_learning_v1";
+
+function loadLearning() {
+  try {
+    return JSON.parse(localStorage.getItem(LEARNING_KEY)) || [];
+  } catch {
+    return [];
+  }
+}
+
+function saveLearning(data) {
+  localStorage.setItem(LEARNING_KEY, JSON.stringify(data));
+}
+
+function bindLearning() {
+  const input = document.getElementById("learn_text");
+  const list = document.getElementById("learn_messages");
+
+  function renderList() {
+    const data = loadLearning();
+    if (!data.length) {
+      list.innerHTML = `<p class="muted">No messages yet.</p>`;
+      return;
+    }
+
+    list.innerHTML = data
+      .map(
+        (m) => `
+          <div class="card" style="margin-top:10px; box-shadow:none;">
+            <p>${m.text}</p>
+            <p class="muted" style="font-size:12px;">${m.date}</p>
+          </div>
+        `
+      )
+      .join("");
+  }
+
+  document.getElementById("learn_send").onclick = () => {
+    const text = input.value.trim();
+    if (!text) return;
+
+    const data = loadLearning();
+    data.unshift({
+      text,
+      date: new Date().toLocaleString()
+    });
+
+    saveLearning(data);
+    input.value = "";
+    renderList();
+  };
+
+  renderList();
+}
 
 function renderHijriMonth(todayDay) {
   let html = "";
@@ -2289,6 +2382,8 @@ async function renderRoute(route) {
   if (r === "zakat") return renderZakat();
   if (r === "diary") return renderDiary();
   if (r === "lock") return renderLock();
+  if (r === "learning") return renderLearning();
+
   if (r === "faq") return renderFAQ();
 
   return renderWelcome();
