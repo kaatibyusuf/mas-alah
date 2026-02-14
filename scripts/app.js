@@ -1,18 +1,24 @@
 /* Mas'alah App (app.js)
-   Features:
-   - Routing via hash (#welcome, #home, etc.)
-   - Warm transitions (leave + enter)
-   - Daily quiz lock (deterministic, no reroll)
-   - Progress + streaks (localStorage)
-   - Quiz UX: timer, progress bar, keyboard shortcuts
-   - Hijri calendar (English + Arabic Islamic month names), click reminders, user timezone
-   - Zakat calculator
-   - Private diary (local only) + export
-   - PIN lock for protected routes (Diary + Progress)
-   - NEW: wrong questions bolded in Results + clickable review
-   - NEW: Prev navigation during quiz (review explanations)
+   Single-file router + quiz + progress + hijri calendar + zakat + diary + PIN lock + Supabase auth + Supabase chat.
+
+   IMPORTANT:
+   1) This file assumes you have: <div id="app"></div> in index.html
+   2) Your nav buttons should have: class="nav-btn" and data-route="home" etc.
+   3) Your CSS should include classes used here (btn, primary, card, muted, etc.)
 */
 
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+/* =======================
+   Supabase
+======================= */
+const SUPABASE_URL = "https://kjggfschpuqfggyasnux.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_wkNt08rBEiLv70BpmMbKiA_GVGMjTO7";
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+/* =======================
+   App root
+======================= */
 const app = document.getElementById("app");
 
 /* =======================
@@ -21,393 +27,46 @@ const app = document.getElementById("app");
 const STORAGE_KEY = "masalah_progress_v1";
 const DAILY_KEY = "masalah_daily_v1";
 const DIARY_KEY = "masalah_diary_v1";
-const DAILY_DECK_KEY = "masalah_daily_decks_v1";
-
-
 const LOCK_PIN_HASH_KEY = "masalah_pin_hash_v1";
 const LOCK_UNLOCKED_UNTIL_KEY = "masalah_unlocked_until_v1";
-const DECK_KEY = "masalah_decks_v1";
 
-function loadDecks(){
-  try { return JSON.parse(localStorage.getItem(DECK_KEY) || "{}"); }
-  catch { return {}; }
-}
-
-function saveDecks(decks){
-  localStorage.setItem(DECK_KEY, JSON.stringify(decks));
-}
-
-function deckKey(category, level){
-  return `${category}|${level}`;
-}
-
-// Fisher-Yates
-function shuffle(arr){
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--){
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
-/**
- * Draw N questions from a persistent deck so you don't repeat immediately.
- * It cycles through all questions before repeating.
- */
-function drawFromDeck(allPool, category, level, n){
-  const decks = loadDecks();
-  const k = deckKey(category, level);
-
-  // init deck if missing or invalid
-  if (!decks[k] || !Array.isArray(decks[k].remaining) || !Array.isArray(decks[k].used)) {
-    const ids = allPool.map(q => q.id);
-    decks[k] = { remaining: shuffle(ids), used: [] };
-  }
-
-  const deck = decks[k];
-
-  // if not enough remaining, recycle used into remaining (reshuffle)
-  if (deck.remaining.length < n){
-    const recycled = shuffle([...deck.used, ...deck.remaining]);
-    deck.remaining = recycled;
-    deck.used = [];
-  }
-
-  const chosenIds = deck.remaining.splice(0, n);
-  deck.used.push(...chosenIds);
-
-  decks[k] = deck;
-  saveDecks(decks);
-
-  // turn ids into questions in the same order
-  const map = new Map(allPool.map(q => [q.id, q]));
-  return chosenIds.map(id => map.get(id)).filter(Boolean);
-}
-function loadDailyDecks(){
-  try { return JSON.parse(localStorage.getItem(DAILY_DECK_KEY) || "{}"); }
-  catch { return {}; }
-}
-
-function saveDailyDecks(decks){
-  localStorage.setItem(DAILY_DECK_KEY, JSON.stringify(decks));
-}
-
-function dailyDeckKey(category, level){
-  return `${category}|${level}`;
-}
-
-// protect what you want
+/* Protect what you want */
 const PROTECTED_ROUTES = new Set(["diary", "progress"]);
 
 /* =======================
-   Quiz State
+   Global state
 ======================= */
 const state = {
   allQuestions: [],
   quizQuestions: [],
   index: 0,
+  score: 0,
   timed: true,
-  secondsPerQuestion: 60,
+  secondsPerQuestion: 20,
   timerId: null,
-  timeLeft: 60,
+  timeLeft: 20,
   lastSettings: null, // { category, level, timed, count, mode: "normal"|"daily" }
-
-  // per-question records so we can go back
-  answers: [], // [{ selectedIdx: number|null|undefined, isCorrect: boolean, timedOut: boolean }]
-  reviewing: false, // when reviewing from results, prevent changing answers
-
   isNavigating: false,
   currentRoute: "welcome",
-  intendedRoute: null
+  intendedRoute: null,
+  answerLog: [] // [{ selectedIdx, correctIdx, isCorrect, reason, explanation, question, options }]
 };
 
 /* =======================
-   Date helpers
+   Utils
 ======================= */
-function todayISO() {
-  const d = new Date();
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  return `${y}-${m}-${day}`;
+function escapeHtml(s) {
+  return String(s || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
 
-function todayISODate() {
-  return todayISO();
-}
-
-/* =======================
-   Progress storage
-======================= */
-function loadProgress() {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) return { streakCount: 0, lastActiveDate: null, bestScores: {}, lastAttempt: null };
-  try {
-    const parsed = JSON.parse(raw);
-    return {
-      streakCount: parsed.streakCount ?? 0,
-      lastActiveDate: parsed.lastActiveDate ?? null,
-      bestScores: parsed.bestScores ?? {},
-      lastAttempt: parsed.lastAttempt ?? null
-    };
-  } catch {
-    return { streakCount: 0, lastActiveDate: null, bestScores: {}, lastAttempt: null };
-  }
-}
-
-function saveProgress(progress) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
-}
-
-function updateStreak(progress) {
-  const today = todayISO();
-  const last = progress.lastActiveDate;
-
-  if (!last) {
-    progress.streakCount = 1;
-    progress.lastActiveDate = today;
-    return;
-  }
-  if (last === today) return;
-
-  const diffDays = Math.round((new Date(today) - new Date(last)) / (1000 * 60 * 60 * 24));
-  progress.streakCount = diffDays === 1 ? progress.streakCount + 1 : 1;
-  progress.lastActiveDate = today;
-}
-
-/* =======================
-   Deterministic helpers
-======================= */
-function hashStringToInt(str) {
-  let h = 2166136261;
-  for (let i = 0; i < str.length; i++) {
-    h ^= str.charCodeAt(i);
-    h = Math.imul(h, 16777619);
-  }
-  return Math.abs(h);
-}
-
-function seededShuffle(arr, seedStr) {
-  const copy = [...arr];
-  let seed = hashStringToInt(seedStr);
-
-  for (let i = copy.length - 1; i > 0; i--) {
-    seed = (seed * 1664525 + 1013904223) % 4294967296;
-    const j = seed % (i + 1);
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-}
-
-/* =======================
-   Questions data (FIXED)
-   - No "res before initialization"
-   - Defensive shuffle to avoid undefined options errors
-   - Normalizes questions to 4 options only
-======================= */
-function normalizeQuestion(q) {
-  const out = { ...q };
-
-  // options
-  if (!Array.isArray(out.options)) out.options = [];
-  out.options = out.options.map((x) => String(x ?? ""));
-
-  // ensure exactly 4 options (pad or trim)
-  if (out.options.length < 4) {
-    while (out.options.length < 4) out.options.push("—");
-  }
-  if (out.options.length > 4) out.options = out.options.slice(0, 4);
-
-  // correctIndex
-  if (typeof out.correctIndex !== "number" || !Number.isFinite(out.correctIndex)) out.correctIndex = 0;
-  if (out.correctIndex < 0 || out.correctIndex > 3) out.correctIndex = 0;
-
-  // other fields
-  out.id = String(out.id ?? "");
-  out.category = String(out.category ?? "");
-  out.level = String(out.level ?? "");
-  out.question = String(out.question ?? "");
-  out.explanation = String(out.explanation ?? "");
-
-  return out;
-}
-
-function shuffleOptionsDeterministic(question) {
-  const q = normalizeQuestion(question);
-
-  // If question is empty, just return normalized version
-  if (!q.id || !q.category || !q.level) return q;
-
-  const idxs = [0, 1, 2, 3];
-  const seed = `opt_${q.id}_${q.category}_${q.level}`;
-  const perm = seededShuffle(idxs, seed);
-
-  const newOptions = perm.map((i) => q.options[i]);
-  const newCorrectIndex = perm.indexOf(q.correctIndex);
-
-  return {
-    ...q,
-    options: newOptions,
-    correctIndex: newCorrectIndex
-  };
-}
-
-async function loadQuestions() {
-  if (state.allQuestions.length) return state.allQuestions;
-
-  const res = await fetch("data/questions.json");
-  if (!res.ok) throw new Error("Could not load data/questions.json");
-
-  const json = await res.json();
-  if (!Array.isArray(json)) throw new Error("questions.json must be an array of questions");
-
-  state.allQuestions = json.map(shuffleOptionsDeterministic);
-  return state.allQuestions;
-}
-
-function pickRandom(arr, n) {
-  const copy = [...arr];
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy.slice(0, n);
-}
-
-/* =======================
-   Daily quiz (no reroll)
-======================= */
-function loadDailyState() {
-  const raw = localStorage.getItem(DAILY_KEY);
-  if (!raw) return null;
-  try {
-    return JSON.parse(raw);
-  } catch {
-    return null;
-  }
-}
-
-function saveDailyState(daily) {
-  localStorage.setItem(DAILY_KEY, JSON.stringify(daily));
-}
-
-async function getOrCreateDailyQuiz(category, level, count){
-  const today = todayISO();
-  const existing = loadDailyState();
-
-  // If today's quiz already exists, return it
-  if (
-    existing &&
-    existing.date === today &&
-    existing.category === category &&
-    existing.level === level &&
-    existing.count === count &&
-    Array.isArray(existing.questionIds) &&
-    existing.questionIds.length
-  ){
-    return existing;
-  }
-
-  const all = await loadQuestions();
-  const pool = all.filter(q => q.category === category && q.level === level);
-
-  if (!pool.length){
-    const empty = { date: today, category, level, count, questionIds: [] };
-    saveDailyState(empty);
-    return empty;
-  }
-
-  const decks = loadDailyDecks();
-  const key = dailyDeckKey(category, level);
-
-  // Initialize deck if missing
-  if (!decks[key] || !Array.isArray(decks[key].remaining) || !Array.isArray(decks[key].used)){
-    const ids = pool.map(q => q.id);
-    decks[key] = {
-      remaining: shuffle(ids),
-      used: []
-    };
-  }
-
-  const deck = decks[key];
-
-  // If not enough remaining, recycle
-  if (deck.remaining.length < count){
-    const recycled = shuffle([...deck.used, ...deck.remaining]);
-    deck.remaining = recycled;
-    deck.used = [];
-  }
-
-  const chosenIds = deck.remaining.splice(0, count);
-  deck.used.push(...chosenIds);
-
-  decks[key] = deck;
-  saveDailyDecks(decks);
-
-  const daily = {
-    date: today,
-    category,
-    level,
-    count,
-    questionIds: chosenIds
-  };
-
-  saveDailyState(daily);
-
-  return daily;
-}
-
-
-function buildQuestionsByIds(all, ids) {
-  const map = new Map(all.map((q) => [q.id, q]));
-  const ordered = [];
-  for (const id of ids) {
-    const q = map.get(id);
-    if (q) ordered.push(q);
-  }
-  return ordered;
-}
-
-/* =======================
-   Timer
-======================= */
-function clearTimer() {
-  if (state.timerId) {
-    clearInterval(state.timerId);
-    state.timerId = null;
-  }
-}
-
-function startTimer() {
-  clearTimer();
-  state.timeLeft = state.secondsPerQuestion;
-
-  const timeEl = document.getElementById("timeLeft");
-  const barEl = document.getElementById("timeBar");
-  const total = state.secondsPerQuestion;
-
-  state.timerId = setInterval(() => {
-    state.timeLeft -= 1;
-
-    if (timeEl) timeEl.textContent = String(state.timeLeft);
-    if (barEl) barEl.style.width = `${(state.timeLeft / total) * 100}%`;
-
-    if (state.timeLeft <= 0) {
-      clearTimer();
-      showFeedback(null, { reason: "timeout" });
-    }
-  }, 1000);
-}
-
-/* =======================
-   Haptics
-======================= */
 function vibrate(pattern) {
-  if (typeof navigator === "undefined") return;
-  if (!("vibrate" in navigator)) return;
   try {
-    navigator.vibrate(pattern);
+    if (navigator && "vibrate" in navigator) navigator.vibrate(pattern);
   } catch {}
 }
 
@@ -415,7 +74,6 @@ function vibrate(pattern) {
    Toast
 ======================= */
 let toastTimer = null;
-
 function showToast(message) {
   let toast = document.getElementById("toast");
   if (!toast) {
@@ -424,14 +82,10 @@ function showToast(message) {
     toast.className = "toast";
     document.body.appendChild(toast);
   }
-
   toast.textContent = message;
   toast.classList.add("show");
-
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => {
-    toast.classList.remove("show");
-  }, 3500);
+  toastTimer = setTimeout(() => toast.classList.remove("show"), 3000);
 }
 
 /* =======================
@@ -441,7 +95,6 @@ function icon(name) {
   const common =
     `fill="none" stroke="currentColor" stroke-width="2" ` +
     `stroke-linecap="round" stroke-linejoin="round"`;
-
   const wrap = (paths) =>
     `<span class="i"><svg viewBox="0 0 24 24" aria-hidden="true">${paths}</svg></span>`;
 
@@ -498,28 +151,202 @@ function icon(name) {
 }
 
 /* =======================
-   Nav active state
+   Date helpers
+======================= */
+function todayISO() {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+function fmtLocalLongDate(d = new Date()) {
+  return new Intl.DateTimeFormat(undefined, {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+  }).format(d);
+}
+
+/* =======================
+   Progress storage
+======================= */
+function loadProgress() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return { streakCount: 0, lastActiveDate: null, bestScores: {}, lastAttempt: null };
+  try {
+    const parsed = JSON.parse(raw);
+    return {
+      streakCount: parsed.streakCount ?? 0,
+      lastActiveDate: parsed.lastActiveDate ?? null,
+      bestScores: parsed.bestScores ?? {},
+      lastAttempt: parsed.lastAttempt ?? null
+    };
+  } catch {
+    return { streakCount: 0, lastActiveDate: null, bestScores: {}, lastAttempt: null };
+  }
+}
+function saveProgress(progress) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+}
+function updateStreak(progress) {
+  const today = todayISO();
+  const last = progress.lastActiveDate;
+  if (!last) {
+    progress.streakCount = 1;
+    progress.lastActiveDate = today;
+    return;
+  }
+  if (last === today) return;
+
+  const diffDays = Math.round((new Date(today) - new Date(last)) / (1000 * 60 * 60 * 24));
+  progress.streakCount = diffDays === 1 ? progress.streakCount + 1 : 1;
+  progress.lastActiveDate = today;
+}
+
+/* =======================
+   Questions
+======================= */
+async function loadQuestions() {
+  if (state.allQuestions.length) return state.allQuestions;
+  const res = await fetch("data/questions.json");
+  if (!res.ok) throw new Error("Could not load data/questions.json");
+  state.allQuestions = await res.json();
+  return state.allQuestions;
+}
+function pickRandom(arr, n) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy.slice(0, n);
+}
+
+/* =======================
+   Deterministic daily
+======================= */
+function hashStringToInt(str) {
+  let h = 2166136261;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return Math.abs(h);
+}
+function seededShuffle(arr, seedStr) {
+  const copy = [...arr];
+  let seed = hashStringToInt(seedStr);
+  for (let i = copy.length - 1; i > 0; i--) {
+    seed = (seed * 1664525 + 1013904223) % 4294967296;
+    const j = seed % (i + 1);
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+function loadDailyState() {
+  const raw = localStorage.getItem(DAILY_KEY);
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+function saveDailyState(daily) {
+  localStorage.setItem(DAILY_KEY, JSON.stringify(daily));
+}
+async function getOrCreateDailyQuiz(category, level, count) {
+  const today = todayISO();
+  const existing = loadDailyState();
+
+  if (
+    existing &&
+    existing.date === today &&
+    existing.category === category &&
+    existing.level === level &&
+    existing.count === count &&
+    Array.isArray(existing.questionIds) &&
+    existing.questionIds.length
+  ) {
+    return existing;
+  }
+
+  const all = await loadQuestions();
+  const pool = all.filter((q) => q.category === category && q.level === level);
+
+  if (!pool.length) {
+    const empty = { date: today, category, level, count, questionIds: [] };
+    saveDailyState(empty);
+    return empty;
+  }
+
+  const seed = `masalah_daily_${today}_${category}_${level}`;
+  const shuffled = seededShuffle(pool, seed);
+  const chosen = shuffled.slice(0, Math.min(count, shuffled.length));
+  const questionIds = chosen.map((q) => q.id);
+
+  const daily = { date: today, category, level, count, questionIds };
+  saveDailyState(daily);
+  return daily;
+}
+function buildQuestionsByIds(all, ids) {
+  const map = new Map(all.map((q) => [q.id, q]));
+  const ordered = [];
+  for (const id of ids) {
+    const q = map.get(id);
+    if (q) ordered.push(q);
+  }
+  return ordered;
+}
+
+/* =======================
+   Timer
+======================= */
+function clearTimer() {
+  if (state.timerId) {
+    clearInterval(state.timerId);
+    state.timerId = null;
+  }
+}
+function startTimer() {
+  clearTimer();
+  state.timeLeft = state.secondsPerQuestion;
+
+  const timeEl = document.getElementById("timeLeft");
+  const barEl = document.getElementById("timeBar");
+  const total = state.secondsPerQuestion;
+
+  state.timerId = setInterval(() => {
+    state.timeLeft -= 1;
+    if (timeEl) timeEl.textContent = String(state.timeLeft);
+    if (barEl) barEl.style.width = `${(state.timeLeft / total) * 100}%`;
+
+    if (state.timeLeft <= 0) {
+      clearTimer();
+      showFeedback(null, { reason: "timeout" });
+    }
+  }, 1000);
+}
+
+/* =======================
+   Nav
 ======================= */
 function setActiveNav(route) {
   document.querySelectorAll(".nav-btn[data-route]").forEach((btn) => {
     btn.classList.toggle("active", btn.dataset.route === route);
   });
 }
-
-/* =======================
-   Navigation helpers
-======================= */
 function go(route) {
   if (!route) return;
   window.location.hash = `#${route}`;
 }
-
 function bindGotoButtons() {
   app.querySelectorAll("[data-goto]").forEach((btn) => {
     btn.addEventListener("click", () => go(btn.dataset.goto));
   });
 }
-
 function bindNavRoutes() {
   document.querySelectorAll("[data-route]").forEach((btn) => {
     btn.addEventListener("click", () => go(btn.dataset.route));
@@ -527,7 +354,7 @@ function bindNavRoutes() {
 }
 
 /* =======================
-   Screen transitions
+   Transitions
 ======================= */
 function beginTransition() {
   app.classList.add("screen");
@@ -547,7 +374,27 @@ function withTransition(fn) {
 }
 
 /* =======================
-   Keyboard support
+   Auth helpers
+======================= */
+async function getSession() {
+  const { data } = await supabase.auth.getSession();
+  return data.session || null;
+}
+async function requireAuthOrRoute(routeIfNot = "auth") {
+  const session = await getSession();
+  if (!session) {
+    go(routeIfNot);
+    return null;
+  }
+  return session;
+}
+function displayNameFromSession(session) {
+  const u = session?.user;
+  return u?.user_metadata?.display_name || u?.email?.split("@")?.[0] || "Anonymous";
+}
+
+/* =======================
+   Keyboard (quiz)
 ======================= */
 function handleQuizKeys(e) {
   if (state.currentRoute !== "quiz") return;
@@ -568,9 +415,14 @@ function handleQuizKeys(e) {
     return;
   }
 
-  const rec = state.answers[state.index];
-  const canAnswer = !state.reviewing && !(rec && rec.selectedIdx !== undefined);
-  if (!canAnswer) return;
+  if (key === "arrowleft") {
+    const prevBtn = document.getElementById("prevBtn");
+    if (prevBtn && prevBtn.style.display !== "none" && !prevBtn.disabled) {
+      e.preventDefault();
+      prevBtn.click();
+    }
+    return;
+  }
 
   const map = { a: 0, b: 1, c: 2, d: 3 };
   if (key in map) {
@@ -582,50 +434,42 @@ function handleQuizKeys(e) {
     }
   }
 }
-
 function bindGlobalKeyboard() {
   window.addEventListener("keydown", handleQuizKeys);
 }
 
 /* =======================
-   PIN Lock (Local)
+   PIN Lock
 ======================= */
 function nowMs() {
   return Date.now();
 }
-
 function isUnlocked() {
   const until = Number(localStorage.getItem(LOCK_UNLOCKED_UNTIL_KEY) || "0");
   return nowMs() < until;
 }
-
 function lockNow() {
   localStorage.removeItem(LOCK_UNLOCKED_UNTIL_KEY);
 }
-
 function hasPin() {
   return !!localStorage.getItem(LOCK_PIN_HASH_KEY);
 }
-
 async function sha256Hex(text) {
   const enc = new TextEncoder().encode(text);
   const buf = await crypto.subtle.digest("SHA-256", enc);
   return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
 }
-
 async function setPin(pin) {
   const hash = await sha256Hex(pin);
   localStorage.setItem(LOCK_PIN_HASH_KEY, hash);
   localStorage.setItem(LOCK_UNLOCKED_UNTIL_KEY, String(nowMs() + 30 * 60 * 1000));
 }
-
 async function verifyPin(pin) {
   const saved = localStorage.getItem(LOCK_PIN_HASH_KEY);
   if (!saved) return false;
   const hash = await sha256Hex(pin);
   return hash === saved;
 }
-
 function requireUnlock(route) {
   if (!PROTECTED_ROUTES.has(route)) return false;
   if (!hasPin()) return true;
@@ -633,22 +477,7 @@ function requireUnlock(route) {
 }
 
 /* =======================
-   Quiz scoring from records
-======================= */
-function computeScoreFromAnswers() {
-  return (state.answers || []).reduce((acc, r) => acc + (r && r.isCorrect ? 1 : 0), 0);
-}
-
-function initAnswerRecords() {
-  state.answers = new Array(state.quizQuestions.length).fill(null).map(() => ({
-    selectedIdx: undefined,
-    isCorrect: false,
-    timedOut: false
-  }));
-}
-
-/* =======================
-   WELCOME
+   Views
 ======================= */
 function renderWelcome() {
   state.currentRoute = "welcome";
@@ -750,9 +579,6 @@ function renderWelcome() {
   bindGotoButtons();
 }
 
-/* =======================
-   HOME
-======================= */
 function renderHome() {
   state.currentRoute = "home";
 
@@ -767,9 +593,7 @@ function renderHome() {
   if (bestEntries.length) {
     bestEntries.sort((a, b) => b[1] - a[1]);
     const [key, val] = bestEntries[0];
-    const parts = String(key || "").split("|");
-    const cat = parts[0] || "Unknown";
-    const lvl = parts[1] || "Unknown";
+    const [cat, lvl] = key.split("|");
     bestHeadline = `${val}%`;
     bestSub = `${cat} (${lvl})`;
   }
@@ -828,7 +652,8 @@ function renderHome() {
                 <span class="btn-inner">${icon("bolt")}Open daily</span>
               </button>
               <button class="btn" type="button" data-goto="welcome">Welcome</button>
-              <button class="btn" type="button" data-goto="calendar">Calendar</button>
+              <button class="btn" type="button" data-goto="learning">Learning Space</button>
+              <button class="btn" type="button" data-goto="auth">Login</button>
             </div>
           </div>
 
@@ -869,6 +694,8 @@ function renderHome() {
                 <span>Questions</span>
                 <select id="count">
                   <option value="20" selected>20</option>
+                  <option value="30">30</option>
+                  <option value="50">50</option>
                   <option value="10">10</option>
                 </select>
               </label>
@@ -895,7 +722,6 @@ function renderHome() {
     const status = document.getElementById("status");
 
     state.lastSettings = { category, level, timed, count, mode: "normal" };
-    state.reviewing = false;
 
     try {
       const all = await loadQuestions();
@@ -906,23 +732,19 @@ function renderHome() {
         return;
       }
 
-      const n = Math.min(count, pool.length);
-state.quizQuestions = drawFromDeck(pool, category, level, n);
-
+      state.quizQuestions = pickRandom(pool, Math.min(count, pool.length));
       state.index = 0;
+      state.score = 0;
       state.timed = timed;
-      initAnswerRecords();
+      state.answerLog = [];
 
       withTransition(renderQuiz);
     } catch (err) {
-      status.textContent = String(err?.message || err);
+      status.textContent = String(err.message || err);
     }
   });
 }
 
-/* =======================
-   DAILY
-======================= */
 async function renderDaily() {
   state.currentRoute = "daily";
 
@@ -985,8 +807,6 @@ async function renderDaily() {
     const status = document.getElementById("dailyStatus");
     const count = 20;
 
-    state.reviewing = false;
-
     try {
       const daily = await getOrCreateDailyQuiz(category, level, count);
 
@@ -1001,48 +821,29 @@ async function renderDaily() {
       state.lastSettings = { category, level, timed, count: chosen.length, mode: "daily" };
       state.quizQuestions = chosen;
       state.index = 0;
+      state.score = 0;
       state.timed = timed;
-      initAnswerRecords();
+      state.answerLog = [];
 
       withTransition(renderQuiz);
     } catch (err) {
-      status.textContent = String(err?.message || err);
+      status.textContent = String(err.message || err);
     }
   });
 }
 
 /* =======================
-   QUIZ
+   Quiz
 ======================= */
 function renderQuiz() {
   state.currentRoute = "quiz";
 
   const total = state.quizQuestions.length;
   const q = state.quizQuestions[state.index];
+  const correctIdx = q.correctIndex;
 
-  if (!q) {
-    app.innerHTML = `
-      <section class="card" style="margin-top:20px;">
-        <h2>Quiz error</h2>
-        <p class="muted">No question found at this index. Check your questions.json.</p>
-        <button class="btn" type="button" data-goto="home">Back Home</button>
-      </section>
-    `;
-    bindGotoButtons();
-    return;
-  }
-
-  // Normalize just in case something slipped through
-  const nq = normalizeQuestion(q);
-  state.quizQuestions[state.index] = nq;
-
-  const rec = state.answers[state.index];
-  const answeredAlready = rec && rec.selectedIdx !== undefined;
-
-  const scoreNow = computeScoreFromAnswers();
   const progressPct = Math.round(((state.index + 1) / total) * 100);
-
-  const canAnswer = !state.reviewing && !answeredAlready;
+  const prior = state.answerLog[state.index] || null;
 
   app.innerHTML = `
     <section class="card" style="margin-top:20px;">
@@ -1060,37 +861,40 @@ function renderQuiz() {
       <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
         <div>
           <h2 style="margin:0;">Question ${state.index + 1} / ${total}</h2>
-          <p class="muted" style="margin:6px 0 0 0;">Score: ${scoreNow}</p>
+          <p class="muted" style="margin:6px 0 0 0;">Score: ${state.score}</p>
           ${
-            state.reviewing
-              ? `<p class="muted" style="margin:6px 0 0 0;">Review mode</p>`
-              : state.lastSettings?.mode === "daily"
-                ? `<p class="muted" style="margin:6px 0 0 0;">Mode: Today’s Quiz</p>`
-                : ``
+            state.lastSettings?.mode === "daily"
+              ? `<p class="muted" style="margin:6px 0 0 0;">Mode: Today’s Quiz</p>`
+              : ``
+          }
+          ${
+            prior
+              ? `<p class="muted" style="margin:6px 0 0 0;">Review mode: this question is already answered.</p>`
+              : ``
           }
         </div>
 
         ${
-          state.timed && canAnswer
+          state.timed && !prior
             ? `<div style="min-width:220px;">
                  <div class="muted">Time left: <strong id="timeLeft">${state.secondsPerQuestion}</strong>s</div>
                  <div class="timeTrack"><div id="timeBar" class="timeBar"></div></div>
                </div>`
-            : `<div class="muted">${state.timed ? "Timer paused (answered)" : "Practice mode"}</div>`
+            : `<div class="muted">${prior ? "Review" : "Practice mode"}</div>`
         }
       </div>
 
       <hr class="hr" />
 
-      <h3 style="margin-top:0;">${nq.question}</h3>
+      <h3 style="margin-top:0;">${escapeHtml(q.question)}</h3>
 
       <div class="grid" id="options">
-        ${nq.options
+        ${q.options
           .map(
             (opt, idx) => `
-              <button class="optionBtn" data-idx="${idx}" type="button" ${canAnswer ? "" : "disabled"}>
+              <button class="optionBtn" data-idx="${idx}" type="button">
                 <span class="badge">${String.fromCharCode(65 + idx)}</span>
-                <span>${opt}</span>
+                <span>${escapeHtml(opt)}</span>
               </button>
             `
           )
@@ -1100,165 +904,148 @@ function renderQuiz() {
       <div id="feedback" class="feedback" style="display:none;"></div>
 
       <div style="display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;">
-        <button id="quitBtn" class="btn" type="button">${state.reviewing ? "Back to Results" : "Quit"}</button>
+        <button id="quitBtn" class="btn" type="button">Quit</button>
         <button id="prevBtn" class="btn" type="button" ${state.index === 0 ? "disabled" : ""}>Prev</button>
-        <button id="nextBtn" class="btn" type="button" style="display:none;">Next</button>
+        <button id="nextBtn" class="btn" style="display:none;" type="button">Next</button>
       </div>
     </section>
   `;
 
   document.getElementById("quitBtn").addEventListener("click", () => {
     clearTimer();
-    if (state.reviewing) {
-      withTransition(renderResults);
-      return;
-    }
     go("home");
   });
 
   document.getElementById("prevBtn").addEventListener("click", () => {
     clearTimer();
-    if (state.index === 0) return;
+    if (state.index <= 0) return;
     state.index -= 1;
     withTransition(renderQuiz);
   });
 
   document.querySelectorAll(".optionBtn").forEach((btn) => {
     btn.addEventListener("click", () => {
-      if (!canAnswer) return;
       const selected = Number(btn.dataset.idx);
       showFeedback(selected);
     });
   });
 
-  if (answeredAlready) {
-    paintFeedbackFromRecord(nq, rec);
-    showNextButtonLabel();
-  } else {
-    if (state.timed) startTimer();
+  if (prior) {
+    applyAnsweredUI(prior.selectedIdx, correctIdx, prior.reason, q.explanation || "");
+    return;
   }
+
+  if (state.timed) startTimer();
 }
 
-function paintFeedbackFromRecord(q, rec) {
-  const correct = q.correctIndex;
+function applyAnsweredUI(selectedIdx, correctIdx, reason, explanation) {
+  clearTimer();
 
   document.querySelectorAll(".optionBtn").forEach((btn) => {
+    btn.disabled = true;
     const idx = Number(btn.dataset.idx);
-    if (idx === correct) btn.classList.add("correct");
-    if (rec.selectedIdx !== null && idx === rec.selectedIdx && idx !== correct) btn.classList.add("wrong");
+    if (idx === correctIdx) btn.classList.add("correct");
+    if (selectedIdx !== null && idx === selectedIdx && idx !== correctIdx) btn.classList.add("wrong");
   });
+
+  const isCorrect = selectedIdx === correctIdx;
 
   const feedback = document.getElementById("feedback");
   feedback.style.display = "block";
-  const headline = rec.timedOut ? "Time up." : rec.isCorrect ? "Correct." : "Incorrect.";
   feedback.innerHTML = `
-    <strong>${headline}</strong>
-    <div class="muted" style="margin-top:6px;">${q.explanation || ""}</div>
+    <strong>${reason === "timeout" ? "Time up." : isCorrect ? "Correct." : "Incorrect."}</strong>
+    <div class="muted" style="margin-top:6px;">${escapeHtml(explanation || "")}</div>
   `;
-}
 
-function showNextButtonLabel() {
   const nextBtn = document.getElementById("nextBtn");
-  if (!nextBtn) return;
   nextBtn.style.display = "inline-block";
   nextBtn.textContent = state.index === state.quizQuestions.length - 1 ? "See Results" : "Next";
+
   nextBtn.onclick = () => {
-    clearTimer();
-    if (state.index >= state.quizQuestions.length - 1) {
+    feedback.style.display = "none";
+    state.index += 1;
+
+    if (state.index >= state.quizQuestions.length) {
       withTransition(renderResults);
       return;
     }
-    state.index += 1;
     withTransition(renderQuiz);
   };
 }
 
 function showFeedback(selectedIdx, meta = {}) {
-  const rec = state.answers[state.index];
-  if (!rec || rec.selectedIdx !== undefined) return;
+  if (state.answerLog[state.index]) return;
 
   clearTimer();
 
-  const q = normalizeQuestion(state.quizQuestions[state.index]);
-  state.quizQuestions[state.index] = q;
-
+  const q = state.quizQuestions[state.index];
   const correct = q.correctIndex;
-
   const isCorrect = selectedIdx === correct;
-  const timedOut = meta.reason === "timeout";
 
-  rec.selectedIdx = selectedIdx; // can be null
-  rec.isCorrect = isCorrect;
-  rec.timedOut = timedOut;
+  if (isCorrect) state.score += 1;
 
-  document.querySelectorAll(".optionBtn").forEach((btn) => {
-    btn.disabled = true;
-    const idx = Number(btn.dataset.idx);
-    if (idx === correct) btn.classList.add("correct");
-    if (selectedIdx !== null && idx === selectedIdx && idx !== correct) btn.classList.add("wrong");
-  });
+  if (meta.reason === "timeout") {
+    vibrate(20);
+  } else {
+    vibrate(isCorrect ? 15 : [10, 30, 10]);
+  }
 
-  if (timedOut) vibrate(20);
-  else vibrate(isCorrect ? 15 : [10, 30, 10]);
+  state.answerLog[state.index] = {
+    selectedIdx,
+    correctIdx: correct,
+    isCorrect,
+    reason: meta.reason === "timeout" ? "timeout" : "choice",
+    explanation: q.explanation || "",
+    question: q.question,
+    options: q.options
+  };
 
-  const feedback = document.getElementById("feedback");
-  feedback.style.display = "block";
-  feedback.innerHTML = `
-    <strong>${timedOut ? "Time up." : isCorrect ? "Correct." : "Incorrect."}</strong>
-    <div class="muted" style="margin-top:6px;">${q.explanation || ""}</div>
-  `;
-
-  showNextButtonLabel();
+  applyAnsweredUI(selectedIdx, correct, meta.reason === "timeout" ? "timeout" : "choice", q.explanation || "");
 }
 
-/* =======================
-   RESULTS
-======================= */
 function renderResults() {
   state.currentRoute = "results";
   clearTimer();
 
   const total = state.quizQuestions.length;
-  const score = computeScoreFromAnswers();
-  const percent = total ? Math.round((score / total) * 100) : 0;
+  const percent = Math.round((state.score / total) * 100);
 
-  if (!state.reviewing) {
-    const progress = loadProgress();
-    updateStreak(progress);
+  const progress = loadProgress();
+  updateStreak(progress);
 
-    const category = state.lastSettings?.category || "Unknown";
-    const level = state.lastSettings?.level || "Unknown";
-    const key = `${category}|${level}`;
+  const category = state.lastSettings?.category || "Unknown";
+  const level = state.lastSettings?.level || "Unknown";
+  const key = `${category}|${level}`;
 
-    const prevBest = progress.bestScores[key] ?? 0;
-    progress.bestScores[key] = Math.max(prevBest, percent);
+  const prevBest = progress.bestScores[key] ?? 0;
+  progress.bestScores[key] = Math.max(prevBest, percent);
 
-    progress.lastAttempt = { date: todayISO(), category, level, score, total, percent };
-    saveProgress(progress);
-  }
+  progress.lastAttempt = { date: todayISO(), category, level, score: state.score, total, percent };
+  saveProgress(progress);
 
-  const items = state.quizQuestions
-    .map((qq, i) => {
-      const q = normalizeQuestion(qq);
-      const rec = state.answers[i];
-      const correct = !!(rec && rec.isCorrect);
-      const answered = rec && rec.selectedIdx !== undefined;
-      const label = answered ? (correct ? "Correct" : "Wrong") : "Unanswered";
-      const title = correct ? q.question : `<strong>${q.question}</strong>`;
+  const reviewHtml = state.quizQuestions
+    .map((q, i) => {
+      const log = state.answerLog[i];
+      const wrong = log ? !log.isCorrect : true;
+      const label = `Q${i + 1}`;
+      const title = q.question || "";
+      const line = wrong ? `<strong>${escapeHtml(`${label}. ${title}`)}</strong>` : escapeHtml(`${label}. ${title}`);
+      const metaLine = log
+        ? `${log.isCorrect ? "Correct" : "Wrong"} • ${log.reason === "timeout" ? "Timed out" : "Answered"}`
+        : `Not answered`;
+
       return `
-        <button class="diary-item" type="button" data-review-index="${i}" style="cursor:pointer;">
+        <button class="diary-item" type="button" data-review-q="${i}">
           <div class="diary-item-top">
-            <span class="diary-date">Q${i + 1}</span>
-            <span class="diary-title">${label}</span>
+            <span class="diary-title" style="text-align:left;">${line}</span>
           </div>
-          <div class="diary-preview muted">${title}</div>
+          <div class="diary-preview muted" style="text-align:left;">
+            <span class="muted" style="font-size:12px;">${escapeHtml(metaLine)}</span>
+          </div>
         </button>
       `;
     })
     .join("");
-
-  const category = state.lastSettings?.category || "Unknown";
-  const level = state.lastSettings?.level || "Unknown";
 
   app.innerHTML = `
     <section class="card" style="margin-top:20px;">
@@ -1266,21 +1053,20 @@ function renderResults() {
       <p class="muted">Score</p>
 
       <div style="font-size:34px; font-weight:950; margin:10px 0;">
-        ${score} / ${total} (${percent}%)
+        ${state.score} / ${total} (${percent}%)
+      </div>
+
+      <div class="card" style="margin-top:12px; box-shadow:none;">
+        <p class="muted" style="margin:0 0 8px 0;">Review</p>
+        <p class="muted" style="margin:0 0 10px 0;">Tap any question to revisit its explanation. Wrong ones are bolded.</p>
+        <div class="diary-list">${reviewHtml}</div>
       </div>
 
       <div class="card" style="margin-top:12px; box-shadow:none;">
         <p class="muted" style="margin:0 0 8px 0;">Share</p>
-        <textarea id="shareText" rows="3">I scored ${score}/${total} in Mas'alah. ${category} (${level}). Can you beat that?</textarea>
+        <textarea id="shareText" rows="3">I scored ${state.score}/${total} in Mas'alah. ${category} (${level}). Can you beat that?</textarea>
         <button id="copyBtn" class="btn" style="margin-top:10px;" type="button">Copy</button>
         <p id="copyStatus" class="muted" style="margin-top:8px;"></p>
-      </div>
-
-      <div class="card" style="margin-top:12px; box-shadow:none;">
-        <p class="muted" style="margin:0 0 8px 0;">Review (wrong questions are bold)</p>
-        <div class="diary-list">
-          ${items || `<p class="muted">No questions to review.</p>`}
-        </div>
       </div>
 
       <div style="display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;">
@@ -1290,6 +1076,15 @@ function renderResults() {
       </div>
     </section>
   `;
+
+  app.querySelectorAll("[data-review-q]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const i = Number(btn.getAttribute("data-review-q"));
+      if (!Number.isFinite(i)) return;
+      state.index = i;
+      withTransition(renderQuiz);
+    });
+  });
 
   document.getElementById("copyBtn").addEventListener("click", async () => {
     const text = document.getElementById("shareText").value;
@@ -1304,9 +1099,6 @@ function renderResults() {
   document.getElementById("tryAgainBtn").addEventListener("click", async () => {
     const s = state.lastSettings;
     if (!s) return go("home");
-
-    state.reviewing = false;
-
     if (s.mode === "daily") return go("daily");
 
     const all = await loadQuestions();
@@ -1315,29 +1107,17 @@ function renderResults() {
 
     state.quizQuestions = chosen;
     state.index = 0;
+    state.score = 0;
     state.timed = s.timed;
-    initAnswerRecords();
+    state.answerLog = [];
 
     withTransition(renderQuiz);
   });
 
   document.getElementById("progressBtn").addEventListener("click", () => go("progress"));
   document.getElementById("homeBtn").addEventListener("click", () => go("home"));
-
-  app.querySelectorAll("[data-review-index]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const i = Number(btn.dataset.reviewIndex);
-      if (!Number.isFinite(i)) return;
-      state.index = i;
-      state.reviewing = true;
-      withTransition(renderQuiz);
-    });
-  });
 }
 
-/* =======================
-   PROGRESS
-======================= */
 function renderProgress() {
   state.currentRoute = "progress";
 
@@ -1362,9 +1142,9 @@ function renderProgress() {
           <p class="muted" style="margin:0;">Last attempt</p>
           ${
             last
-              ? `<div style="margin-top:8px; font-weight:950;">${last.category} • ${last.level}</div>
+              ? `<div style="margin-top:8px; font-weight:950;">${escapeHtml(last.category)} • ${escapeHtml(last.level)}</div>
                  <div style="font-size:22px; font-weight:950; margin-top:6px;">${last.score}/${last.total} (${last.percent}%)</div>
-                 <p class="muted" style="margin-top:6px;">${last.date}</p>`
+                 <p class="muted" style="margin-top:6px;">${escapeHtml(last.date)}</p>`
               : `<p class="muted" style="margin-top:8px;">No attempts yet.</p>`
           }
         </div>
@@ -1375,12 +1155,10 @@ function renderProgress() {
             bestEntries.length
               ? `<div style="margin-top:10px; display:grid; gap:8px;">
                    ${bestEntries
-                     .map(([key, val]) => {
-                       const parts = String(key || "").split("|");
-                       const cat = parts[0] || "Unknown";
-                       const lvl = parts[1] || "Unknown";
+                     .map(([k, val]) => {
+                       const [cat, lvl] = k.split("|");
                        return `<div style="display:flex; justify-content:space-between; gap:10px;">
-                                 <span>${cat} • ${lvl}</span>
+                                 <span>${escapeHtml(cat)} • ${escapeHtml(lvl)}</span>
                                  <strong>${val}%</strong>
                                </div>`;
                      })
@@ -1406,9 +1184,6 @@ function renderProgress() {
   bindGotoButtons();
 }
 
-/* =======================
-   FAQ
-======================= */
 function renderFAQ() {
   state.currentRoute = "faq";
 
@@ -1491,19 +1266,6 @@ function renderFAQ() {
                 </div>
               </details>
 
-              <details class="faq-item">
-                <summary>
-                  <span class="faq-q">
-                    <span class="faq-dot">${icon("book")}</span>
-                    Why are explanations short?
-                  </span>
-                  <span class="faq-chevron">${icon("check")}</span>
-                </summary>
-                <div class="faq-a">
-                  Because the goal is revision, not replacing lessons. Short explanations help you correct quickly and move forward.
-                </div>
-              </details>
-
             </div>
           </div>
 
@@ -1520,6 +1282,7 @@ function renderFAQ() {
                 <button class="btn" type="button" data-goto="home">
                   <span class="btn-inner">${icon("target")}Open home</span>
                 </button>
+                <button class="btn" type="button" data-goto="learning">Learning Space</button>
               </div>
             </div>
 
@@ -1550,18 +1313,15 @@ function formatMoney(n, currency) {
     maximumFractionDigits: 2
   }).format(num);
 }
-
 function toNum(v) {
   const x = Number(String(v || "").replace(/,/g, "").trim());
   return Number.isFinite(x) ? x : 0;
 }
-
 function calcZakat({ zakatable, nisab }) {
   const meetsNisab = zakatable >= nisab && zakatable > 0;
   const zakatDue = meetsNisab ? zakatable * 0.025 : 0;
   return { meetsNisab, zakatDue };
 }
-
 function renderZakat() {
   state.currentRoute = "zakat";
 
@@ -1612,30 +1372,11 @@ function renderZakat() {
         <div class="zakat-box">
           <h3 class="zakat-title">2) Assets</h3>
 
-          <div class="field">
-            <label class="label">Cash at hand / bank</label>
-            <input id="zk_cash" class="input" inputmode="decimal" placeholder="0" />
-          </div>
-
-          <div class="field">
-            <label class="label">Gold / silver value</label>
-            <input id="zk_metals" class="input" inputmode="decimal" placeholder="0" />
-          </div>
-
-          <div class="field">
-            <label class="label">Investments / shares / crypto</label>
-            <input id="zk_invest" class="input" inputmode="decimal" placeholder="0" />
-          </div>
-
-          <div class="field">
-            <label class="label">Business inventory (resale value)</label>
-            <input id="zk_inventory" class="input" inputmode="decimal" placeholder="0" />
-          </div>
-
-          <div class="field">
-            <label class="label">Money owed to you (likely to be paid)</label>
-            <input id="zk_debtsOwed" class="input" inputmode="decimal" placeholder="0" />
-          </div>
+          <div class="field"><label class="label">Cash at hand / bank</label><input id="zk_cash" class="input" inputmode="decimal" placeholder="0" /></div>
+          <div class="field"><label class="label">Gold / silver value</label><input id="zk_metals" class="input" inputmode="decimal" placeholder="0" /></div>
+          <div class="field"><label class="label">Investments / shares / crypto</label><input id="zk_invest" class="input" inputmode="decimal" placeholder="0" /></div>
+          <div class="field"><label class="label">Business inventory (resale value)</label><input id="zk_inventory" class="input" inputmode="decimal" placeholder="0" /></div>
+          <div class="field"><label class="label">Money owed to you (likely to be paid)</label><input id="zk_debtsOwed" class="input" inputmode="decimal" placeholder="0" /></div>
         </div>
 
         <div class="zakat-box">
@@ -1709,7 +1450,7 @@ function renderZakat() {
         : "Enter price per gram to compute nisab.";
 
     const statusLine = !hawlOk
-      ? `<p class="warn">Reminder: zakat is due after a lunar year (hawl) on zakatable wealth. Turn on “Hawl completed” when ready.</p>`
+      ? `<p class="warn">Reminder: zakat is due after a lunar year (hawl). Turn on “Hawl completed” when ready.</p>`
       : "";
 
     const dueLine =
@@ -1756,7 +1497,7 @@ function renderZakat() {
 }
 
 /* =======================
-   Private Diary (Local)
+   Diary (local)
 ======================= */
 function loadDiary() {
   try {
@@ -1767,27 +1508,14 @@ function loadDiary() {
     return [];
   }
 }
-
 function saveDiary(entries) {
   localStorage.setItem(DIARY_KEY, JSON.stringify(entries));
 }
-
-function escapeHtml(s) {
-  return String(s || "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
 function renderDiaryList(entries) {
   if (!entries.length) {
-    return `<p class="muted">No entries yet. Write something small today. Consistency beats volume.</p>`;
+    return `<p class="muted">No entries yet. Write something small today.</p>`;
   }
-
   const sorted = [...entries].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-
   return `
     <div class="diary-list">
       ${sorted
@@ -1796,7 +1524,7 @@ function renderDiaryList(entries) {
           const title = escapeHtml(e.title || "Untitled");
           const preview = escapeHtml((e.text || "").slice(0, 140));
           return `
-            <button class="diary-item" type="button" data-diary-open="${e.id}">
+            <button class="diary-item" type="button" data-diary-open="${escapeHtml(e.id)}">
               <div class="diary-item-top">
                 <span class="diary-date">${date}</span>
                 <span class="diary-title">${title}</span>
@@ -1809,7 +1537,6 @@ function renderDiaryList(entries) {
     </div>
   `;
 }
-
 function renderDiary() {
   state.currentRoute = "diary";
 
@@ -1819,14 +1546,14 @@ function renderDiary() {
     <section class="card">
       <div class="card-head">
         <h2>Private Diary</h2>
-        <p class="muted">Your personal rant page.</p>
+        <p class="muted">Your personal page. Stored only on this device.</p>
       </div>
 
       <div class="diary-grid">
         <div class="diary-box">
           <div class="diary-formhead">
             <h3 class="diary-subtitle">New entry</h3>
-            <span class="muted diary-small">Date: <strong>${todayISODate()}</strong></span>
+            <span class="muted diary-small">Date: <strong>${todayISO()}</strong></span>
           </div>
 
           <div class="field">
@@ -1836,9 +1563,9 @@ function renderDiary() {
 
           <div class="field">
             <label class="label">Your day</label>
-            <textarea id="diary_text" class="textarea" placeholder="Write freely. No one else sees this." rows="10" maxlength="4000"></textarea>
+            <textarea id="diary_text" class="textarea" placeholder="Write freely." rows="10" maxlength="8000"></textarea>
             <div class="diary-meta">
-              <span class="muted" id="diary_count">0 / 4000</span>
+              <span class="muted" id="diary_count">0 / 8000</span>
               <button id="diary_insert_prompt" class="btn mini" type="button">Add prompts</button>
             </div>
           </div>
@@ -1846,7 +1573,6 @@ function renderDiary() {
           <div class="diary-actions">
             <button id="diary_save" class="btn primary" type="button">Save entry</button>
             <button id="diary_clear" class="btn" type="button">Clear</button>
-            <button id="diary_export" class="btn" type="button">Export</button>
           </div>
 
           <div id="diary_notice" class="diary-notice" aria-live="polite"></div>
@@ -1913,7 +1639,7 @@ function renderDiary() {
   }
 
   function updateCount() {
-    elCount.textContent = `${(elText.value || "").length} / 4000`;
+    elCount.textContent = `${(elText.value || "").length} / 8000`;
   }
 
   updateCount();
@@ -1951,7 +1677,7 @@ function renderDiary() {
     const entriesNow = loadDiary();
     const entry = {
       id: crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()) + "_" + Math.random().toString(16).slice(2),
-      date: todayISODate(),
+      date: todayISO(),
       title: title || "Untitled",
       text,
       createdAt: Date.now()
@@ -1966,22 +1692,6 @@ function renderDiary() {
 
     setNotice("Saved on this device.", "good");
     refreshList();
-  });
-
-  app.querySelector("#diary_export").addEventListener("click", () => {
-    const data = loadDiary();
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `masalah-diary-${todayISODate()}.json`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-
-    URL.revokeObjectURL(url);
-    setNotice("Exported.", "good");
   });
 
   function openModal(entry) {
@@ -2001,35 +1711,26 @@ function renderDiary() {
   }
 
   elModalClose.addEventListener("click", closeModal);
-
   elModal.addEventListener("click", (e) => {
     if (e.target === elModal) closeModal();
   });
 
-  // open entry (event delegation) - bind once per render, scoped to this app node
-  app.addEventListener(
-    "click",
-    (e) => {
-      const btn = e.target.closest("[data-diary-open]");
-      if (!btn) return;
+  app.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-diary-open]");
+    if (!btn) return;
 
-      const id = btn.getAttribute("data-diary-open");
-      const data = loadDiary();
-      const entry = data.find((x) => x.id === id);
-      if (!entry) return;
-
-      openModal(entry);
-    },
-    { passive: true }
-  );
+    const id = btn.getAttribute("data-diary-open");
+    const data = loadDiary();
+    const entry = data.find((x) => x.id === id);
+    if (!entry) return;
+    openModal(entry);
+  });
 
   elDelete.addEventListener("click", () => {
     if (!openedId) return;
-
     const data = loadDiary();
     const next = data.filter((x) => x.id !== openedId);
     saveDiary(next);
-
     closeModal();
     refreshList();
     setNotice("Deleted.", "good");
@@ -2066,7 +1767,7 @@ function renderLock() {
         <div class="field">
           <label class="label">${pinExists ? "Enter PIN" : "Create a PIN (4-8 digits)"}</label>
           <input id="lock_pin" class="input" inputmode="numeric" autocomplete="off" placeholder="••••" maxlength="8" />
-          <p class="muted small">Digits only. Keep it simple.</p>
+          <p class="muted small">Digits only.</p>
         </div>
 
         ${
@@ -2089,8 +1790,7 @@ function renderLock() {
 
         <div class="lock-foot muted">
           <p>Unlocked sessions expire automatically (30 minutes).</p>
-          <p>If you clear browser data, your PIN and diary entries can be lost.</p>
-          <p class="muted">After unlocking, you will be taken to: <strong>${intended}</strong></p>
+          <p class="muted">After unlocking, you will be taken to: <strong>${escapeHtml(intended)}</strong></p>
         </div>
       </div>
     </section>
@@ -2105,7 +1805,6 @@ function renderLock() {
     if (kind === "warn") noticeEl.classList.add("is-warn");
     if (kind === "good") noticeEl.classList.add("is-good");
   }
-
   function digitsOnly(val) {
     return String(val || "").replace(/\D/g, "");
   }
@@ -2194,158 +1893,38 @@ function renderLock() {
 }
 
 /* =======================
-   Hijri Calendar (English + Arabic)
+   Hijri Calendar
 ======================= */
-function safeTimeZone() {
-  try {
-    return Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
-  } catch {
-    return "UTC";
-  }
-}
+const HIJRI_MONTHS = [
+  { en: "Muharram", ar: "مُحَرَّم" },
+  { en: "Safar", ar: "صَفَر" },
+  { en: "Rabiʿ al-Awwal", ar: "رَبِيع الأَوَّل" },
+  { en: "Rabiʿ al-Thani", ar: "رَبِيع الآخِر" },
+  { en: "Jumada al-Ula", ar: "جُمَادَى الأُولَى" },
+  { en: "Jumada al-Akhirah", ar: "جُمَادَى الآخِرَة" },
+  { en: "Rajab", ar: "رَجَب" },
+  { en: "Shaʿban", ar: "شَعْبَان" },
+  { en: "Ramadan", ar: "رَمَضَان" },
+  { en: "Shawwal", ar: "شَوَّال" },
+  { en: "Dhu al-Qaʿdah", ar: "ذُو القَعْدَة" },
+  { en: "Dhu al-Hijjah", ar: "ذُو الحِجَّة" }
+];
 
-function getHijriParts(date, locale) {
-  const tz = safeTimeZone();
-  const fmt = new Intl.DateTimeFormat(locale, {
+function getHijriPartsLocal(date = new Date()) {
+  const fmt = new Intl.DateTimeFormat("en-TN-u-ca-islamic", {
     day: "numeric",
-    month: "long",
-    year: "numeric",
-    timeZone: tz
+    month: "numeric",
+    year: "numeric"
   });
   const parts = fmt.formatToParts(date);
   const day = Number(parts.find((p) => p.type === "day")?.value || "1");
-  const month = parts.find((p) => p.type === "month")?.value || "";
+  const monthNum = Number(parts.find((p) => p.type === "month")?.value || "1");
   const year = parts.find((p) => p.type === "year")?.value || "";
-  return { day, month, year, tz };
-}
-
-function renderCalendar() {
-  state.currentRoute = "calendar";
-
-  const now = new Date();
-
-  const en = getHijriParts(now, "en-TN-u-ca-islamic");
-  const ar = getHijriParts(now, "ar-SA-u-ca-islamic");
-
-  app.innerHTML = `
-    <section class="card" style="margin-top:20px;">
-      <h2>Hijri Calendar</h2>
-      <p class="muted" style="margin-top:6px;">
-        <strong>${en.month}</strong> ${en.year} AH
-        <span class="muted" style="margin-left:8px;">•</span>
-        <strong dir="rtl" style="margin-left:8px;">${ar.month}</strong> <span dir="rtl">${ar.year}</span>
-      </p>
-      <p class="muted" style="margin-top:6px; font-size:12px;">
-        Using your timezone: <strong>${en.tz}</strong>
-      </p>
-
-      <div class="calendar-grid">
-        ${renderHijriMonth(en.day)}
-      </div>
-
-      <p class="muted" style="margin-top:12px;">
-        The 13th, 14th, and 15th are the white days (Ayyām al-Bīḍ).
-      </p>
-    </section>
-  `;
-}
-function renderLearning() {
-  state.currentRoute = "learning";
-
-  app.innerHTML = `
-    <section class="card" style="margin-top:20px;">
-      <h2>Learning Space</h2>
-      <p class="muted">
-        Study together. Ask questions. Leave voice reflections.
-      </p>
-
-      <div class="learning-box" style="margin-top:16px;">
-
-        <div class="field">
-          <label class="label">Your message</label>
-          <textarea id="learn_text" class="textarea"
-            placeholder="Ask a question or share a reflection..."
-            rows="4"></textarea>
-        </div>
-
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          <button id="learn_send" class="primary" type="button">
-            Send Message
-          </button>
-
-          <button id="learn_voice" class="btn" type="button">
-            🎙 Record Voice
-          </button>
-        </div>
-
-        <div id="learn_messages" style="margin-top:20px;">
-          <p class="muted">No messages yet.</p>
-        </div>
-
-      </div>
-    </section>
-  `;
-
-  bindLearning();
-}
-const LEARNING_KEY = "masalah_learning_v1";
-
-function loadLearning() {
-  try {
-    return JSON.parse(localStorage.getItem(LEARNING_KEY)) || [];
-  } catch {
-    return [];
-  }
-}
-
-function saveLearning(data) {
-  localStorage.setItem(LEARNING_KEY, JSON.stringify(data));
-}
-
-function bindLearning() {
-  const input = document.getElementById("learn_text");
-  const list = document.getElementById("learn_messages");
-
-  function renderList() {
-    const data = loadLearning();
-    if (!data.length) {
-      list.innerHTML = `<p class="muted">No messages yet.</p>`;
-      return;
-    }
-
-    list.innerHTML = data
-      .map(
-        (m) => `
-          <div class="card" style="margin-top:10px; box-shadow:none;">
-            <p>${m.text}</p>
-            <p class="muted" style="font-size:12px;">${m.date}</p>
-          </div>
-        `
-      )
-      .join("");
-  }
-
-  document.getElementById("learn_send").onclick = () => {
-    const text = input.value.trim();
-    if (!text) return;
-
-    const data = loadLearning();
-    data.unshift({
-      text,
-      date: new Date().toLocaleString()
-    });
-
-    saveLearning(data);
-    input.value = "";
-    renderList();
-  };
-
-  renderList();
+  return { day, monthNum, year };
 }
 
 function renderHijriMonth(todayDay) {
   let html = "";
-
   for (let d = 1; d <= 30; d++) {
     const isWhiteDay = d === 13 || d === 14 || d === 15;
     const isToday = d === todayDay;
@@ -2357,14 +1936,438 @@ function renderHijriMonth(todayDay) {
         data-hijri-day="${d}"
         ${isWhiteDay ? 'data-white-day="1"' : ""}
         aria-label="Hijri day ${d}"
-        style="${isToday ? "font-weight:900;" : ""}"
       >
-        ${d}
+        ${isToday ? `<strong>${d}</strong>` : d}
       </button>
     `;
   }
-
   return html;
+}
+
+function renderCalendar() {
+  state.currentRoute = "calendar";
+
+  const now = new Date();
+  const localLong = fmtLocalLongDate(now);
+  const { day: hijriDay, monthNum, year: hijriYear } = getHijriPartsLocal(now);
+  const m = HIJRI_MONTHS[Math.max(1, Math.min(12, monthNum)) - 1] || { en: "Hijri", ar: "هجري" };
+
+  app.innerHTML = `
+    <section class="card" style="margin-top:20px;">
+      <h2>Hijri Calendar</h2>
+
+      <p class="muted" style="margin-top:6px;">
+        Today (local): <strong>${escapeHtml(localLong)}</strong>
+      </p>
+
+      <p class="muted" style="margin-top:6px;">
+        ${escapeHtml(m.en)} <span style="opacity:.85;">(${escapeHtml(m.ar)})</span> • ${escapeHtml(hijriYear)} AH
+      </p>
+
+      <div class="calendar-grid">
+        ${renderHijriMonth(hijriDay)}
+      </div>
+
+      <p class="muted" style="margin-top:12px;">
+        The 13th, 14th, and 15th are the white days (Ayyām al-Bīḍ).
+      </p>
+    </section>
+  `;
+}
+
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest(".calendar-day[data-hijri-day]");
+  if (!btn) return;
+
+  const day = Number(btn.dataset.hijriDay);
+  const isWhiteDay = btn.dataset.whiteDay === "1";
+
+  if (!isWhiteDay) {
+    showToast(`Hijri day ${day}. Only 13, 14, 15 are highlighted for the white days.`);
+    return;
+  }
+
+  showToast(`White Day reminder: ${day}th. Sunnah fasting is recommended on the 13th, 14th, and 15th.`);
+});
+
+/* =======================
+   Auth page
+======================= */
+function renderAuth() {
+  state.currentRoute = "auth";
+
+  app.innerHTML = `
+    <section class="card" style="margin-top:20px; max-width:720px; margin-inline:auto;">
+      <h2>Login / Sign up</h2>
+      <p class="muted">Use email + password.</p>
+
+      <div class="grid" style="margin-top:12px;">
+        <label class="field">
+          <span>Display name (optional)</span>
+          <input id="auth_name" type="text" placeholder="e.g., Abdulsamad" />
+        </label>
+
+        <label class="field">
+          <span>Email</span>
+          <input id="auth_email" type="email" placeholder="you@example.com" />
+        </label>
+
+        <label class="field">
+          <span>Password</span>
+          <input id="auth_pass" type="password" placeholder="Min 6 characters" />
+        </label>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:8px;">
+          <button id="btn_login" class="btn" type="button">Login</button>
+          <button id="btn_signup" class="primary" type="button">Sign up</button>
+          <button class="btn" data-goto="home" type="button">Back Home</button>
+        </div>
+
+        <p id="auth_status" class="muted" style="margin:0;"></p>
+      </div>
+    </section>
+  `;
+
+  bindGotoButtons();
+
+  const elName = document.getElementById("auth_name");
+  const elEmail = document.getElementById("auth_email");
+  const elPass = document.getElementById("auth_pass");
+  const status = document.getElementById("auth_status");
+
+  document.getElementById("btn_signup").addEventListener("click", async () => {
+    status.textContent = "Creating account...";
+
+    const display_name = (elName.value || "").trim();
+    const email = (elEmail.value || "").trim();
+    const password = (elPass.value || "").trim();
+
+    if (!email || !password) {
+      status.textContent = "Email and password required.";
+      return;
+    }
+
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { display_name },
+        emailRedirectTo: `${location.origin}${location.pathname}#auth`
+      }
+    });
+
+    if (error) {
+      status.textContent = error.message;
+      return;
+    }
+
+    status.innerHTML =
+      "Account created. We sent a confirmation email.<br/>" +
+      "Check Inbox, then Spam/Promotions if you don’t see it.<br/>" +
+      "After confirming, come back here and log in.";
+    showToast("Check your email to confirm.");
+  });
+
+  document.getElementById("btn_login").addEventListener("click", async () => {
+    status.textContent = "Logging in...";
+
+    const email = (elEmail.value || "").trim();
+    const password = (elPass.value || "").trim();
+
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      status.textContent = error.message;
+      return;
+    }
+
+    status.textContent = "Logged in.";
+    go("learning");
+  });
+}
+
+/* =======================
+   Supabase Learning Space
+======================= */
+let realtimeChannel = null;
+
+async function renderLearning() {
+  state.currentRoute = "learning";
+
+  const session = await requireAuthOrRoute("auth");
+  if (!session) return;
+
+  const myName = displayNameFromSession(session);
+
+  app.innerHTML = `
+    <section class="card" style="margin-top:20px;">
+      <h2>Learning Space</h2>
+      <p class="muted">Join a room. Chat with peers. Send voice notes.</p>
+
+      <div class="grid" style="margin-top:12px; grid-template-columns: 1fr 1.2fr; align-items:start;">
+        <div class="card" style="box-shadow:none;">
+          <h3 style="margin:0;">Rooms</h3>
+          <p class="muted" style="margin:6px 0 10px;">Create or join a room.</p>
+
+          <div class="grid">
+            <label class="field">
+              <span>New room name</span>
+              <input id="room_name" type="text" placeholder="e.g., Fiqh Advanced Drill" />
+            </label>
+            <button id="room_create" class="primary" type="button">Create room</button>
+            <div id="rooms_list" class="grid" style="margin-top:8px;"></div>
+          </div>
+        </div>
+
+        <div class="card" style="box-shadow:none;">
+          <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+            <div>
+              <h3 style="margin:0;">Room chat</h3>
+              <p class="muted" id="room_meta" style="margin:6px 0 0;">Select a room.</p>
+            </div>
+
+            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+              <span class="pill pill-good">Signed in</span>
+              <button id="logout_btn" class="btn" type="button">Logout</button>
+            </div>
+          </div>
+
+          <hr class="hr" />
+
+          <div id="chat_box" style="min-height:260px; max-height:420px; overflow:auto; display:grid; gap:10px;"></div>
+
+          <div class="grid" style="margin-top:12px;">
+            <label class="field">
+              <span>Message</span>
+              <input id="chat_text" type="text" placeholder="Type and send..." />
+            </label>
+
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button id="chat_send" class="primary" type="button">Send text</button>
+
+              <label class="btn" style="display:inline-flex; align-items:center; gap:10px;">
+                <input id="voice_file" type="file" accept="audio/*" style="display:none;" />
+                Upload voice note
+              </label>
+            </div>
+
+            <p id="chat_status" class="muted" style="margin:0;"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+  `;
+
+  const roomsListEl = document.getElementById("rooms_list");
+  const roomMetaEl = document.getElementById("room_meta");
+  const chatBoxEl = document.getElementById("chat_box");
+  const chatTextEl = document.getElementById("chat_text");
+  const chatStatusEl = document.getElementById("chat_status");
+  const voiceInput = document.getElementById("voice_file");
+
+  let activeRoom = null;
+
+  function stopRealtime() {
+    if (realtimeChannel) {
+      supabase.removeChannel(realtimeChannel);
+      realtimeChannel = null;
+    }
+  }
+
+  function renderMessage(m) {
+    const time = new Date(m.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    const who = m.user_name || "Anonymous";
+
+    if (m.type === "voice" && m.voice_url) {
+      return `
+        <div class="card" style="box-shadow:none;">
+          <div class="muted" style="font-size:12px;">${escapeHtml(who)} • ${escapeHtml(time)}</div>
+          <div style="margin-top:8px;">
+            <audio controls src="${escapeHtml(m.voice_url)}" style="width:100%;"></audio>
+          </div>
+        </div>
+      `;
+    }
+
+    return `
+      <div class="card" style="box-shadow:none;">
+        <div class="muted" style="font-size:12px;">${escapeHtml(who)} • ${escapeHtml(time)}</div>
+        <div style="margin-top:6px;">${escapeHtml(m.text || "")}</div>
+      </div>
+    `;
+  }
+
+  async function loadRooms() {
+    const { data, error } = await supabase
+      .from("rooms")
+      .select("id,name,created_at")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      roomsListEl.innerHTML = `<p class="muted">Rooms error: ${escapeHtml(error.message)}</p>`;
+      return;
+    }
+
+    if (!data?.length) {
+      roomsListEl.innerHTML = `<p class="muted">No rooms yet. Create one.</p>`;
+      return;
+    }
+
+    roomsListEl.innerHTML = data
+      .map((r) => `<button class="btn" type="button" data-room-id="${r.id}">${escapeHtml(r.name)}</button>`)
+      .join("");
+
+    roomsListEl.querySelectorAll("[data-room-id]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-room-id");
+        const room = data.find((x) => x.id === id);
+        if (room) selectRoom(room);
+      });
+    });
+  }
+
+  async function loadMessages(roomId) {
+    const { data, error } = await supabase
+      .from("messages")
+      .select("id,room_id,user_id,user_name,type,text,voice_url,created_at")
+      .eq("room_id", roomId)
+      .order("created_at", { ascending: true });
+
+    if (error) {
+      chatBoxEl.innerHTML = `<p class="muted">Messages error: ${escapeHtml(error.message)}</p>`;
+      return;
+    }
+
+    chatBoxEl.innerHTML = (data || []).map(renderMessage).join("");
+    chatBoxEl.scrollTop = chatBoxEl.scrollHeight;
+  }
+
+  function startRealtime(roomId) {
+    stopRealtime();
+
+    realtimeChannel = supabase
+      .channel(`room:${roomId}`)
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "messages", filter: `room_id=eq.${roomId}` },
+        (payload) => {
+          const m = payload.new;
+          chatBoxEl.insertAdjacentHTML("beforeend", renderMessage(m));
+          chatBoxEl.scrollTop = chatBoxEl.scrollHeight;
+        }
+      )
+      .subscribe();
+  }
+
+  async function selectRoom(room) {
+    activeRoom = room;
+    roomMetaEl.textContent = `Room: ${room.name}`;
+    chatStatusEl.textContent = "";
+    await loadMessages(room.id);
+    startRealtime(room.id);
+  }
+
+  document.getElementById("room_create").addEventListener("click", async () => {
+    const name = String(document.getElementById("room_name").value || "").trim();
+    if (!name) return;
+
+    const { error } = await supabase.from("rooms").insert({
+      name,
+      created_by: session.user.id
+    });
+
+    if (error) {
+      chatStatusEl.textContent = error.message;
+      return;
+    }
+
+    document.getElementById("room_name").value = "";
+    await loadRooms();
+  });
+
+  document.getElementById("chat_send").addEventListener("click", async () => {
+    if (!activeRoom) {
+      chatStatusEl.textContent = "Select a room first.";
+      return;
+    }
+
+    const text = String(chatTextEl.value || "").trim();
+    if (!text) return;
+
+    chatStatusEl.textContent = "Sending...";
+
+    const { error } = await supabase.from("messages").insert({
+      room_id: activeRoom.id,
+      user_id: session.user.id,
+      user_name: myName,
+      type: "text",
+      text
+    });
+
+    if (error) {
+      chatStatusEl.textContent = error.message;
+      return;
+    }
+
+    chatTextEl.value = "";
+    chatStatusEl.textContent = "";
+  });
+
+  voiceInput.addEventListener("change", async () => {
+    if (!activeRoom) {
+      chatStatusEl.textContent = "Select a room first.";
+      return;
+    }
+
+    const file = voiceInput.files?.[0];
+    if (!file) return;
+
+    chatStatusEl.textContent = "Uploading voice note...";
+
+    const ext = (file.name.split(".").pop() || "webm").toLowerCase();
+    const filePath = `${session.user.id}/${activeRoom.id}/${Date.now()}.${ext}`;
+
+    const { error: upErr } = await supabase.storage.from("voice-notes").upload(filePath, file, { upsert: false });
+    if (upErr) {
+      chatStatusEl.textContent = upErr.message;
+      return;
+    }
+
+    const { data: pub } = supabase.storage.from("voice-notes").getPublicUrl(filePath);
+    const voice_url = pub?.publicUrl;
+
+    const { error: msgErr } = await supabase.from("messages").insert({
+      room_id: activeRoom.id,
+      user_id: session.user.id,
+      user_name: myName,
+      type: "voice",
+      voice_url,
+      text: null
+    });
+
+    if (msgErr) {
+      chatStatusEl.textContent = msgErr.message;
+      return;
+    }
+
+    chatStatusEl.textContent = "";
+    voiceInput.value = "";
+  });
+
+  document.getElementById("logout_btn").addEventListener("click", async () => {
+    stopRealtime();
+    await supabase.auth.signOut();
+    go("welcome");
+  });
+
+  await loadRooms();
+}
+
+/* =======================
+   Footer year
+======================= */
+function setFooterYear() {
+  const el = document.getElementById("year");
+  if (el) el.textContent = String(new Date().getFullYear());
 }
 
 /* =======================
@@ -2382,9 +2385,9 @@ async function renderRoute(route) {
   if (r === "zakat") return renderZakat();
   if (r === "diary") return renderDiary();
   if (r === "lock") return renderLock();
-  if (r === "learning") return renderLearning();
-
   if (r === "faq") return renderFAQ();
+  if (r === "auth") return renderAuth();
+  if (r === "learning") return renderLearning();
 
   return renderWelcome();
 }
@@ -2393,16 +2396,17 @@ function render(route) {
   if (state.isNavigating) return;
 
   const r = route || "welcome";
+  let actual = r;
 
   if (requireUnlock(r)) {
     state.intendedRoute = r;
-    route = "lock";
+    actual = "lock";
   }
 
   state.isNavigating = true;
 
   withTransition(() => {
-    const maybePromise = renderRoute(route);
+    const maybePromise = renderRoute(actual);
     if (maybePromise && typeof maybePromise.then === "function") {
       maybePromise.finally(() => {
         state.isNavigating = false;
@@ -2414,64 +2418,10 @@ function render(route) {
 }
 
 /* =======================
-   Header mobile menu (optional)
-======================= */
-document.addEventListener("click", (e) => {
-  const toggle = e.target.closest(".nav-toggle");
-  const menu = document.getElementById("navMenu");
-
-  if (toggle && menu) {
-    const isOpen = menu.dataset.open === "true";
-    menu.dataset.open = String(!isOpen);
-    toggle.setAttribute("aria-expanded", String(!isOpen));
-    return;
-  }
-
-  if (menu && menu.dataset.open === "true") {
-    const clickedRoute = e.target.closest("[data-route]");
-    const clickedInsideMenu = e.target.closest("#navMenu");
-    if (clickedRoute || !clickedInsideMenu) {
-      menu.dataset.open = "false";
-      const btn = document.querySelector(".nav-toggle");
-      if (btn) btn.setAttribute("aria-expanded", "false");
-    }
-  }
-});
-
-/* =======================
-   Calendar click reminder
-======================= */
-document.addEventListener("click", (e) => {
-  const btn = e.target.closest(".calendar-day[data-hijri-day]");
-  if (!btn) return;
-
-  const day = Number(btn.dataset.hijriDay);
-  const isWhiteDay = btn.dataset.whiteDay === "1";
-
-  if (!isWhiteDay) {
-    showToast(`Hijri day ${day}. Only 13, 14, 15 are highlighted for the white days.`);
-    return;
-  }
-
-  showToast(
-    `White Day reminder: Today is the ${day}th. Sunnah fasting is recommended on the 13th, 14th, and 15th of each Hijri month.`
-  );
-});
-
-/* =======================
-   Footer year
-======================= */
-function setFooterYear() {
-  const el = document.getElementById("year");
-  if (el) el.textContent = String(new Date().getFullYear());
-}
-
-/* =======================
    Hash routing
 ======================= */
 window.addEventListener("hashchange", () => {
   const route = (window.location.hash || "#welcome").slice(1);
-  state.reviewing = false;
   render(route);
 });
 
@@ -2479,6 +2429,11 @@ window.addEventListener("hashchange", () => {
    Boot
 ======================= */
 window.addEventListener("DOMContentLoaded", () => {
+  if (!app) {
+    alert('Missing <div id="app"></div> in your HTML.');
+    return;
+  }
+
   bindNavRoutes();
   bindGlobalKeyboard();
   setFooterYear();
