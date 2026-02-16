@@ -1677,13 +1677,10 @@ function renderDiary() {
       <header class="diary-head">
         <div>
           <h2 class="diary-h">Private Diary</h2>
-          <p class="diary-sub muted">Stored only on this device. Write like nobody is watching.</p>
+          <p class="diary-sub muted">Write like nobody is watching.</p>
         </div>
 
         <div class="diary-head-right">
-          <div class="diary-savechip" id="save_chip">Not saved yet</div>
-          <button class="btn mini" id="diary_insert_prompt" type="button">Prompts</button>
-        </div>
       </header>
 
       <div class="diary-shell">
