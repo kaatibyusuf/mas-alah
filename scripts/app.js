@@ -21,6 +21,7 @@ const DAILY_KEY = "masalah_daily_v1";
 const DIARY_KEY = "masalah_diary_v1";
 const LOCK_PIN_HASH_KEY = "masalah_pin_hash_v1";
 const LOCK_UNLOCKED_UNTIL_KEY = "masalah_unlocked_until_v1";
+const BAG_KEY = "masalah_shuffle_bag_v1";
 
 /* Protect what you want */
 const PROTECTED_ROUTES = new Set(["diary", "progress"]);
@@ -152,6 +153,7 @@ function todayISO() {
   const day = String(d.getDate()).padStart(2, "0");
   return `${y}-${m}-${day}`;
 }
+
 function fmtLocalLongDate(d = new Date()) {
   return new Intl.DateTimeFormat(undefined, {
     weekday: "long",
@@ -207,6 +209,7 @@ async function loadQuestions() {
   state.allQuestions = await res.json();
   return state.allQuestions;
 }
+
 function pickRandom(arr, n) {
   const copy = [...arr];
   for (let i = copy.length - 1; i > 0; i--) {
@@ -217,26 +220,8 @@ function pickRandom(arr, n) {
 }
 
 /* =======================
-   Deterministic daily
+   Daily state (localStorage)
 ======================= */
-function hashStringToInt(str) {
-  let h = 2166136261;
-  for (let i = 0; i < str.length; i++) {
-    h ^= str.charCodeAt(i);
-    h = Math.imul(h, 16777619);
-  }
-  return Math.abs(h);
-}
-function seededShuffle(arr, seedStr) {
-  const copy = [...arr];
-  let seed = hashStringToInt(seedStr);
-  for (let i = copy.length - 1; i > 0; i--) {
-    seed = (seed * 1664525 + 1013904223) % 4294967296;
-    const j = seed % (i + 1);
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-}
 function loadDailyState() {
   const raw = localStorage.getItem(DAILY_KEY);
   if (!raw) return null;
@@ -249,6 +234,106 @@ function loadDailyState() {
 function saveDailyState(daily) {
   localStorage.setItem(DAILY_KEY, JSON.stringify(daily));
 }
+
+function buildQuestionsByIds(all, ids) {
+  const map = new Map(all.map((q) => [q.id, q]));
+  const ordered = [];
+  for (const id of ids) {
+    const q = map.get(id);
+    if (q) ordered.push(q);
+  }
+  return ordered;
+}
+
+/* =======================
+   Shuffle bag (no repeats until recycle)
+======================= */
+function loadBag() {
+  try {
+    const raw = localStorage.getItem(BAG_KEY);
+    const parsed = raw ? JSON.parse(raw) : {};
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+function saveBag(bag) {
+  localStorage.setItem(BAG_KEY, JSON.stringify(bag));
+}
+function shuffleArray(arr) {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+/**
+ * Pool rules:
+ * - Beginner/Intermediate: exact level match
+ * - Advanced: include both "_adv_" and "_jaamiah_" IDs while q.level === "Advanced"
+ */
+function isEligibleQuestion(q, category, level) {
+  if (q.category !== category) return false;
+  if (q.level !== level) return false;
+
+  if (level === "Advanced") {
+    const id = String(q.id || "");
+    return id.includes("_adv_") || id.includes("_jaamiah_");
+  }
+  return true;
+}
+
+/**
+ * Shuffle-bag draw. No repeats until pool exhausted.
+ * bagKey should be stable, e.g. "custom|Fiqh|Advanced" or "daily|Fiqh|Advanced"
+ */
+function drawFromBag(allEligibleIds, bagKey, count) {
+  const bag = loadBag();
+
+  const stored = bag[bagKey];
+  const poolSet = new Set(allEligibleIds);
+
+  const needsReset =
+    !stored ||
+    !Array.isArray(stored.remaining) ||
+    !Array.isArray(stored.pool) ||
+    stored.remaining.some((id) => !poolSet.has(id)) ||
+    allEligibleIds.some((id) => !stored.pool.includes(id));
+
+  if (needsReset) {
+    bag[bagKey] = {
+      pool: [...allEligibleIds],
+      remaining: shuffleArray(allEligibleIds),
+      recycledAt: Date.now()
+    };
+  }
+
+  const entry = bag[bagKey];
+
+  const picked = [];
+  while (picked.length < count) {
+    if (!entry.remaining.length) {
+      entry.remaining = shuffleArray(entry.pool);
+      entry.recycledAt = Date.now();
+    }
+    picked.push(entry.remaining.shift());
+  }
+
+  bag[bagKey] = entry;
+  saveBag(bag);
+
+  return picked;
+}
+
+/**
+ * Daily picker:
+ * - Locked for the day (same set after refresh)
+ * - Random from full eligible pool
+ * - No repeats until pool exhausted, then recycle
+ * - Advanced includes both adv + jaamiah IDs (via isEligibleQuestion)
+ */
 async function getOrCreateDailyQuiz(category, level, count) {
   const today = todayISO();
   const existing = loadDailyState();
@@ -266,31 +351,23 @@ async function getOrCreateDailyQuiz(category, level, count) {
   }
 
   const all = await loadQuestions();
-  const pool = all.filter((q) => q.category === category && q.level === level);
+  const eligible = all.filter((q) => isEligibleQuestion(q, category, level));
 
-  if (!pool.length) {
+  if (!eligible.length) {
     const empty = { date: today, category, level, count, questionIds: [] };
     saveDailyState(empty);
     return empty;
   }
 
-  const seed = `masalah_daily_${today}_${category}_${level}`;
-  const shuffled = seededShuffle(pool, seed);
-  const chosen = shuffled.slice(0, Math.min(count, shuffled.length));
-  const questionIds = chosen.map((q) => q.id);
+  const ids = eligible.map((q) => q.id);
+  const pickCount = Math.min(count, ids.length);
 
-  const daily = { date: today, category, level, count, questionIds };
+  const bagKey = `daily|${category}|${level}`;
+  const pickedIds = drawFromBag(ids, bagKey, pickCount);
+
+  const daily = { date: today, category, level, count, questionIds: pickedIds };
   saveDailyState(daily);
   return daily;
-}
-function buildQuestionsByIds(all, ids) {
-  const map = new Map(all.map((q) => [q.id, q]));
-  const ordered = [];
-  for (const id of ids) {
-    const q = map.get(id);
-    if (q) ordered.push(q);
-  }
-  return ordered;
 }
 
 /* =======================
@@ -348,7 +425,7 @@ function bindNavRoutes() {
   });
 }
 
-/* ✅ Mobile menu toggle (your missing piece) */
+/* Mobile menu toggle */
 function bindMobileMenu() {
   const nav = document.querySelector(".nav");
   const toggle = document.querySelector(".nav-toggle");
@@ -375,6 +452,10 @@ function bindMobileMenu() {
     if (!nav.contains(e.target)) setOpen(false);
   });
 
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") setOpen(false);
+  });
+
   window.addEventListener("hashchange", () => setOpen(false));
 
   window.addEventListener("resize", () => {
@@ -383,57 +464,6 @@ function bindMobileMenu() {
 
   setOpen(false);
 }
-function bindNavToggle() {
-  const toggle = document.querySelector(".nav-toggle");
-  const menu = document.getElementById("navMenu");
-
-  if (!toggle || !menu) return;
-
-  const setOpen = (open) => {
-    menu.dataset.open = open ? "true" : "false";
-    toggle.setAttribute("aria-expanded", open ? "true" : "false");
-  };
-
-  toggle.addEventListener("click", (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const open = menu.dataset.open === "true";
-    setOpen(!open);
-  });
-
-  // close when clicking any nav button
-  menu.addEventListener("click", (e) => {
-    const btn = e.target.closest("[data-route]");
-    if (btn) setOpen(false);
-  });
-
-  // close when clicking outside nav
-  document.addEventListener("click", (e) => {
-    const open = menu.dataset.open === "true";
-    if (!open) return;
-    if (!e.target.closest(".nav")) setOpen(false);
-  });
-
-  // close on Escape
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") setOpen(false);
-  });
-}
-window.addEventListener("DOMContentLoaded", () => {
-  if (!app) {
-    alert('Missing <div id="app"></div> in your HTML.');
-    return;
-  }
-
-  bindNavRoutes();
-  bindNavToggle(); // ✅ ADD THIS
-  bindGlobalKeyboard();
-  setFooterYear();
-
-  const initial = (window.location.hash || "").slice(1);
-  render(initial || "welcome");
-});
-
 
 /* =======================
    Transitions
@@ -670,7 +700,7 @@ function renderHome() {
   const streakLabel = progress.streakCount === 1 ? "1 day" : `${progress.streakCount} days`;
 
   const bestEntries = Object.entries(progress.bestScores);
-  let bestHeadline = "—";
+  let bestHeadline = "-";
   let bestSub = "No best score yet.";
   if (bestEntries.length) {
     bestEntries.sort((a, b) => b[1] - a[1]);
@@ -680,7 +710,7 @@ function renderHome() {
     bestSub = `${cat} (${lvl})`;
   }
 
-  const lastHeadline = last ? `${last.score}/${last.total}` : "—";
+  const lastHeadline = last ? `${last.score}/${last.total}` : "-";
   const lastSub = last ? `${last.category} (${last.level})` : "No attempts yet.";
 
   app.innerHTML = `
@@ -749,7 +779,7 @@ function renderHome() {
               <label class="field">
                 <span>Category</span>
                 <select id="category">
-                  <option>Qur’an</option>
+                  <option>Qu'an</option>
                   <option>Seerah</option>
                   <option>Fiqh</option>
                   <option>Tawheed</option>
@@ -807,14 +837,20 @@ function renderHome() {
 
     try {
       const all = await loadQuestions();
-      const pool = all.filter((q) => q.category === category && q.level === level);
+      const eligible = all.filter((q) => isEligibleQuestion(q, category, level));
 
-      if (!pool.length) {
+      if (!eligible.length) {
         status.textContent = `No questions found for ${category} • ${level}. Add them in data/questions.json.`;
         return;
       }
 
-      state.quizQuestions = pickRandom(pool, Math.min(count, pool.length));
+      const ids = eligible.map((q) => q.id);
+      const bagKey = `custom|${category}|${level}`;
+      const pickCount = Math.min(count, ids.length);
+
+      const pickedIds = drawFromBag(ids, bagKey, pickCount);
+      state.quizQuestions = buildQuestionsByIds(all, pickedIds);
+
       state.index = 0;
       state.score = 0;
       state.timed = timed;
@@ -832,7 +868,7 @@ async function renderDaily() {
 
   const today = todayISO();
   const existing = loadDailyState();
-  const defaultCategory = existing?.date === today ? existing.category : "Qur’an";
+  const defaultCategory = existing?.date === today ? existing.category : "Qu'an";
   const defaultLevel = existing?.date === today ? existing.level : "Beginner";
 
   app.innerHTML = `
@@ -844,7 +880,7 @@ async function renderDaily() {
         <label class="field">
           <span>Category</span>
           <select id="dailyCategory">
-            <option ${defaultCategory === "Qur’an" ? "selected" : ""}>Qur’an</option>
+            <option ${defaultCategory === "Qu'an" ? "selected" : ""}>Qu'an</option>
             <option ${defaultCategory === "Seerah" ? "selected" : ""}>Seerah</option>
             <option ${defaultCategory === "Fiqh" ? "selected" : ""}>Fiqh</option>
             <option ${defaultCategory === "Tawheed" ? "selected" : ""}>Tawheed</option>
@@ -1184,10 +1220,17 @@ function renderResults() {
     if (s.mode === "daily") return go("daily");
 
     const all = await loadQuestions();
-    const pool = all.filter((q) => q.category === s.category && q.level === s.level);
-    const chosen = pickRandom(pool, Math.min(s.count, pool.length));
+    const eligible = all.filter((q) => isEligibleQuestion(q, s.category, s.level));
 
-    state.quizQuestions = chosen;
+    if (!eligible.length) return go("home");
+
+    const ids = eligible.map((q) => q.id);
+    const pickCount = Math.min(s.count, ids.length);
+
+    const bagKey = `custom|${s.category}|${s.level}`;
+    const pickedIds = drawFromBag(ids, bagKey, pickCount);
+
+    state.quizQuestions = buildQuestionsByIds(all, pickedIds);
     state.index = 0;
     state.score = 0;
     state.timed = s.timed;
@@ -1266,6 +1309,9 @@ function renderProgress() {
   bindGotoButtons();
 }
 
+/* =======================
+   FAQ
+======================= */
 function renderFAQ() {
   state.currentRoute = "faq";
 
@@ -1632,7 +1678,7 @@ function renderDiary() {
       weekday: "short",
       day: "2-digit",
       month: "short",
-      year: "numeric",
+      year: "numeric"
     });
   };
 
@@ -1668,7 +1714,7 @@ function renderDiary() {
   const draft = loadDraft() || {
     title: "",
     text: "",
-    updatedAt: 0,
+    updatedAt: 0
   };
 
   app.innerHTML = `
@@ -1677,10 +1723,13 @@ function renderDiary() {
       <header class="diary-head">
         <div>
           <h2 class="diary-h">Private Diary</h2>
-          <p class="diary-sub muted">Write like nobody is watching.</p>
+          <p class="diary-sub muted">Stored only on this device. Write like nobody is watching.</p>
         </div>
 
-        <div class="diary-head-right">
+        <div class="diary-head-right" style="display:flex; gap:10px; align-items:center;">
+          <span id="save_chip" class="pill">${draft.updatedAt ? "Draft saved" : "Not saved yet"}</span>
+          <button id="diary_insert_prompt" class="btn" type="button">Prompts</button>
+        </div>
       </header>
 
       <div class="diary-shell">
@@ -1713,7 +1762,9 @@ function renderDiary() {
             <div class="diary-meta muted">
               <span id="diary_count">0 / 8000</span>
               <span class="diary-dot">•</span>
-              <span id="last_saved">${draft.updatedAt ? `Draft saved at ${safe(fmtTime(draft.updatedAt))}` : "Draft not saved"}</span>
+              <span id="last_saved">${
+                draft.updatedAt ? `Draft saved at ${safe(fmtTime(draft.updatedAt))}` : "Draft not saved"
+              }</span>
             </div>
 
             <div class="diary-actions">
@@ -1787,6 +1838,8 @@ function renderDiary() {
   }
 
   function setDraftUI(mode, whenMs) {
+    if (!elSaveChip || !elLastSaved) return;
+
     if (mode === "dirty") {
       elSaveChip.textContent = "Saving…";
       elSaveChip.classList.add("is-dirty");
@@ -1822,14 +1875,13 @@ function renderDiary() {
       const d = {
         title: elTitle.value || "",
         text: elText.value || "",
-        updatedAt: Date.now(),
+        updatedAt: Date.now()
       };
       saveDraft(d);
       setDraftUI("saved", d.updatedAt);
     }, 600);
   }
 
-  // init
   updateCount();
   if (draft.updatedAt) setDraftUI("saved", draft.updatedAt);
 
@@ -1878,7 +1930,7 @@ function renderDiary() {
       date: fmtHumanDate(todayISO()),
       title: title || "Untitled",
       text,
-      createdAt: Date.now(),
+      createdAt: Date.now()
     };
 
     entriesNow.push(entry);
@@ -1936,7 +1988,6 @@ function renderDiary() {
     setNotice("Deleted.", "good");
   });
 }
-
 
 /* =======================
    Lock screen
@@ -2301,7 +2352,6 @@ async function renderLearning() {
 
   app.innerHTML = `
     <section class="wa">
-      <!-- Rooms drawer (mobile) -->
       <aside class="wa-rooms" id="waRooms" data-open="false" aria-label="Rooms">
         <div class="wa-rooms-head">
           <div class="wa-title">Rooms</div>
@@ -2319,7 +2369,6 @@ async function renderLearning() {
         </div>
       </aside>
 
-      <!-- Chat area -->
       <div class="wa-chat">
         <header class="wa-chat-head">
           <button class="wa-iconbtn" id="waRoomsOpen" type="button" aria-label="Open rooms">☰</button>
@@ -2591,7 +2640,6 @@ async function renderLearning() {
   await loadRooms();
 }
 
-
 /* =======================
    Footer year
 ======================= */
@@ -2665,7 +2713,7 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   bindNavRoutes();
-  bindMobileMenu(); // ✅ makes the mobile Menu button work
+  bindMobileMenu();
   bindGlobalKeyboard();
   setFooterYear();
 

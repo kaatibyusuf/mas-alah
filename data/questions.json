@@ -9452,6 +9452,1140 @@
     "correctIndex": 2,
     "explanation": "Adhkār and ruqyah are acts of worship rooted in tawḥīd, not rituals or magic."
   },
+{
+  "id": "fiqh_adv_051",
+  "category": "Fiqh",
+  "level": "Advanced",
+  "question": "A surgeon misses Maghrib due to emergency surgery that saves a life. What is the ruling?",
+  "options": [
+    "Prayer is invalid permanently",
+    "He is sinful regardless",
+    "He prays immediately after finishing",
+    "He must give charity only"
+  ],
+  "correctIndex": 2,
+  "explanation": "Life preservation is a necessity. Prayer is made up immediately after."
+},
+{
+  "id": "fiqh_adv_052",
+  "category": "Fiqh",
+  "level": "Advanced",
+  "question": "A man divorces his wife jokingly. According to the majority, what is the ruling?",
+  "options": [
+    "It does not count",
+    "It counts as divorce",
+    "It depends on witnesses",
+    "It requires written documentation"
+  ],
+  "correctIndex": 1,
+  "explanation": "Serious and joking divorce both count according to majority."
+},
+{
+  "id": "fiqh_adv_053",
+  "category": "Fiqh",
+  "level": "Advanced",
+  "question": "A fasting person inhales medical oxygen without nutrition. What is the strongest ruling?",
+  "options": [
+    "Fast invalid",
+    "Fast valid",
+    "Requires expiation",
+    "Requires charity only"
+  ],
+  "correctIndex": 1,
+  "explanation": "Pure oxygen without nutrition does not invalidate the fast."
+},
+{
+  "id": "fiqh_adv_054",
+  "category": "Fiqh",
+  "level": "Advanced",
+  "question": "A woman’s menses begins moments before sunset while fasting. What is the ruling?",
+  "options": [
+    "Fast valid",
+    "Fast invalid and must be made up",
+    "Half reward only",
+    "No make-up required"
+  ],
+  "correctIndex": 1,
+  "explanation": "Menstruation invalidates fasting even moments before sunset."
+},
+{
+  "id": "fiqh_adv_055",
+  "category": "Fiqh",
+  "level": "Advanced",
+  "question": "A borrower delays repayment despite ability. What is the ruling?",
+  "options": [
+    "Permissible",
+    "Disliked",
+    "Oppression",
+    "Excused due to ownership"
+  ],
+  "correctIndex": 2,
+  "explanation": "Delaying repayment while capable is injustice."
+},
+{
+  "id": "fiqh_adv_066",
+  "category": "Fiqh",
+  "level": "Advanced",
+  "question": "Which madhhab considers touching a non-mahram invalidates wudu regardless of desire?",
+  "options": [
+    "Hanafi",
+    "Maliki",
+    "Shafi'i",
+    "Hanbali"
+  ],
+  "correctIndex": 2,
+  "explanation": "Shafi'i school invalidates wudu through skin contact."
+},
+{
+  "id": "fiqh_adv_067",
+  "category": "Fiqh",
+  "level": "Advanced",
+  "question": "Which school generally requires intention for wudu validity?",
+  "options": [
+    "Hanafi",
+    "Maliki",
+    "All schools",
+    "None"
+  ],
+  "correctIndex": 2,
+  "explanation": "Intention is required according to the majority."
+},
+{
+  "id": "fiqh_adv_068",
+  "category": "Fiqh",
+  "level": "Advanced",
+  "question": "In which madhhab is reciting al-Fatihah behind the imam obligatory?",
+  "options": [
+    "Hanafi",
+    "Shafi'i",
+    "Maliki",
+    "None"
+  ],
+  "correctIndex": 1,
+  "explanation": "Shafi'i school obligates recitation even behind imam."
+},
+{
+  "id": "fiqh_adv_076",
+  "category": "Fiqh",
+  "level": "Advanced",
+  "question": "Which maqṣad is primarily preserved by prohibiting interest (riba)?",
+  "options": [
+    "Preservation of intellect",
+    "Preservation of wealth",
+    "Preservation of lineage",
+    "Preservation of religion"
+  ],
+  "correctIndex": 1,
+  "explanation": "Riba prohibition preserves economic justice and wealth."
+},
+{
+  "id": "fiqh_adv_077",
+  "category": "Fiqh",
+  "level": "Advanced",
+  "question": "The prohibition of intoxicants protects which essential objective?",
+  "options": [
+    "Life",
+    "Lineage",
+    "Intellect",
+    "Honor"
+  ],
+  "correctIndex": 2,
+  "explanation": "Intellect preservation is primary objective."
+},
+{
+  "id": "fiqh_adv_086",
+  "category": "Fiqh",
+  "level": "Jaamiah",
+  "question": "If public harm results from a normally permissible trade practice, which principle allows restriction?",
+  "options": [
+    "Blocking the means (sadd al-dhara'i)",
+    "Certainty over doubt",
+    "Original permissibility",
+    "Custom is law"
+  ],
+  "correctIndex": 0,
+  "explanation": "Means leading to harm may be blocked."
+},
+{
+  "id": "fiqh_adv_087",
+  "category": "Fiqh",
+  "level": "Jaamiah",
+  "question": "A ruler enforces price control to prevent exploitation. Which principle supports this?",
+  "options": [
+    "Absolute market freedom",
+    "Public interest (maslahah mursalah)",
+    "Personal ownership supremacy",
+    "Private contract sanctity"
+  ],
+  "correctIndex": 1,
+  "explanation": "Public welfare justifies intervention."
+},
+{
+  "id": "fiqh_adv_088",
+  "category": "Fiqh",
+  "level": "Jaamiah",
+  "question": "Which maxim resolves conflict between two harms?",
+  "options": [
+    "Greater harm removed by lesser harm",
+    "Doubt cancels certainty",
+    "Intention validates harm",
+    "Ease overrides obligation"
+  ],
+  "correctIndex": 0,
+  "explanation": "The lesser harm is chosen to repel the greater."
+},
+{
+  "id": "seerah_adv_051",
+  "category": "Seerah",
+  "level": "Advanced",
+  "question": "Which strategic principle is most clearly demonstrated in the Treaty of Hudaybiyyah?",
+  "options": [
+    "Immediate military dominance",
+    "Avoidance of diplomatic engagement",
+    "Prioritizing long-term stability over short-term honor",
+    "Public confrontation for morale"
+  ],
+  "correctIndex": 2,
+  "explanation": "The Prophet ﷺ accepted terms that appeared unfavorable to secure long-term strategic gain."
+},
+{
+  "id": "seerah_adv_052",
+  "category": "Seerah",
+  "level": "Advanced",
+  "question": "Why did the Prophet ﷺ allow hypocrites to remain publicly integrated within Madinah?",
+  "options": [
+    "He was unaware of their identity",
+    "He lacked authority to punish them",
+    "To prevent civil fragmentation and greater harm",
+    "To convert them through isolation"
+  ],
+  "correctIndex": 2,
+  "explanation": "Executing or isolating them would have destabilized the fragile political unity of Madinah."
+},
+{
+  "id": "seerah_adv_053",
+  "category": "Seerah",
+  "level": "Advanced",
+  "question": "Which battle most clearly reflects adaptive battlefield positioning as a decisive factor?",
+  "options": [
+    "Badr",
+    "Uhud",
+    "Khandaq",
+    "Tabuk"
+  ],
+  "correctIndex": 0,
+  "explanation": "At Badr, control of water access and terrain positioning was strategically decisive."
+},
+{
+  "id": "seerah_adv_054",
+  "category": "Seerah",
+  "level": "Advanced",
+  "question": "The migration to Abyssinia primarily demonstrates which leadership quality?",
+  "options": [
+    "Expansionist ambition",
+    "Calculated preservation of faith under protection",
+    "Economic migration strategy",
+    "Military preparation abroad"
+  ],
+  "correctIndex": 1,
+  "explanation": "It shows proactive protection of believers by seeking just non-Muslim authority."
+},
+{
+  "id": "seerah_adv_055",
+  "category": "Seerah",
+  "level": "Advanced",
+  "question": "What was the deeper political implication of establishing the Constitution of Madinah?",
+  "options": [
+    "Declaring exclusive Muslim sovereignty",
+    "A tribal treaty without legal weight",
+    "Formation of a pluralistic political order",
+    "Replacing all Jewish authority immediately"
+  ],
+  "correctIndex": 2,
+  "explanation": "It formalized a multi-religious political compact with shared defense obligations."
+},
+{
+  "id": "seerah_adv_056",
+  "category": "Seerah",
+  "level": "Advanced",
+  "question": "The placement of archers at Uhud illustrates which fiqh principle?",
+  "options": [
+    "Command obedience overrides personal interpretation",
+    "Battlefield decisions are flexible after engagement",
+    "Majority opinion determines tactics",
+    "Victory negates earlier instructions"
+  ],
+  "correctIndex": 0,
+  "explanation": "Disobedience to explicit instruction directly affected the outcome."
+},
+{
+  "id": "seerah_adv_057",
+  "category": "Seerah",
+  "level": "Advanced",
+  "question": "Why was the conquest of Makkah largely bloodless?",
+  "options": [
+    "Quraysh military collapse",
+    "Complete tribal surrender beforehand",
+    "Strategic psychological dominance and amnesty policy",
+    "Absence of resistance"
+  ],
+  "correctIndex": 2,
+  "explanation": "The Prophet ﷺ used overwhelming strategic positioning and offered amnesty."
+},
+{
+  "id": "seerah_adv_058",
+  "category": "Seerah",
+  "level": "Advanced",
+  "question": "Which event most clearly marks the transition from persecution to governance?",
+  "options": [
+    "First revelation",
+    "Bay'ah of Aqabah",
+    "Hijrah",
+    "Battle of Uhud"
+  ],
+  "correctIndex": 2,
+  "explanation": "Hijrah transformed Islam from a persecuted community into a governing authority."
+},
+{
+  "id": "seerah_adv_059",
+  "category": "Seerah",
+  "level": "Advanced",
+  "question": "The Prophet’s ﷺ distribution of spoils after Hunayn primarily aimed at:",
+  "options": [
+    "Rewarding senior companions",
+    "Appeasing tribal elites to stabilize unity",
+    "Equal wealth distribution",
+    "Economic punishment"
+  ],
+  "correctIndex": 1,
+  "explanation": "It strategically strengthened newly reconciled tribal leaders."
+},
+{
+  "id": "seerah_adv_060",
+  "category": "Seerah",
+  "level": "Advanced",
+  "question": "Which maqasid dimension is most evident in the gradual prohibition of alcohol?",
+  "options": [
+    "Preservation of lineage",
+    "Preservation of intellect",
+    "Preservation of wealth",
+    "Preservation of territory"
+  ],
+  "correctIndex": 1,
+  "explanation": "Gradual prohibition preserved intellect while considering social readiness."
+},
+{
+  "id": "seerah_adv_061",
+  "category": "Seerah",
+  "level": "Advanced",
+  "question": "A leader today signs a treaty that appears humiliating but prevents war and secures future influence. Which Seerah precedent most closely mirrors this?",
+  "options": [
+    "Battle of Uhud",
+    "Treaty of Hudaybiyyah",
+    "Battle of Badr",
+    "Expedition of Tabuk"
+  ],
+  "correctIndex": 1,
+  "explanation": "Hudaybiyyah appeared unfavorable but secured long-term strategic victory."
+},
+{
+  "id": "seerah_adv_062",
+  "category": "Seerah",
+  "level": "Advanced",
+  "question": "If internal dissent threatens state stability but open punishment may cause fragmentation, which Prophetic approach is most relevant?",
+  "options": [
+    "Immediate public exposure",
+    "Private counsel and political containment",
+    "Exile without process",
+    "Military enforcement"
+  ],
+  "correctIndex": 1,
+  "explanation": "The Prophet ﷺ politically contained hypocrisy to prevent civil rupture."
+},
+{
+  "id": "seerah_adv_063",
+  "category": "Seerah",
+  "level": "Advanced",
+  "question": "A minority community seeks protection under a just non-Muslim ruler. Which Seerah migration provides precedent?",
+  "options": [
+    "Hijrah to Madinah",
+    "Migration to Abyssinia",
+    "Return from Tabuk",
+    "Conquest of Makkah"
+  ],
+  "correctIndex": 1,
+  "explanation": "The migration to Abyssinia demonstrates seeking justice under non-Muslim protection."
+},
+{
+  "id": "seerah_adv_064",
+  "category": "Seerah",
+  "level": "Advanced",
+  "question": "When victory breeds arrogance among followers, which Seerah moment shows corrective divine recalibration?",
+  "options": [
+    "Battle of Hunayn",
+    "Battle of Badr",
+    "Treaty of Hudaybiyyah",
+    "First Revelation"
+  ],
+  "correctIndex": 0,
+  "explanation": "At Hunayn, reliance on numbers led to early setback before victory."
+},
+{
+  "id": "seerah_adv_065",
+  "category": "Seerah",
+  "level": "Advanced",
+  "question": "If a state must integrate former enemies without revenge, which Prophetic action is most instructive?",
+  "options": [
+    "Execution of Quraysh leaders",
+    "General amnesty at the conquest of Makkah",
+    "Economic sanctions",
+    "Public humiliation"
+  ],
+  "correctIndex": 1,
+  "explanation": "The conquest of Makkah demonstrated transformative amnesty."
+},
+{
+  "id": "seerah_adv_076",
+  "category": "Seerah",
+  "level": "Advanced",
+  "question": "Which occurred first?",
+  "options": [
+    "Hijrah to Madinah",
+    "Second Bay'ah of Aqabah",
+    "Treaty of Hudaybiyyah",
+    "Battle of Badr"
+  ],
+  "correctIndex": 1,
+  "explanation": "The Second Bay'ah of Aqabah preceded Hijrah."
+},
+{
+  "id": "seerah_adv_077",
+  "category": "Seerah",
+  "level": "Advanced",
+  "question": "Which came before the prohibition of alcohol was finalized?",
+  "options": [
+    "Battle of Uhud",
+    "Battle of Badr",
+    "Treaty of Hudaybiyyah",
+    "Conquest of Makkah"
+  ],
+  "correctIndex": 0,
+  "explanation": "Alcohol prohibition was gradual and finalized after Uhud."
+},
+{
+  "id": "seerah_adv_078",
+  "category": "Seerah",
+  "level": "Advanced",
+  "question": "Which event happened last?",
+  "options": [
+    "Battle of Khandaq",
+    "Treaty of Hudaybiyyah",
+    "Battle of Tabuk",
+    "Conquest of Makkah"
+  ],
+  "correctIndex": 2,
+  "explanation": "Tabuk occurred in 9 AH, after Makkah and earlier battles."
+},
+{
+  "id": "seerah_adv_079",
+  "category": "Seerah",
+  "level": "Advanced",
+  "question": "Place in correct order: Khandaq, Hudaybiyyah, Conquest of Makkah.",
+  "options": [
+    "Hudaybiyyah → Khandaq → Makkah",
+    "Khandaq → Hudaybiyyah → Makkah",
+    "Khandaq → Makkah → Hudaybiyyah",
+    "Hudaybiyyah → Makkah → Khandaq"
+  ],
+  "correctIndex": 1,
+  "explanation": "Khandaq (5 AH), Hudaybiyyah (6 AH), Makkah (8 AH)."
+},
+{
+  "id": "seerah_jaamiah_086",
+  "category": "Seerah",
+  "level": "Advanced",
+  "question": "The Constitution of Madinah is best classified in modern political theory as:",
+  "options": [
+    "A purely tribal pact",
+    "A theocratic imposition",
+    "A proto-constitutional pluralist framework",
+    "An imperial declaration"
+  ],
+  "correctIndex": 2,
+  "explanation": "It institutionalized multi-religious political cooperation."
+},
+{
+  "id": "seerah_jaamiah_087",
+  "category": "Seerah",
+  "level": "Advanced",
+  "question": "Hudaybiyyah most clearly demonstrates which usul principle?",
+  "options": [
+    "Dar’ al-mafasid muqaddam ‘ala jalb al-masalih",
+    "Al-‘adah muhakkamah",
+    "Al-yaqin la yazul bi-shakk",
+    "Al-darar yuzal"
+  ],
+  "correctIndex": 0,
+  "explanation": "Preventing large-scale harm took priority over perceived short-term gain."
+},
+{
+  "id": "seerah_jaamiah_088",
+  "category": "Seerah",
+  "level": "Advanced",
+  "question": "The delayed confrontation with Quraysh in early Madinah reflects which strategic doctrine?",
+  "options": [
+    "Immediate offensive warfare",
+    "Reactive escalation",
+    "Gradual consolidation of internal authority",
+    "Symbolic retaliation"
+  ],
+  "correctIndex": 2,
+  "explanation": "Internal consolidation preceded external confrontation."
+},
+{
+  "id": "seerah_jaamiah_089",
+  "category": "Seerah",
+  "level": "Advanced",
+  "question": "The Prophet’s ﷺ treatment of captives at Badr primarily reflected which objective?",
+  "options": [
+    "Retributive justice",
+    "Economic recovery",
+    "Moral authority and strategic messaging",
+    "Tribal revenge"
+  ],
+  "correctIndex": 2,
+  "explanation": "The treatment strengthened Islam’s moral legitimacy."
+},
+{
+  "id": "seerah_jaamiah_090",
+  "category": "Seerah",
+  "level": "Advanced",
+  "question": "Which Seerah decision most directly illustrates prioritizing unity over symbolic retaliation?",
+  "options": [
+    "Not executing Ibn Ubayy",
+    "Battle of Badr",
+    "Siege of Ta’if",
+    "Campaign of Tabuk"
+  ],
+  "correctIndex": 0,
+  "explanation": "Avoiding execution preserved social cohesion."
+},
+{
+  "id": "arabic_adv_051",
+  "category": "Arabic",
+  "level": "Advanced",
+  "question": "في قوله تعالى: ﴿وَكَانَ اللَّهُ غَفُورًا رَحِيمًا﴾ ما نوع خبر كان؟",
+  "options": [
+    "خبر مفرد",
+    "خبر جملة فعلية",
+    "خبر شبه جملة",
+    "خبر محذوف"
+  ],
+  "correctIndex": 0,
+  "explanation": "غفورًا رحيمًا خبران مفردان منصوبان لكان."
+},
+{
+  "id": "arabic_adv_052",
+  "category": "Arabic",
+  "level": "Advanced",
+  "question": "أي الجمل التالية تحتوي على تمييز محول عن فاعل؟",
+  "options": [
+    "ازداد الطالب علماً",
+    "اشتريتُ كيلو تفاحاً",
+    "امتلأ الإناء ماءً",
+    "هو أكثر منك مالاً"
+  ],
+  "correctIndex": 2,
+  "explanation": "ماءً تمييز محول عن الفاعل، والأصل: امتلأ الماءُ الإناءَ."
+},
+{
+  "id": "arabic_adv_053",
+  "category": "Arabic",
+  "level": "Advanced",
+  "question": "في جملة: \"ما أجملَ السماءَ\" ما إعراب السماء؟",
+  "options": [
+    "فاعل مرفوع",
+    "مفعول به منصوب",
+    "تمييز",
+    "حال"
+  ],
+  "correctIndex": 1,
+  "explanation": "السماء مفعول به لفعل التعجب."
+},
+{
+  "id": "arabic_adv_054",
+  "category": "Arabic",
+  "level": "Advanced",
+  "question": "أي الجمل التالية تحتوي على بدل بعض من كل؟",
+  "options": [
+    "حضر الطلابُ ثلاثةُ طلابٍ",
+    "جاء أخوك زيدٌ",
+    "قرأت الكتابَ نصفَه",
+    "اشتريت بيتاً بابُه واسع"
+  ],
+  "correctIndex": 2,
+  "explanation": "نصفه بدل بعض من كل من الكتاب."
+},
+{
+  "id": "arabic_adv_055",
+  "category": "Arabic",
+  "level": "Advanced",
+  "question": "في قوله: \"لا سيما المجتهدُ\" ما إعراب المجتهد؟",
+  "options": [
+    "مفعول به",
+    "خبر مبتدأ محذوف",
+    "بدل",
+    "فاعل"
+  ],
+  "correctIndex": 1,
+  "explanation": "يجوز رفعه على أنه خبر لمبتدأ محذوف تقديره: هو المجتهد."
+},
+{
+  "id": "arabic_adv_051",
+  "category": "Arabic",
+  "level": "Advanced",
+  "question": "في قوله تعالى: ﴿وَكَانَ اللَّهُ غَفُورًا رَحِيمًا﴾ ما نوع خبر كان؟",
+  "options": [
+    "خبر مفرد",
+    "خبر جملة فعلية",
+    "خبر شبه جملة",
+    "خبر محذوف"
+  ],
+  "correctIndex": 0,
+  "explanation": "غفورًا رحيمًا خبران مفردان منصوبان لكان."
+},
+{
+  "id": "arabic_adv_052",
+  "category": "Arabic",
+  "level": "Advanced",
+  "question": "أي الجمل التالية تحتوي على تمييز محول عن فاعل؟",
+  "options": [
+    "ازداد الطالب علماً",
+    "اشتريتُ كيلو تفاحاً",
+    "امتلأ الإناء ماءً",
+    "هو أكثر منك مالاً"
+  ],
+  "correctIndex": 2,
+  "explanation": "ماءً تمييز محول عن الفاعل، والأصل: امتلأ الماءُ الإناءَ."
+},
+{
+  "id": "arabic_adv_053",
+  "category": "Arabic",
+  "level": "Advanced",
+  "question": "في جملة: \"ما أجملَ السماءَ\" ما إعراب السماء؟",
+  "options": [
+    "فاعل مرفوع",
+    "مفعول به منصوب",
+    "تمييز",
+    "حال"
+  ],
+  "correctIndex": 1,
+  "explanation": "السماء مفعول به لفعل التعجب."
+},
+{
+  "id": "arabic_adv_054",
+  "category": "Arabic",
+  "level": "Advanced",
+  "question": "أي الجمل التالية تحتوي على بدل بعض من كل؟",
+  "options": [
+    "حضر الطلابُ ثلاثةُ طلابٍ",
+    "جاء أخوك زيدٌ",
+    "قرأت الكتابَ نصفَه",
+    "اشتريت بيتاً بابُه واسع"
+  ],
+  "correctIndex": 2,
+  "explanation": "نصفه بدل بعض من كل من الكتاب."
+},
+{
+  "id": "arabic_adv_055",
+  "category": "Arabic",
+  "level": "Advanced",
+  "question": "في قوله: \"لا سيما المجتهدُ\" ما إعراب المجتهد؟",
+  "options": [
+    "مفعول به",
+    "خبر مبتدأ محذوف",
+    "بدل",
+    "فاعل"
+  ],
+  "correctIndex": 1,
+  "explanation": "يجوز رفعه على أنه خبر لمبتدأ محذوف تقديره: هو المجتهد."
+},
+{
+  "id": "arabic_adv_086",
+  "category": "Arabic",
+  "level": "Advanced",
+  "question": "في قوله: \"الليلُ كالبحرِ\" هذا مثال على:",
+  "options": [
+    "استعارة مكنية",
+    "تشبيه صريح",
+    "كناية",
+    "مجاز مرسل"
+  ],
+  "correctIndex": 1,
+  "explanation": "وجود أداة التشبيه الكاف يجعلها تشبيهاً صريحاً."
+},
+{
+  "id": "arabic_adv_087",
+  "category": "Arabic",
+  "level": "Advanced",
+  "question": "حذف المسند إليه في البلاغة يفيد غالباً:",
+  "options": [
+    "التهويل أو التحقير",
+    "الإيجاز",
+    "المدح",
+    "التوكيد"
+  ],
+  "correctIndex": 1,
+  "explanation": "الحذف أحد أساليب الإيجاز."
+},
+{
+  "id": "arabic_adv_088",
+  "category": "Arabic",
+  "level": "Advanced",
+  "question": "تقديم المفعول به على الفاعل يفيد غالباً:",
+  "options": [
+    "الحصر أو الاختصاص",
+    "الإبهام",
+    "الاستفهام",
+    "النداء"
+  ],
+  "correctIndex": 0,
+  "explanation": "التقديم يفيد الحصر أو التخصيص."
+},
+{
+  "id": "arabic_adv_089",
+  "category": "Arabic",
+  "level": "Advanced",
+  "question": "في قوله تعالى: ﴿واسأل القرية﴾ هذا من باب:",
+  "options": [
+    "مجاز مرسل علاقته المحلية",
+    "استعارة تصريحية",
+    "كناية",
+    "تشبيه بليغ"
+  ],
+  "correctIndex": 0,
+  "explanation": "المقصود أهل القرية، والعلاقة المحلية."
+},
+{
+  "id": "arabic_adv_090",
+  "category": "Arabic",
+  "level": "Advanced",
+  "question": "الإنشاء الطلبي يشمل:",
+  "options": [
+    "الأمر والنهي والاستفهام والنداء والتمني",
+    "الجملة الاسمية فقط",
+    "الخبر المؤكد",
+    "القسم فقط"
+  ],
+  "correctIndex": 0,
+  "explanation": "هذه أشهر صور الإنشاء الطلبي."
+},
+{
+  "id": "tawheed_adv_051",
+  "category": "Tawheed",
+  "level": "Advanced",
+  "question": "Which statement best defines Tawheed al-Uluhiyyah?",
+  "options": [
+    "Affirming Allah as sole Creator",
+    "Singling Allah out in acts of worship",
+    "Believing Allah controls provision",
+    "Affirming divine attributes metaphorically"
+  ],
+  "correctIndex": 1,
+  "explanation": "Tawheed al-Uluhiyyah is singling Allah out in all acts of worship."
+},
+{
+  "id": "tawheed_adv_052",
+  "category": "Tawheed",
+  "level": "Advanced",
+  "question": "The mushrikūn of Quraysh primarily violated which category of Tawheed?",
+  "options": [
+    "Rububiyyah",
+    "Uluhiyyah",
+    "Asma wa Sifat",
+    "Qadar"
+  ],
+  "correctIndex": 1,
+  "explanation": "They affirmed Rububiyyah but committed shirk in worship."
+},
+{
+  "id": "tawheed_adv_053",
+  "category": "Tawheed",
+  "level": "Advanced",
+  "question": "Attributing independent causal power to created means constitutes:",
+  "options": [
+    "Major shirk",
+    "Minor shirk",
+    "Bid'ah only",
+    "Permissible belief"
+  ],
+  "correctIndex": 0,
+  "explanation": "Independent power negates Tawheed al-Rububiyyah."
+},
+{
+  "id": "tawheed_adv_066",
+  "category": "Tawheed",
+  "level": "Advanced",
+  "question": "If a person says: \"Allah is everywhere\" intending omnipresence without specification, the primary issue is:",
+  "options": [
+    "Denial of Rububiyyah",
+    "Ambiguity in affirming divine transcendence",
+    "Major disbelief automatically",
+    "Permissible poetic speech"
+  ],
+  "correctIndex": 1,
+  "explanation": "The phrase is ambiguous and may contradict established transcendence."
+},
+{
+  "id": "tawheed_adv_067",
+  "category": "Tawheed",
+  "level": "Advanced",
+  "question": "Denying Allah’s attributes to avoid anthropomorphism falls into which deviation?",
+  "options": [
+    "Tashbih",
+    "Ta'til",
+    "Shirk al-Rububiyyah",
+    "Irja'"
+  ],
+  "correctIndex": 1,
+  "explanation": "Ta'til is negation of affirmed attributes."
+},
+{
+  "id": "tawheed_adv_068",
+  "category": "Tawheed",
+  "level": "Advanced",
+  "question": "Interpreting all divine attributes metaphorically without evidence is classified as:",
+  "options": [
+    "Ta'wil batil",
+    "Athari creed",
+    "Pure Tawheed",
+    "Ijma'"
+  ],
+  "correctIndex": 0,
+  "explanation": "Blanket metaphorical reinterpretation is invalid ta'wil."
+},
+{
+  "id": "tawheed_adv_076",
+  "category": "Tawheed",
+  "level": "Advanced",
+  "question": "The principle \"Whoever directs any act of worship to other than Allah commits shirk\" is derived primarily from:",
+  "options": [
+    "Tawheed al-Asma",
+    "Tawheed al-Uluhiyyah",
+    "Tawheed al-Rububiyyah",
+    "Qadar"
+  ],
+  "correctIndex": 1,
+  "explanation": "Acts of worship belong exclusively to Uluhiyyah."
+},
+{
+  "id": "tawheed_adv_077",
+  "category": "Tawheed",
+  "level": "Advanced",
+  "question": "If someone believes an object benefits by Allah’s permission only, but exaggerates attachment to it, this most likely constitutes:",
+  "options": [
+    "Major shirk",
+    "Minor shirk",
+    "Kufr akbar",
+    "No issue"
+  ],
+  "correctIndex": 1,
+  "explanation": "Excessive reliance without independent belief falls under minor shirk."
+},
+{
+  "id": "tawheed_jaamiah_086",
+  "category": "Tawheed",
+  "level": "Advanced",
+  "question": "Affirming Allah’s attributes \"without asking how\" (bila kayf) primarily protects against:",
+  "options": [
+    "Ta'til only",
+    "Tashbih and Ta'til simultaneously",
+    "Shirk al-Uluhiyyah",
+    "Irja'"
+  ],
+  "correctIndex": 1,
+  "explanation": "Bila kayf affirms without anthropomorphism or negation."
+},
+{
+  "id": "tawheed_jaamiah_087",
+  "category": "Tawheed",
+  "level": "Advanced",
+  "question": "Declaring takfir on a specific individual requires which additional condition?",
+  "options": [
+    "Personal anger",
+    "Establishing proof and removing doubt",
+    "Major sin commission",
+    "Community consensus"
+  ],
+  "correctIndex": 1,
+  "explanation": "Specific takfir requires proof and removal of shubha."
+},
+{
+  "id": "tawheed_jaamiah_088",
+  "category": "Tawheed",
+  "level": "Advanced",
+  "question": "The statement \"Means are effective by themselves\" contradicts which theological foundation?",
+  "options": [
+    "Rububiyyah",
+    "Uluhiyyah",
+    "Asma wa Sifat",
+    "Imamah"
+  ],
+  "correctIndex": 0,
+  "explanation": "Only Allah possesses independent causation."
+},
+{
+  "id": "tawheed_jaamiah_089",
+  "category": "Tawheed",
+  "level": "Advanced",
+  "question": "The difference between major and minor shirk primarily lies in:",
+  "options": [
+    "Severity of punishment only",
+    "Nullification of Islam",
+    "Public visibility",
+    "Emotional intensity"
+  ],
+  "correctIndex": 1,
+  "explanation": "Major shirk nullifies Islam; minor does not."
+},
+{
+  "id": "tawheed_jaamiah_090",
+  "category": "Tawheed",
+  "level": "Advanced",
+  "question": "Which group historically exaggerated in affirming attributes to the point of resemblance?",
+  "options": [
+    "Mu'tazilah",
+    "Jahmiyyah",
+    "Mujassimah",
+    "Ash'ariyyah"
+  ],
+  "correctIndex": 2,
+  "explanation": "Mujassimah likened Allah to creation."
+},
+{
+  "id": "quran_adv_051",
+  "category": "Qu'an",
+  "level": "Advanced",
+  "question": "The term \"mutashābih\" primarily refers to:",
+  "options": [
+    "All unclear verses linguistically",
+    "Verses whose ultimate reality is known only to Allah",
+    "Verses abrogated later",
+    "Verses revealed in Madinah"
+  ],
+  "correctIndex": 1,
+  "explanation": "Mutashābih refers to verses whose full meaning or modality is known only to Allah."
+},
+{
+  "id": "quran_adv_066",
+  "category": "Qu'an",
+  "level": "Advanced",
+  "question": "The primary distinction between Makki and Madani revelation is based on:",
+  "options": [
+    "Place of revelation only",
+    "Audience addressed",
+    "Time relative to Hijrah",
+    "Length of verses"
+  ],
+  "correctIndex": 2,
+  "explanation": "Makki refers to pre-Hijrah, Madani post-Hijrah."
+},
+{
+  "id": "quran_jaamiah_087",
+  "category": "Qu'an",
+  "level": "Advanced",
+  "question": "The concept of iʿjāz al-Qur’an is primarily rooted in:",
+  "options": [
+    "Numerical miracles",
+    "Linguistic inimitability",
+    "Scientific prediction alone",
+    "Chronological structure"
+  ],
+  "correctIndex": 1,
+  "explanation": "Classical scholars emphasized linguistic inimitability."
+},
+{
+  "id": "adhkaar_adv_051",
+  "category": "Adhkaar",
+  "level": "Advanced",
+  "question": "Which principle governs all legislated adhkār?",
+  "options": [
+    "Personal emotional preference",
+    "Frequency determined by culture",
+    "Tawqīf (strict adherence to revealed wording)",
+    "Poetic eloquence"
+  ],
+  "correctIndex": 2,
+  "explanation": "Acts of worship, including adhkār, are tawqīfī and must follow revelation."
+},
+{
+  "id": "adhkaar_adv_052",
+  "category": "Adhkaar",
+  "level": "Advanced",
+  "question": "Altering a prophetic duʿāʾ while keeping its meaning intact:",
+  "options": [
+    "Is always recommended",
+    "Is permissible in non-tawqīf dhikr",
+    "Invalidates the worship entirely",
+    "Is required for sincerity"
+  ],
+  "correctIndex": 1,
+  "explanation": "General duʿāʾ allows variation, but specific legislated adhkār should be preserved."
+},
+{
+  "id": "adhkaar_adv_053",
+  "category": "Adhkaar",
+  "level": "Advanced",
+  "question": "Specifying a number for a dhikr without evidence constitutes:",
+  "options": [
+    "Permissible structuring",
+    "Minor bidʿah in worship",
+    "Major shirk",
+    "Ijmaʿ practice"
+  ],
+  "correctIndex": 1,
+  "explanation": "Assigning specific numbers without textual basis is innovation."
+},
+{
+  "id": "adhkaar_adv_066",
+  "category": "Adhkaar",
+  "level": "Advanced",
+  "question": "Ruqyah is permissible when:",
+  "options": [
+    "It includes unknown incantations",
+    "It contains Qur'an or known supplications free of shirk",
+    "It relies on symbolic objects",
+    "It guarantees healing"
+  ],
+  "correctIndex": 1,
+  "explanation": "Permissible ruqyah must be free from shirk and use known words."
+},
+{
+  "id": "adhkaar_adv_067",
+  "category": "Adhkaar",
+  "level": "Advanced",
+  "question": "Believing that written verses placed in objects provide protection independently constitutes:",
+  "options": [
+    "Permissible tabarruk",
+    "Cultural practice only",
+    "Shirk in causation",
+    "Recommended precaution"
+  ],
+  "correctIndex": 2,
+  "explanation": "Protection is from Allah alone, not objects."
+},
+{
+  "id": "adhkaar_adv_068",
+  "category": "Adhkaar",
+  "level": "Advanced",
+  "question": "Collective chanting of dhikr in fixed rhythm without evidence is classified as:",
+  "options": [
+    "Prophetic Sunnah",
+    "Permissible organization",
+    "Bidʿah in form",
+    "Obligatory practice"
+  ],
+  "correctIndex": 2,
+  "explanation": "Form-based innovations fall under bidʿah."
+},
+{
+  "id": "adhkaar_adv_076",
+  "category": "Adhkaar",
+  "level": "Advanced",
+  "question": "The phrase \"Allah knows best\" after giving knowledge primarily reflects:",
+  "options": [
+    "Uncertainty in belief",
+    "Proper theological humility",
+    "Weak scholarship",
+    "Fear of criticism"
+  ],
+  "correctIndex": 1,
+  "explanation": "It affirms humility before divine knowledge."
+},
+{
+  "id": "adhkaar_adv_077",
+  "category": "Adhkaar",
+  "level": "Advanced",
+  "question": "Replacing prophetic morning adhkār with motivational affirmations is:",
+  "options": [
+    "Equivalent worship",
+    "Superior modern practice",
+    "Replacement of revealed dhikr with self-designed ritual",
+    "Encouraged renewal"
+  ],
+  "correctIndex": 2,
+  "explanation": "Revealed adhkār cannot be substituted with invented rituals."
+},
+{
+  "id": "adhkaar_jaamiah_086",
+  "category": "Adhkaar",
+  "level": "Advanced",
+  "question": "The difference between dhikr mutlaq (unrestricted) and dhikr muqayyad (restricted) primarily affects:",
+  "options": [
+    "Sincerity only",
+    "Timing and number limitations",
+    "Arabic pronunciation",
+    "Reward magnitude"
+  ],
+  "correctIndex": 1,
+  "explanation": "Muqayyad dhikr has specific timing or quantity restrictions."
+},
+{
+  "id": "adhkaar_jaamiah_087",
+  "category": "Adhkaar",
+  "level": "Advanced",
+  "question": "Persistently attributing protection to a specific unproven phrase risks:",
+  "options": [
+    "Minor sin only",
+    "Innovation in belief",
+    "Language corruption",
+    "Excessive humility"
+  ],
+  "correctIndex": 1,
+  "explanation": "Assigning unseen effects without evidence corrupts creed."
+},
+{
+  "id": "adhkaar_jaamiah_088",
+  "category": "Adhkaar",
+  "level": "Advanced",
+  "question": "The strongest safeguard against superstition in dhikr practice is:",
+  "options": [
+    "Emotional intensity",
+    "Cultural continuity",
+    "Strict adherence to textual evidence",
+    "Numerical repetition"
+  ],
+  "correctIndex": 2,
+  "explanation": "Textual anchoring prevents superstition."
+},
+{
+  "id": "adhkaar_jaamiah_089",
+  "category": "Adhkaar",
+  "level": "Advanced",
+  "question": "Which scenario best represents minor shirk in dhikr?",
+  "options": [
+    "Reciting quietly",
+    "Seeking praise for visible dhikr",
+    "Making duʿāʾ alone",
+    "Short remembrance"
+  ],
+  "correctIndex": 1,
+  "explanation": "Riyāʾ (showing off) is minor shirk."
+},
+{
+  "id": "adhkaar_jaamiah_090",
+  "category": "Adhkaar",
+  "level": "Advanced",
+  "question": "The maqṣad (objective) of daily adhkār is primarily:",
+  "options": [
+    "Numerical completion",
+    "Spiritual conditioning and tawḥīd reinforcement",
+    "Cultural identity",
+    "Public recognition"
+  ],
+  "correctIndex": 1,
+  "explanation": "Adhkār reinforce constant awareness of Allah."
+},
 
   {
     "id": "quran_adv_001",
