@@ -1624,51 +1624,120 @@ function renderDiary() {
 
   const entries = loadDiary();
 
+  const DRAFT_KEY = "masalah_diary_draft_v1";
+
+  const fmtHumanDate = (iso) => {
+    const d = iso ? new Date(iso) : new Date();
+    return d.toLocaleDateString(undefined, {
+      weekday: "short",
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  };
+
+  const fmtTime = (ms) => {
+    const d = new Date(ms || Date.now());
+    return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  };
+
+  const safe = (s) =>
+    String(s || "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+
+  const loadDraft = () => {
+    try {
+      return JSON.parse(localStorage.getItem(DRAFT_KEY) || "null");
+    } catch {
+      return null;
+    }
+  };
+
+  const saveDraft = (draft) => {
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+  };
+
+  const clearDraft = () => {
+    localStorage.removeItem(DRAFT_KEY);
+  };
+
+  const draft = loadDraft() || {
+    title: "",
+    text: "",
+    updatedAt: 0,
+  };
+
   app.innerHTML = `
-    <section class="card">
-      <div class="card-head">
-        <h2>Private Diary</h2>
-        <p class="muted">Your personal page. Stored only on this device.</p>
-      </div>
+    <section class="diary-page screen">
 
-      <div class="diary-grid">
-        <div class="diary-box">
-          <div class="diary-formhead">
-            <h3 class="diary-subtitle">New entry</h3>
-            <span class="muted diary-small">Date: <strong>${todayISO()}</strong></span>
+      <header class="diary-head">
+        <div>
+          <h2 class="diary-h">Private Diary</h2>
+          <p class="diary-sub muted">Stored only on this device. Write like nobody is watching.</p>
+        </div>
+
+        <div class="diary-head-right">
+          <div class="diary-savechip" id="save_chip">Not saved yet</div>
+          <button class="btn mini" id="diary_insert_prompt" type="button">Prompts</button>
+        </div>
+      </header>
+
+      <div class="diary-shell">
+        <main class="diary-editor">
+          <div class="diary-editor-top">
+            <div class="diary-date">
+              <span class="muted">Today</span>
+              <span class="diary-date-strong">${safe(fmtHumanDate(todayISO()))}</span>
+            </div>
+
+            <input
+              id="diary_title"
+              class="diary-title"
+              placeholder="A short headline (optional)"
+              maxlength="80"
+              value="${safe(draft.title)}"
+            />
           </div>
 
-          <div class="field">
-            <label class="label">Title (optional)</label>
-            <input id="diary_title" class="input" placeholder="A short headline..." maxlength="80" />
+          <div class="diary-pad">
+            <textarea
+              id="diary_text"
+              class="diary-text"
+              placeholder="Write freely. No perfection required."
+              maxlength="8000"
+            >${safe(draft.text)}</textarea>
           </div>
 
-          <div class="field">
-            <label class="label">Your day</label>
-            <textarea id="diary_text" class="textarea" placeholder="Write freely." rows="10" maxlength="8000"></textarea>
-            <div class="diary-meta">
-              <span class="muted" id="diary_count">0 / 8000</span>
-              <button id="diary_insert_prompt" class="btn mini" type="button">Add prompts</button>
+          <div class="diary-foot">
+            <div class="diary-meta muted">
+              <span id="diary_count">0 / 8000</span>
+              <span class="diary-dot">•</span>
+              <span id="last_saved">${draft.updatedAt ? `Draft saved at ${safe(fmtTime(draft.updatedAt))}` : "Draft not saved"}</span>
+            </div>
+
+            <div class="diary-actions">
+              <button id="diary_save" class="primary" type="button">Save entry</button>
+              <button id="diary_clear" class="btn" type="button">Clear</button>
             </div>
           </div>
 
-          <div class="diary-actions">
-            <button id="diary_save" class="btn primary" type="button">Save entry</button>
-            <button id="diary_clear" class="btn" type="button">Clear</button>
-          </div>
-
           <div id="diary_notice" class="diary-notice" aria-live="polite"></div>
-        </div>
+        </main>
 
-        <div class="diary-box">
-          <div class="diary-formhead">
-            <h3 class="diary-subtitle">Your entries</h3>
+        <aside class="diary-side">
+          <div class="diary-side-head">
+            <h3 class="diary-side-title">Your entries</h3>
+            <p class="muted diary-side-sub">${entries.length} saved</p>
           </div>
 
-          <div id="diary_list">
+          <div id="diary_list" class="diary-list">
             ${renderDiaryList(entries)}
           </div>
-        </div>
+        </aside>
       </div>
 
       <div class="diary-modal" id="diary_modal" aria-hidden="true">
@@ -1690,6 +1759,7 @@ function renderDiary() {
           </div>
         </div>
       </div>
+
     </section>
   `;
 
@@ -1699,6 +1769,9 @@ function renderDiary() {
   const elNotice = app.querySelector("#diary_notice");
   const elList = app.querySelector("#diary_list");
 
+  const elSaveChip = app.querySelector("#save_chip");
+  const elLastSaved = app.querySelector("#last_saved");
+
   const elModal = app.querySelector("#diary_modal");
   const elModalDate = app.querySelector("#diary_modal_date");
   const elModalTitle = app.querySelector("#diary_modal_title");
@@ -1707,12 +1780,33 @@ function renderDiary() {
   const elDelete = app.querySelector("#diary_delete");
 
   let openedId = null;
+  let autosaveTimer = null;
 
   function setNotice(msg, kind) {
     elNotice.textContent = msg || "";
     elNotice.classList.remove("is-warn", "is-good");
     if (kind === "warn") elNotice.classList.add("is-warn");
     if (kind === "good") elNotice.classList.add("is-good");
+  }
+
+  function setDraftUI(mode, whenMs) {
+    if (mode === "dirty") {
+      elSaveChip.textContent = "Saving…";
+      elSaveChip.classList.add("is-dirty");
+      elSaveChip.classList.remove("is-saved");
+      elLastSaved.textContent = "Typing…";
+      return;
+    }
+    if (mode === "saved") {
+      elSaveChip.textContent = "Draft saved";
+      elSaveChip.classList.add("is-saved");
+      elSaveChip.classList.remove("is-dirty");
+      elLastSaved.textContent = `Draft saved at ${fmtTime(whenMs || Date.now())}`;
+      return;
+    }
+    elSaveChip.textContent = "Not saved yet";
+    elSaveChip.classList.remove("is-saved", "is-dirty");
+    elLastSaved.textContent = "Draft not saved";
   }
 
   function refreshList() {
@@ -1724,8 +1818,30 @@ function renderDiary() {
     elCount.textContent = `${(elText.value || "").length} / 8000`;
   }
 
+  function scheduleDraftSave() {
+    setDraftUI("dirty");
+    if (autosaveTimer) clearTimeout(autosaveTimer);
+    autosaveTimer = setTimeout(() => {
+      const d = {
+        title: elTitle.value || "",
+        text: elText.value || "",
+        updatedAt: Date.now(),
+      };
+      saveDraft(d);
+      setDraftUI("saved", d.updatedAt);
+    }, 600);
+  }
+
+  // init
   updateCount();
-  elText.addEventListener("input", updateCount);
+  if (draft.updatedAt) setDraftUI("saved", draft.updatedAt);
+
+  elText.addEventListener("input", () => {
+    updateCount();
+    scheduleDraftSave();
+  });
+
+  elTitle.addEventListener("input", scheduleDraftSave);
 
   app.querySelector("#diary_insert_prompt").addEventListener("click", () => {
     const prompts =
@@ -1737,6 +1853,7 @@ function renderDiary() {
       `- One thing to improve tomorrow:\n`;
     elText.value = (elText.value || "") + prompts;
     updateCount();
+    scheduleDraftSave();
     elText.focus();
   });
 
@@ -1744,6 +1861,8 @@ function renderDiary() {
     elTitle.value = "";
     elText.value = "";
     updateCount();
+    clearDraft();
+    setDraftUI("idle");
     setNotice("Cleared.", "good");
   });
 
@@ -1759,10 +1878,10 @@ function renderDiary() {
     const entriesNow = loadDiary();
     const entry = {
       id: crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()) + "_" + Math.random().toString(16).slice(2),
-      date: todayISO(),
+      date: fmtHumanDate(todayISO()),
       title: title || "Untitled",
       text,
-      createdAt: Date.now()
+      createdAt: Date.now(),
     };
 
     entriesNow.push(entry);
@@ -1772,6 +1891,8 @@ function renderDiary() {
     elText.value = "";
     updateCount();
 
+    clearDraft();
+    setDraftUI("idle");
     setNotice("Saved on this device.", "good");
     refreshList();
   });
@@ -1818,6 +1939,7 @@ function renderDiary() {
     setNotice("Deleted.", "good");
   });
 }
+
 
 /* =======================
    Lock screen
