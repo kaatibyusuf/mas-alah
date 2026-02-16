@@ -383,6 +383,57 @@ function bindMobileMenu() {
 
   setOpen(false);
 }
+function bindNavToggle() {
+  const toggle = document.querySelector(".nav-toggle");
+  const menu = document.getElementById("navMenu");
+
+  if (!toggle || !menu) return;
+
+  const setOpen = (open) => {
+    menu.dataset.open = open ? "true" : "false";
+    toggle.setAttribute("aria-expanded", open ? "true" : "false");
+  };
+
+  toggle.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const open = menu.dataset.open === "true";
+    setOpen(!open);
+  });
+
+  // close when clicking any nav button
+  menu.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-route]");
+    if (btn) setOpen(false);
+  });
+
+  // close when clicking outside nav
+  document.addEventListener("click", (e) => {
+    const open = menu.dataset.open === "true";
+    if (!open) return;
+    if (!e.target.closest(".nav")) setOpen(false);
+  });
+
+  // close on Escape
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") setOpen(false);
+  });
+}
+window.addEventListener("DOMContentLoaded", () => {
+  if (!app) {
+    alert('Missing <div id="app"></div> in your HTML.');
+    return;
+  }
+
+  bindNavRoutes();
+  bindNavToggle(); // ✅ ADD THIS
+  bindGlobalKeyboard();
+  setFooterYear();
+
+  const initial = (window.location.hash || "").slice(1);
+  render(initial || "welcome");
+});
+
 
 /* =======================
    Transitions
@@ -2130,70 +2181,83 @@ async function renderLearning() {
   const myName = displayNameFromSession(session);
 
   app.innerHTML = `
-    <section class="card" style="margin-top:20px;">
-      <h2>Learning Space</h2>
-      <p class="muted">Join a room. Chat with peers. Send voice notes.</p>
-
-      <div class="grid" style="margin-top:12px; grid-template-columns: 1fr 1.2fr; align-items:start;">
-        <div class="card" style="box-shadow:none;">
-          <h3 style="margin:0;">Rooms</h3>
-          <p class="muted" style="margin:6px 0 10px;">Create or join a room.</p>
-
-          <div class="grid">
-            <label class="field">
-              <span>New room name</span>
-              <input id="room_name" type="text" placeholder="e.g., Fiqh Advanced Drill" />
-            </label>
-            <button id="room_create" class="primary" type="button">Create room</button>
-            <div id="rooms_list" class="grid" style="margin-top:8px;"></div>
-          </div>
+    <section class="wa">
+      <!-- Rooms drawer (mobile) -->
+      <aside class="wa-rooms" id="waRooms" data-open="false" aria-label="Rooms">
+        <div class="wa-rooms-head">
+          <div class="wa-title">Rooms</div>
+          <button class="wa-iconbtn" id="waRoomsClose" type="button" aria-label="Close rooms">✕</button>
         </div>
 
-        <div class="card" style="box-shadow:none;">
-          <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;">
-            <div>
-              <h3 style="margin:0;">Room chat</h3>
-              <p class="muted" id="room_meta" style="margin:6px 0 0;">Select a room.</p>
-            </div>
+        <div class="wa-rooms-body">
+          <label class="field">
+            <span>New room name</span>
+            <input id="room_name" type="text" placeholder="e.g., Fiqh Advanced Drill" />
+          </label>
+          <button id="room_create" class="primary" type="button">Create</button>
 
-            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-              <span class="pill pill-good">Signed in</span>
-              <button id="logout_btn" class="btn" type="button">Logout</button>
-            </div>
-          </div>
-
-          <hr class="hr" />
-
-          <div id="chat_box" style="min-height:260px; max-height:420px; overflow:auto; display:grid; gap:10px;"></div>
-
-          <div class="grid" style="margin-top:12px;">
-            <label class="field">
-              <span>Message</span>
-              <input id="chat_text" type="text" placeholder="Type and send..." />
-            </label>
-
-            <div style="display:flex; gap:10px; flex-wrap:wrap;">
-              <button id="chat_send" class="primary" type="button">Send text</button>
-
-              <label class="btn" style="display:inline-flex; align-items:center; gap:10px;">
-                <input id="voice_file" type="file" accept="audio/*" style="display:none;" />
-                Upload voice note
-              </label>
-            </div>
-
-            <p id="chat_status" class="muted" style="margin:0;"></p>
-          </div>
+          <div id="rooms_list" class="wa-roomlist" style="margin-top:10px;"></div>
         </div>
+      </aside>
+
+      <!-- Chat area -->
+      <div class="wa-chat">
+        <header class="wa-chat-head">
+          <button class="wa-iconbtn" id="waRoomsOpen" type="button" aria-label="Open rooms">☰</button>
+
+          <div class="wa-chat-meta">
+            <div class="wa-chat-title" id="room_title">Select a room</div>
+            <div class="wa-chat-sub muted" id="room_sub">Join a room to start chatting.</div>
+          </div>
+
+          <div class="wa-chat-actions">
+            <span class="wa-pill">Signed in</span>
+            <button id="logout_btn" class="btn" type="button">Logout</button>
+          </div>
+        </header>
+
+        <main class="wa-messages" id="chat_box" aria-live="polite"></main>
+
+        <footer class="wa-inputbar">
+          <input id="chat_text" class="wa-input" type="text" placeholder="Message" />
+          <button id="chat_send" class="wa-send" type="button" aria-label="Send">➤</button>
+
+          <label class="wa-attach btn" style="display:inline-flex; align-items:center; gap:10px;">
+            <input id="voice_file" type="file" accept="audio/*" style="display:none;" />
+            Voice
+          </label>
+        </footer>
+
+        <div class="wa-status muted" id="chat_status"></div>
       </div>
     </section>
   `;
 
   const roomsListEl = document.getElementById("rooms_list");
-  const roomMetaEl = document.getElementById("room_meta");
+  const roomTitleEl = document.getElementById("room_title");
+  const roomSubEl = document.getElementById("room_sub");
   const chatBoxEl = document.getElementById("chat_box");
   const chatTextEl = document.getElementById("chat_text");
   const chatStatusEl = document.getElementById("chat_status");
   const voiceInput = document.getElementById("voice_file");
+
+  const roomsDrawer = document.getElementById("waRooms");
+  const btnRoomsOpen = document.getElementById("waRoomsOpen");
+  const btnRoomsClose = document.getElementById("waRoomsClose");
+
+  const setRoomsOpen = (open) => {
+    roomsDrawer.dataset.open = open ? "true" : "false";
+  };
+
+  btnRoomsOpen.addEventListener("click", () => setRoomsOpen(true));
+  btnRoomsClose.addEventListener("click", () => setRoomsOpen(false));
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") setRoomsOpen(false);
+  });
+  document.addEventListener("click", (e) => {
+    if (roomsDrawer.dataset.open !== "true") return;
+    if (!e.target.closest("#waRooms") && !e.target.closest("#waRoomsOpen")) setRoomsOpen(false);
+  });
 
   let activeRoom = null;
 
@@ -2207,22 +2271,27 @@ async function renderLearning() {
   function renderMessage(m) {
     const time = new Date(m.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
     const who = m.user_name || "Anonymous";
+    const mine = m.user_id === session.user.id;
 
     if (m.type === "voice" && m.voice_url) {
       return `
-        <div class="card" style="box-shadow:none;">
-          <div class="muted" style="font-size:12px;">${escapeHtml(who)} • ${escapeHtml(time)}</div>
-          <div style="margin-top:8px;">
-            <audio controls src="${escapeHtml(m.voice_url)}" style="width:100%;"></audio>
+        <div class="wa-row ${mine ? "me" : "them"}">
+          <div class="wa-bubble">
+            <div class="wa-who">${escapeHtml(who)}</div>
+            <audio controls src="${escapeHtml(m.voice_url)}" style="width:220px; max-width:100%; margin-top:6px;"></audio>
+            <div class="wa-time">${escapeHtml(time)}</div>
           </div>
         </div>
       `;
     }
 
     return `
-      <div class="card" style="box-shadow:none;">
-        <div class="muted" style="font-size:12px;">${escapeHtml(who)} • ${escapeHtml(time)}</div>
-        <div style="margin-top:6px;">${escapeHtml(m.text || "")}</div>
+      <div class="wa-row ${mine ? "me" : "them"}">
+        <div class="wa-bubble">
+          <div class="wa-who">${escapeHtml(who)}</div>
+          <div class="wa-text">${escapeHtml(m.text || "")}</div>
+          <div class="wa-time">${escapeHtml(time)}</div>
+        </div>
       </div>
     `;
   }
@@ -2244,7 +2313,7 @@ async function renderLearning() {
     }
 
     roomsListEl.innerHTML = data
-      .map((r) => `<button class="btn" type="button" data-room-id="${r.id}">${escapeHtml(r.name)}</button>`)
+      .map((r) => `<button class="wa-room" type="button" data-room-id="${r.id}">${escapeHtml(r.name)}</button>`)
       .join("");
 
     roomsListEl.querySelectorAll("[data-room-id]").forEach((btn) => {
@@ -2291,10 +2360,12 @@ async function renderLearning() {
 
   async function selectRoom(room) {
     activeRoom = room;
-    roomMetaEl.textContent = `Room: ${room.name}`;
+    roomTitleEl.textContent = room.name;
+    roomSubEl.textContent = "Group chat";
     chatStatusEl.textContent = "";
     await loadMessages(room.id);
     startRealtime(room.id);
+    setRoomsOpen(false);
   }
 
   document.getElementById("room_create").addEventListener("click", async () => {
@@ -2341,6 +2412,14 @@ async function renderLearning() {
 
     chatTextEl.value = "";
     chatStatusEl.textContent = "";
+    chatTextEl.focus();
+  });
+
+  chatTextEl.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      document.getElementById("chat_send").click();
+    }
   });
 
   voiceInput.addEventListener("change", async () => {
@@ -2392,6 +2471,7 @@ async function renderLearning() {
 
   await loadRooms();
 }
+
 
 /* =======================
    Footer year
