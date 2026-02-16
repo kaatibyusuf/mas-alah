@@ -14,38 +14,42 @@
 
   <body>
     <header class="topbar">
-  <div class="wrap topbar-inner">
-    <div class="brand">
-      <div class="brand-mark" aria-hidden="true">م</div>
-      <div class="brand-text">
-        <h1 class="brand-name">Mas'alah</h1>
-        <p class="brand-sub">Short Islamic quizzes. One steady step daily.</p>
+      <div class="wrap topbar-inner">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">م</div>
+          <div class="brand-text">
+            <h1 class="brand-name">Mas'alah</h1>
+            <p class="brand-sub">Short Islamic quizzes. One steady step daily.</p>
+          </div>
+        </div>
+
+        <nav class="nav" aria-label="Primary navigation">
+          <button
+            class="nav-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="navMenu"
+            id="navToggle"
+          >
+            Menu
+          </button>
+
+          <div id="navMenu" class="nav-menu" data-open="false">
+            <button class="nav-btn" data-route="welcome" type="button">Welcome</button>
+            <button class="nav-btn" data-route="home" type="button">Home</button>
+            <button class="nav-btn" data-route="daily" type="button">Daily</button>
+            <button class="nav-btn" data-route="calendar" type="button">Calendar</button>
+            <button class="nav-btn" data-route="zakat" type="button">Zakat</button>
+            <button class="nav-btn" data-route="diary" type="button">Diary</button>
+            <button class="nav-btn" data-route="learning" type="button">Learning</button>
+            <button class="nav-btn" data-route="faq" type="button">FAQ</button>
+          </div>
+        </nav>
       </div>
-    </div>
+    </header>
 
-    <nav class="nav" aria-label="Primary navigation">
-      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="navMenu">
-        Menu
-      </button>
-
-      <div id="navMenu" class="nav-menu" data-open="false">
-        <button class="nav-btn" data-route="welcome" type="button">Welcome</button>
-        <button class="nav-btn" data-route="home" type="button">Home</button>
-        <button class="nav-btn" data-route="daily" type="button">Daily</button>
-        <button class="nav-btn" data-route="calendar" type="button">Calendar</button>
-        <button class="nav-btn" data-route="zakat" type="button">Zakat</button>
-        <button class="nav-btn" data-route="diary" type="button">Diary</button>
-        <button class="nav-btn" data-route="learning" type="button">Learning</button>
-        <button class="nav-btn" data-route="faq" type="button">FAQ</button>
-      </div>
-    </nav>
-  </div>
-</header>
-
-<main id="app" class="wrap" role="main" aria-live="polite"></main>
-
-      <!-- App screens render here -->
-    </main>
+    <!-- App screens render here -->
+    <main id="app" class="wrap" role="main" aria-live="polite"></main>
 
     <footer class="footer">
       <div class="wrap footer-inner">
@@ -67,7 +71,6 @@
           <div class="footer-links" aria-label="Footer links">
             <button class="footer-link" data-route="welcome" type="button">Welcome</button>
             <button class="footer-link" data-route="home" type="button">Home</button>
-
             <button class="footer-link" data-route="faq" type="button">FAQ</button>
           </div>
 
@@ -80,5 +83,44 @@
     </footer>
 
     <script src="scripts/app.js" type="module"></script>
+
+    <!-- Mobile nav dropdown behavior -->
+    <script>
+      (function () {
+        const toggle = document.getElementById("navToggle");
+        const menu = document.getElementById("navMenu");
+        if (!toggle || !menu) return;
+
+        function setOpen(open) {
+          menu.dataset.open = open ? "true" : "false";
+          toggle.setAttribute("aria-expanded", open ? "true" : "false");
+        }
+
+        toggle.addEventListener("click", () => {
+          const open = menu.dataset.open === "true";
+          setOpen(!open);
+        });
+
+        // Close menu on outside click (mobile)
+        document.addEventListener("click", (e) => {
+          const isOpen = menu.dataset.open === "true";
+          if (!isOpen) return;
+          const inside = e.target.closest(".nav");
+          if (!inside) setOpen(false);
+        });
+
+        // Close menu after clicking any nav button
+        menu.addEventListener("click", (e) => {
+          const btn = e.target.closest("[data-route]");
+          if (!btn) return;
+          setOpen(false);
+        });
+
+        // Close on Escape
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") setOpen(false);
+        });
+      })();
+    </script>
   </body>
 </html>

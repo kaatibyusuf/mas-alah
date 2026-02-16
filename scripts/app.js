@@ -1,11 +1,3 @@
-/* Mas'alah App (app.js)
-   Single-file router + quiz + progress + hijri calendar + zakat + diary + PIN lock + Supabase auth + Supabase chat.
-
-   IMPORTANT:
-   1) This file assumes you have: <div id="app"></div> in index.html
-   2) Your nav buttons should have: class="nav-btn" and data-route="home" etc.
-   3) Your CSS should include classes used here (btn, primary, card, muted, etc.)
-*/
 
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
@@ -338,19 +330,58 @@ function setActiveNav(route) {
     btn.classList.toggle("active", btn.dataset.route === route);
   });
 }
+
 function go(route) {
   if (!route) return;
   window.location.hash = `#${route}`;
 }
+
 function bindGotoButtons() {
   app.querySelectorAll("[data-goto]").forEach((btn) => {
     btn.addEventListener("click", () => go(btn.dataset.goto));
   });
 }
+
 function bindNavRoutes() {
   document.querySelectorAll("[data-route]").forEach((btn) => {
     btn.addEventListener("click", () => go(btn.dataset.route));
   });
+}
+
+/* ✅ Mobile menu toggle (your missing piece) */
+function bindMobileMenu() {
+  const nav = document.querySelector(".nav");
+  const toggle = document.querySelector(".nav-toggle");
+  const menu = document.getElementById("navMenu");
+  if (!nav || !toggle || !menu) return;
+
+  const setOpen = (open) => {
+    menu.dataset.open = open ? "true" : "false";
+    toggle.setAttribute("aria-expanded", open ? "true" : "false");
+  };
+
+  toggle.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setOpen(menu.dataset.open !== "true");
+  });
+
+  menu.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-route]");
+    if (btn) setOpen(false);
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!nav.contains(e.target)) setOpen(false);
+  });
+
+  window.addEventListener("hashchange", () => setOpen(false));
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 720) setOpen(false);
+  });
+
+  setOpen(false);
 }
 
 /* =======================
@@ -2430,11 +2461,12 @@ window.addEventListener("hashchange", () => {
 ======================= */
 window.addEventListener("DOMContentLoaded", () => {
   if (!app) {
-    alert('Missing <div id="app"></div> in your HTML.');
+    alert('Missing <div id="app"></div> (or <main id="app"></main>) in your HTML.');
     return;
   }
 
   bindNavRoutes();
+  bindMobileMenu(); // ✅ makes the mobile Menu button work
   bindGlobalKeyboard();
   setFooterYear();
 
