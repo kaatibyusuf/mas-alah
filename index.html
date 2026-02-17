@@ -84,39 +84,7 @@
 
     <script src="scripts/app.js" type="module"></script>
 
-    <!-- Mobile nav dropdown behavior -->
-    <script>
-      (function () {
-        const toggle = document.getElementById("navToggle");
-        const menu = document.getElementById("navMenu");
-        if (!toggle || !menu) return;
-
-        function setOpen(open) {
-          menu.dataset.open = open ? "true" : "false";
-          toggle.setAttribute("aria-expanded", open ? "true" : "false");
-        }
-
-        toggle.addEventListener("click", () => {
-          const open = menu.dataset.open === "true";
-          setOpen(!open);
-        });
-
-        // Close menu on outside click (mobile)
-        document.addEventListener("click", (e) => {
-          const isOpen = menu.dataset.open === "true";
-          if (!isOpen) return;
-          const inside = e.target.closest(".nav");
-          if (!inside) setOpen(false);
-        });
-
-        // Close menu after clicking any nav button
-        menu.addEventListener("click", (e) => {
-          const btn = e.target.closest("[data-route]");
-          if (!btn) return;
-          setOpen(false);
-        });
-
-        // Close on Escape
+  
         document.addEventListener("keydown", (e) => {
           if (e.key === "Escape") setOpen(false);
         });

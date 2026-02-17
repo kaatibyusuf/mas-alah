@@ -2707,13 +2707,8 @@ window.addEventListener("hashchange", () => {
    Boot
 ======================= */
 window.addEventListener("DOMContentLoaded", () => {
-  if (!app) {
-    alert('Missing <div id="app"></div> (or <main id="app"></main>) in your HTML.');
-    return;
-  }
-
   bindNavRoutes();
-  bindMobileMenu();
+  bindMobileMenu(); // this must exist and must run
   bindGlobalKeyboard();
   setFooterYear();
 

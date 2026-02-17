@@ -1540,3 +1540,32 @@ input[type="password"]:focus{
   font-size: 15px;
   color: rgba(255,255,255,.9);
 }
+/* Mobile nav */
+.nav-menu { display: flex; gap: 8px; }
+
+/* collapse on small screens */
+@media (max-width: 720px) {
+  .nav { position: relative; }
+
+  .nav-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: min(92vw, 320px);
+    padding: 10px;
+    border: 1px solid rgba(255, 187, 0, 0.18);
+    border-radius: 14px;
+    background: #0f0f11;
+    box-shadow: 0 16px 50px rgba(0,0,0,0.55);
+    flex-direction: column;
+    z-index: 9999;
+  }
+
+  .nav-menu[data-open="true"] { display: flex; }
+
+  .nav-btn {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
