@@ -16,15 +16,21 @@ const app = document.getElementById("app");
 /* =======================
    LocalStorage keys
 ======================= */
-const STORAGE_KEY = "masalah_progress_v1";
-const DAILY_KEY = "masalah_daily_v1";
+const STORAGE_KEY = "masalah_progress_v2";
+const DAILY_KEY = "masalah_daily_v2";
 const DIARY_KEY = "masalah_diary_v1";
 const LOCK_PIN_HASH_KEY = "masalah_pin_hash_v1";
 const LOCK_UNLOCKED_UNTIL_KEY = "masalah_unlocked_until_v1";
 const BAG_KEY = "masalah_shuffle_bag_v1";
+const QUESTIONS_CACHE_KEY = "masalah_questions_cache_v1";
+const QUESTIONS_CACHE_AT_KEY = "masalah_questions_cache_at_v1";
 
 /* Protect what you want */
 const PROTECTED_ROUTES = new Set(["diary", "progress"]);
+
+/* Categories must match data/questions.json exactly */
+const CATEGORIES = ["Qur’an", "Seerah", "Fiqh", "Tawheed", "Arabic", "Adhkaar"];
+const LEVELS = ["Beginner", "Intermediate", "Advanced"];
 
 /* =======================
    Global state
@@ -38,11 +44,12 @@ const state = {
   secondsPerQuestion: 20,
   timerId: null,
   timeLeft: 20,
-  lastSettings: null, // { category, level, timed, count, mode: "normal"|"daily" }
+  lastSettings: null, // { category, level, timed, count, mode: "custom"|"daily"|"review" }
   isNavigating: false,
   currentRoute: "welcome",
   intendedRoute: null,
-  answerLog: [] // [{ selectedIdx, correctIdx, isCorrect, reason, explanation, question, options }]
+  answerLog: [], // [{ selectedIdx, correctIdx, isCorrect, reason, explanation, questionId }]
+  _finalized: false
 };
 
 /* =======================
@@ -61,6 +68,23 @@ function vibrate(pattern) {
   try {
     if (navigator && "vibrate" in navigator) navigator.vibrate(pattern);
   } catch {}
+}
+
+function todayISO() {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
+function fmtLocalLongDate(d = new Date()) {
+  return new Intl.DateTimeFormat(undefined, {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+  }).format(d);
 }
 
 /* =======================
@@ -136,6 +160,8 @@ function icon(name) {
           `<path ${common} d="M3 12l9 5 9-5"/>` +
           `<path ${common} d="M3 17l9 5 9-5"/>`
       );
+    case "download":
+      return wrap(`<path ${common} d="M12 3v12"/><path ${common} d="M7 10l5 5 5-5"/><path ${common} d="M5 21h14"/>`);
     case "check":
       return wrap(`<path ${common} d="M20 6L9 17l-5-5"/>`);
     default:
@@ -144,79 +170,164 @@ function icon(name) {
 }
 
 /* =======================
-   Date helpers
+   Progress storage + mastery + mistakes
 ======================= */
-function todayISO() {
-  const d = new Date();
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  return `${y}-${m}-${day}`;
+function defaultProgress() {
+  return {
+    streakCount: 0,
+    lastActiveDate: null,
+    lastAttempt: null,
+    mastery: {}, // "Category|Level" -> 0..1
+    mistakes: {}, // questionId -> { wrong, right, lastWrongAt, lastRightAt }
+    reviewQueue: [], // question ids, newest first
+    bestScores: {} // "Category|Level" -> percent
+  };
 }
 
-function fmtLocalLongDate(d = new Date()) {
-  return new Intl.DateTimeFormat(undefined, {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric"
-  }).format(d);
-}
-
-/* =======================
-   Progress storage
-======================= */
 function loadProgress() {
   const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) return { streakCount: 0, lastActiveDate: null, bestScores: {}, lastAttempt: null };
+  if (!raw) return defaultProgress();
   try {
-    const parsed = JSON.parse(raw);
-    return {
-      streakCount: parsed.streakCount ?? 0,
-      lastActiveDate: parsed.lastActiveDate ?? null,
-      bestScores: parsed.bestScores ?? {},
-      lastAttempt: parsed.lastAttempt ?? null
-    };
+    return { ...defaultProgress(), ...JSON.parse(raw) };
   } catch {
-    return { streakCount: 0, lastActiveDate: null, bestScores: {}, lastAttempt: null };
+    return defaultProgress();
   }
 }
-function saveProgress(progress) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+
+function saveProgress(p) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(p));
 }
+
 function updateStreak(progress) {
   const today = todayISO();
   const last = progress.lastActiveDate;
+
   if (!last) {
     progress.streakCount = 1;
     progress.lastActiveDate = today;
     return;
   }
+
   if (last === today) return;
 
-  const diffDays = Math.round((new Date(today) - new Date(last)) / (1000 * 60 * 60 * 24));
+  const diffDays = Math.round((new Date(today) - new Date(last)) / 86400000);
   progress.streakCount = diffDays === 1 ? progress.streakCount + 1 : 1;
   progress.lastActiveDate = today;
 }
 
-/* =======================
-   Questions
-======================= */
-async function loadQuestions() {
-  if (state.allQuestions.length) return state.allQuestions;
-  const res = await fetch("data/questions.json");
-  if (!res.ok) throw new Error("Could not load data/questions.json");
-  state.allQuestions = await res.json();
-  return state.allQuestions;
+function masteryKey(category, level) {
+  return `${category}|${level}`;
 }
 
-function pickRandom(arr, n) {
-  const copy = [...arr];
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
+function updateMastery(progress, category, level, score, total) {
+  const k = masteryKey(category, level);
+  const attemptPct = total > 0 ? score / total : 0;
+  const prev = typeof progress.mastery[k] === "number" ? progress.mastery[k] : null;
+
+  const alpha = 0.25;
+  const next = prev === null ? attemptPct : alpha * attemptPct + (1 - alpha) * prev;
+
+  progress.mastery[k] = +next.toFixed(4);
+}
+
+function overallKnowledgeScore(progress) {
+  const vals = Object.values(progress.mastery || {});
+  if (!vals.length) return 0;
+  const avg = vals.reduce((a, b) => a + b, 0) / vals.length;
+  return Math.round(avg * 100);
+}
+
+function weakestTopic(progress) {
+  const entries = Object.entries(progress.mastery || {});
+  if (!entries.length) return null;
+  entries.sort((a, b) => a[1] - b[1]);
+  const [key, val] = entries[0];
+  const [cat, lvl] = key.split("|");
+  return { cat, lvl, pct: Math.round(val * 100) };
+}
+
+function recordAnswer(progress, q, isCorrect) {
+  if (!progress.mistakes) progress.mistakes = {};
+  if (!progress.reviewQueue) progress.reviewQueue = [];
+
+  const id = q.id;
+  const now = new Date().toISOString();
+
+  if (!progress.mistakes[id]) {
+    progress.mistakes[id] = { wrong: 0, right: 0, lastWrongAt: null, lastRightAt: null };
   }
-  return copy.slice(0, n);
+
+  if (isCorrect) {
+    progress.mistakes[id].right += 1;
+    progress.mistakes[id].lastRightAt = now;
+  } else {
+    progress.mistakes[id].wrong += 1;
+    progress.mistakes[id].lastWrongAt = now;
+    if (!progress.reviewQueue.includes(id)) progress.reviewQueue.unshift(id);
+  }
+
+  if (progress.reviewQueue.length > 200) progress.reviewQueue = progress.reviewQueue.slice(0, 200);
+}
+
+function getQuestionsByIds(ids, allQuestions) {
+  const map = new Map(allQuestions.map((q) => [q.id, q]));
+  return ids.map((id) => map.get(id)).filter(Boolean);
+}
+
+function buildMistakeSet(progress, allQuestions, count = 20) {
+  const ids = progress.reviewQueue || [];
+  const qs = getQuestionsByIds(ids, allQuestions);
+
+  qs.sort((a, b) => {
+    const ma = progress.mistakes?.[a.id]?.wrong || 0;
+    const mb = progress.mistakes?.[b.id]?.wrong || 0;
+    return mb - ma;
+  });
+
+  return qs.slice(0, count);
+}
+
+/* =======================
+   Questions: offline-first loading
+======================= */
+function cacheQuestionsLocally(questions) {
+  try {
+    localStorage.setItem(QUESTIONS_CACHE_KEY, JSON.stringify(questions));
+    localStorage.setItem(QUESTIONS_CACHE_AT_KEY, String(Date.now()));
+  } catch {}
+}
+
+function loadCachedQuestions() {
+  try {
+    const raw = localStorage.getItem(QUESTIONS_CACHE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+async function loadQuestions() {
+  if (state.allQuestions.length) return state.allQuestions;
+
+  try {
+    const res = await fetch("data/questions.json", { cache: "no-store" });
+    if (!res.ok) throw new Error("Could not load data/questions.json");
+    const data = await res.json();
+    if (!Array.isArray(data)) throw new Error("questions.json must be an array");
+    state.allQuestions = data;
+    cacheQuestionsLocally(data);
+    return state.allQuestions;
+  } catch (err) {
+    const cached = loadCachedQuestions();
+    if (cached && cached.length) {
+      state.allQuestions = cached;
+      showToast("Offline mode. Using cached questions.");
+      return state.allQuestions;
+    }
+    throw err;
+  }
 }
 
 /* =======================
@@ -269,26 +380,18 @@ function shuffleArray(arr) {
   return copy;
 }
 
-/**
- * Pool rules:
- * - Beginner/Intermediate: exact level match
- * - Advanced: include both "_adv_" and "_jaamiah_" IDs while q.level === "Advanced"
- */
 function isEligibleQuestion(q, category, level) {
   if (q.category !== category) return false;
   if (q.level !== level) return false;
 
   if (level === "Advanced") {
     const id = String(q.id || "");
-    return id.includes("_adv_") || id.includes("_jaamiah_");
+    return id.includes("_adv_") || id.includes("_jaamiah_") || id.includes("_advanced_") || true;
   }
+
   return true;
 }
 
-/**
- * Shuffle-bag draw. No repeats until pool exhausted.
- * bagKey should be stable, e.g. "custom|Fiqh|Advanced" or "daily|Fiqh|Advanced"
- */
 function drawFromBag(allEligibleIds, bagKey, count) {
   const bag = loadBag();
 
@@ -311,8 +414,8 @@ function drawFromBag(allEligibleIds, bagKey, count) {
   }
 
   const entry = bag[bagKey];
-
   const picked = [];
+
   while (picked.length < count) {
     if (!entry.remaining.length) {
       entry.remaining = shuffleArray(entry.pool);
@@ -327,13 +430,6 @@ function drawFromBag(allEligibleIds, bagKey, count) {
   return picked;
 }
 
-/**
- * Daily picker:
- * - Locked for the day (same set after refresh)
- * - Random from full eligible pool
- * - No repeats until pool exhausted, then recycle
- * - Advanced includes both adv + jaamiah IDs (via isEligibleQuestion)
- */
 async function getOrCreateDailyQuiz(category, level, count) {
   const today = todayISO();
   const existing = loadDailyState();
@@ -400,7 +496,7 @@ function startTimer() {
 }
 
 /* =======================
-   Nav
+   Nav + Routing helpers
 ======================= */
 function setActiveNav(route) {
   document.querySelectorAll(".nav-btn[data-route]").forEach((btn) => {
@@ -425,7 +521,6 @@ function bindNavRoutes() {
   });
 }
 
-/* Mobile menu toggle */
 function bindMobileMenu() {
   const nav = document.querySelector(".nav");
   const toggle = document.querySelector(".nav-toggle");
@@ -457,7 +552,6 @@ function bindMobileMenu() {
   });
 
   window.addEventListener("hashchange", () => setOpen(false));
-
   window.addEventListener("resize", () => {
     if (window.innerWidth > 720) setOpen(false);
   });
@@ -486,26 +580,6 @@ function withTransition(fn) {
 }
 
 /* =======================
-   Auth helpers
-======================= */
-async function getSession() {
-  const { data } = await supabase.auth.getSession();
-  return data.session || null;
-}
-async function requireAuthOrRoute(routeIfNot = "auth") {
-  const session = await getSession();
-  if (!session) {
-    go(routeIfNot);
-    return null;
-  }
-  return session;
-}
-function displayNameFromSession(session) {
-  const u = session?.user;
-  return u?.user_metadata?.display_name || u?.email?.split("@")?.[0] || "Anonymous";
-}
-
-/* =======================
    Keyboard (quiz)
 ======================= */
 function handleQuizKeys(e) {
@@ -529,7 +603,7 @@ function handleQuizKeys(e) {
 
   if (key === "arrowleft") {
     const prevBtn = document.getElementById("prevBtn");
-    if (prevBtn && prevBtn.style.display !== "none" && !prevBtn.disabled) {
+    if (prevBtn && !prevBtn.disabled) {
       e.preventDefault();
       prevBtn.click();
     }
@@ -589,7 +663,47 @@ function requireUnlock(route) {
 }
 
 /* =======================
-   Views
+   PWA Install prompt button
+======================= */
+let deferredInstallPrompt = null;
+
+function setupInstallPrompt() {
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    const btn = document.getElementById("installBtn");
+    if (btn) btn.style.display = "inline-flex";
+  });
+
+  window.addEventListener("appinstalled", () => {
+    deferredInstallPrompt = null;
+    const btn = document.getElementById("installBtn");
+    if (btn) btn.style.display = "none";
+    showToast("Installed.");
+  });
+}
+
+async function triggerInstall() {
+  if (!deferredInstallPrompt) {
+    showToast("Install not available on this device yet.");
+    return;
+  }
+  deferredInstallPrompt.prompt();
+  try {
+    await deferredInstallPrompt.userChoice;
+  } catch {}
+  deferredInstallPrompt = null;
+  const btn = document.getElementById("installBtn");
+  if (btn) btn.style.display = "none";
+}
+
+function registerServiceWorker() {
+  if (!("serviceWorker" in navigator)) return;
+  navigator.serviceWorker.register("./sw.js").catch(() => {});
+}
+
+/* =======================
+   Views: Welcome
 ======================= */
 function renderWelcome() {
   state.currentRoute = "welcome";
@@ -613,7 +727,7 @@ function renderWelcome() {
 
           <p>
             Short Islamic quizzes built for calm revision. Clear explanations, daily structure,
-            and honest progress you can actually sustain.
+            and progress you can sustain.
           </p>
 
           <div class="welcome-cta">
@@ -624,6 +738,10 @@ function renderWelcome() {
             <button class="btn" type="button" data-goto="${hasAnyActivity ? "home" : "faq"}">
               <span class="btn-inner">${icon("target")}${hasAnyActivity ? "Continue" : "How it works"}</span>
             </button>
+
+            <button id="installBtn" class="btn" type="button" style="display:none;">
+              <span class="btn-inner">${icon("download")}Install</span>
+            </button>
           </div>
         </div>
 
@@ -631,19 +749,19 @@ function renderWelcome() {
           <div class="welcome-card">
             <div class="icon">${icon("book")}</div>
             <h3>Clarity</h3>
-            <p>Short questions with focused explanations, not long lectures.</p>
+            <p>Short questions with focused explanations.</p>
           </div>
 
           <div class="welcome-card">
             <div class="icon">${icon("shield")}</div>
             <h3>Consistency</h3>
-            <p>Daily quizzes that remove indecision and make starting easy.</p>
+            <p>Daily quizzes that remove indecision.</p>
           </div>
 
           <div class="welcome-card">
             <div class="icon">${icon("layers")}</div>
             <h3>Structure</h3>
-            <p>Organized by category and level so you always know what to do next.</p>
+            <p>Organized by topic and level.</p>
           </div>
         </div>
 
@@ -656,7 +774,7 @@ function renderWelcome() {
               <div class="num">1</div>
               <div>
                 <h4>Pick Daily or Custom</h4>
-                <p>Daily is locked for the day. Custom lets you target a topic and level.</p>
+                <p>Daily is locked for the day. Custom targets a topic and level.</p>
               </div>
             </div>
 
@@ -664,15 +782,15 @@ function renderWelcome() {
               <div class="num">2</div>
               <div>
                 <h4>Answer and learn</h4>
-                <p>Get instant feedback and short explanations after each question.</p>
+                <p>Instant feedback with short explanations.</p>
               </div>
             </div>
 
             <div class="step">
               <div class="num">3</div>
               <div>
-                <h4>Track quietly</h4>
-                <p>Progress is saved on your device. Streaks reward consistency, not perfection.</p>
+                <h4>Review mistakes</h4>
+                <p>Wrong answers build your review set automatically.</p>
               </div>
             </div>
           </div>
@@ -681,7 +799,7 @@ function renderWelcome() {
             <button class="primary" type="button" data-goto="daily">
               <span class="btn-inner">${icon("bolt")}Begin today’s quiz</span>
             </button>
-            <button class="btn" type="button" data-goto="home">Browse topics</button>
+            <button class="btn" type="button" data-goto="home">Open dashboard</button>
           </div>
         </div>
       </div>
@@ -689,6 +807,49 @@ function renderWelcome() {
   `;
 
   bindGotoButtons();
+
+  const installBtn = document.getElementById("installBtn");
+  if (installBtn) {
+    installBtn.addEventListener("click", triggerInstall);
+    if (deferredInstallPrompt) installBtn.style.display = "inline-flex";
+  }
+}
+
+/* =======================
+   Dashboard (Home)
+======================= */
+function renderMasteryTable(progress) {
+  const entries = Object.entries(progress.mastery || {});
+  if (!entries.length) return "";
+
+  entries.sort((a, b) => b[1] - a[1]);
+
+  const rows = entries.slice(0, 10).map(([k, v]) => {
+    const [cat, lvl] = k.split("|");
+    const pct = Math.round(v * 100);
+    return `
+      <div class="mrow">
+        <div class="mleft">
+          <strong>${escapeHtml(cat)}</strong>
+          <span class="muted small">${escapeHtml(lvl)}</span>
+        </div>
+        <div class="mright">
+          <span class="muted small">${pct}%</span>
+          <div class="mbar"><div class="mfill" style="width:${pct}%"></div></div>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  return `
+    <section class="card" style="margin-top:16px;">
+      <h3 style="margin:0;">Mastery</h3>
+      <p class="muted small" style="margin:8px 0 0 0;">Based on your attempts. This is not perfection, it is direction.</p>
+      <div class="mtable" style="margin-top:12px;">
+        ${rows}
+      </div>
+    </section>
+  `;
 }
 
 function renderHome() {
@@ -698,129 +859,120 @@ function renderHome() {
   const last = progress.lastAttempt;
 
   const streakLabel = progress.streakCount === 1 ? "1 day" : `${progress.streakCount} days`;
+  const knowledge = overallKnowledgeScore(progress);
+  const weak = weakestTopic(progress);
 
-  const bestEntries = Object.entries(progress.bestScores);
-  let bestHeadline = "-";
-  let bestSub = "No best score yet.";
-  if (bestEntries.length) {
-    bestEntries.sort((a, b) => b[1] - a[1]);
-    const [key, val] = bestEntries[0];
-    const [cat, lvl] = key.split("|");
-    bestHeadline = `${val}%`;
-    bestSub = `${cat} (${lvl})`;
-  }
+  const mistakesTotal = Object.values(progress.mistakes || {}).reduce((acc, m) => acc + (m.wrong || 0), 0);
+  const uniqueMistakes = Object.keys(progress.mistakes || {}).filter((id) => (progress.mistakes[id]?.wrong || 0) > 0)
+    .length;
 
-  const lastHeadline = last ? `${last.score}/${last.total}` : "-";
-  const lastSub = last ? `${last.category} (${last.level})` : "No attempts yet.";
+  const lastHeadline = last ? `${last.score}/${last.total}` : "No attempts";
+  const lastSub = last ? `${last.category} • ${last.level}` : "Start Daily or choose a module.";
 
   app.innerHTML = `
-    <section class="card" style="margin-top:20px;">
-      <h2 style="margin:0;">Home</h2>
-      <p class="muted" style="margin:8px 0 0 0; line-height:1.6;">
-        Short quizzes. Clear feedback. Calm pace.
-      </p>
-
-      <div class="grid" style="margin-top:14px;">
-        <div class="stats-grid">
-          <div class="card" style="box-shadow:none;">
-            <p class="muted" style="margin:0;">Streak</p>
-            <div style="display:flex; align-items:center; gap:10px; margin-top:8px;">
-              ${icon("calendar")}
-              <strong style="font-size:20px;">${streakLabel}</strong>
-            </div>
-            <p class="muted" style="margin:8px 0 0 0; font-size:12px;">
-              Last active: ${progress.lastActiveDate || "Not yet"}
-            </p>
-          </div>
-
-          <div class="card" style="box-shadow:none;">
-            <p class="muted" style="margin:0;">Last attempt</p>
-            <div style="display:flex; align-items:center; gap:10px; margin-top:8px;">
-              ${icon("target")}
-              <strong style="font-size:20px;">${lastHeadline}</strong>
-            </div>
-            <p class="muted" style="margin:8px 0 0 0; font-size:12px;">${lastSub}</p>
-          </div>
-
-          <div class="card" style="box-shadow:none;">
-            <p class="muted" style="margin:0;">Best</p>
-            <div style="display:flex; align-items:center; gap:10px; margin-top:8px;">
-              ${icon("trophy")}
-              <strong style="font-size:20px;">${bestHeadline}</strong>
-            </div>
-            <p class="muted" style="margin:8px 0 0 0; font-size:12px;">${bestSub}</p>
-          </div>
+    <section class="dash">
+      <div class="dash-top">
+        <div class="dash-title">
+          <h2>Dashboard</h2>
+          <p class="muted">Quiet revision. Measured growth.</p>
         </div>
 
-        <div class="home-grid">
-          <div class="card" style="box-shadow:none;">
-            <h3 style="margin:0;">Today’s Quiz</h3>
-            <p class="muted" style="margin:8px 0 0 0; line-height:1.6;">
-              Locked for the day. Same questions even after refresh.
-            </p>
+        <div class="dash-actions">
+          <button class="primary" type="button" data-goto="daily">
+            <span class="btn-inner">${icon("bolt")}Daily</span>
+          </button>
+          <button class="btn" type="button" data-goto="review">
+            <span class="btn-inner">${icon("layers")}Review</span>
+          </button>
+          <button class="btn" type="button" data-goto="faq">
+            <span class="btn-inner">${icon("target")}How it works</span>
+          </button>
+        </div>
+      </div>
 
-            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
-              <button class="primary" type="button" data-goto="daily">
-                <span class="btn-inner">${icon("bolt")}Open daily</span>
-              </button>
-              <button class="btn" type="button" data-goto="welcome">Welcome</button>
-              <button class="btn" type="button" data-goto="learning">Learning Space</button>
-              <button class="btn" type="button" data-goto="auth">Login</button>
-            </div>
-          </div>
+      <div class="dash-grid">
+        <div class="card">
+          <p class="muted">Knowledge score</p>
+          <div class="big">${knowledge}%</div>
+          <p class="muted small">Average mastery across topics you attempted.</p>
+        </div>
 
-          <div class="card" style="box-shadow:none;">
-            <h3 style="margin:0;">Custom Quiz</h3>
-            <p class="muted" style="margin:8px 0 0 0; line-height:1.6;">
-              Train a specific category and level. Practice or timed.
-            </p>
+        <div class="card">
+          <p class="muted">Streak</p>
+          <div class="big">${escapeHtml(streakLabel)}</div>
+          <p class="muted small">Last active: ${escapeHtml(progress.lastActiveDate || "Not yet")}</p>
+        </div>
 
-            <div class="grid" style="margin-top:12px;">
-              <label class="field">
-                <span>Category</span>
-                <select id="category">
-                  <option>Qu'an</option>
-                  <option>Seerah</option>
-                  <option>Fiqh</option>
-                  <option>Tawheed</option>
-                  <option>Arabic</option>
-                  <option>Adhkaar</option>
-                </select>
-              </label>
+        <div class="card">
+          <p class="muted">Weakest focus</p>
+          <div class="big">${weak ? `${weak.pct}%` : "-"}</div>
+          <p class="muted small">${weak ? `${escapeHtml(weak.cat)} • ${escapeHtml(weak.lvl)}` : "Attempt quizzes to generate mastery."}</p>
+        </div>
 
-              <label class="field">
-                <span>Level</span>
-                <select id="level">
-                  <option>Beginner</option>
-                  <option>Intermediate</option>
-                  <option>Advanced</option>
-                </select>
-              </label>
-
-              <label class="field inline">
-                <input id="timed" type="checkbox" checked />
-                <span>Timed mode (20 seconds per question)</span>
-              </label>
-
-              <label class="field">
-                <span>Questions</span>
-                <select id="count">
-                  <option value="20" selected>20</option>
-                  <option value="30">30</option>
-                  <option value="50">50</option>
-                  <option value="10">10</option>
-                </select>
-              </label>
-
-              <button id="startBtn" class="primary" type="button">
-                <span class="btn-inner">${icon("target")}Start custom quiz</span>
-              </button>
-
-              <p id="status" class="muted" style="margin:0;"></p>
-            </div>
+        <div class="card">
+          <p class="muted">Mistakes</p>
+          <div class="big">${uniqueMistakes}</div>
+          <p class="muted small">${mistakesTotal} total wrong answers tracked.</p>
+          <div style="margin-top:10px;">
+            <button class="btn" type="button" data-goto="review">
+              <span class="btn-inner">${icon("layers")}Open mistake review</span>
+            </button>
           </div>
         </div>
       </div>
+
+      <div class="card" style="margin-top:16px;">
+        <p class="muted">Last attempt</p>
+        <div style="display:flex; align-items:center; gap:10px; margin-top:6px;">
+          ${icon("target")}
+          <strong style="font-size:18px;">${escapeHtml(lastHeadline)}</strong>
+        </div>
+        <p class="muted small" style="margin-top:6px;">${escapeHtml(lastSub)}</p>
+      </div>
+
+      ${renderMasteryTable(progress)}
+
+      <section class="card" style="margin-top:16px;">
+        <h3 style="margin:0;">Start a custom quiz</h3>
+        <p class="muted small" style="margin:8px 0 0 0;">Target one topic. Build mastery faster.</p>
+
+        <div class="grid" style="margin-top:12px;">
+          <label class="field">
+            <span>Category</span>
+            <select id="category">
+              ${CATEGORIES.map((c) => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join("")}
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Level</span>
+            <select id="level">
+              ${LEVELS.map((l) => `<option value="${escapeHtml(l)}">${escapeHtml(l)}</option>`).join("")}
+            </select>
+          </label>
+
+          <label class="field inline">
+            <input id="timed" type="checkbox" checked />
+            <span>Timed mode (20 seconds per question)</span>
+          </label>
+
+          <label class="field">
+            <span>Questions</span>
+            <select id="count">
+              <option value="20" selected>20</option>
+              <option value="30">30</option>
+              <option value="50">50</option>
+              <option value="10">10</option>
+            </select>
+          </label>
+
+          <button id="startBtn" class="primary" type="button">
+            <span class="btn-inner">${icon("target")}Start custom quiz</span>
+          </button>
+
+          <p id="status" class="muted" style="margin:0;"></p>
+        </div>
+      </section>
     </section>
   `;
 
@@ -833,7 +985,8 @@ function renderHome() {
     const count = Number(document.getElementById("count").value);
     const status = document.getElementById("status");
 
-    state.lastSettings = { category, level, timed, count, mode: "normal" };
+    state.lastSettings = { category, level, timed, count, mode: "custom" };
+    state._finalized = false;
 
     try {
       const all = await loadQuestions();
@@ -858,43 +1011,39 @@ function renderHome() {
 
       withTransition(renderQuiz);
     } catch (err) {
-      status.textContent = String(err.message || err);
+      status.textContent = String(err?.message || err);
     }
   });
 }
 
+/* =======================
+   Daily
+======================= */
 async function renderDaily() {
   state.currentRoute = "daily";
 
   const today = todayISO();
   const existing = loadDailyState();
-  const defaultCategory = existing?.date === today ? existing.category : "Qu'an";
+  const defaultCategory = existing?.date === today ? existing.category : "Qur’an";
   const defaultLevel = existing?.date === today ? existing.level : "Beginner";
 
   app.innerHTML = `
     <section class="card" style="margin-top:20px;">
       <h2>Today’s Quiz</h2>
-      <p class="muted">This quiz is locked for today. Refreshing won’t change the questions.</p>
+      <p class="muted">This quiz is locked for today. Refreshing will not change the questions.</p>
 
       <div class="grid" style="margin-top:12px;">
         <label class="field">
           <span>Category</span>
           <select id="dailyCategory">
-            <option ${defaultCategory === "Qu'an" ? "selected" : ""}>Qu'an</option>
-            <option ${defaultCategory === "Seerah" ? "selected" : ""}>Seerah</option>
-            <option ${defaultCategory === "Fiqh" ? "selected" : ""}>Fiqh</option>
-            <option ${defaultCategory === "Tawheed" ? "selected" : ""}>Tawheed</option>
-            <option ${defaultCategory === "Arabic" ? "selected" : ""}>Arabic</option>
-            <option ${defaultCategory === "Adhkaar" ? "selected" : ""}>Adhkaar</option>
+            ${CATEGORIES.map((c) => `<option ${c === defaultCategory ? "selected" : ""} value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join("")}
           </select>
         </label>
 
         <label class="field">
           <span>Level</span>
           <select id="dailyLevel">
-            <option ${defaultLevel === "Beginner" ? "selected" : ""}>Beginner</option>
-            <option ${defaultLevel === "Intermediate" ? "selected" : ""}>Intermediate</option>
-            <option ${defaultLevel === "Advanced" ? "selected" : ""}>Advanced</option>
+            ${LEVELS.map((l) => `<option ${l === defaultLevel ? "selected" : ""} value="${escapeHtml(l)}">${escapeHtml(l)}</option>`).join("")}
           </select>
         </label>
 
@@ -911,7 +1060,7 @@ async function renderDaily() {
 
         ${
           existing && existing.date === today && existing.questionIds?.length
-            ? `<p class="muted">Locked for today: ${existing.category} • ${existing.level} (${existing.questionIds.length} questions)</p>`
+            ? `<p class="muted">Locked for today: ${escapeHtml(existing.category)} • ${escapeHtml(existing.level)} (${existing.questionIds.length} questions)</p>`
             : `<p class="muted">No locked quiz yet for today. Start one to lock it.</p>`
         }
       </div>
@@ -937,6 +1086,8 @@ async function renderDaily() {
       const chosen = buildQuestionsByIds(all, daily.questionIds);
 
       state.lastSettings = { category, level, timed, count: chosen.length, mode: "daily" };
+      state._finalized = false;
+
       state.quizQuestions = chosen;
       state.index = 0;
       state.score = 0;
@@ -945,14 +1096,85 @@ async function renderDaily() {
 
       withTransition(renderQuiz);
     } catch (err) {
-      status.textContent = String(err.message || err);
+      status.textContent = String(err?.message || err);
     }
   });
+
+  bindGotoButtons();
 }
 
 /* =======================
-   Quiz
+   Review (mistake engine)
 ======================= */
+async function renderReview() {
+  state.currentRoute = "review";
+
+  const progress = loadProgress();
+  const all = await loadQuestions();
+  const mistakeSet = buildMistakeSet(progress, all, 20);
+
+  app.innerHTML = `
+    <section class="card" style="margin-top:20px;">
+      <h2 style="margin:0;">Review</h2>
+      <p class="muted" style="margin:8px 0 0 0; line-height:1.6;">
+        Your most missed questions first. Fix the cracks.
+      </p>
+
+      <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="primary" type="button" id="startMistakeReview" ${mistakeSet.length ? "" : "disabled"}>
+          <span class="btn-inner">${icon("layers")}Start mistake review (${mistakeSet.length})</span>
+        </button>
+        <button class="btn" type="button" data-goto="home">Back to dashboard</button>
+      </div>
+
+      ${mistakeSet.length ? "" : `<p class="muted" style="margin-top:12px;">No mistakes tracked yet. Do a quiz first.</p>`}
+    </section>
+  `;
+
+  document.getElementById("startMistakeReview")?.addEventListener("click", () => {
+    state.lastSettings = { category: "Mistakes", level: "Review", timed: false, count: mistakeSet.length, mode: "review" };
+    state._finalized = false;
+
+    state.quizQuestions = mistakeSet;
+    state.index = 0;
+    state.score = 0;
+    state.timed = false;
+    state.answerLog = [];
+
+    withTransition(renderQuiz);
+  });
+
+  bindGotoButtons();
+}
+
+/* =======================
+   Quiz: lock-in answer + mastery/mistake tracking
+======================= */
+function lockInAnswer({ selectedIdx, reason }) {
+  const q = state.quizQuestions[state.index];
+  const correctIdx = q.correctIndex;
+
+  if (state.answerLog[state.index]) return;
+
+  const isCorrect = selectedIdx === correctIdx;
+
+  state.answerLog[state.index] = {
+    selectedIdx,
+    correctIdx,
+    isCorrect,
+    reason,
+    explanation: q.explanation || "",
+    questionId: q.id
+  };
+
+  if (isCorrect) state.score += 1;
+
+  const progress = loadProgress();
+  updateStreak(progress);
+  recordAnswer(progress, q, isCorrect);
+  saveProgress(progress);
+}
+
 function renderQuiz() {
   state.currentRoute = "quiz";
 
@@ -965,7 +1187,6 @@ function renderQuiz() {
 
   app.innerHTML = `
     <section class="card" style="margin-top:20px;">
-
       <div class="quiz-progress">
         <div class="muted" style="display:flex; justify-content:space-between; gap:10px; margin-bottom:8px;">
           <span>Question ${state.index + 1} of ${total}</span>
@@ -1100,46 +1321,64 @@ function showFeedback(selectedIdx, meta = {}) {
   const correct = q.correctIndex;
   const isCorrect = selectedIdx === correct;
 
-  if (isCorrect) state.score += 1;
+  if (meta.reason === "timeout") vibrate(20);
+  else vibrate(isCorrect ? 15 : [10, 30, 10]);
 
-  if (meta.reason === "timeout") {
-    vibrate(20);
-  } else {
-    vibrate(isCorrect ? 15 : [10, 30, 10]);
-  }
-
-  state.answerLog[state.index] = {
+  lockInAnswer({
     selectedIdx,
-    correctIdx: correct,
-    isCorrect,
-    reason: meta.reason === "timeout" ? "timeout" : "choice",
-    explanation: q.explanation || "",
-    question: q.question,
-    options: q.options
-  };
+    reason: meta.reason === "timeout" ? "timeout" : "choice"
+  });
 
   applyAnsweredUI(selectedIdx, correct, meta.reason === "timeout" ? "timeout" : "choice", q.explanation || "");
 }
 
-function renderResults() {
-  state.currentRoute = "results";
-  clearTimer();
+/* =======================
+   Results: finalize attempt (best + mastery + lastAttempt)
+======================= */
+function finalizeAttemptOnce() {
+  if (state._finalized) return;
+  state._finalized = true;
 
   const total = state.quizQuestions.length;
-  const percent = Math.round((state.score / total) * 100);
+  const percent = total ? Math.round((state.score / total) * 100) : 0;
 
   const progress = loadProgress();
   updateStreak(progress);
 
   const category = state.lastSettings?.category || "Unknown";
   const level = state.lastSettings?.level || "Unknown";
-  const key = `${category}|${level}`;
+  const key = masteryKey(category, level);
 
   const prevBest = progress.bestScores[key] ?? 0;
   progress.bestScores[key] = Math.max(prevBest, percent);
 
-  progress.lastAttempt = { date: todayISO(), category, level, score: state.score, total, percent };
+  progress.lastAttempt = {
+    date: todayISO(),
+    category,
+    level,
+    score: state.score,
+    total,
+    percent
+  };
+
+  if (state.lastSettings?.mode === "custom" || state.lastSettings?.mode === "daily") {
+    updateMastery(progress, category, level, state.score, total);
+  }
+
   saveProgress(progress);
+}
+
+function renderResults() {
+  state.currentRoute = "results";
+  clearTimer();
+
+  finalizeAttemptOnce();
+
+  const total = state.quizQuestions.length;
+  const percent = total ? Math.round((state.score / total) * 100) : 0;
+
+  const category = state.lastSettings?.category || "Unknown";
+  const level = state.lastSettings?.level || "Unknown";
 
   const reviewHtml = state.quizQuestions
     .map((q, i) => {
@@ -1168,7 +1407,7 @@ function renderResults() {
   app.innerHTML = `
     <section class="card" style="margin-top:20px;">
       <h2>Results</h2>
-      <p class="muted">Score</p>
+      <p class="muted">${escapeHtml(category)} • ${escapeHtml(level)}</p>
 
       <div style="font-size:34px; font-weight:950; margin:10px 0;">
         ${state.score} / ${total} (${percent}%)
@@ -1189,8 +1428,8 @@ function renderResults() {
 
       <div style="display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;">
         <button id="tryAgainBtn" class="btn" type="button">Try Again</button>
-        <button id="progressBtn" class="btn" type="button">Progress</button>
-        <button id="homeBtn" class="btn" type="button">Back Home</button>
+        <button id="reviewBtn" class="btn" type="button">Review mistakes</button>
+        <button id="homeBtn" class="btn" type="button">Back to dashboard</button>
       </div>
     </section>
   `;
@@ -1217,11 +1456,12 @@ function renderResults() {
   document.getElementById("tryAgainBtn").addEventListener("click", async () => {
     const s = state.lastSettings;
     if (!s) return go("home");
+
     if (s.mode === "daily") return go("daily");
+    if (s.mode === "review") return go("review");
 
     const all = await loadQuestions();
     const eligible = all.filter((q) => isEligibleQuestion(q, s.category, s.level));
-
     if (!eligible.length) return go("home");
 
     const ids = eligible.map((q) => q.id);
@@ -1235,19 +1475,23 @@ function renderResults() {
     state.score = 0;
     state.timed = s.timed;
     state.answerLog = [];
+    state._finalized = false;
 
     withTransition(renderQuiz);
   });
 
-  document.getElementById("progressBtn").addEventListener("click", () => go("progress"));
+  document.getElementById("reviewBtn").addEventListener("click", () => go("review"));
   document.getElementById("homeBtn").addEventListener("click", () => go("home"));
 }
 
+/* =======================
+   Progress page
+======================= */
 function renderProgress() {
   state.currentRoute = "progress";
 
   const progress = loadProgress();
-  const bestEntries = Object.entries(progress.bestScores).sort((a, b) => b[1] - a[1]);
+  const bestEntries = Object.entries(progress.bestScores || {}).sort((a, b) => b[1] - a[1]);
   const last = progress.lastAttempt;
 
   app.innerHTML = `
@@ -1260,7 +1504,7 @@ function renderProgress() {
           <div style="font-size:28px; font-weight:950; margin-top:6px;">
             ${progress.streakCount} day${progress.streakCount === 1 ? "" : "s"}
           </div>
-          <p class="muted" style="margin-top:6px;">Last active: ${progress.lastActiveDate || "Not yet"}</p>
+          <p class="muted" style="margin-top:6px;">Last active: ${escapeHtml(progress.lastActiveDate || "Not yet")}</p>
         </div>
 
         <div class="card" style="box-shadow:none;">
@@ -1280,6 +1524,7 @@ function renderProgress() {
             bestEntries.length
               ? `<div style="margin-top:10px; display:grid; gap:8px;">
                    ${bestEntries
+                     .slice(0, 20)
                      .map(([k, val]) => {
                        const [cat, lvl] = k.split("|");
                        return `<div style="display:flex; justify-content:space-between; gap:10px;">
@@ -1295,7 +1540,7 @@ function renderProgress() {
 
         <div style="display:flex; gap:10px; flex-wrap:wrap;">
           <button id="resetProgress" class="btn" type="button">Reset progress</button>
-          <button class="btn" type="button" data-goto="home">Back Home</button>
+          <button class="btn" type="button" data-goto="home">Back to dashboard</button>
         </div>
       </div>
     </section>
@@ -1328,7 +1573,6 @@ function renderFAQ() {
         <div class="faq-grid">
           <div class="faq-panel">
             <div class="faq-acc">
-
               <details class="faq-item" open>
                 <summary>
                   <span class="faq-q">
@@ -1338,7 +1582,7 @@ function renderFAQ() {
                   <span class="faq-chevron">${icon("check")}</span>
                 </summary>
                 <div class="faq-a">
-                  A short Islamic quiz app designed to help you revise consistently. One calm step daily.
+                  A short Islamic quiz app designed to help you revise consistently.
                 </div>
               </details>
 
@@ -1351,20 +1595,20 @@ function renderFAQ() {
                   <span class="faq-chevron">${icon("check")}</span>
                 </summary>
                 <div class="faq-a">
-                  It is locked for the day. Refreshing does not change the questions, so you can focus on learning.
+                  It is locked for the day. Refreshing does not change the questions.
                 </div>
               </details>
 
               <details class="faq-item">
                 <summary>
                   <span class="faq-q">
-                    <span class="faq-dot">${icon("target")}</span>
-                    What is “Custom Quiz”?
+                    <span class="faq-dot">${icon("layers")}</span>
+                    What is mistake review?
                   </span>
                   <span class="faq-chevron">${icon("check")}</span>
                 </summary>
                 <div class="faq-a">
-                  Custom lets you choose a category and level, then practice in timed mode or calm practice mode.
+                  Every wrong answer is tracked on your device. Review pulls your most missed questions first.
                 </div>
               </details>
 
@@ -1377,23 +1621,9 @@ function renderFAQ() {
                   <span class="faq-chevron">${icon("check")}</span>
                 </summary>
                 <div class="faq-a">
-                  Progress is saved locally on your device. If you clear browser data or switch devices, it resets.
+                  Locally on your device. Clearing browser data resets it.
                 </div>
               </details>
-
-              <details class="faq-item">
-                <summary>
-                  <span class="faq-q">
-                    <span class="faq-dot">${icon("layers")}</span>
-                    Can I add more questions?
-                  </span>
-                  <span class="faq-chevron">${icon("check")}</span>
-                </summary>
-                <div class="faq-a">
-                  Yes. Add items in <span class="kbd">data/questions.json</span>. The app will pick them up automatically.
-                </div>
-              </details>
-
             </div>
           </div>
 
@@ -1401,16 +1631,18 @@ function renderFAQ() {
             <div class="faq-panel">
               <h3 style="margin:0;">Quick start</h3>
               <p class="muted" style="margin:8px 0 0; line-height:1.6;">
-                If you want the simplest path, do Today’s Quiz daily. If you want to target a weakness, use Custom.
+                If you want the simplest path, do Today’s Quiz daily. If you want to target a weakness, do a Custom quiz.
               </p>
               <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
                 <button class="primary" type="button" data-goto="daily">
                   <span class="btn-inner">${icon("bolt")}Start today</span>
                 </button>
                 <button class="btn" type="button" data-goto="home">
-                  <span class="btn-inner">${icon("target")}Open home</span>
+                  <span class="btn-inner">${icon("target")}Open dashboard</span>
                 </button>
-                <button class="btn" type="button" data-goto="learning">Learning Space</button>
+                <button class="btn" type="button" data-goto="review">
+                  <span class="btn-inner">${icon("layers")}Review</span>
+                </button>
               </div>
             </div>
 
@@ -1431,7 +1663,7 @@ function renderFAQ() {
 }
 
 /* =======================
-   Zakat Calculator
+   Zakat Calculator (kept from your version)
 ======================= */
 function formatMoney(n, currency) {
   const num = Number(n || 0);
@@ -1464,7 +1696,6 @@ function renderZakat() {
       </div>
 
       <div class="zakat-grid">
-
         <div class="zakat-box">
           <h3 class="zakat-title">1) Nisab</h3>
 
@@ -2648,6 +2879,7 @@ function setFooterYear() {
   if (el) el.textContent = String(new Date().getFullYear());
 }
 
+
 /* =======================
    Routing
 ======================= */
@@ -2658,6 +2890,7 @@ async function renderRoute(route) {
   if (r === "welcome") return renderWelcome();
   if (r === "home") return renderHome();
   if (r === "daily") return renderDaily();
+  if (r === "review") return renderReview();
   if (r === "progress") return renderProgress();
   if (r === "calendar") return renderCalendar();
   if (r === "zakat") return renderZakat();
@@ -2708,9 +2941,12 @@ window.addEventListener("hashchange", () => {
 ======================= */
 window.addEventListener("DOMContentLoaded", () => {
   bindNavRoutes();
-  bindMobileMenu(); // this must exist and must run
+  bindMobileMenu();
   bindGlobalKeyboard();
   setFooterYear();
+
+  setupInstallPrompt();
+  registerServiceWorker();
 
   const initial = (window.location.hash || "").slice(1);
   render(initial || "welcome");

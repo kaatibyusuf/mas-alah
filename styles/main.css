@@ -1569,3 +1569,30 @@ input[type="password"]:focus{
     justify-content: flex-start;
   }
 }
+.dash { margin-top: 18px; }
+.dash-top { display:flex; gap:16px; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; }
+.dash-title h2 { margin:0; }
+.dash-actions { display:flex; gap:10px; flex-wrap:wrap; }
+
+.dash-grid {
+  display:grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap:12px;
+  margin-top:14px;
+}
+@media (max-width: 900px) {
+  .dash-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .dash-grid { grid-template-columns: 1fr; }
+}
+
+.big { font-size: 26px; font-weight: 700; margin-top: 6px; }
+.small { font-size: 12px; line-height: 1.5; }
+
+.mrow { display:flex; justify-content:space-between; gap:12px; padding:10px 0; border-top:1px solid rgba(255,255,255,.06); }
+.mrow:first-child { border-top: none; }
+.mleft { display:flex; flex-direction:column; gap:2px; }
+.mright { display:flex; flex-direction:column; align-items:flex-end; gap:6px; min-width: 140px; }
+.mbar { width:140px; height:8px; border-radius:999px; background:rgba(255,255,255,.08); overflow:hidden; }
+.mfill { height:100%; border-radius:999px; background:rgba(255,255,255,.65); }
