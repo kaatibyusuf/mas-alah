@@ -1,11 +1,13 @@
 /* =========================================================
- /* =========================================================
    Mas'alah main.css
-   Clean + deduplicated. Works with the app.js I gave you.
+   Clean + deduplicated. Works with the App.js I gave you.
    Includes: nav dropdown, welcome layout, quiz, calendar,
-   zakat, diary, lock, toast, transitions.
+   zakat, diary, lock, toast, transitions, learning UI.
 ========================================================= */
 
+/* =========================================================
+   Tokens
+========================================================= */
 :root{
   --bg:#0F0F11;
   --gold:#FFBB00;
@@ -48,13 +50,12 @@ body{
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
-
 a{ color: inherit; text-decoration: none; }
 img{ max-width:100%; display:block; }
 button, input, select, textarea{ font: inherit; }
 
 .muted{ color: var(--muted); }
-.small{ font-size: 12px; }
+.small{ font-size: 12px; line-height: 1.5; }
 h1,h2,h3{ letter-spacing: -0.2px; }
 h2,h3{ font-weight: 900; margin: 0; }
 
@@ -164,7 +165,6 @@ main.wrap{ padding-block: clamp(14px, 2.5vw, 26px); }
   border-radius: 999px;
   background: rgba(255,255,255,.03);
 }
-
 .nav-toggle{
   display:none;
   align-items:center;
@@ -178,7 +178,6 @@ main.wrap{ padding-block: clamp(14px, 2.5vw, 26px); }
   font-weight: 850;
   cursor:pointer;
 }
-
 .nav-menu{
   display:flex;
   gap:8px;
@@ -229,7 +228,6 @@ main.wrap{ padding-block: clamp(14px, 2.5vw, 26px); }
   .brand-sub{ font-size: 11px; }
 
   .nav{ width:100%; flex-wrap: nowrap; overflow: visible; }
-
   .nav-toggle{ display:inline-flex; }
 
   .nav-menu{
@@ -265,6 +263,7 @@ main.wrap{ padding-block: clamp(14px, 2.5vw, 26px); }
 ========================================================= */
 .field{ display:grid; gap:6px; margin-bottom: 12px; }
 .field span, .label{ color: var(--muted); font-size: 12px; }
+
 .field.inline{
   grid-template-columns: 18px 1fr;
   align-items:center;
@@ -323,6 +322,15 @@ input[type="password"]:focus{
   color: rgba(255,255,255,0.92);
   outline: none;
   resize: vertical;
+  min-height: 260px;
+  font-size: 15px;
+  line-height: 1.8;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  padding: 16px 14px;
+  background:
+    linear-gradient(to bottom, transparent 0%, transparent 94%, rgba(255,255,255,.06) 95%),
+    rgba(255,255,255,.03);
+  background-size: 100% 30px;
 }
 .textarea:focus{
   border-color: rgba(255,187,0,0.55);
@@ -600,7 +608,7 @@ input[type="password"]:focus{
   .welcome-values{ grid-template-columns: 1fr; }
 }
 
-/* Desktop welcome layout: hero left, values right, how full width */
+/* Desktop welcome layout */
 @media (min-width: 1024px){
   .welcome{ padding: 38px 0 22px; }
   .welcome-shell{
@@ -615,7 +623,7 @@ input[type="password"]:focus{
   .welcome-how{ grid-column: 1 / -1; }
 }
 
-/* Tablet: comfortable single column */
+/* Tablet: single column */
 @media (min-width: 721px) and (max-width: 1023px){
   .welcome-shell{ max-width: min(920px, 100%); }
   .welcome-hero{ padding: 28px; }
@@ -980,50 +988,209 @@ input[type="password"]:focus{
 .warn{ color: rgba(255,187,0,0.92); }
 
 /* =========================================================
-   Diary
+   Diary (App.js diary uses diary-page + diary-shell etc.)
 ========================================================= */
-.diary-grid{
+.diary-page{
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 16px 0 40px;
+}
+
+.diary-head{
+  display:flex;
+  justify-content:space-between;
+  gap: 14px;
+  align-items:flex-end;
+  flex-wrap:wrap;
+}
+
+.diary-h{ font-size: 28px; margin: 0; }
+.diary-sub{ margin-top: 6px; color: rgba(255,255,255,.65); font-size: 14px; }
+
+.diary-shell{
   display:grid;
   grid-template-columns: 1.1fr 0.9fr;
-  gap: 20px;
+  gap: 18px;
   margin-top: 14px;
 }
 @media (max-width: 980px){
-  .diary-grid{ grid-template-columns: 1fr; }
+  .diary-shell{ grid-template-columns: 1fr; }
 }
 
-.diary-box{
+.diary-editor{
   border: 1px solid rgba(255,255,255,0.08);
   background: rgba(255,255,255,0.03);
   border-radius: 16px;
-  padding: 20px;
+  padding: 16px;
 }
 
-/* =======================
-   Diary mobile polish
-======================= */
-.textarea{
-  min-height: 260px;
-  font-size: 15px;
-  line-height: 1.8;
+.diary-editor-top{
+  display:flex;
+  gap: 12px;
+  align-items:flex-end;
+  justify-content:space-between;
+  flex-wrap:wrap;
+}
+.diary-date-strong{ font-weight: 900; color: rgba(255,255,255,.90); }
+
+.diary-title{
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255,255,255,.12);
+  padding: 10px 0;
+  font-size: 18px;
+  color: rgba(255,255,255,.92);
+}
+.diary-title::placeholder{ color: rgba(255,255,255,.4); }
+.diary-title:focus{ outline: none; border-bottom-color: rgba(255,187,0,.6); }
+
+.diary-pad{ margin-top: 10px; }
+.diary-text{
+  width: 100%;
+  min-height: 52vh;
+  background: transparent;
+  border: none;
+  padding: 10px 0 6px;
+  font-size: 16px;
+  line-height: 1.9;
+  color: rgba(255,255,255,.92);
+  resize: none;
+}
+.diary-text::placeholder{ color: rgba(255,255,255,.35); }
+.diary-text:focus{ outline: none; }
+
+.diary-foot{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255,255,255,.06);
+  font-size: 13px;
+  color: rgba(255,255,255,.55);
+  gap: 10px;
+  flex-wrap:wrap;
+}
+
+.diary-meta{ display:flex; align-items:center; gap: 10px; flex-wrap:wrap; }
+.diary-dot{ opacity:.6; }
+
+.diary-actions{ display:flex; gap: 10px; flex-wrap:wrap; }
+
+.diary-notice{
+  margin-top: 10px;
+  font-size: 12px;
+  color: rgba(255,255,255,.72);
+}
+.diary-notice.is-warn{ color: rgba(255,187,0,.95); }
+.diary-notice.is-good{ color: rgba(255,255,255,.92); }
+
+.diary-side{
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.03);
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.diary-side-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap: 10px;
+}
+.diary-side-title{ font-size: 18px; margin:0; }
+.diary-side-sub{ margin: 0; }
+
+.diary-list{
+  margin-top: 12px;
+  display:grid;
+  gap: 10px;
+}
+
+/* Entry button row */
+.diary-item{
+  width: 100%;
+  text-align:left;
+  border-radius: 14px;
+  padding: 12px 12px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.18);
+  color: var(--text);
+  cursor:pointer;
+}
+.diary-item:hover{
+  border-color: rgba(255,187,0,.35);
+  background: rgba(255,255,255,.04);
+}
+
+.diary-item-top{
+  display:flex;
+  justify-content:space-between;
+  gap: 10px;
+  align-items:baseline;
+}
+.diary-date{ font-size: 12px; color: rgba(255,255,255,.55); }
+.diary-preview{ font-size: 12px; margin-top: 6px; line-height: 1.5; }
+
+/* Draft pill */
+.pill{
+  display:inline-flex;
+  align-items:center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(0,0,0,0.20);
+}
+.pill.is-dirty{ border-color: rgba(255,255,255,.18); }
+.pill.is-saved{ border-color: rgba(255,187,0,.35); }
+
+/* Modal */
+.diary-modal{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.62);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding: 16px;
+  z-index: 9999;
+}
+.diary-modal.is-open{ display:flex; }
+
+.diary-modal-inner{
+  width: min(760px, 100%);
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(15,15,17,.98);
+  box-shadow: var(--shadow2);
+  overflow:hidden;
+}
+
+.diary-modal-head{
+  display:flex;
+  justify-content:space-between;
+  gap: 12px;
+  padding: 12px 12px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  background: rgba(0,0,0,.18);
+}
+.diary-modal-title{ margin: 0; }
+.diary-modal-body{ padding: 14px 12px; }
+.diary-modal-text{
+  white-space: pre-wrap;
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-  padding: 16px 14px;
-  background:
-    linear-gradient(to bottom, transparent 0%, transparent 94%, rgba(255,255,255,.06) 95%),
-    rgba(255,255,255,.03);
-  background-size: 100% 30px;
+  line-height: 1.7;
+  font-size: 14px;
+  margin: 0;
 }
-
-@media (max-width: 720px){
-  .diary-grid{ gap: 12px; }
-  .diary-box{ padding: 14px; }
-
-  .diary-actions{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .btn.mini{ width: auto; }
+.diary-modal-actions{
+  padding: 12px;
+  border-top: 1px solid rgba(255,255,255,.08);
+  background: rgba(0,0,0,.18);
+  display:flex;
+  justify-content:flex-end;
 }
 
 /* =========================================================
@@ -1042,16 +1209,6 @@ input[type="password"]:focus{
   justify-content:space-between;
   gap: 10px;
   margin-bottom: 12px;
-}
-.pill{
-  display:inline-flex;
-  align-items:center;
-  gap: 8px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  font-size: 12px;
-  border: 1px solid rgba(255,255,255,0.10);
-  background: rgba(0,0,0,0.20);
 }
 .pill-good{ border-color: rgba(255,187,0,0.35); }
 .pill-warn{ border-color: rgba(255,255,255,0.18); }
@@ -1077,71 +1234,44 @@ input[type="password"]:focus{
 }
 
 /* =========================================================
-   Home grids
+   Home / Dashboard
 ========================================================= */
-.stats-grid{
+.dash { margin-top: 18px; }
+.dash-top { display:flex; gap:16px; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; }
+.dash-title h2 { margin:0; }
+.dash-actions { display:flex; gap:10px; flex-wrap:wrap; }
+
+.dash-grid{
   display:grid;
-  gap: 12px;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-.home-grid{
-  display:grid;
-  gap: 12px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap:12px;
+  margin-top:14px;
 }
 @media (max-width: 900px){
-  .stats-grid{ grid-template-columns: 1fr; }
-  .home-grid{ grid-template-columns: 1fr; }
+  .dash-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-@media (max-width: 720px){
-  .nav{ position: relative; overflow: visible; }
-
-  .nav-toggle{
-    display: inline-flex !important;
-    align-items: center;
-    justify-content: center;
-    height: 40px;
-    padding: 8px 12px;
-    border-radius: 999px;
-    border: 1px solid rgba(255,255,255,.12);
-    background: rgba(255,255,255,.02);
-    color: var(--text);
-    font-weight: 850;
-    cursor: pointer;
-  }
-
-  .nav-menu{
-    display: none !important;
-    position: absolute;
-    right: 0;
-    top: calc(100% + 10px);
-    width: min(280px, 92vw);
-    padding: 10px;
-    border-radius: 16px;
-    border: 1px solid rgba(255,255,255,.12);
-    background: rgba(15,15,17,.98);
-    box-shadow: 0 16px 50px rgba(0,0,0,.55);
-    flex-direction: column;
-    gap: 8px;
-    z-index: 9999;
-  }
-
-  .nav-menu[data-open="true"]{
-    display: flex !important;
-  }
-
-  .nav-menu .nav-btn{
-    width: 100%;
-    justify-content: flex-start;
-    text-align: left;
-    border-radius: 14px;
-    padding: 10px 12px;
-  }
+@media (max-width: 560px){
+  .dash-grid{ grid-template-columns: 1fr; }
 }
-/* =========================
+
+.big{ font-size: 26px; font-weight: 700; margin-top: 6px; }
+
+.mrow{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:10px 0;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+.mrow:first-child{ border-top: none; }
+.mleft{ display:flex; flex-direction:column; gap:2px; }
+.mright{ display:flex; flex-direction:column; align-items:flex-end; gap:6px; min-width: 140px; }
+.mbar{ width:140px; height:8px; border-radius:999px; background:rgba(255,255,255,.08); overflow:hidden; }
+.mfill{ height:100%; border-radius:999px; background:rgba(255,255,255,.65); }
+
+/* =========================================================
    WhatsApp-style Learning UI
-========================= */
-
+========================================================= */
 .wa{
   height: calc(100vh - 140px);
   min-height: 560px;
@@ -1149,7 +1279,6 @@ input[type="password"]:focus{
   grid-template-columns: 320px 1fr;
   gap: 12px;
 }
-
 @media (max-width: 900px){
   .wa{
     grid-template-columns: 1fr;
@@ -1175,19 +1304,10 @@ input[type="password"]:focus{
   background: rgba(0,0,0,.18);
 }
 
-.wa-title{
-  font-weight: 950;
-  letter-spacing: -0.2px;
-}
+.wa-title{ font-weight: 950; letter-spacing: -0.2px; }
+.wa-rooms-body{ padding: 12px; }
 
-.wa-rooms-body{
-  padding: 12px;
-}
-
-.wa-roomlist{
-  display: grid;
-  gap: 8px;
-}
+.wa-roomlist{ display: grid; gap: 8px; }
 
 .wa-room{
   width: 100%;
@@ -1200,7 +1320,6 @@ input[type="password"]:focus{
   font-weight: 850;
   cursor:pointer;
 }
-
 .wa-room:hover{
   border-color: rgba(255,187,0,.35);
   background: rgba(255,255,255,.04);
@@ -1219,12 +1338,9 @@ input[type="password"]:focus{
   cursor:pointer;
   font-weight: 900;
 }
+.wa-iconbtn:active{ transform: translateY(1px); }
 
-.wa-iconbtn:active{
-  transform: translateY(1px);
-}
-
-/* Mobile behavior: rooms becomes a slide-over drawer */
+/* Mobile behavior: rooms slide-over drawer */
 @media (max-width: 900px){
   .wa-rooms{
     position: fixed;
@@ -1236,9 +1352,7 @@ input[type="password"]:focus{
     transform: translateX(-105%);
     transition: transform .18s ease;
   }
-  .wa-rooms[data-open="true"]{
-    transform: translateX(0);
-  }
+  .wa-rooms[data-open="true"]{ transform: translateX(0); }
 }
 
 /* Chat area */
@@ -1262,11 +1376,7 @@ input[type="password"]:focus{
   background: rgba(0,0,0,.18);
 }
 
-.wa-chat-meta{
-  flex: 1;
-  min-width: 0;
-}
-
+.wa-chat-meta{ flex: 1; min-width: 0; }
 .wa-chat-title{
   font-weight: 950;
   line-height: 1.2;
@@ -1274,11 +1384,7 @@ input[type="password"]:focus{
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
-.wa-chat-sub{
-  font-size: 12px;
-  margin-top: 2px;
-}
+.wa-chat-sub{ font-size: 12px; margin-top: 2px; }
 
 .wa-chat-actions{
   display:flex;
@@ -1305,11 +1411,7 @@ input[type="password"]:focus{
 }
 
 /* rows and bubbles */
-.wa-row{
-  display:flex;
-  margin-bottom: 10px;
-}
-
+.wa-row{ display:flex; margin-bottom: 10px; }
 .wa-row.them{ justify-content:flex-start; }
 .wa-row.me{ justify-content:flex-end; }
 
@@ -1320,7 +1422,6 @@ input[type="password"]:focus{
   border: 1px solid rgba(255,255,255,.10);
   background: rgba(255,255,255,.04);
 }
-
 .wa-row.me .wa-bubble{
   background: rgba(36,194,106,.16);
   border-color: rgba(36,194,106,.25);
@@ -1332,16 +1433,9 @@ input[type="password"]:focus{
   color: rgba(255,255,255,.86);
   margin-bottom: 6px;
 }
+.wa-row.me .wa-who{ color: rgba(255,255,255,.90); }
 
-.wa-row.me .wa-who{
-  color: rgba(255,255,255,.90);
-}
-
-.wa-text{
-  line-height: 1.55;
-  font-size: 14px;
-}
-
+.wa-text{ line-height: 1.55; font-size: 14px; }
 .wa-time{
   font-size: 11px;
   color: rgba(255,255,255,.55);
@@ -1368,7 +1462,6 @@ input[type="password"]:focus{
   color: var(--text);
   outline:none;
 }
-
 .wa-input:focus{
   border-color: rgba(255,187,0,.45);
   box-shadow: 0 0 0 4px rgba(255,187,0,.10);
@@ -1384,215 +1477,11 @@ input[type="password"]:focus{
   font-weight: 950;
   cursor:pointer;
 }
+.wa-send:active{ transform: translateY(1px); }
 
-.wa-send:active{
-  transform: translateY(1px);
-}
+.wa-attach{ border-radius: 999px; padding: 10px 12px; }
 
-.wa-attach{
-  border-radius: 999px;
-  padding: 10px 12px;
-}
-
-/* status line */
 .wa-status{
   padding: 8px 12px 12px;
   min-height: 22px;
 }
-/* =========================
-   DIARY REFINED — Minimal + Warm
-========================= */
-
-.diary-page{
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 24px 0 40px;
-}
-
-.diary-h{
-  font-size: 28px;
-  margin: 0;
-}
-
-.diary-sub{
-  margin-top: 6px;
-  color: rgba(255,255,255,.65);
-  font-size: 14px;
-}
-
-/* Remove hard card feel */
-.diary-editor{
-  margin-top: 28px;
-  padding: 0;
-  border: none;
-  background: transparent;
-  box-shadow: none;
-}
-
-/* Date */
-.diary-date{
-  font-size: 14px;
-  color: rgba(255,255,255,.6);
-  margin-bottom: 12px;
-}
-
-/* Title input */
-.diary-title{
-  width: 100%;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid rgba(255,255,255,.12);
-  padding: 10px 0;
-  font-size: 18px;
-  color: rgba(255,255,255,.92);
-}
-.diary-title::placeholder{
-  color: rgba(255,255,255,.4);
-}
-.diary-title:focus{
-  outline: none;
-  border-bottom-color: rgba(255,187,0,.6);
-}
-
-/* Writing area */
-.diary-text{
-  width: 100%;
-  min-height: 55vh;
-  background: transparent;
-  border: none;
-  padding: 18px 0;
-  font-size: 16px;
-  line-height: 1.9;
-  color: rgba(255,255,255,.92);
-  resize: none;
-}
-.diary-text::placeholder{
-  color: rgba(255,255,255,.35);
-}
-.diary-text:focus{
-  outline: none;
-}
-
-/* Footer line */
-.diary-foot{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 10px;
-  border-top: 1px solid rgba(255,255,255,.06);
-  font-size: 13px;
-  color: rgba(255,255,255,.55);
-}
-
-/* Save button softer */
-.diary-actions{
-  margin-top: 20px;
-  display: flex;
-  gap: 14px;
-}
-
-.diary-actions .primary{
-  background: #FFBB00;
-  border: none;
-  color: #141414;
-  font-weight: 700;
-  padding: 10px 22px;
-  border-radius: 999px;
-  box-shadow: none;
-}
-
-.diary-actions .btn{
-  background: transparent;
-  border: 1px solid rgba(255,255,255,.15);
-  color: rgba(255,255,255,.75);
-}
-
-/* Entries section minimal */
-.diary-side{
-  margin-top: 48px;
-  border: none;
-  background: transparent;
-  box-shadow: none;
-}
-
-.diary-side-title{
-  font-size: 18px;
-  margin-bottom: 12px;
-}
-
-.diary-entry-row{
-  padding: 14px 0;
-  border-bottom: 1px solid rgba(255,255,255,.06);
-  cursor: pointer;
-}
-
-.diary-entry-row:hover{
-  background: rgba(255,255,255,.03);
-}
-
-.diary-entry-date{
-  font-size: 12px;
-  color: rgba(255,255,255,.5);
-}
-
-.diary-entry-title{
-  margin-top: 4px;
-  font-size: 15px;
-  color: rgba(255,255,255,.9);
-}
-/* Mobile nav */
-.nav-menu { display: flex; gap: 8px; }
-
-/* collapse on small screens */
-@media (max-width: 720px) {
-  .nav { position: relative; }
-
-  .nav-menu {
-    display: none;
-    position: absolute;
-    top: calc(100% + 10px);
-    right: 0;
-    width: min(92vw, 320px);
-    padding: 10px;
-    border: 1px solid rgba(255, 187, 0, 0.18);
-    border-radius: 14px;
-    background: #0f0f11;
-    box-shadow: 0 16px 50px rgba(0,0,0,0.55);
-    flex-direction: column;
-    z-index: 9999;
-  }
-
-  .nav-menu[data-open="true"] { display: flex; }
-
-  .nav-btn {
-    width: 100%;
-    justify-content: flex-start;
-  }
-}
-.dash { margin-top: 18px; }
-.dash-top { display:flex; gap:16px; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; }
-.dash-title h2 { margin:0; }
-.dash-actions { display:flex; gap:10px; flex-wrap:wrap; }
-
-.dash-grid {
-  display:grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap:12px;
-  margin-top:14px;
-}
-@media (max-width: 900px) {
-  .dash-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-@media (max-width: 560px) {
-  .dash-grid { grid-template-columns: 1fr; }
-}
-
-.big { font-size: 26px; font-weight: 700; margin-top: 6px; }
-.small { font-size: 12px; line-height: 1.5; }
-
-.mrow { display:flex; justify-content:space-between; gap:12px; padding:10px 0; border-top:1px solid rgba(255,255,255,.06); }
-.mrow:first-child { border-top: none; }
-.mleft { display:flex; flex-direction:column; gap:2px; }
-.mright { display:flex; flex-direction:column; align-items:flex-end; gap:6px; min-width: 140px; }
-.mbar { width:140px; height:8px; border-radius:999px; background:rgba(255,255,255,.08); overflow:hidden; }
-.mfill { height:100%; border-radius:999px; background:rgba(255,255,255,.65); }

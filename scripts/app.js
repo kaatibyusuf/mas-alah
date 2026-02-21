@@ -161,7 +161,11 @@ function icon(name) {
           `<path ${common} d="M3 17l9 5 9-5"/>`
       );
     case "download":
-      return wrap(`<path ${common} d="M12 3v12"/><path ${common} d="M7 10l5 5 5-5"/><path ${common} d="M5 21h14"/>`);
+      return wrap(
+        `<path ${common} d="M12 3v12"/>` +
+          `<path ${common} d="M7 10l5 5 5-5"/>` +
+          `<path ${common} d="M5 21h14"/>`
+      );
     case "check":
       return wrap(`<path ${common} d="M20 6L9 17l-5-5"/>`);
     default:
@@ -386,7 +390,7 @@ function isEligibleQuestion(q, category, level) {
 
   if (level === "Advanced") {
     const id = String(q.id || "");
-    return id.includes("_adv_") || id.includes("_jaamiah_") || id.includes("_advanced_") || true;
+    return id.includes("_adv_") || id.includes("_jaamiah_") || id.includes("_advanced_");
   }
 
   return true;
@@ -703,6 +707,34 @@ function registerServiceWorker() {
 }
 
 /* =======================
+   Auth helpers
+======================= */
+async function requireAuthOrRoute(routeIfMissing = "auth") {
+  try {
+    const { data } = await supabase.auth.getSession();
+    const session = data?.session || null;
+    if (!session) {
+      go(routeIfMissing);
+      return null;
+    }
+    return session;
+  } catch {
+    go(routeIfMissing);
+    return null;
+  }
+}
+
+function displayNameFromSession(session) {
+  const meta = session?.user?.user_metadata || {};
+  const name =
+    meta.display_name ||
+    meta.name ||
+    session?.user?.email?.split("@")?.[0] ||
+    "Anonymous";
+  return String(name || "Anonymous").trim() || "Anonymous";
+}
+
+/* =======================
    Views: Welcome
 ======================= */
 function renderWelcome() {
@@ -824,22 +856,25 @@ function renderMasteryTable(progress) {
 
   entries.sort((a, b) => b[1] - a[1]);
 
-  const rows = entries.slice(0, 10).map(([k, v]) => {
-    const [cat, lvl] = k.split("|");
-    const pct = Math.round(v * 100);
-    return `
-      <div class="mrow">
-        <div class="mleft">
-          <strong>${escapeHtml(cat)}</strong>
-          <span class="muted small">${escapeHtml(lvl)}</span>
+  const rows = entries
+    .slice(0, 10)
+    .map(([k, v]) => {
+      const [cat, lvl] = k.split("|");
+      const pct = Math.round(v * 100);
+      return `
+        <div class="mrow">
+          <div class="mleft">
+            <strong>${escapeHtml(cat)}</strong>
+            <span class="muted small">${escapeHtml(lvl)}</span>
+          </div>
+          <div class="mright">
+            <span class="muted small">${pct}%</span>
+            <div class="mbar"><div class="mfill" style="width:${pct}%"></div></div>
+          </div>
         </div>
-        <div class="mright">
-          <span class="muted small">${pct}%</span>
-          <div class="mbar"><div class="mfill" style="width:${pct}%"></div></div>
-        </div>
-      </div>
-    `;
-  }).join("");
+      `;
+    })
+    .join("");
 
   return `
     <section class="card" style="margin-top:16px;">
@@ -906,7 +941,9 @@ function renderHome() {
         <div class="card">
           <p class="muted">Weakest focus</p>
           <div class="big">${weak ? `${weak.pct}%` : "-"}</div>
-          <p class="muted small">${weak ? `${escapeHtml(weak.cat)} • ${escapeHtml(weak.lvl)}` : "Attempt quizzes to generate mastery."}</p>
+          <p class="muted small">${
+            weak ? `${escapeHtml(weak.cat)} • ${escapeHtml(weak.lvl)}` : "Attempt quizzes to generate mastery."
+          }</p>
         </div>
 
         <div class="card">
@@ -1036,14 +1073,19 @@ async function renderDaily() {
         <label class="field">
           <span>Category</span>
           <select id="dailyCategory">
-            ${CATEGORIES.map((c) => `<option ${c === defaultCategory ? "selected" : ""} value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join("")}
+            ${CATEGORIES.map(
+              (c) =>
+                `<option ${c === defaultCategory ? "selected" : ""} value="${escapeHtml(c)}">${escapeHtml(c)}</option>`
+            ).join("")}
           </select>
         </label>
 
         <label class="field">
           <span>Level</span>
           <select id="dailyLevel">
-            ${LEVELS.map((l) => `<option ${l === defaultLevel ? "selected" : ""} value="${escapeHtml(l)}">${escapeHtml(l)}</option>`).join("")}
+            ${LEVELS.map(
+              (l) => `<option ${l === defaultLevel ? "selected" : ""} value="${escapeHtml(l)}">${escapeHtml(l)}</option>`
+            ).join("")}
           </select>
         </label>
 
@@ -1608,7 +1650,7 @@ function renderFAQ() {
                   <span class="faq-chevron">${icon("check")}</span>
                 </summary>
                 <div class="faq-a">
-                Review pulls your most missed questions first.
+                  Review pulls your most missed questions first.
                 </div>
               </details>
 
@@ -1649,7 +1691,7 @@ function renderFAQ() {
             <div class="faq-panel">
               <h3 style="margin:0;">Reminder</h3>
               <p class="muted" style="margin:8px 0 0; line-height:1.6;">
-                Consistency beats intensity.The goal is to remember.
+                Consistency beats intensity. The goal is to remember.
               </p>
             </div>
           </div>
@@ -1663,7 +1705,7 @@ function renderFAQ() {
 }
 
 /* =======================
-   Zakat Calculator (kept from your version)
+   Zakat Calculator
 ======================= */
 function formatMoney(n, currency) {
   const num = Number(n || 0);
@@ -1870,37 +1912,35 @@ function loadDiary() {
 function saveDiary(entries) {
   localStorage.setItem(DIARY_KEY, JSON.stringify(entries));
 }
+
+/* FIX: return only items, no nested .diary-list wrapper */
 function renderDiaryList(entries) {
-  if (!entries.length) {
-    return `<p class="muted">Write something small today.</p>`;
-  }
+  if (!entries.length) return `<p class="muted">Write something small today.</p>`;
+
   const sorted = [...entries].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-  return `
-    <div class="diary-list">
-      ${sorted
-        .map((e) => {
-          const date = escapeHtml(e.date || "");
-          const title = escapeHtml(e.title || "Untitled");
-          const preview = escapeHtml((e.text || "").slice(0, 140));
-          return `
-            <button class="diary-item" type="button" data-diary-open="${escapeHtml(e.id)}">
-              <div class="diary-item-top">
-                <span class="diary-date">${date}</span>
-                <span class="diary-title">${title}</span>
-              </div>
-              <div class="diary-preview muted">${preview}${(e.text || "").length > 140 ? "…" : ""}</div>
-            </button>
-          `;
-        })
-        .join("")}
-    </div>
-  `;
+
+  return sorted
+    .map((e) => {
+      const date = escapeHtml(e.date || "");
+      const title = escapeHtml(e.title || "Untitled");
+      const preview = escapeHtml((e.text || "").slice(0, 140));
+      return `
+        <button class="diary-item" type="button" data-diary-open="${escapeHtml(e.id)}">
+          <div class="diary-item-top">
+            <span class="diary-date">${date}</span>
+            <span class="diary-title">${title}</span>
+          </div>
+          <div class="diary-preview muted">${preview}${(e.text || "").length > 140 ? "…" : ""}</div>
+        </button>
+      `;
+    })
+    .join("");
 }
+
 function renderDiary() {
   state.currentRoute = "diary";
 
   const entries = loadDiary();
-
   const DRAFT_KEY = "masalah_diary_draft_v1";
 
   const fmtHumanDate = (iso) => {
@@ -1918,14 +1958,6 @@ function renderDiary() {
     return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
-  const safe = (s) =>
-    String(s || "")
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
-
   const loadDraft = () => {
     try {
       return JSON.parse(localStorage.getItem(DRAFT_KEY) || "null");
@@ -1942,11 +1974,7 @@ function renderDiary() {
     localStorage.removeItem(DRAFT_KEY);
   };
 
-  const draft = loadDraft() || {
-    title: "",
-    text: "",
-    updatedAt: 0
-  };
+  const draft = loadDraft() || { title: "", text: "", updatedAt: 0 };
 
   app.innerHTML = `
     <section class="diary-page screen">
@@ -1968,7 +1996,7 @@ function renderDiary() {
           <div class="diary-editor-top">
             <div class="diary-date">
               <span class="muted">Today</span>
-              <span class="diary-date-strong">${safe(fmtHumanDate(todayISO()))}</span>
+              <span class="diary-date-strong">${escapeHtml(fmtHumanDate(todayISO()))}</span>
             </div>
 
             <input
@@ -1976,7 +2004,7 @@ function renderDiary() {
               class="diary-title"
               placeholder="A short headline (optional)"
               maxlength="80"
-              value="${safe(draft.title)}"
+              value="${escapeHtml(draft.title)}"
             />
           </div>
 
@@ -1986,7 +2014,7 @@ function renderDiary() {
               class="diary-text"
               placeholder="No perfection required."
               maxlength="8000"
-            >${safe(draft.text)}</textarea>
+            >${escapeHtml(draft.text)}</textarea>
           </div>
 
           <div class="diary-foot">
@@ -1994,7 +2022,7 @@ function renderDiary() {
               <span id="diary_count">0 / 8000</span>
               <span class="diary-dot">•</span>
               <span id="last_saved">${
-                draft.updatedAt ? `Draft saved at ${safe(fmtTime(draft.updatedAt))}` : "Draft not saved"
+                draft.updatedAt ? `Draft saved at ${escapeHtml(fmtTime(draft.updatedAt))}` : "Draft not saved"
               }</span>
             </div>
 
@@ -2010,7 +2038,7 @@ function renderDiary() {
         <aside class="diary-side">
           <div class="diary-side-head">
             <h3 class="diary-side-title">Your entries</h3>
-            <p class="muted diary-side-sub">${entries.length} saved</p>
+            <p class="muted diary-side-sub"><span id="diary_saved_count">${entries.length}</span> saved</p>
           </div>
 
           <div id="diary_list" class="diary-list">
@@ -2047,6 +2075,7 @@ function renderDiary() {
   const elCount = app.querySelector("#diary_count");
   const elNotice = app.querySelector("#diary_notice");
   const elList = app.querySelector("#diary_list");
+  const elSavedCount = app.querySelector("#diary_saved_count");
 
   const elSaveChip = app.querySelector("#save_chip");
   const elLastSaved = app.querySelector("#last_saved");
@@ -2061,6 +2090,9 @@ function renderDiary() {
   let openedId = null;
   let autosaveTimer = null;
 
+  let deleteArmed = false;
+  let deleteArmTimer = null;
+
   function setNotice(msg, kind) {
     elNotice.textContent = msg || "";
     elNotice.classList.remove("is-warn", "is-good");
@@ -2072,7 +2104,7 @@ function renderDiary() {
     if (!elSaveChip || !elLastSaved) return;
 
     if (mode === "dirty") {
-      elSaveChip.textContent = "Saving…";
+      elSaveChip.textContent = "Typing…";
       elSaveChip.classList.add("is-dirty");
       elSaveChip.classList.remove("is-saved");
       elLastSaved.textContent = "Typing…";
@@ -2093,6 +2125,7 @@ function renderDiary() {
   function refreshList() {
     const latest = loadDiary();
     elList.innerHTML = renderDiaryList(latest);
+    if (elSavedCount) elSavedCount.textContent = String(latest.length);
   }
 
   function updateCount() {
@@ -2173,7 +2206,7 @@ function renderDiary() {
 
     clearDraft();
     setDraftUI("idle");
-    setNotice("Saved on this device.", "good");
+    setNotice("Saved privately on this device.", "good");
     refreshList();
   });
 
@@ -2183,6 +2216,10 @@ function renderDiary() {
     elModalTitle.textContent = entry.title || "Untitled";
     elModalText.textContent = entry.text || "";
 
+    deleteArmed = false;
+    elDelete.textContent = "Delete entry";
+    clearTimeout(deleteArmTimer);
+
     elModal.classList.add("is-open");
     elModal.setAttribute("aria-hidden", "false");
   }
@@ -2191,6 +2228,10 @@ function renderDiary() {
     openedId = null;
     elModal.classList.remove("is-open");
     elModal.setAttribute("aria-hidden", "true");
+
+    deleteArmed = false;
+    elDelete.textContent = "Delete entry";
+    clearTimeout(deleteArmTimer);
   }
 
   elModalClose.addEventListener("click", closeModal);
@@ -2209,11 +2250,29 @@ function renderDiary() {
     openModal(entry);
   });
 
+  /* FIX: delete confirmation */
   elDelete.addEventListener("click", () => {
     if (!openedId) return;
+
+    if (!deleteArmed) {
+      deleteArmed = true;
+      elDelete.textContent = "Tap again to delete";
+      setNotice("Tap delete again to confirm.", "warn");
+
+      clearTimeout(deleteArmTimer);
+      deleteArmTimer = setTimeout(() => {
+        deleteArmed = false;
+        elDelete.textContent = "Delete entry";
+        setNotice("", "");
+      }, 2500);
+
+      return;
+    }
+
     const data = loadDiary();
     const next = data.filter((x) => x.id !== openedId);
     saveDiary(next);
+
     closeModal();
     refreshList();
     setNotice("Deleted.", "good");
@@ -2878,7 +2937,6 @@ function setFooterYear() {
   const el = document.getElementById("year");
   if (el) el.textContent = String(new Date().getFullYear());
 }
-
 
 /* =======================
    Routing
