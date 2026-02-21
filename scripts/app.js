@@ -767,7 +767,7 @@ function renderWelcome() {
 
         <div class="welcome-how">
           <h3>How it works</h3>
-          <p class="sub">Simple on purpose. The product should not compete with the learning.</p>
+          <p class="sub">Simple on purpose and should not compete with the learning.</p>
 
           <div class="steps">
             <div class="step">
@@ -844,7 +844,7 @@ function renderMasteryTable(progress) {
   return `
     <section class="card" style="margin-top:16px;">
       <h3 style="margin:0;">Mastery</h3>
-      <p class="muted small" style="margin:8px 0 0 0;">Based on your attempts. This is not perfection, it is direction.</p>
+      <p class="muted small" style="margin:8px 0 0 0;">Based on your attempts. This is a direction.</p>
       <div class="mtable" style="margin-top:12px;">
         ${rows}
       </div>
@@ -934,7 +934,7 @@ function renderHome() {
 
       <section class="card" style="margin-top:16px;">
         <h3 style="margin:0;">Start a custom quiz</h3>
-        <p class="muted small" style="margin:8px 0 0 0;">Target one topic. Build mastery faster.</p>
+        <p class="muted small" style="margin:8px 0 0 0;">Target one topic to build mastery faster.</p>
 
         <div class="grid" style="margin-top:12px;">
           <label class="field">
@@ -1608,7 +1608,7 @@ function renderFAQ() {
                   <span class="faq-chevron">${icon("check")}</span>
                 </summary>
                 <div class="faq-a">
-                  Every wrong answer is tracked on your device. Review pulls your most missed questions first.
+                Review pulls your most missed questions first.
                 </div>
               </details>
 
@@ -1621,7 +1621,7 @@ function renderFAQ() {
                   <span class="faq-chevron">${icon("check")}</span>
                 </summary>
                 <div class="faq-a">
-                  Locally on your device. Clearing browser data resets it.
+                  Locally on your device.
                 </div>
               </details>
             </div>
@@ -1649,7 +1649,7 @@ function renderFAQ() {
             <div class="faq-panel">
               <h3 style="margin:0;">Reminder</h3>
               <p class="muted" style="margin:8px 0 0; line-height:1.6;">
-                Consistency beats intensity. The goal is not to win a quiz. The goal is to remember.
+                Consistency beats intensity.The goal is to remember.
               </p>
             </div>
           </div>
@@ -1872,7 +1872,7 @@ function saveDiary(entries) {
 }
 function renderDiaryList(entries) {
   if (!entries.length) {
-    return `<p class="muted">No entries yet. Write something small today.</p>`;
+    return `<p class="muted">Write something small today.</p>`;
   }
   const sorted = [...entries].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
   return `
@@ -1954,7 +1954,7 @@ function renderDiary() {
       <header class="diary-head">
         <div>
           <h2 class="diary-h">Private Diary</h2>
-          <p class="diary-sub muted">Stored only on this device. Write like nobody is watching.</p>
+          <p class="diary-sub muted">Write. Nobody is watching.</p>
         </div>
 
         <div class="diary-head-right" style="display:flex; gap:10px; align-items:center;">
@@ -1984,7 +1984,7 @@ function renderDiary() {
             <textarea
               id="diary_text"
               class="diary-text"
-              placeholder="Write freely. No perfection required."
+              placeholder="No perfection required."
               maxlength="8000"
             >${safe(draft.text)}</textarea>
           </div>
@@ -2234,7 +2234,7 @@ function renderLock() {
     <section class="card">
       <div class="card-head">
         <h2>Lock</h2>
-        <p class="muted">Protect Diary and Progress on this device.</p>
+        <p class="muted">Protect Diary and Progress.</p>
       </div>
 
       <div class="lock-box">
