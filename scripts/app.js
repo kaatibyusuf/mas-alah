@@ -1,4 +1,3 @@
-
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
 /* =======================
@@ -24,6 +23,7 @@ const LOCK_UNLOCKED_UNTIL_KEY = "masalah_unlocked_until_v1";
 const BAG_KEY = "masalah_shuffle_bag_v1";
 const QUESTIONS_CACHE_KEY = "masalah_questions_cache_v1";
 const QUESTIONS_CACHE_AT_KEY = "masalah_questions_cache_at_v1";
+const FASL_KEY = "masalah_fasl_v1";
 
 /* Protect what you want */
 const PROTECTED_ROUTES = new Set(["diary", "progress"]);
@@ -85,6 +85,29 @@ function fmtLocalLongDate(d = new Date()) {
     month: "long",
     day: "numeric"
   }).format(d);
+}
+
+function startOfMonth(date) {
+  return new Date(date.getFullYear(), date.getMonth(), 1);
+}
+function endOfMonth(date) {
+  return new Date(date.getFullYear(), date.getMonth() + 1, 0);
+}
+function isoFromDate(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+function dateFromISO(iso) {
+  return new Date(iso + "T00:00:00");
+}
+function sameISO(aISO, bISO) {
+  return aISO && bISO && aISO === bISO;
+}
+function inRangeISO(xISO, aISO, bISO) {
+  if (!xISO || !aISO || !bISO) return false;
+  return xISO >= aISO && xISO <= bISO;
 }
 
 /* =======================
@@ -897,9 +920,13 @@ function renderHome() {
   const knowledge = overallKnowledgeScore(progress);
   const weak = weakestTopic(progress);
 
-  const mistakesTotal = Object.values(progress.mistakes || {}).reduce((acc, m) => acc + (m.wrong || 0), 0);
-  const uniqueMistakes = Object.keys(progress.mistakes || {}).filter((id) => (progress.mistakes[id]?.wrong || 0) > 0)
-    .length;
+  const mistakesTotal = Object.values(progress.mistakes || {}).reduce(
+    (acc, m) => acc + (m.wrong || 0),
+    0
+  );
+  const uniqueMistakes = Object.keys(progress.mistakes || {}).filter(
+    (id) => (progress.mistakes[id]?.wrong || 0) > 0
+  ).length;
 
   const lastHeadline = last ? `${last.score}/${last.total}` : "No attempts";
   const lastSub = last ? `${last.category} • ${last.level}` : "Start Daily or choose a module.";
@@ -1084,7 +1111,8 @@ async function renderDaily() {
           <span>Level</span>
           <select id="dailyLevel">
             ${LEVELS.map(
-              (l) => `<option ${l === defaultLevel ? "selected" : ""} value="${escapeHtml(l)}">${escapeHtml(l)}</option>`
+              (l) =>
+                `<option ${l === defaultLevel ? "selected" : ""} value="${escapeHtml(l)}">${escapeHtml(l)}</option>`
             ).join("")}
           </select>
         </label>
@@ -1190,7 +1218,7 @@ async function renderReview() {
 }
 
 /* =======================
-   Quiz: lock-in answer + mastery/mistake tracking
+   Quiz
 ======================= */
 function lockInAnswer({ selectedIdx, reason }) {
   const q = state.quizQuestions[state.index];
@@ -1375,7 +1403,7 @@ function showFeedback(selectedIdx, meta = {}) {
 }
 
 /* =======================
-   Results: finalize attempt (best + mastery + lastAttempt)
+   Results
 ======================= */
 function finalizeAttemptOnce() {
   if (state._finalized) return;
@@ -1705,6 +1733,556 @@ function renderFAQ() {
 }
 
 /* =======================
+   Fasl (women’s fiqh + tracking)
+======================= */
+function loadFasl() {
+  try {
+    const raw = localStorage.getItem(FASL_KEY);
+    const parsed = raw ? JSON.parse(raw) : null;
+    return parsed && typeof parsed === "object"
+      ? parsed
+      : {
+          lastPeriodStart: "",
+          cycleLength: 28,
+          periodLength: 5,
+          notes: ""
+        };
+  } catch {
+    return { lastPeriodStart: "", cycleLength: 28, periodLength: 5, notes: "" };
+  }
+}
+function saveFasl(data) {
+  localStorage.setItem(FASL_KEY, JSON.stringify(data));
+}
+
+function addDays(dateISO, days) {
+  const d = new Date(dateISO + "T00:00:00");
+  d.setDate(d.getDate() + Number(days || 0));
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+function fmtISO(iso) {
+  if (!iso) return "-";
+  try {
+    return new Date(iso + "T00:00:00").toLocaleDateString(undefined, {
+      weekday: "short",
+      year: "numeric",
+      month: "short",
+      day: "2-digit"
+    });
+  } catch {
+    return iso;
+  }
+}
+function clampNum(n, min, max, fallback) {
+  const x = Number(n);
+  if (!Number.isFinite(x)) return fallback;
+  return Math.max(min, Math.min(max, x));
+}
+
+async function renderFasl() {
+  state.currentRoute = "fasl";
+
+  app.innerHTML = `
+    <section class="card" style="margin-top:20px; max-width:980px; margin-inline:auto;">
+      <div class="card-head">
+        <h2 style="margin:0;">Fasl</h2>
+        <p class="muted" style="margin:8px 0 0 0; line-height:1.6;">
+          A private space for women’s rulings (ḥayḍ, istiḥāḍah, nifās) and a calm cycle tracker.
+          This does not replace medical care. If symptoms are severe or unusual, speak to a clinician.
+        </p>
+      </div>
+
+      <div class="segmented" role="group" aria-label="Fasl tabs" style="margin-top:12px;">
+        <button class="seg-btn is-on" type="button" data-fasl-tab="learn">Learn</button>
+        <button class="seg-btn" type="button" data-fasl-tab="track">Track</button>
+        <button class="seg-btn" type="button" data-fasl-tab="ask">Ask</button>
+      </div>
+
+      <div id="fasl_panel" style="margin-top:12px;"></div>
+    </section>
+  `;
+
+  const panel = app.querySelector("#fasl_panel");
+  const tabBtns = Array.from(app.querySelectorAll("[data-fasl-tab]"));
+
+  const setTab = (name) => {
+    tabBtns.forEach((b) => b.classList.toggle("is-on", b.dataset.faslTab === name));
+    if (name === "learn") renderFaslLearn(panel);
+    if (name === "track") renderFaslTrack(panel);
+    if (name === "ask") renderFaslAsk(panel);
+  };
+
+  tabBtns.forEach((b) => b.addEventListener("click", () => setTab(b.dataset.faslTab)));
+
+  setTab("learn");
+}
+
+function renderFaslLearn(panel) {
+  panel.innerHTML = `
+    <div class="grid" style="gap:12px;">
+      <div class="card" style="box-shadow:none;">
+        <h3 style="margin-top:0;">What Fasl covers</h3>
+        <ul class="muted" style="line-height:1.7; margin-top:8px;">
+          <li><strong>Ḥayḍ</strong>: the natural monthly blood of women.</li>
+          <li><strong>Istiḥāḍah</strong>: non-menstrual bleeding, with different rulings.</li>
+          <li><strong>Nifās</strong>: post-natal bleeding.</li>
+          <li>Practical: purity, prayer, fasting, Qur’an recitation, marital relations, and common edge cases.</li>
+        </ul>
+      </div>
+
+      <div class="card" style="box-shadow:none;">
+        <h3 style="margin-top:0;">Quick self-check before you ask</h3>
+        <ol class="muted" style="line-height:1.7; margin-top:8px;">
+          <li>What exactly did you see. Color, consistency, days, gaps.</li>
+          <li>How many days is your usual ḥayḍ. How many days is your usual ṭuhr.</li>
+          <li>Did this happen near your expected period or completely outside it.</li>
+          <li>Any medication, contraception, postpartum, or health changes.</li>
+        </ol>
+        <p class="muted" style="margin-top:10px;">
+          Tip: In Ask, paste a clean timeline. Day 1, Day 2, Day 3. That is what makes rulings easy.
+        </p>
+      </div>
+
+      <div class="card" style="box-shadow:none;">
+        <h3 style="margin-top:0;">Mini templates to copy</h3>
+        <div class="muted" style="line-height:1.7; margin-top:8px;">
+          <p><strong>Template A (simple):</strong><br/>
+          “My usual period is __ days. Usual clean days are __. This month I saw blood on __, stopped on __, then saw spotting on __.”</p>
+
+          <p><strong>Template B (timeline):</strong><br/>
+          Day 1: __<br/>
+          Day 2: __<br/>
+          Day 3: __<br/>
+          Clean: __<br/>
+          Spotting: __</p>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function monthLabel(d) {
+  return d.toLocaleDateString(undefined, { month: "long", year: "numeric" });
+}
+
+/* builds a Monday-first month grid (Mon..Sun) */
+function buildMonthCells(viewDate) {
+  const first = startOfMonth(viewDate);
+  const last = endOfMonth(viewDate);
+
+  const firstDow = first.getDay(); // 0 Sun..6 Sat
+  const mondayFirstIndex = (firstDow + 6) % 7; // 0 Mon..6 Sun
+
+  const cells = [];
+
+  for (let i = 0; i < mondayFirstIndex; i++) {
+    cells.push({ iso: null, day: "", isOutside: true });
+  }
+
+  for (let d = 1; d <= last.getDate(); d++) {
+    const dt = new Date(viewDate.getFullYear(), viewDate.getMonth(), d);
+    cells.push({ iso: isoFromDate(dt), day: String(d), isOutside: false });
+  }
+
+  while (cells.length % 7 !== 0) {
+    cells.push({ iso: null, day: "", isOutside: true });
+  }
+
+  return cells;
+}
+
+function renderCycleCalendarGrid(containerEl, model, viewDate) {
+  const cells = buildMonthCells(viewDate);
+  const today = todayISO();
+
+  const daysHeader = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+    .map((x) => `<div class="fasl-dow muted">${x}</div>`)
+    .join("");
+
+  const dayCells = cells
+    .map((c) => {
+      if (!c.iso) return `<div class="fasl-day is-empty"></div>`;
+
+      const isToday = sameISO(c.iso, today);
+      const isLoggedStart = model.last && sameISO(c.iso, model.last);
+
+      const isPeriod = model.periodStart && inRangeISO(c.iso, model.periodStart, model.periodEnd);
+      const isFertile = model.fertileStart && inRangeISO(c.iso, model.fertileStart, model.fertileEnd);
+      const isOvu = model.ovulation && sameISO(c.iso, model.ovulation);
+
+      const classes = [
+        "fasl-day",
+        isToday ? "is-today" : "",
+        isLoggedStart ? "is-start" : "",
+        isPeriod ? "is-period" : "",
+        isFertile ? "is-fertile" : "",
+        isOvu ? "is-ovu" : ""
+      ]
+        .filter(Boolean)
+        .join(" ");
+
+      let dot = "";
+      if (isOvu) dot = `<span class="fasl-dot">●</span>`;
+      else if (isPeriod) dot = `<span class="fasl-dot">●</span>`;
+      else if (isFertile) dot = `<span class="fasl-dot">●</span>`;
+
+      return `
+        <button type="button" class="${classes}" data-fasl-iso="${escapeHtml(c.iso)}" aria-label="${escapeHtml(c.iso)}">
+          <span class="fasl-num">${escapeHtml(c.day)}</span>
+          ${dot}
+        </button>
+      `;
+    })
+    .join("");
+
+  containerEl.innerHTML = `
+    <div class="fasl-cal">
+      <div class="fasl-cal-head">
+        <strong>${escapeHtml(monthLabel(viewDate))}</strong>
+        <div class="fasl-cal-actions">
+          <button class="btn" type="button" id="fasl_prev_m">Prev</button>
+          <button class="btn" type="button" id="fasl_next_m">Next</button>
+        </div>
+      </div>
+
+      <div class="fasl-cal-legend">
+        <span class="fasl-leg"><span class="fasl-swatch period"></span> Period</span>
+        <span class="fasl-leg"><span class="fasl-swatch fertile"></span> Fertile</span>
+        <span class="fasl-leg"><span class="fasl-swatch ovu"></span> Ovulation</span>
+        <span class="fasl-leg"><span class="fasl-swatch today"></span> Today</span>
+      </div>
+
+      <div class="fasl-grid">
+        ${daysHeader}
+        ${dayCells}
+      </div>
+
+      <div class="muted small" id="fasl_day_info" style="margin-top:10px;"></div>
+    </div>
+  `;
+}
+
+function buildCycleModel(fasl) {
+  const last = fasl.lastPeriodStart || "";
+  const cycleLength = clampNum(fasl.cycleLength, 18, 45, 28);
+  const periodLength = clampNum(fasl.periodLength, 2, 10, 5);
+
+  if (!last) {
+    return {
+      last,
+      cycleLength,
+      periodLength,
+      periodStart: null,
+      periodEnd: null,
+      ovulation: null,
+      fertileStart: null,
+      fertileEnd: null,
+      nextPeriod: null
+    };
+  }
+
+  const periodStart = last;
+  const periodEnd = addDays(last, periodLength - 1);
+  const nextPeriod = addDays(last, cycleLength);
+
+  const ovulationISO = addDays(last, cycleLength - 14);
+  const fertileStart = addDays(ovulationISO, -5);
+  const fertileEnd = addDays(ovulationISO, 1);
+
+  return {
+    last,
+    cycleLength,
+    periodLength,
+    periodStart,
+    periodEnd,
+    ovulation: ovulationISO,
+    fertileStart,
+    fertileEnd,
+    nextPeriod
+  };
+}
+
+/* FIXED: renderFaslTrack string is properly closed, then JS continues */
+function renderFaslTrack(panel) {
+  const d = loadFasl();
+
+  const cycleLength = clampNum(d.cycleLength, 18, 45, 28);
+  const periodLength = clampNum(d.periodLength, 2, 10, 5);
+  const last = d.lastPeriodStart || "";
+
+  const model = buildCycleModel(d);
+
+  panel.innerHTML = `
+    <div class="grid" style="gap:12px;">
+      <div class="card" style="box-shadow:none;">
+        <h3 style="margin-top:0;">Your cycle (private)</h3>
+
+        <div class="grid" style="margin-top:12px;">
+          <label class="field">
+            <span>Last period start date</span>
+            <input id="fasl_last" type="date" value="${escapeHtml(last)}" />
+          </label>
+
+          <label class="field">
+            <span>Cycle length (days)</span>
+            <input id="fasl_cycle" inputmode="numeric" placeholder="28" value="${escapeHtml(cycleLength)}" />
+            <p class="help muted">Typical range is 21–35. We allow 18–45.</p>
+          </label>
+
+          <label class="field">
+            <span>Period length (days)</span>
+            <input id="fasl_period" inputmode="numeric" placeholder="5" value="${escapeHtml(periodLength)}" />
+          </label>
+
+          <label class="field">
+            <span>Notes (optional)</span>
+            <textarea id="fasl_notes" rows="3" placeholder="Symptoms, spotting, meds, anything relevant">${escapeHtml(
+              d.notes || ""
+            )}</textarea>
+          </label>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button id="fasl_save" class="primary" type="button">Save</button>
+            <button id="fasl_reset" class="btn" type="button">Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="box-shadow:none;">
+        <h3 style="margin-top:0;">Calendar</h3>
+        <div id="fasl_calendar_mount"></div>
+
+        <div class="grid" style="gap:10px; margin-top:10px;">
+          <div class="card" style="box-shadow:none;">
+            <p class="muted" style="margin:0;">Next expected period</p>
+            <div style="font-size:22px; font-weight:950; margin-top:6px;">
+              ${escapeHtml(model.nextPeriod ? fmtISO(model.nextPeriod) : "-")}
+            </div>
+          </div>
+
+          <div class="card" style="box-shadow:none;">
+            <p class="muted" style="margin:0;">Estimated fertile window</p>
+            <div style="font-size:18px; font-weight:850; margin-top:6px;">
+              ${escapeHtml(model.fertileStart ? fmtISO(model.fertileStart) : "-")}
+              to
+              ${escapeHtml(model.fertileEnd ? fmtISO(model.fertileEnd) : "-")}
+            </div>
+            <p class="muted small" style="margin-top:8px;">
+              Calendar estimates only.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  const elLast = panel.querySelector("#fasl_last");
+  const elCycle = panel.querySelector("#fasl_cycle");
+  const elPeriod = panel.querySelector("#fasl_period");
+  const elNotes = panel.querySelector("#fasl_notes");
+
+  const digitsOnly = (v) => String(v || "").replace(/[^\d]/g, "");
+
+  elCycle.addEventListener("input", () => (elCycle.value = digitsOnly(elCycle.value).slice(0, 2)));
+  elPeriod.addEventListener("input", () => (elPeriod.value = digitsOnly(elPeriod.value).slice(0, 2)));
+
+  const calMount = panel.querySelector("#fasl_calendar_mount");
+  let viewDate = new Date();
+
+  const rerenderCal = () => {
+    const nextModel = buildCycleModel(loadFasl());
+    renderCycleCalendarGrid(calMount, nextModel, viewDate);
+
+    const btnPrev = calMount.querySelector("#fasl_prev_m");
+    const btnNext = calMount.querySelector("#fasl_next_m");
+    const info = calMount.querySelector("#fasl_day_info");
+
+    btnPrev?.addEventListener("click", () => {
+      viewDate = new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1);
+      rerenderCal();
+    });
+    btnNext?.addEventListener("click", () => {
+      viewDate = new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1);
+      rerenderCal();
+    });
+
+    calMount.querySelectorAll("[data-fasl-iso]").forEach((b) => {
+      b.addEventListener("click", () => {
+        const iso = b.getAttribute("data-fasl-iso");
+        if (!iso) return;
+        info.textContent = `Selected: ${iso}`;
+      });
+    });
+  };
+
+  rerenderCal();
+
+  panel.querySelector("#fasl_save").addEventListener("click", () => {
+    const next = {
+      lastPeriodStart: (elLast.value || "").trim(),
+      cycleLength: clampNum(elCycle.value, 18, 45, 28),
+      periodLength: clampNum(elPeriod.value, 2, 10, 5),
+      notes: (elNotes.value || "").trim()
+    };
+    saveFasl(next);
+    showToast("Saved privately.");
+    renderFaslTrack(panel);
+  });
+
+  panel.querySelector("#fasl_reset").addEventListener("click", () => {
+    localStorage.removeItem(FASL_KEY);
+    showToast("Reset.");
+    renderFaslTrack(panel);
+  });
+}
+
+async function renderFaslAsk(panel) {
+  const session = await requireAuthOrRoute("auth");
+  if (!session) {
+    panel.innerHTML = `
+      <div class="card" style="box-shadow:none;">
+        <h3 style="margin-top:0;">Ask a question</h3>
+        <p class="muted" style="line-height:1.7;">
+          Please log in to submit questions. This keeps your questions tied to your account and reduces spam.
+        </p>
+        <button class="primary" type="button" data-goto="auth">Go to Login</button>
+      </div>
+    `;
+    bindGotoButtons();
+    return;
+  }
+
+  const myName = displayNameFromSession(session);
+
+  panel.innerHTML = `
+    <div class="grid" style="gap:12px;">
+      <div class="card" style="box-shadow:none;">
+        <h3 style="margin-top:0;">Submit a question</h3>
+        <p class="muted" style="margin-top:6px; line-height:1.7;">
+          Keep it structured. Include your usual habit, the timeline, and what changed.
+        </p>
+
+        <div class="grid" style="margin-top:12px;">
+          <label class="field">
+            <span>Topic</span>
+            <select id="fasl_topic">
+              <option value="Hayd">Ḥayḍ (menses)</option>
+              <option value="Istihada">Istiḥāḍah</option>
+              <option value="Nifas">Nifās (post-natal)</option>
+              <option value="General">General</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Your question</span>
+            <textarea id="fasl_q" rows="6" placeholder="Write a clear timeline..."></textarea>
+          </label>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button id="fasl_send" class="primary" type="button">Send</button>
+            <button id="fasl_refresh" class="btn" type="button">Refresh</button>
+          </div>
+
+          <p id="fasl_status" class="muted" style="margin:0;"></p>
+        </div>
+      </div>
+
+      <div class="card" style="box-shadow:none;">
+        <h3 style="margin-top:0;">Recent questions (yours)</h3>
+        <div id="fasl_list" class="diary-list"></div>
+        <p class="muted small" style="margin-top:10px;">
+          This list requires a Supabase table. If it is not set up yet, you will see an error below.
+        </p>
+      </div>
+    </div>
+  `;
+
+  const elTopic = panel.querySelector("#fasl_topic");
+  const elQ = panel.querySelector("#fasl_q");
+  const elStatus = panel.querySelector("#fasl_status");
+  const elList = panel.querySelector("#fasl_list");
+
+  const renderItems = (items) => {
+    if (!items?.length) {
+      elList.innerHTML = `<p class="muted">No submissions yet.</p>`;
+      return;
+    }
+    elList.innerHTML = items
+      .map((x) => {
+        const when = x.created_at
+          ? new Date(x.created_at).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })
+          : "";
+        const preview = escapeHtml(String(x.question || "").slice(0, 180));
+        return `
+          <div class="diary-item" style="text-align:left;">
+            <div class="diary-item-top">
+              <span class="diary-date">${escapeHtml(when)}</span>
+              <span class="diary-title">${escapeHtml(x.topic || "General")}</span>
+            </div>
+            <div class="diary-preview muted">${preview}${String(x.question || "").length > 180 ? "…" : ""}</div>
+          </div>
+        `;
+      })
+      .join("");
+  };
+
+  async function loadMine() {
+    elStatus.textContent = "Loading...";
+    const { data, error } = await supabase
+      .from("fasl_questions")
+      .select("id,user_id,user_name,topic,question,created_at")
+      .eq("user_id", session.user.id)
+      .order("created_at", { ascending: false })
+      .limit(25);
+
+    if (error) {
+      elStatus.textContent = `Supabase error: ${error.message}`;
+      renderItems([]);
+      return;
+    }
+
+    elStatus.textContent = "";
+    renderItems(data || []);
+  }
+
+  panel.querySelector("#fasl_send").addEventListener("click", async () => {
+    const topic = String(elTopic.value || "General");
+    const question = String(elQ.value || "").trim();
+
+    if (question.length < 15) {
+      elStatus.textContent = "Write a bit more detail so it can be answered properly.";
+      return;
+    }
+
+    elStatus.textContent = "Sending...";
+
+    const payload = {
+      user_id: session.user.id,
+      user_name: myName,
+      topic,
+      question
+    };
+
+    const { error } = await supabase.from("fasl_questions").insert(payload);
+    if (error) {
+      elStatus.textContent = `Supabase error: ${error.message}`;
+      return;
+    }
+
+    elQ.value = "";
+    elStatus.textContent = "Sent.";
+    await loadMine();
+  });
+
+  panel.querySelector("#fasl_refresh").addEventListener("click", loadMine);
+
+  await loadMine();
+}
+
+/* =======================
    Zakat Calculator
 ======================= */
 function formatMoney(n, currency) {
@@ -1913,7 +2491,6 @@ function saveDiary(entries) {
   localStorage.setItem(DIARY_KEY, JSON.stringify(entries));
 }
 
-/* FIX: return only items, no nested .diary-list wrapper */
 function renderDiaryList(entries) {
   if (!entries.length) return `<p class="muted">Write something small today.</p>`;
 
@@ -2141,7 +2718,7 @@ function renderDiary() {
         text: elText.value || "",
         updatedAt: Date.now()
       };
-      saveDraft(d);
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(d));
       setDraftUI("saved", d.updatedAt);
     }, 600);
   }
@@ -2250,7 +2827,6 @@ function renderDiary() {
     openModal(entry);
   });
 
-  /* FIX: delete confirmation */
   elDelete.addEventListener("click", () => {
     if (!openedId) return;
 
@@ -2957,6 +3533,7 @@ async function renderRoute(route) {
   if (r === "faq") return renderFAQ();
   if (r === "auth") return renderAuth();
   if (r === "learning") return renderLearning();
+  if (r === "fasl") return renderFasl();
 
   return renderWelcome();
 }

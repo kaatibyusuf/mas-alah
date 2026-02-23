@@ -1,7 +1,7 @@
 /* =========================================================
-   Mas'alah main.css
-   Clean + deduplicated. Works with the App.js I gave you.
-   Includes: nav dropdown, welcome layout, quiz, calendar,
+   Mas'alah main.css (Updated)
+   Clean + deduplicated. Works with your App.js structure.
+   Includes: nav dropdown, welcome, quiz, calendar,
    zakat, diary, lock, toast, transitions, learning UI.
 ========================================================= */
 
@@ -40,7 +40,7 @@
 }
 
 /* =========================================================
-   Base
+   Base + quality-of-life
 ========================================================= */
 *{ box-sizing:border-box; }
 html, body{ background: var(--bg); color: var(--text); width:100%; overflow-x:hidden; }
@@ -53,6 +53,8 @@ body{
 a{ color: inherit; text-decoration: none; }
 img{ max-width:100%; display:block; }
 button, input, select, textarea{ font: inherit; }
+button{ -webkit-tap-highlight-color: transparent; }
+::selection{ background: rgba(255,187,0,.25); }
 
 .muted{ color: var(--muted); }
 .small{ font-size: 12px; line-height: 1.5; }
@@ -67,6 +69,20 @@ h2,h3{ font-weight: 900; margin: 0; }
 }
 
 .grid{ display:grid; gap:12px; }
+
+/* Scrollbar (subtle) */
+*{
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,.14) transparent;
+}
+*::-webkit-scrollbar{ width: 10px; height: 10px; }
+*::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,.14);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  border-radius: 999px;
+}
+*::-webkit-scrollbar-track{ background: transparent; }
 
 /* =========================================================
    Container
@@ -94,7 +110,6 @@ main.wrap{ padding-block: clamp(14px, 2.5vw, 26px); }
   border-radius: var(--radius2);
   padding: 16px;
 }
-
 .card-head h2{ margin:0; }
 .card-head p{ margin:8px 0 0; line-height:1.6; }
 
@@ -316,9 +331,7 @@ input[type="password"]:focus{
 .textarea{
   width:100%;
   border-radius: 12px;
-  padding: 10px 12px;
   border: 1px solid rgba(255,255,255,0.10);
-  background: rgba(0,0,0,0.25);
   color: rgba(255,255,255,0.92);
   outline: none;
   resize: vertical;
@@ -350,7 +363,7 @@ input[type="password"]:focus{
   border-radius: 999px;
   cursor:pointer;
   font-weight: 850;
-  transition: transform .12s ease, background .12s ease, border-color .12s ease;
+  transition: transform .12s ease, background .12s ease, border-color .12s ease, filter .12s ease;
 }
 
 .btn:hover, .optionBtn:hover{ background: rgba(255,255,255,.06); }
@@ -360,7 +373,13 @@ input[type="password"]:focus{
 .primary:focus-visible,
 .optionBtn:focus-visible,
 .footer-link:focus-visible,
-.nav-toggle:focus-visible{
+.nav-toggle:focus-visible,
+.seg-btn:focus-visible,
+.calendar-day:focus-visible,
+.wa-iconbtn:focus-visible,
+.wa-send:focus-visible,
+.wa-room:focus-visible,
+.diary-item:focus-visible{
   outline: 2px solid rgba(255,187,0,.55);
   outline-offset: 2px;
 }
@@ -880,11 +899,11 @@ input[type="password"]:focus{
   font-weight: 600;
   border: 0;
   cursor: pointer;
+  transition: transform .12s ease, background .12s ease, border-color .12s ease;
 }
-.calendar-day:focus-visible{
-  outline: 2px solid rgba(255,187,0,.45);
-  outline-offset: 2px;
-}
+.calendar-day:hover{ background: rgba(255,255,255,.06); }
+.calendar-day:active{ transform: translateY(1px); }
+
 .calendar-day.white-day{
   font-weight: 900;
   color: var(--gold);
@@ -954,7 +973,10 @@ input[type="password"]:focus{
   background: rgba(0,0,0,0.20);
   color: rgba(255,255,255,0.85);
   cursor:pointer;
+  transition: transform .12s ease, background .12s ease, border-color .12s ease;
 }
+.seg-btn:hover{ background: rgba(255,255,255,.04); }
+.seg-btn:active{ transform: translateY(1px); }
 .seg-btn.is-on{
   border-color: rgba(255,187,0,0.60);
   color: var(--gold);
@@ -972,6 +994,7 @@ input[type="password"]:focus{
   display:flex;
   gap: 10px;
   margin-top: 8px;
+  flex-wrap: wrap;
 }
 
 .zakat-result{
@@ -1117,11 +1140,13 @@ input[type="password"]:focus{
   background: rgba(0,0,0,.18);
   color: var(--text);
   cursor:pointer;
+  transition: background .12s ease, border-color .12s ease, transform .12s ease;
 }
 .diary-item:hover{
   border-color: rgba(255,187,0,.35);
   background: rgba(255,255,255,.04);
 }
+.diary-item:active{ transform: translateY(1px); }
 
 .diary-item-top{
   display:flex;
@@ -1283,6 +1308,7 @@ input[type="password"]:focus{
   .wa{
     grid-template-columns: 1fr;
     height: calc(100vh - 120px);
+    min-height: 520px;
   }
 }
 
@@ -1319,11 +1345,13 @@ input[type="password"]:focus{
   color: var(--text);
   font-weight: 850;
   cursor:pointer;
+  transition: background .12s ease, border-color .12s ease, transform .12s ease;
 }
 .wa-room:hover{
   border-color: rgba(255,187,0,.35);
   background: rgba(255,255,255,.04);
 }
+.wa-room:active{ transform: translateY(1px); }
 
 .wa-iconbtn{
   border: 1px solid rgba(255,255,255,.10);
@@ -1337,14 +1365,30 @@ input[type="password"]:focus{
   justify-content: center;
   cursor:pointer;
   font-weight: 900;
+  transition: background .12s ease, border-color .12s ease, transform .12s ease;
 }
+.wa-iconbtn:hover{ background: rgba(255,255,255,.05); border-color: rgba(255,255,255,.16); }
 .wa-iconbtn:active{ transform: translateY(1px); }
 
-/* Mobile behavior: rooms slide-over drawer */
+/* Mobile behavior: rooms slide-over drawer + backdrop */
+.wa-backdrop{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s ease;
+  z-index: 9998;
+}
+.wa-backdrop[data-open="true"]{
+  opacity: 1;
+  pointer-events: auto;
+}
+
 @media (max-width: 900px){
   .wa-rooms{
     position: fixed;
-    inset: 0;
+    inset: 0 auto 0 0;
     width: min(420px, 92vw);
     height: 100vh;
     border-radius: 0;
@@ -1476,12 +1520,49 @@ input[type="password"]:focus{
   color: #141414;
   font-weight: 950;
   cursor:pointer;
+  transition: transform .12s ease, filter .12s ease;
 }
+.wa-send:hover{ filter: brightness(1.03); }
 .wa-send:active{ transform: translateY(1px); }
 
 .wa-attach{ border-radius: 999px; padding: 10px 12px; }
 
+/* Status strip under input */
 .wa-status{
   padding: 8px 12px 12px;
   min-height: 22px;
+  font-size: 12px;
+  color: rgba(255,255,255,.65);
 }
+.wa-status.is-warn{ color: rgba(255,187,0,.92); }
+.wa-status.is-good{ color: rgba(255,255,255,.90); }
+.wa-status.is-bad{ color: rgba(255,120,140,.92); }
+/* Fasl calendar alias styles */
+.fasl-grid{
+  margin-top: 14px;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+
+.fasl-dow{
+  padding: 10px 0;
+  text-align: center;
+  border-radius: 8px;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.fasl-day{
+  padding: 10px 0;
+  text-align: center;
+  border-radius: 8px;
+  background: rgba(255,255,255,.04);
+  color: var(--text);
+  font-weight: 600;
+  border: 0;
+  cursor: pointer;
+}
+
+.fasl-day:hover{ background: rgba(255,255,255,.06); }
+.fasl-day:active{ transform: translateY(1px); }
