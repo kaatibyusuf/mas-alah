@@ -1,3 +1,9 @@
+
+import { HAYD_PACK } from "./packs/hayd.js";
+import { ISTIHADA_PACK } from "./packs/istihada.js";
+import { NIFAS_PACK } from "./packs/nifas.js";
+import { FOUNDATIONS_PACK } from "./packs/foundations.js";
+
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
 /* =======================
@@ -6,6 +12,7 @@ import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 const SUPABASE_URL = "https://kjggfschpuqfggyasnux.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_wkNt08rBEiLv70BpmMbKiA_GVGMjTO7";
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+let _supabase = null;
 
 /* =======================
    App root
@@ -1733,8 +1740,9 @@ function renderFAQ() {
 }
 
 /* =======================
-   Fasl (women’s fiqh + tracking)
+   Fasl (women’s fiqh + tracking + library)
 ======================= */
+
 function loadFasl() {
   try {
     const raw = localStorage.getItem(FASL_KEY);
@@ -1751,8 +1759,15 @@ function loadFasl() {
     return { lastPeriodStart: "", cycleLength: 28, periodLength: 5, notes: "" };
   }
 }
+
 function saveFasl(data) {
   localStorage.setItem(FASL_KEY, JSON.stringify(data));
+}
+
+function clampNum(n, min, max, fallback) {
+  const x = Number(n);
+  if (!Number.isFinite(x)) return fallback;
+  return Math.max(min, Math.min(max, x));
 }
 
 function addDays(dateISO, days) {
@@ -1763,24 +1778,20 @@ function addDays(dateISO, days) {
   const day = String(d.getDate()).padStart(2, "0");
   return `${y}-${m}-${day}`;
 }
+
 function fmtISO(iso) {
   if (!iso) return "-";
-  try {
-    return new Date(iso + "T00:00:00").toLocaleDateString(undefined, {
-      weekday: "short",
-      year: "numeric",
-      month: "short",
-      day: "2-digit"
-    });
-  } catch {
-    return iso;
-  }
+  return new Date(iso + "T00:00:00").toLocaleDateString(undefined, {
+    weekday: "short",
+    year: "numeric",
+    month: "short",
+    day: "2-digit"
+  });
 }
-function clampNum(n, min, max, fallback) {
-  const x = Number(n);
-  if (!Number.isFinite(x)) return fallback;
-  return Math.max(min, Math.min(max, x));
-}
+
+/* =======================
+   Main Render
+======================= */
 
 async function renderFasl() {
   state.currentRoute = "fasl";
@@ -1790,7 +1801,7 @@ async function renderFasl() {
       <div class="card-head">
         <h2 style="margin:0;">Fasl</h2>
         <p class="muted" style="margin:8px 0 0 0; line-height:1.6;">
-          A private space for women’s rulings (ḥayḍ, istiḥāḍah, nifās) and a calm cycle tracker.
+          Women’s blood rulings with a private cycle tracker.
           This does not replace medical care. If symptoms are severe or unusual, speak to a clinician.
         </p>
       </div>
@@ -1798,7 +1809,7 @@ async function renderFasl() {
       <div class="segmented" role="group" aria-label="Fasl tabs" style="margin-top:12px;">
         <button class="seg-btn is-on" type="button" data-fasl-tab="learn">Learn</button>
         <button class="seg-btn" type="button" data-fasl-tab="track">Track</button>
-        <button class="seg-btn" type="button" data-fasl-tab="ask">Ask</button>
+        <button class="seg-btn" type="button" data-fasl-tab="library">Library</button>
       </div>
 
       <div id="fasl_panel" style="margin-top:12px;"></div>
@@ -1808,162 +1819,44 @@ async function renderFasl() {
   const panel = app.querySelector("#fasl_panel");
   const tabBtns = Array.from(app.querySelectorAll("[data-fasl-tab]"));
 
-  const setTab = (name) => {
+  function setTab(name) {
     tabBtns.forEach((b) => b.classList.toggle("is-on", b.dataset.faslTab === name));
+
     if (name === "learn") renderFaslLearn(panel);
-    if (name === "track") renderFaslTrack(panel);
-    if (name === "ask") renderFaslAsk(panel);
-  };
+    else if (name === "track") renderFaslTrack(panel);
+    else if (name === "library") renderFaslLibrary(panel);
+    else renderFaslLearn(panel);
+  }
 
   tabBtns.forEach((b) => b.addEventListener("click", () => setTab(b.dataset.faslTab)));
 
   setTab("learn");
 }
 
+/* =======================
+   Learn
+======================= */
+
 function renderFaslLearn(panel) {
   panel.innerHTML = `
-    <div class="grid" style="gap:12px;">
-      <div class="card" style="box-shadow:none;">
-        <h3 style="margin-top:0;">What Fasl covers</h3>
-        <ul class="muted" style="line-height:1.7; margin-top:8px;">
-          <li><strong>Ḥayḍ</strong>: the natural monthly blood of women.</li>
-          <li><strong>Istiḥāḍah</strong>: non-menstrual bleeding, with different rulings.</li>
-          <li><strong>Nifās</strong>: post-natal bleeding.</li>
-          <li>Practical: purity, prayer, fasting, Qur’an recitation, marital relations, and common edge cases.</li>
-        </ul>
-      </div>
-
-      <div class="card" style="box-shadow:none;">
-        <h3 style="margin-top:0;">Quick self-check before you ask</h3>
-        <ol class="muted" style="line-height:1.7; margin-top:8px;">
-          <li>What exactly did you see. Color, consistency, days, gaps.</li>
-          <li>How many days is your usual ḥayḍ. How many days is your usual ṭuhr.</li>
-          <li>Did this happen near your expected period or completely outside it.</li>
-          <li>Any medication, contraception, postpartum, or health changes.</li>
-        </ol>
-        <p class="muted" style="margin-top:10px;">
-          Tip: In Ask, paste a clean timeline. Day 1, Day 2, Day 3. That is what makes rulings easy.
-        </p>
-      </div>
-
-      <div class="card" style="box-shadow:none;">
-        <h3 style="margin-top:0;">Mini templates to copy</h3>
-        <div class="muted" style="line-height:1.7; margin-top:8px;">
-          <p><strong>Template A (simple):</strong><br/>
-          “My usual period is __ days. Usual clean days are __. This month I saw blood on __, stopped on __, then saw spotting on __.”</p>
-
-          <p><strong>Template B (timeline):</strong><br/>
-          Day 1: __<br/>
-          Day 2: __<br/>
-          Day 3: __<br/>
-          Clean: __<br/>
-          Spotting: __</p>
-        </div>
-      </div>
+    <div class="card" style="box-shadow:none;">
+      <h3>Foundations</h3>
+      <p class="muted" style="line-height:1.7;">
+        Ḥayḍ is natural menstrual blood.  
+        Istiḥāḍah is irregular bleeding.  
+        Nifās is post-natal bleeding.  
+        Each has distinct rulings for prayer, fasting, ghusl, and marital relations.
+      </p>
+      <p class="muted" style="margin-top:10px;">
+        Study principles first. Then review cases in the Library tab.
+      </p>
     </div>
   `;
 }
 
-function monthLabel(d) {
-  return d.toLocaleDateString(undefined, { month: "long", year: "numeric" });
-}
-
-/* builds a Monday-first month grid (Mon..Sun) */
-function buildMonthCells(viewDate) {
-  const first = startOfMonth(viewDate);
-  const last = endOfMonth(viewDate);
-
-  const firstDow = first.getDay(); // 0 Sun..6 Sat
-  const mondayFirstIndex = (firstDow + 6) % 7; // 0 Mon..6 Sun
-
-  const cells = [];
-
-  for (let i = 0; i < mondayFirstIndex; i++) {
-    cells.push({ iso: null, day: "", isOutside: true });
-  }
-
-  for (let d = 1; d <= last.getDate(); d++) {
-    const dt = new Date(viewDate.getFullYear(), viewDate.getMonth(), d);
-    cells.push({ iso: isoFromDate(dt), day: String(d), isOutside: false });
-  }
-
-  while (cells.length % 7 !== 0) {
-    cells.push({ iso: null, day: "", isOutside: true });
-  }
-
-  return cells;
-}
-
-function renderCycleCalendarGrid(containerEl, model, viewDate) {
-  const cells = buildMonthCells(viewDate);
-  const today = todayISO();
-
-  const daysHeader = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-    .map((x) => `<div class="fasl-dow muted">${x}</div>`)
-    .join("");
-
-  const dayCells = cells
-    .map((c) => {
-      if (!c.iso) return `<div class="fasl-day is-empty"></div>`;
-
-      const isToday = sameISO(c.iso, today);
-      const isLoggedStart = model.last && sameISO(c.iso, model.last);
-
-      const isPeriod = model.periodStart && inRangeISO(c.iso, model.periodStart, model.periodEnd);
-      const isFertile = model.fertileStart && inRangeISO(c.iso, model.fertileStart, model.fertileEnd);
-      const isOvu = model.ovulation && sameISO(c.iso, model.ovulation);
-
-      const classes = [
-        "fasl-day",
-        isToday ? "is-today" : "",
-        isLoggedStart ? "is-start" : "",
-        isPeriod ? "is-period" : "",
-        isFertile ? "is-fertile" : "",
-        isOvu ? "is-ovu" : ""
-      ]
-        .filter(Boolean)
-        .join(" ");
-
-      let dot = "";
-      if (isOvu) dot = `<span class="fasl-dot">●</span>`;
-      else if (isPeriod) dot = `<span class="fasl-dot">●</span>`;
-      else if (isFertile) dot = `<span class="fasl-dot">●</span>`;
-
-      return `
-        <button type="button" class="${classes}" data-fasl-iso="${escapeHtml(c.iso)}" aria-label="${escapeHtml(c.iso)}">
-          <span class="fasl-num">${escapeHtml(c.day)}</span>
-          ${dot}
-        </button>
-      `;
-    })
-    .join("");
-
-  containerEl.innerHTML = `
-    <div class="fasl-cal">
-      <div class="fasl-cal-head">
-        <strong>${escapeHtml(monthLabel(viewDate))}</strong>
-        <div class="fasl-cal-actions">
-          <button class="btn" type="button" id="fasl_prev_m">Prev</button>
-          <button class="btn" type="button" id="fasl_next_m">Next</button>
-        </div>
-      </div>
-
-      <div class="fasl-cal-legend">
-        <span class="fasl-leg"><span class="fasl-swatch period"></span> Period</span>
-        <span class="fasl-leg"><span class="fasl-swatch fertile"></span> Fertile</span>
-        <span class="fasl-leg"><span class="fasl-swatch ovu"></span> Ovulation</span>
-        <span class="fasl-leg"><span class="fasl-swatch today"></span> Today</span>
-      </div>
-
-      <div class="fasl-grid">
-        ${daysHeader}
-        ${dayCells}
-      </div>
-
-      <div class="muted small" id="fasl_day_info" style="margin-top:10px;"></div>
-    </div>
-  `;
-}
+/* =======================
+   Tracker
+======================= */
 
 function buildCycleModel(fasl) {
   const last = fasl.lastPeriodStart || "";
@@ -1971,317 +1864,311 @@ function buildCycleModel(fasl) {
   const periodLength = clampNum(fasl.periodLength, 2, 10, 5);
 
   if (!last) {
-    return {
-      last,
-      cycleLength,
-      periodLength,
-      periodStart: null,
-      periodEnd: null,
-      ovulation: null,
-      fertileStart: null,
-      fertileEnd: null,
-      nextPeriod: null
-    };
+    return { nextPeriod: null, fertileStart: null, fertileEnd: null };
   }
 
-  const periodStart = last;
-  const periodEnd = addDays(last, periodLength - 1);
   const nextPeriod = addDays(last, cycleLength);
+  const ovulation = addDays(last, cycleLength - 14);
+  const fertileStart = addDays(ovulation, -5);
+  const fertileEnd = addDays(ovulation, 1);
 
-  const ovulationISO = addDays(last, cycleLength - 14);
-  const fertileStart = addDays(ovulationISO, -5);
-  const fertileEnd = addDays(ovulationISO, 1);
-
-  return {
-    last,
-    cycleLength,
-    periodLength,
-    periodStart,
-    periodEnd,
-    ovulation: ovulationISO,
-    fertileStart,
-    fertileEnd,
-    nextPeriod
-  };
+  return { nextPeriod, fertileStart, fertileEnd };
 }
 
-/* FIXED: renderFaslTrack string is properly closed, then JS continues */
 function renderFaslTrack(panel) {
   const d = loadFasl();
-
-  const cycleLength = clampNum(d.cycleLength, 18, 45, 28);
-  const periodLength = clampNum(d.periodLength, 2, 10, 5);
-  const last = d.lastPeriodStart || "";
-
   const model = buildCycleModel(d);
 
   panel.innerHTML = `
-    <div class="grid" style="gap:12px;">
-      <div class="card" style="box-shadow:none;">
-        <h3 style="margin-top:0;">Your cycle (private)</h3>
+    <div class="card" style="box-shadow:none;">
+      <h3>Your Cycle (Private)</h3>
 
-        <div class="grid" style="margin-top:12px;">
-          <label class="field">
-            <span>Last period start date</span>
-            <input id="fasl_last" type="date" value="${escapeHtml(last)}" />
-          </label>
+      <label class="field">
+        <span>Last period start</span>
+        <input id="fasl_last" type="date" value="${d.lastPeriodStart || ""}" />
+      </label>
 
-          <label class="field">
-            <span>Cycle length (days)</span>
-            <input id="fasl_cycle" inputmode="numeric" placeholder="28" value="${escapeHtml(cycleLength)}" />
-            <p class="help muted">Typical range is 21–35. We allow 18–45.</p>
-          </label>
+      <label class="field">
+        <span>Cycle length</span>
+        <input id="fasl_cycle" value="${d.cycleLength}" />
+      </label>
 
-          <label class="field">
-            <span>Period length (days)</span>
-            <input id="fasl_period" inputmode="numeric" placeholder="5" value="${escapeHtml(periodLength)}" />
-          </label>
+      <label class="field">
+        <span>Period length</span>
+        <input id="fasl_period" value="${d.periodLength}" />
+      </label>
 
-          <label class="field">
-            <span>Notes (optional)</span>
-            <textarea id="fasl_notes" rows="3" placeholder="Symptoms, spotting, meds, anything relevant">${escapeHtml(
-              d.notes || ""
-            )}</textarea>
-          </label>
-
-          <div style="display:flex; gap:10px; flex-wrap:wrap;">
-            <button id="fasl_save" class="primary" type="button">Save</button>
-            <button id="fasl_reset" class="btn" type="button">Reset</button>
-          </div>
-        </div>
+      <div style="margin-top:12px;">
+        <button id="fasl_save" class="primary">Save</button>
       </div>
 
-      <div class="card" style="box-shadow:none;">
-        <h3 style="margin-top:0;">Calendar</h3>
-        <div id="fasl_calendar_mount"></div>
-
-        <div class="grid" style="gap:10px; margin-top:10px;">
-          <div class="card" style="box-shadow:none;">
-            <p class="muted" style="margin:0;">Next expected period</p>
-            <div style="font-size:22px; font-weight:950; margin-top:6px;">
-              ${escapeHtml(model.nextPeriod ? fmtISO(model.nextPeriod) : "-")}
-            </div>
-          </div>
-
-          <div class="card" style="box-shadow:none;">
-            <p class="muted" style="margin:0;">Estimated fertile window</p>
-            <div style="font-size:18px; font-weight:850; margin-top:6px;">
-              ${escapeHtml(model.fertileStart ? fmtISO(model.fertileStart) : "-")}
-              to
-              ${escapeHtml(model.fertileEnd ? fmtISO(model.fertileEnd) : "-")}
-            </div>
-            <p class="muted small" style="margin-top:8px;">
-              Calendar estimates only.
-            </p>
-          </div>
-        </div>
+      <div style="margin-top:20px;">
+        <p><strong>Next expected period:</strong> ${fmtISO(model.nextPeriod)}</p>
+        <p><strong>Fertile window:</strong> ${fmtISO(model.fertileStart)} to ${fmtISO(model.fertileEnd)}</p>
       </div>
     </div>
   `;
-
-  const elLast = panel.querySelector("#fasl_last");
-  const elCycle = panel.querySelector("#fasl_cycle");
-  const elPeriod = panel.querySelector("#fasl_period");
-  const elNotes = panel.querySelector("#fasl_notes");
-
-  const digitsOnly = (v) => String(v || "").replace(/[^\d]/g, "");
-
-  elCycle.addEventListener("input", () => (elCycle.value = digitsOnly(elCycle.value).slice(0, 2)));
-  elPeriod.addEventListener("input", () => (elPeriod.value = digitsOnly(elPeriod.value).slice(0, 2)));
-
-  const calMount = panel.querySelector("#fasl_calendar_mount");
-  let viewDate = new Date();
-
-  const rerenderCal = () => {
-    const nextModel = buildCycleModel(loadFasl());
-    renderCycleCalendarGrid(calMount, nextModel, viewDate);
-
-    const btnPrev = calMount.querySelector("#fasl_prev_m");
-    const btnNext = calMount.querySelector("#fasl_next_m");
-    const info = calMount.querySelector("#fasl_day_info");
-
-    btnPrev?.addEventListener("click", () => {
-      viewDate = new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1);
-      rerenderCal();
-    });
-    btnNext?.addEventListener("click", () => {
-      viewDate = new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1);
-      rerenderCal();
-    });
-
-    calMount.querySelectorAll("[data-fasl-iso]").forEach((b) => {
-      b.addEventListener("click", () => {
-        const iso = b.getAttribute("data-fasl-iso");
-        if (!iso) return;
-        info.textContent = `Selected: ${iso}`;
-      });
-    });
-  };
-
-  rerenderCal();
 
   panel.querySelector("#fasl_save").addEventListener("click", () => {
-    const next = {
-      lastPeriodStart: (elLast.value || "").trim(),
-      cycleLength: clampNum(elCycle.value, 18, 45, 28),
-      periodLength: clampNum(elPeriod.value, 2, 10, 5),
-      notes: (elNotes.value || "").trim()
-    };
-    saveFasl(next);
-    showToast("Saved privately.");
-    renderFaslTrack(panel);
-  });
-
-  panel.querySelector("#fasl_reset").addEventListener("click", () => {
-    localStorage.removeItem(FASL_KEY);
-    showToast("Reset.");
+    saveFasl({
+      lastPeriodStart: panel.querySelector("#fasl_last").value,
+      cycleLength: clampNum(panel.querySelector("#fasl_cycle").value, 18, 45, 28),
+      periodLength: clampNum(panel.querySelector("#fasl_period").value, 2, 10, 5),
+      notes: ""
+    });
+    showToast("Saved.");
     renderFaslTrack(panel);
   });
 }
 
-async function renderFaslAsk(panel) {
-  const session = await requireAuthOrRoute("auth");
-  if (!session) {
-    panel.innerHTML = `
-      <div class="card" style="box-shadow:none;">
-        <h3 style="margin-top:0;">Ask a question</h3>
-        <p class="muted" style="line-height:1.7;">
-          Please log in to submit questions. This keeps your questions tied to your account and reduces spam.
-        </p>
-        <button class="primary" type="button" data-goto="auth">Go to Login</button>
+/* =======================
+   Library
+======================= */
+
+// Library renderer (offline content packs, serious archive UI)
+
+
+
+function flattenPack(pack, packKey) {
+  const out = [];
+  let n = 0;
+
+  (pack.sections || []).forEach((sec) => {
+    (sec.cases || []).forEach((c) => {
+      n += 1;
+      const title = c[0] || "";
+      const answer = c[1] || "";
+      out.push({
+        id: `${packKey}_${n}`,
+        pack: packKey,
+        section: sec.heading || "",
+        no: n,
+        title,
+        answer
+      });
+    });
+  });
+
+  return out;
+}
+
+function packMeta() {
+  const packs = [
+    { key: "hayd", name: "Ḥayḍ", desc: "Menses rulings and patterns", pack: HAYD_PACK },
+    { key: "istihada", name: "Istiḥāḍah", desc: "Non-menstrual bleeding rulings", pack: ISTIHADA_PACK },
+    { key: "nifas", name: "Nifās", desc: "Postpartum bleeding rulings", pack: NIFAS_PACK }
+    // { key: "foundations", name: "Foundations", desc: "Definitions and max/min rules", pack: FOUNDATIONS_PACK }
+  ];
+
+  return packs.map((p) => {
+    const items = flattenPack(p.pack, p.key);
+    return { ...p, count: items.length, items };
+  });
+}
+
+
+function renderFatwaCard(x) {
+  const title = escapeHtml(x.title);
+  const answer = escapeHtml(x.answer);
+  const section = escapeHtml(x.section);
+
+  return `
+    <article class="fatwa">
+      <div class="fatwa-top">
+        <div class="fatwa-no">
+          <span class="khutut">⟡</span>
+          <span>Case ${escapeHtml(x.no)}</span>
+        </div>
+        <span class="fatwa-tag">${section || "General"}</span>
       </div>
-    `;
-    bindGotoButtons();
-    return;
-  }
 
-  const myName = displayNameFromSession(session);
+      <h4 class="fatwa-title">${title}</h4>
 
+      <div class="fatwa-body">
+        <div>
+          <div class="fatwa-label">Jawāb</div>
+          <p class="fatwa-text">${answer}</p>
+        </div>
+
+        <details>
+          <summary>
+            Show “Mas’alah” header
+            <span class="muted small">tap</span>
+          </summary>
+          <div style="margin-top:10px;">
+            <div class="fatwa-label">Mas’alah</div>
+            <p class="fatwa-text">${title}</p>
+          </div>
+        </details>
+      </div>
+    </article>
+  `;
+}
+function renderFaslLibrary(panel) {
   panel.innerHTML = `
-    <div class="grid" style="gap:12px;">
-      <div class="card" style="box-shadow:none;">
-        <h3 style="margin-top:0;">Submit a question</h3>
-        <p class="muted" style="margin-top:6px; line-height:1.7;">
-          Keep it structured. Include your usual habit, the timeline, and what changed.
-        </p>
+    <div class="card" style="box-shadow:none;">
+      <h3 style="margin-top:0;">Library</h3>
+      <p class="muted" style="line-height:1.7;">
+        Your offline fiqh packs will load here.
+      </p>
+    </div>
+  `;
+}
+export async function renderLibrary() {
+  state.currentRoute = "library";
 
-        <div class="grid" style="margin-top:12px;">
-          <label class="field">
-            <span>Topic</span>
-            <select id="fasl_topic">
-              <option value="Hayd">Ḥayḍ (menses)</option>
-              <option value="Istihada">Istiḥāḍah</option>
-              <option value="Nifas">Nifās (post-natal)</option>
-              <option value="General">General</option>
-            </select>
-          </label>
+  const packs = packMeta();
+  const total = packs.reduce((a, p) => a + p.count, 0);
 
-          <label class="field">
-            <span>Your question</span>
-            <textarea id="fasl_q" rows="6" placeholder="Write a clear timeline..."></textarea>
-          </label>
-
-          <div style="display:flex; gap:10px; flex-wrap:wrap;">
-            <button id="fasl_send" class="primary" type="button">Send</button>
-            <button id="fasl_refresh" class="btn" type="button">Refresh</button>
+  app.innerHTML = `
+    <section class="library">
+      <div class="library-hero">
+        <div class="library-hero-top">
+          <div>
+            <h2 class="library-title">Fasl Library</h2>
+            <p class="library-sub">
+              A curated archive of women’s fiqh cases in a calm, classical format. Select a shelf, search within it, then read the rulings as you would in a fiqh circle.
+            </p>
           </div>
 
-          <p id="fasl_status" class="muted" style="margin:0;"></p>
+          <div class="library-badges">
+            <span class="lib-badge">Total cases: <strong>${escapeHtml(total)}</strong></span>
+            <span class="lib-badge">Mode: <strong>Offline</strong></span>
+            <span class="lib-badge">Madhhab: <strong>Maliki</strong></span>
+          </div>
+        </div>
+
+        <div class="library-controls">
+          <div class="library-search">
+            <input id="lib_search" type="text" placeholder="Search titles and rulings..." autocomplete="off" />
+          </div>
+
+          <div class="library-filters" id="lib_chips">
+            ${packs
+              .map(
+                (p, i) => `
+                <button class="lib-chip ${i === 0 ? "is-on" : ""}" type="button" data-pack="${escapeHtml(p.key)}">
+                  ${escapeHtml(p.name)} <span class="muted small">(${escapeHtml(p.count)})</span>
+                </button>
+              `
+              )
+              .join("")}
+          </div>
         </div>
       </div>
 
-      <div class="card" style="box-shadow:none;">
-        <h3 style="margin-top:0;">Recent questions (yours)</h3>
-        <div id="fasl_list" class="diary-list"></div>
-        <p class="muted small" style="margin-top:10px;">
-          This list requires a Supabase table. If it is not set up yet, you will see an error below.
-        </p>
+      <div class="library-grid">
+        <aside class="topic-shelf">
+          <div class="topic-shelf-head">
+            <div class="topic-shelf-title">Shelves</div>
+            <span class="muted small">Choose a pack</span>
+          </div>
+          <div class="topic-list" id="topic_list">
+            ${packs
+              .map(
+                (p, i) => `
+                <button class="topic-item" type="button" data-pack="${escapeHtml(p.key)}">
+                  <div class="topic-item-top">
+                    <span class="topic-name">${escapeHtml(p.name)}</span>
+                    <span class="topic-meta">${escapeHtml(p.count)} cases</span>
+                  </div>
+                  <div class="topic-desc">${escapeHtml(p.desc)}</div>
+                </button>
+              `
+              )
+              .join("")}
+          </div>
+        </aside>
+
+        <section class="archive-panel">
+          <div class="archive-head">
+            <div class="archive-title" id="archive_title">Ḥayḍ</div>
+            <div class="archive-meta">
+              <span class="pill" id="archive_count">0</span>
+              <button class="btn mini" type="button" id="archive_top">Top</button>
+            </div>
+          </div>
+
+          <div class="archive-scroll" id="archive_scroll"></div>
+        </section>
       </div>
-    </div>
+    </section>
   `;
 
-  const elTopic = panel.querySelector("#fasl_topic");
-  const elQ = panel.querySelector("#fasl_q");
-  const elStatus = panel.querySelector("#fasl_status");
-  const elList = panel.querySelector("#fasl_list");
+  const elSearch = app.querySelector("#lib_search");
+  const elChips = app.querySelector("#lib_chips");
+  const elTopicList = app.querySelector("#topic_list");
+  const elScroll = app.querySelector("#archive_scroll");
+  const elTitle = app.querySelector("#archive_title");
+  const elCount = app.querySelector("#archive_count");
+  const btnTop = app.querySelector("#archive_top");
 
-  const renderItems = (items) => {
-    if (!items?.length) {
-      elList.innerHTML = `<p class="muted">No submissions yet.</p>`;
-      return;
-    }
-    elList.innerHTML = items
-      .map((x) => {
-        const when = x.created_at
-          ? new Date(x.created_at).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })
-          : "";
-        const preview = escapeHtml(String(x.question || "").slice(0, 180));
-        return `
-          <div class="diary-item" style="text-align:left;">
-            <div class="diary-item-top">
-              <span class="diary-date">${escapeHtml(when)}</span>
-              <span class="diary-title">${escapeHtml(x.topic || "General")}</span>
-            </div>
-            <div class="diary-preview muted">${preview}${String(x.question || "").length > 180 ? "…" : ""}</div>
-          </div>
-        `;
-      })
-      .join("");
-  };
+  let currentPackKey = packs[0]?.key || "hayd";
+  let query = "";
 
-  async function loadMine() {
-    elStatus.textContent = "Loading...";
-    const { data, error } = await supabase
-      .from("fasl_questions")
-      .select("id,user_id,user_name,topic,question,created_at")
-      .eq("user_id", session.user.id)
-      .order("created_at", { ascending: false })
-      .limit(25);
-
-    if (error) {
-      elStatus.textContent = `Supabase error: ${error.message}`;
-      renderItems([]);
-      return;
-    }
-
-    elStatus.textContent = "";
-    renderItems(data || []);
+  function getCurrentPack() {
+    return packs.find((p) => p.key === currentPackKey) || packs[0];
   }
 
-  panel.querySelector("#fasl_send").addEventListener("click", async () => {
-    const topic = String(elTopic.value || "General");
-    const question = String(elQ.value || "").trim();
+  function applyFilter(items) {
+    const q = query.trim().toLowerCase();
+    if (!q) return items;
 
-    if (question.length < 15) {
-      elStatus.textContent = "Write a bit more detail so it can be answered properly.";
+    return items.filter((x) => {
+      const a = `${x.title}\n${x.answer}\n${x.section}`.toLowerCase();
+      return a.includes(q);
+    });
+  }
+
+  function paint() {
+    const p = getCurrentPack();
+    const items = applyFilter(p.items);
+
+    elTitle.textContent = p.name;
+    elCount.textContent = `${items.length} shown`;
+
+    if (!items.length) {
+      elScroll.innerHTML = `<p class="muted">No results. Try a simpler search.</p>`;
       return;
     }
 
-    elStatus.textContent = "Sending...";
+    elScroll.innerHTML = items.map(renderFatwaCard).join("");
+  }
 
-    const payload = {
-      user_id: session.user.id,
-      user_name: myName,
-      topic,
-      question
-    };
+  function setPack(key) {
+    currentPackKey = key;
 
-    const { error } = await supabase.from("fasl_questions").insert(payload);
-    if (error) {
-      elStatus.textContent = `Supabase error: ${error.message}`;
-      return;
-    }
+    elChips.querySelectorAll("[data-pack]").forEach((b) => {
+      b.classList.toggle("is-on", b.dataset.pack === key);
+    });
 
-    elQ.value = "";
-    elStatus.textContent = "Sent.";
-    await loadMine();
+    paint();
+    elScroll.scrollTop = 0;
+  }
+
+  elChips.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-pack]");
+    if (!btn) return;
+    setPack(btn.dataset.pack);
   });
 
-  panel.querySelector("#fasl_refresh").addEventListener("click", loadMine);
+  elTopicList.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-pack]");
+    if (!btn) return;
+    setPack(btn.dataset.pack);
+  });
 
-  await loadMine();
+  elSearch.addEventListener("input", () => {
+    query = String(elSearch.value || "");
+    paint();
+  });
+
+  btnTop.addEventListener("click", () => {
+    elScroll.scrollTop = 0;
+  });
+
+  setPack(currentPackKey);
 }
-
 /* =======================
    Zakat Calculator
 ======================= */
@@ -3515,25 +3402,51 @@ function setFooterYear() {
 }
 
 /* =======================
-   Routing
+   Routing (Supabase isolated)
 ======================= */
+
+// Routes that must NOT touch Supabase
+const OFFLINE_ROUTES = new Set(["welcome", "home", "daily", "review", "progress", "calendar", "faq", "learning", "fasl", "library", "lock"]);
+
+// Routes that DO need Supabase
+const SUPABASE_ROUTES = new Set(["auth", "diary", "zakat"]);
+
+let _supabaseClient = null;
+
+// Load Supabase only when needed
+async function getSupabase() {
+  if (_supabaseClient) return _supabaseClient;
+
+  const mod = await import("./supabaseClient.js");
+  _supabaseClient = mod.supabase;
+  return _supabaseClient;
+}
+
 async function renderRoute(route) {
   const r = route || "welcome";
   setActiveNav(r);
 
+  // Offline routes first (no Supabase)
   if (r === "welcome") return renderWelcome();
   if (r === "home") return renderHome();
   if (r === "daily") return renderDaily();
   if (r === "review") return renderReview();
   if (r === "progress") return renderProgress();
   if (r === "calendar") return renderCalendar();
-  if (r === "zakat") return renderZakat();
-  if (r === "diary") return renderDiary();
   if (r === "lock") return renderLock();
   if (r === "faq") return renderFAQ();
-  if (r === "auth") return renderAuth();
   if (r === "learning") return renderLearning();
   if (r === "fasl") return renderFasl();
+  if (r === "library") return renderLibrary();
+
+  // Supabase routes (lazy import)
+  if (SUPABASE_ROUTES.has(r)) {
+    const supabase = await getSupabase();
+
+    if (r === "auth") return renderAuth({ supabase });
+    if (r === "diary") return renderDiary({ supabase });
+    if (r === "zakat") return renderZakat({ supabase });
+  }
 
   return renderWelcome();
 }

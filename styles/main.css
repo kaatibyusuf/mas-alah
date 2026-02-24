@@ -1566,3 +1566,784 @@ input[type="password"]:focus{
 
 .fasl-day:hover{ background: rgba(255,255,255,.06); }
 .fasl-day:active{ transform: translateY(1px); }
+/* =========================================================
+   Mufti Dashboard
+========================================================= */
+
+.mufti-shell {
+  margin-top: 20px;
+}
+
+.mufti-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 14px;
+}
+
+@media (max-width: 980px){
+  .mufti-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Case list panel */
+.mufti-list {
+  max-height: 70vh;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+/* Case card tweaks */
+.mufti-case {
+  border-radius: 16px;
+  padding: 12px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.20);
+  transition: background .15s ease, border-color .15s ease, transform .12s ease;
+  text-align: left;
+  cursor: pointer;
+}
+
+.mufti-case:hover {
+  background: rgba(255,255,255,.05);
+  border-color: rgba(255,187,0,.35);
+}
+
+.mufti-case:active {
+  transform: translateY(1px);
+}
+
+.mufti-case.is-active {
+  border-color: rgba(255,187,0,.60);
+  background: rgba(255,187,0,.08);
+}
+
+/* Status pill */
+.mufti-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 900;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.04);
+}
+
+.mufti-status.submitted { border-color: rgba(255,255,255,.25); }
+.mufti-status.assigned  { border-color: rgba(255,187,0,.45); color: var(--gold); }
+.mufti-status.answered  { border-color: rgba(36,194,106,.45); color: var(--good); }
+.mufti-status.reviewed  { border-color: rgba(120,180,255,.45); }
+.mufti-status.published { border-color: rgba(36,194,106,.70); color: var(--good); }
+
+/* Viewer area */
+.mufti-view {
+  max-height: 75vh;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+/* Answer editor */
+.mufti-answer-area textarea {
+  min-height: 200px;
+  resize: vertical;
+}
+
+/* Evidence block */
+.mufti-evidence {
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 14px;
+  padding: 12px;
+  margin-top: 8px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* Action row */
+.mufti-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+/* =========================================================
+   Public Fatwa Archive
+========================================================= */
+
+.fatwa-shell {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px 0 40px;
+}
+
+.fatwa-search {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.fatwa-list {
+  display: grid;
+  gap: 14px;
+}
+
+/* Fatwa card */
+.fatwa-card {
+  border-radius: 18px;
+  padding: 18px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.03);
+  box-shadow: var(--shadow);
+  transition: border-color .15s ease, transform .12s ease;
+}
+
+.fatwa-card:hover {
+  border-color: rgba(255,187,0,.35);
+}
+
+.fatwa-title {
+  font-size: 18px;
+  font-weight: 950;
+  margin: 0;
+}
+
+.fatwa-meta {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+.fatwa-question {
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 14px;
+  background: rgba(255,255,255,.02);
+  border: 1px solid rgba(255,255,255,.08);
+  line-height: 1.7;
+}
+
+.fatwa-answer {
+  margin-top: 14px;
+  padding: 14px;
+  border-radius: 14px;
+  background: rgba(36,194,106,.10);
+  border: 1px solid rgba(36,194,106,.25);
+  line-height: 1.7;
+}
+
+/* Evidence accordion */
+.fatwa-evidence {
+  margin-top: 14px;
+  border-top: 1px solid rgba(255,255,255,.08);
+  padding-top: 12px;
+}
+
+.fatwa-evidence-item {
+  padding: 8px 0;
+  font-size: 13px;
+  line-height: 1.6;
+  border-bottom: 1px solid rgba(255,255,255,.05);
+}
+
+.fatwa-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.fatwa-tag {
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  border: 1px solid rgba(255,187,0,.35);
+  background: rgba(255,187,0,.12);
+  color: var(--gold);
+}
+/* =========================================================
+   Fasl: Library (details/summary)
+========================================================= */
+
+details{
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.02);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+details + details{ margin-top: 12px; }
+
+summary{
+  list-style: none;
+  cursor: pointer;
+  padding: 14px 14px;
+  font-weight: 900;
+  color: var(--text);
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap: 12px;
+}
+
+summary::-webkit-details-marker{ display:none; }
+
+details[open] summary{
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  background: rgba(0,0,0,.14);
+}
+
+details > div{
+  padding: 12px 14px 14px;
+  color: var(--muted);
+}
+
+details p{
+  margin: 10px 0 0 0;
+  line-height: 1.7;
+}
+
+details p strong{
+  color: rgba(255,255,255,.92);
+}
+
+details summary:focus-visible{
+  outline: 2px solid rgba(255,187,0,.55);
+  outline-offset: 2px;
+  border-radius: 14px;
+}
+
+/* A small subtle chevron */
+summary::after{
+  content: "▾";
+  opacity: .65;
+  transform: rotate(0deg);
+  transition: transform .18s ease, opacity .18s ease;
+  margin-left: auto;
+}
+
+details[open] summary::after{
+  transform: rotate(180deg);
+  opacity: .9;
+}
+
+/* Optional: library wrapper spacing */
+#fasl_lib_list{
+  margin-top: 12px;
+  display: grid;
+  gap: 12px;
+}
+/* =========================
+   Fasl Library (Premium UI)
+========================= */
+.fasl-lib-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.fasl-lib-title{
+  font-size: 18px;
+  font-weight: 950;
+  letter-spacing: -0.2px;
+  margin:0;
+}
+
+.fasl-lib-sub{
+  margin:6px 0 0 0;
+  color: var(--muted);
+  line-height: 1.6;
+  font-size: 13px;
+  max-width: 75ch;
+}
+
+.fasl-lib-controls{
+  display:grid;
+  grid-template-columns: 1fr 1.1fr auto;
+  gap:10px;
+  align-items:end;
+}
+
+@media (max-width: 860px){
+  .fasl-lib-controls{
+    grid-template-columns: 1fr;
+  }
+}
+
+.fasl-chiprow{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+
+.fasl-chip{
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.03);
+  color: rgba(255,255,255,.82);
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.fasl-case{
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.03);
+  border-radius: 18px;
+  overflow:hidden;
+  box-shadow: var(--shadow);
+  margin-bottom: 12px;
+}
+
+.fasl-case summary{
+  list-style:none;
+  cursor:pointer;
+  padding: 14px 14px;
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap: 12px;
+  user-select:none;
+}
+
+.fasl-case summary::-webkit-details-marker{ display:none; }
+
+.fasl-case-title{
+  font-weight: 950;
+  letter-spacing: -0.2px;
+  line-height: 1.25;
+}
+
+.fasl-case-meta{
+  margin-top:6px;
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.fasl-pill{
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,187,0,.25);
+  background: rgba(255,187,0,.10);
+  color: rgba(255,255,255,.88);
+  font-weight: 850;
+  font-size: 12px;
+}
+
+.fasl-chevron{
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: rgba(255,255,255,.65);
+  transition: transform .18s ease;
+}
+
+.fasl-case[open] .fasl-chevron{ transform: rotate(180deg); }
+
+.fasl-case-body{
+  padding: 0 14px 14px 14px;
+  border-top: 1px solid rgba(255,255,255,.08);
+  background: rgba(0,0,0,.16);
+}
+
+.fasl-block{
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.02);
+  margin-top: 12px;
+}
+
+.fasl-block h4{
+  margin:0;
+  font-size: 13px;
+  font-weight: 950;
+  letter-spacing: -0.15px;
+}
+
+.fasl-block p{
+  margin:8px 0 0 0;
+  color: rgba(255,255,255,.86);
+  line-height: 1.75;
+  white-space: pre-wrap;
+}
+
+.fasl-divider{
+  height:1px;
+  background: rgba(255,255,255,.08);
+  margin: 12px 0;
+}
+
+/* Search input feel */
+#fasl_lib_search{
+  border-radius: 999px;
+  padding: 12px 14px;
+}
+
+/* Make details feel responsive */
+.fasl-case summary:hover{
+  background: rgba(255,255,255,.03);
+}
+
+.fasl-case:focus-within{
+  outline: 2px solid rgba(255,187,0,.25);
+  outline-offset: 2px;
+}
+/* =========================================================
+   Fasl Library: Classical Madrasa Archive UI
+========================================================= */
+
+/* Library shell */
+.library {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 6px 0 40px;
+}
+
+/* Archive header */
+.library-hero{
+  background:
+    radial-gradient(circle at 18% 12%, rgba(255,187,0,.08), transparent 40%),
+    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 22px;
+  box-shadow: var(--shadow2);
+  padding: 22px 18px;
+}
+
+.library-hero-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap: 12px;
+  flex-wrap:wrap;
+}
+
+.library-title{
+  margin:0;
+  font-size: clamp(22px, 2.8vw, 34px);
+  font-weight: 950;
+  letter-spacing: -0.6px;
+  line-height: 1.1;
+}
+
+.library-sub{
+  margin: 8px 0 0;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 72ch;
+  font-size: 14px;
+}
+
+.library-badges{
+  display:flex;
+  gap: 8px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+.lib-badge{
+  display:inline-flex;
+  align-items:center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.18);
+  color: rgba(255,255,255,.90);
+  font-weight: 850;
+  font-size: 12px;
+}
+.lib-badge strong{ color: var(--gold); font-weight: 950; }
+
+/* Shelf controls */
+.library-controls{
+  display:flex;
+  gap: 10px;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:space-between;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+
+.library-search{
+  flex: 1;
+  min-width: 240px;
+  display:flex;
+  gap: 10px;
+  align-items:center;
+}
+
+.library-search input{
+  width: 100%;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.03);
+  color: var(--text);
+  padding: 12px 14px;
+  outline:none;
+}
+
+.library-search input:focus{
+  border-color: rgba(255,187,0,.45);
+  box-shadow: 0 0 0 4px rgba(255,187,0,.10);
+}
+
+.library-filters{
+  display:flex;
+  gap: 8px;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:flex-end;
+}
+
+.lib-chip{
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.03);
+  color: rgba(255,255,255,.80);
+  padding: 10px 12px;
+  border-radius: 999px;
+  cursor:pointer;
+  font-weight: 900;
+  transition: background .12s ease, border-color .12s ease, transform .12s ease;
+  white-space: nowrap;
+  user-select:none;
+}
+.lib-chip:hover{
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.18);
+}
+.lib-chip:active{ transform: translateY(1px); }
+.lib-chip.is-on{
+  border-color: rgba(255,187,0,.45);
+  background: rgba(255,187,0,.10);
+  color: var(--text);
+}
+
+/* Layout */
+.library-grid{
+  margin-top: 14px;
+  display:grid;
+  grid-template-columns: 0.92fr 1.08fr;
+  gap: 12px;
+}
+@media (max-width: 980px){
+  .library-grid{ grid-template-columns: 1fr; }
+}
+
+/* Topic shelf */
+.topic-shelf{
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  overflow:hidden;
+}
+
+.topic-shelf-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 10px;
+  padding: 12px 12px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  background: rgba(0,0,0,.18);
+}
+
+.topic-shelf-title{
+  font-weight: 950;
+  letter-spacing: -0.2px;
+}
+
+.topic-list{
+  padding: 12px;
+  display:grid;
+  gap: 8px;
+}
+
+.topic-item{
+  width:100%;
+  text-align:left;
+  border-radius: 14px;
+  padding: 12px 12px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.16);
+  color: rgba(255,255,255,.92);
+  cursor:pointer;
+  transition: background .12s ease, border-color .12s ease, transform .12s ease;
+}
+.topic-item:hover{
+  border-color: rgba(255,187,0,.35);
+  background: rgba(255,255,255,.04);
+}
+.topic-item:active{ transform: translateY(1px); }
+
+.topic-item-top{
+  display:flex;
+  justify-content:space-between;
+  gap: 10px;
+  align-items:baseline;
+}
+.topic-name{ font-weight: 950; }
+.topic-meta{ color: var(--muted); font-size: 12px; }
+.topic-desc{ margin-top: 6px; color: var(--muted); font-size: 12px; line-height: 1.6; }
+
+/* Archive panel */
+.archive-panel{
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  overflow:hidden;
+  display:grid;
+  grid-template-rows: auto 1fr;
+  min-height: 520px;
+}
+
+.archive-head{
+  padding: 12px 12px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  background: rgba(0,0,0,.18);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 10px;
+  flex-wrap:wrap;
+}
+
+.archive-title{
+  font-weight: 950;
+  letter-spacing: -0.2px;
+}
+
+.archive-meta{
+  display:flex;
+  gap: 8px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+
+.archive-scroll{
+  padding: 12px;
+  overflow:auto;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(255,187,0,.05), transparent 40%),
+    rgba(0,0,0,.14);
+}
+
+/* Fatwa card */
+.fatwa{
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.10);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.02));
+  padding: 14px 14px 12px;
+  margin-bottom: 10px;
+  box-shadow: 0 12px 36px rgba(0,0,0,.30);
+}
+
+.fatwa-top{
+  display:flex;
+  justify-content:space-between;
+  gap: 10px;
+  align-items:flex-start;
+  flex-wrap:wrap;
+}
+
+.fatwa-no{
+  display:inline-flex;
+  align-items:center;
+  gap: 8px;
+  font-weight: 950;
+}
+
+.fatwa-tag{
+  display:inline-flex;
+  align-items:center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,187,0,.30);
+  background: rgba(255,187,0,.10);
+  color: rgba(255,255,255,.92);
+  font-weight: 900;
+  font-size: 12px;
+}
+
+.fatwa-title{
+  margin: 8px 0 0;
+  font-size: 14px;
+  font-weight: 950;
+  line-height: 1.35;
+}
+
+.fatwa-body{
+  margin-top: 10px;
+  display:grid;
+  gap: 10px;
+}
+
+.fatwa-label{
+  font-size: 11px;
+  letter-spacing: .2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.55);
+  font-weight: 900;
+}
+
+.fatwa-text{
+  margin: 6px 0 0;
+  white-space: pre-wrap;
+  line-height: 1.75;
+  font-size: 14px;
+  color: rgba(255,255,255,.92);
+}
+
+.fatwa-divider{
+  height: 1px;
+  background: rgba(255,255,255,.08);
+  border: none;
+  margin: 0;
+}
+
+/* Collapsible */
+.fatwa details{ margin-top: 10px; }
+.fatwa summary{
+  list-style:none;
+  cursor:pointer;
+  user-select:none;
+  font-weight: 900;
+  color: rgba(255,255,255,.88);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.16);
+}
+.fatwa summary::-webkit-details-marker{ display:none; }
+.fatwa details[open] summary{
+  border-color: rgba(255,187,0,.35);
+  background: rgba(255,187,0,.08);
+}
+
+/* Tiny marks */
+.khutut{
+  color: rgba(255,187,0,.85);
+  font-weight: 950;
+}
