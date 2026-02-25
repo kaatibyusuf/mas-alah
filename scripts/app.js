@@ -1832,7 +1832,11 @@ async function renderFasl() {
           This does not replace medical care. If symptoms are severe or unusual, speak to a clinician.
         </p>
       </div>
-
+<button id="expertBtn" class="expertBtn" type="button">
+  <span class="expertDot"></span>
+  Consult an Expert
+  <span class="expertArrow">↗</span>
+</button>
       <div class="segmented" role="group" aria-label="Fasl tabs" style="margin-top:12px;">
         <button class="seg-btn is-on" type="button" data-fasl-tab="learn">Learn</button>
         <button class="seg-btn" type="button" data-fasl-tab="track">Track</button>
@@ -1842,7 +1846,22 @@ async function renderFasl() {
       <div id="fasl_panel" style="margin-top:12px;"></div>
     </section>
   `;
+  function bindExpertButton() {
+  const btn = document.getElementById("expertBtn");
+  if (!btn) return;
 
+  btn.addEventListener("click", () => {
+    const phone = "2347080152258";
+    const message = encodeURIComponent(
+      "As-salamu alaykum. I would like consultation regarding hayd/bleeding."
+    );
+
+    const url = `https://wa.me/${phone}?text=${message}`;
+
+    window.location.href = url;   // safer than window.open
+  });
+}
+bindExpertButton();
   const panel = app.querySelector("#fasl_panel");
   const tabBtns = Array.from(app.querySelectorAll("[data-fasl-tab]"));
 

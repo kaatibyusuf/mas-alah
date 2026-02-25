@@ -2348,3 +2348,58 @@ details[open] summary::after{
   color: rgba(255,187,0,.85);
   font-weight: 950;
 }
+/* =========================
+   Consult Expert (Compact)
+========================= */
+.expertBtn{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+
+  padding: 8px 12px;   /* reduced */
+  font-size: 13px;     /* smaller text */
+  border-radius: 999px;
+  cursor:pointer;
+  font-weight: 900;
+  letter-spacing: .2px;
+
+  border: 1px solid rgba(255,187,0,.45);
+  color: #141414;
+
+  background: linear-gradient(
+    180deg,
+    rgba(255,187,0,1),
+    rgba(255,187,0,.92)
+  );
+
+  box-shadow:
+    0 8px 24px rgba(0,0,0,.35),
+    0 8px 18px rgba(255,187,0,.20);
+
+  transition: transform .12s ease, filter .12s ease, box-shadow .12s ease;
+}
+
+.expertBtn:hover{
+  filter: brightness(1.04);
+}
+
+.expertBtn:active{
+  transform: translateY(1px);
+}
+
+.expertBtn:focus-visible{
+  outline: 2px solid rgba(255,187,0,.65);
+  outline-offset: 2px;
+}
+
+.expertDot{
+  width: 6px;          /* smaller */
+  height: 6px;
+  border-radius: 999px;
+  background: #141414;
+}
+
+.expertArrow{
+  font-size: 12px;
+  opacity: .8;
+}
