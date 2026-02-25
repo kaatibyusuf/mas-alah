@@ -2696,7 +2696,332 @@ function renderLock() {
     });
   }
 }
+/* =======================
+   Zakat (offline module)
+   - Pure calculation core
+   - One renderer
+   - One binder
+======================= */
 
+/** Zakat defaults kept in one place */
+const ZAKAT_DEFAULTS = {
+  currency: "NGN",
+  method: "gold", // "gold" | "silver"
+  nisabGrams: { gold: 85, silver: 595 },
+  rate: 0.025,
+  storageKey: "masalah_zakat_v1"
+};
+
+/** Small utils local to zakat */
+function zakat_toNum(v) {
+  const x = Number(String(v || "").replace(/,/g, "").trim());
+  return Number.isFinite(x) ? x : 0;
+}
+
+function zakat_formatMoney(n, currency) {
+  const num = Number(n || 0);
+  const code = String(currency || "NGN").toUpperCase();
+  try {
+    return new Intl.NumberFormat(undefined, {
+      style: "currency",
+      currency: code,
+      maximumFractionDigits: 2
+    }).format(num);
+  } catch {
+    // fallback if currency code is invalid
+    return `${num.toFixed(2)} ${code}`;
+  }
+}
+
+/** Load/Save (so user doesn't retype every time) */
+function zakat_loadState() {
+  try {
+    const raw = localStorage.getItem(ZAKAT_DEFAULTS.storageKey);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === "object" ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+function zakat_saveState(state) {
+  try {
+    localStorage.setItem(ZAKAT_DEFAULTS.storageKey, JSON.stringify(state));
+  } catch {}
+}
+
+/** Pure core calculation */
+function zakat_compute({
+  method,
+  pricePerGram,
+  currency,
+  hawlCompleted,
+  assets,
+  liabilities
+}) {
+  const grams = ZAKAT_DEFAULTS.nisabGrams[method] || 85;
+  const nisab = pricePerGram > 0 ? pricePerGram * grams : 0;
+
+  const totalAssets =
+    (assets.cash || 0) +
+    (assets.metals || 0) +
+    (assets.investments || 0) +
+    (assets.inventory || 0) +
+    (assets.debtsOwed || 0);
+
+  const totalLiabilities = (liabilities.debtsDue || 0);
+
+  const zakatable = Math.max(0, totalAssets - totalLiabilities);
+
+  const meetsNisab = nisab > 0 && zakatable >= nisab;
+  const due = meetsNisab && hawlCompleted ? zakatable * ZAKAT_DEFAULTS.rate : 0;
+
+  return {
+    currency,
+    method,
+    grams,
+    nisab,
+    totalAssets,
+    totalLiabilities,
+    zakatable,
+    meetsNisab,
+    hawlCompleted,
+    due
+  };
+}
+
+/** Rendering: only HTML + placeholders */
+function renderZakat() {
+  state.currentRoute = "zakat";
+
+  const saved = zakat_loadState();
+  const d = {
+    currency: saved?.currency || ZAKAT_DEFAULTS.currency,
+    method: saved?.method || ZAKAT_DEFAULTS.method,
+    pricePerGram: saved?.pricePerGram || "",
+    hawlCompleted: !!saved?.hawlCompleted,
+    cash: saved?.cash || "",
+    metals: saved?.metals || "",
+    investments: saved?.investments || "",
+    inventory: saved?.inventory || "",
+    debtsOwed: saved?.debtsOwed || "",
+    debtsDue: saved?.debtsDue || ""
+  };
+
+  app.innerHTML = `
+    <section class="card" style="margin-top:20px; max-width:980px; margin-inline:auto;">
+      <div class="card-head">
+        <h2>Zakat</h2>
+        <p class="muted" style="line-height:1.7;">
+          Estimate zakat on zakatable wealth. The rate is <strong>2.5%</strong> once you meet <strong>nisab</strong>
+          and a lunar year (ḥawl) has passed.
+        </p>
+      </div>
+
+      <div class="zakat-grid">
+
+        <div class="zakat-box">
+          <h3 class="zakat-title">1) Nisab</h3>
+
+          <label class="field">
+            <span>Currency</span>
+            <input id="zk_currency" value="${escapeHtml(d.currency)}" placeholder="NGN, USD, GBP..." />
+            <p class="help muted">Use a valid currency code.</p>
+          </label>
+
+          <div class="field">
+            <span>Nisab method</span>
+            <div class="segmented" role="group" aria-label="Nisab method">
+              <button type="button" class="seg-btn ${d.method === "gold" ? "is-on" : ""}" data-zk-method="gold">
+                Gold (85g)
+              </button>
+              <button type="button" class="seg-btn ${d.method === "silver" ? "is-on" : ""}" data-zk-method="silver">
+                Silver (595g)
+              </button>
+            </div>
+          </div>
+
+          <label class="field">
+            <span>Price per gram</span>
+            <input id="zk_pricePerGram" inputmode="decimal" value="${escapeHtml(d.pricePerGram)}"
+              placeholder="Enter current price per gram" />
+          </label>
+
+          <label class="checkline" style="margin-top:10px;">
+            <input id="zk_hawl" type="checkbox" ${d.hawlCompleted ? "checked" : ""} />
+            <span>Ḥawl completed (one lunar year)</span>
+          </label>
+        </div>
+
+        <div class="zakat-box">
+          <h3 class="zakat-title">2) Assets</h3>
+
+          <label class="field"><span>Cash at hand / bank</span>
+            <input id="zk_cash" inputmode="decimal" value="${escapeHtml(d.cash)}" placeholder="0" />
+          </label>
+
+          <label class="field"><span>Gold / silver value</span>
+            <input id="zk_metals" inputmode="decimal" value="${escapeHtml(d.metals)}" placeholder="0" />
+          </label>
+
+          <label class="field"><span>Investments / shares / crypto</span>
+            <input id="zk_investments" inputmode="decimal" value="${escapeHtml(d.investments)}" placeholder="0" />
+          </label>
+
+          <label class="field"><span>Business inventory (resale value)</span>
+            <input id="zk_inventory" inputmode="decimal" value="${escapeHtml(d.inventory)}" placeholder="0" />
+          </label>
+
+          <label class="field"><span>Money owed to you (likely to be paid)</span>
+            <input id="zk_debtsOwed" inputmode="decimal" value="${escapeHtml(d.debtsOwed)}" placeholder="0" />
+          </label>
+        </div>
+
+        <div class="zakat-box">
+          <h3 class="zakat-title">3) Liabilities</h3>
+
+          <label class="field">
+            <span>Short-term debts due now</span>
+            <input id="zk_debtsDue" inputmode="decimal" value="${escapeHtml(d.debtsDue)}" placeholder="0" />
+            <p class="help muted">Subtract only what is due and payable soon.</p>
+          </label>
+
+          <div class="zakat-actions">
+            <button id="zk_calc" class="primary" type="button">Calculate</button>
+            <button id="zk_reset" class="btn" type="button">Reset</button>
+          </div>
+
+          <div id="zk_result" class="zakat-result" aria-live="polite"></div>
+        </div>
+
+      </div>
+    </section>
+  `;
+
+  zakat_bind();
+  zakat_renderResult({ auto: true });
+}
+
+/** Binding: all events for zakat live here */
+function zakat_bind() {
+  const segBtns = Array.from(app.querySelectorAll("[data-zk-method]"));
+  const elCurrency = app.querySelector("#zk_currency");
+  const elPricePerGram = app.querySelector("#zk_pricePerGram");
+  const elHawl = app.querySelector("#zk_hawl");
+
+  const elCash = app.querySelector("#zk_cash");
+  const elMetals = app.querySelector("#zk_metals");
+  const elInvestments = app.querySelector("#zk_investments");
+  const elInventory = app.querySelector("#zk_inventory");
+  const elDebtsOwed = app.querySelector("#zk_debtsOwed");
+  const elDebtsDue = app.querySelector("#zk_debtsDue");
+
+  let method = segBtns.find((b) => b.classList.contains("is-on"))?.dataset.zkMethod || "gold";
+
+  const persist = () => {
+    zakat_saveState({
+      currency: (elCurrency.value || "NGN").trim().toUpperCase(),
+      method,
+      pricePerGram: elPricePerGram.value || "",
+      hawlCompleted: !!elHawl.checked,
+      cash: elCash.value || "",
+      metals: elMetals.value || "",
+      investments: elInvestments.value || "",
+      inventory: elInventory.value || "",
+      debtsOwed: elDebtsOwed.value || "",
+      debtsDue: elDebtsDue.value || ""
+    });
+  };
+
+  segBtns.forEach((b) => {
+    b.addEventListener("click", () => {
+      method = b.dataset.zkMethod;
+      segBtns.forEach((x) => x.classList.toggle("is-on", x === b));
+      persist();
+      zakat_renderResult({ auto: true, method });
+    });
+  });
+
+  const onInput = () => {
+    persist();
+    zakat_renderResult({ auto: true, method });
+  };
+
+  [elCurrency, elPricePerGram, elHawl, elCash, elMetals, elInvestments, elInventory, elDebtsOwed, elDebtsDue]
+    .forEach((el) => el.addEventListener("input", onInput));
+
+  app.querySelector("#zk_calc").addEventListener("click", () => {
+    persist();
+    zakat_renderResult({ auto: false, method });
+  });
+
+  app.querySelector("#zk_reset").addEventListener("click", () => {
+    localStorage.removeItem(ZAKAT_DEFAULTS.storageKey);
+    renderZakat();
+  });
+}
+
+/** Result renderer: read DOM, compute, print */
+function zakat_renderResult({ auto, method }) {
+  const elResult = app.querySelector("#zk_result");
+  if (!elResult) return;
+
+  const currency = (app.querySelector("#zk_currency")?.value || "NGN").trim().toUpperCase();
+  const pricePerGram = zakat_toNum(app.querySelector("#zk_pricePerGram")?.value);
+  const hawlCompleted = !!app.querySelector("#zk_hawl")?.checked;
+
+  const assets = {
+    cash: zakat_toNum(app.querySelector("#zk_cash")?.value),
+    metals: zakat_toNum(app.querySelector("#zk_metals")?.value),
+    investments: zakat_toNum(app.querySelector("#zk_investments")?.value),
+    inventory: zakat_toNum(app.querySelector("#zk_inventory")?.value),
+    debtsOwed: zakat_toNum(app.querySelector("#zk_debtsOwed")?.value)
+  };
+
+  const liabilities = {
+    debtsDue: zakat_toNum(app.querySelector("#zk_debtsDue")?.value)
+  };
+
+  const r = zakat_compute({
+    method: method || "gold",
+    pricePerGram,
+    currency,
+    hawlCompleted,
+    assets,
+    liabilities
+  });
+
+  const nisabText =
+    r.nisab > 0
+      ? `${zakat_formatMoney(r.nisab, currency)} (${r.method} nisab: ${r.grams}g)`
+      : `Enter price per gram to compute nisab.`;
+
+  const hawlLine = r.hawlCompleted
+    ? `<p class="good"><strong>Ḥawl:</strong> Completed</p>`
+    : `<p class="warn"><strong>Ḥawl:</strong> Not completed. Zakat is not due yet.</p>`;
+
+  const dueLine =
+    r.meetsNisab && r.hawlCompleted
+      ? `<p class="good" style="font-size:18px;"><strong>Zakat due:</strong> ${zakat_formatMoney(r.due, currency)}</p>`
+      : `<p class="muted" style="font-size:18px;"><strong>Zakat due:</strong> ${zakat_formatMoney(0, currency)}</p>`;
+
+  elResult.innerHTML = `
+    <div class="zakat-summary">
+      <p><strong>Total assets:</strong> ${zakat_formatMoney(r.totalAssets, currency)}</p>
+      <p><strong>Liabilities deducted:</strong> ${zakat_formatMoney(r.totalLiabilities, currency)}</p>
+      <p><strong>Zakatable amount:</strong> ${zakat_formatMoney(r.zakatable, currency)}</p>
+      <p class="${r.meetsNisab ? "good" : "muted"}"><strong>Nisab:</strong> ${nisabText}</p>
+      ${hawlLine}
+      ${dueLine}
+      ${
+        auto
+          ? `<p class="muted small" style="margin-top:10px;">Auto-updated as you type. Click Calculate if you prefer manual.</p>`
+          : ""
+      }
+    </div>
+  `;
+}
 /* =======================
    Footer year
 ======================= */
@@ -2717,6 +3042,7 @@ const OFFLINE_ROUTES = new Set([
   "review",
   "progress",
   "calendar",
+  "zakat",
   "faq",
   "fasl",
   "library",
@@ -2744,6 +3070,8 @@ async function renderRoute(route) {
   if (r === "lock") return renderLock();
   if (r === "quiz") return renderQuiz();
   if (r === "results") return renderResults();
+  if (r === "zakat") return renderZakat();
+  if (r === "diary") return renderDiary();
 
   // SUPABASE (lazy load)
   if (SUPABASE_ROUTES.has(r)) {
