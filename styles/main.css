@@ -2388,3 +2388,5 @@ details[open] summary::after{
   background: rgba(255,255,255,.65);
   margin-top: 8px;
 }
+.btn, .btn.mini { pointer-events: auto !important; position: relative; z-index: 5; }
+.diary-head, .diary-side { position: relative; z-index: 5; }

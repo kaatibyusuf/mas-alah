@@ -3224,7 +3224,6 @@ function renderDiary() {
             ${draft.updatedAt ? "Draft saved" : "Not saved yet"}
           </span>
           <button id="diary_settings_btn" class="btn" type="button">Settings</button>
-          <button id="diary_clear_filter" class="btn mini" type="button">All</button>
         </div>
       </header>
 
@@ -3542,7 +3541,38 @@ function diary_bind({ viewYear, viewMonth }) {
       })
       .join("");
   }
+// --- FIX: delegated clicks for Settings + All ---
+app.addEventListener("click", (e) => {
+  const settingsBtn = e.target.closest("#diary_settings_btn");
+  if (settingsBtn) {
+    e.preventDefault();
+    e.stopPropagation();
+    elSettings.classList.add("is-open");
+    elSettings.setAttribute("aria-hidden", "false");
+    return;
+  }
 
+  const allBtn = e.target.closest("#diary_clear_filter");
+  if (allBtn) {
+    e.preventDefault();
+    e.stopPropagation();
+    filterDate = "";
+    query = "";
+    if (elSearch) elSearch.value = "";
+    renderCalendar();
+    renderList();
+    return;
+  }
+
+  const closeSettingsBtn = e.target.closest("#diary_settings_close");
+  if (closeSettingsBtn || e.target === elSettings) {
+    e.preventDefault();
+    e.stopPropagation();
+    elSettings.classList.remove("is-open");
+    elSettings.setAttribute("aria-hidden", "true");
+    return;
+  }
+}, true);
   function openModal(entry) {
     openedId = entry.id;
 
