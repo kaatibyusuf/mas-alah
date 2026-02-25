@@ -855,26 +855,22 @@ function renderHome() {
   const knowledge = overallKnowledgeScore(progress);
   const weak = weakestTopic(progress);
 
-  const mistakesTotal = Object.values(progress.mistakes || {}).reduce(
-    (acc, m) => acc + (m.wrong || 0),
-    0
-  );
-  const uniqueMistakes = Object.keys(progress.mistakes || {}).filter(
-    (id) => (progress.mistakes[id]?.wrong || 0) > 0
-  ).length;
+  const mistakesTotal = Object.values(progress.mistakes || {}).reduce((acc, m) => acc + (m.wrong || 0), 0);
+  const uniqueMistakes = Object.keys(progress.mistakes || {}).filter((id) => (progress.mistakes[id]?.wrong || 0) > 0).length;
 
-  const lastHeadline = last ? `${last.score}/${last.total}` : "No attempts";
-  const lastSub = last ? `${last.category} • ${last.level}` : "Start Daily or choose a module.";
+  const lastHeadline = last ? `${last.score}/${last.total} (${last.percent}%)` : "No attempts yet";
+  const lastSub = last ? `${last.category} • ${last.level} • ${last.date}` : "Start Daily or choose a module.";
 
   app.innerHTML = `
-    <section class="dash">
-      <div class="dash-top">
-        <div class="dash-title">
-          <h2>Dashboard</h2>
-          <p class="muted">Quiet revision. Measured growth.</p>
+    <section class="homev2">
+
+      <header class="homev2-head">
+        <div class="homev2-title">
+          <h2>Mas'alah</h2>
+          <p class="muted">A calm learning system.</p>
         </div>
 
-        <div class="dash-actions">
+        <div class="homev2-quick">
           <button class="primary" type="button" data-goto="daily">
             <span class="btn-inner">${icon("bolt")}Daily</span>
           </button>
@@ -885,16 +881,16 @@ function renderHome() {
             <span class="btn-inner">${icon("book")}Fasl</span>
           </button>
           <button class="btn" type="button" data-goto="learning">
-            <span class="btn-inner">${icon("target")}Learning</span>
+            <span class="btn-inner">${icon("shield")}Learning Space</span>
           </button>
         </div>
-      </div>
+      </header>
 
-      <div class="dash-grid">
+      <section class="homev2-status">
         <div class="card">
           <p class="muted">Knowledge score</p>
           <div class="big">${knowledge}%</div>
-          <p class="muted small">Average mastery across topics you attempted.</p>
+          <p class="muted small">Average mastery from your attempts.</p>
         </div>
 
         <div class="card">
@@ -906,9 +902,7 @@ function renderHome() {
         <div class="card">
           <p class="muted">Weakest focus</p>
           <div class="big">${weak ? `${weak.pct}%` : "-"}</div>
-          <p class="muted small">${
-            weak ? `${escapeHtml(weak.cat)} • ${escapeHtml(weak.lvl)}` : "Attempt quizzes to generate mastery."
-          }</p>
+          <p class="muted small">${weak ? `${escapeHtml(weak.cat)} • ${escapeHtml(weak.lvl)}` : "Attempt quizzes to generate mastery."}</p>
         </div>
 
         <div class="card">
@@ -917,105 +911,171 @@ function renderHome() {
           <p class="muted small">${mistakesTotal} total wrong answers tracked.</p>
           <div style="margin-top:10px;">
             <button class="btn" type="button" data-goto="review">
-              <span class="btn-inner">${icon("layers")}Open mistake review</span>
+              <span class="btn-inner">${icon("layers")}Open review</span>
             </button>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div class="card" style="margin-top:16px;">
-        <p class="muted">Last attempt</p>
-        <div style="display:flex; align-items:center; gap:10px; margin-top:6px;">
-          ${icon("target")}
-          <strong style="font-size:18px;">${escapeHtml(lastHeadline)}</strong>
-        </div>
-        <p class="muted small" style="margin-top:6px;">${escapeHtml(lastSub)}</p>
-      </div>
+      <section class="card homev2-last">
+        <div style="display:flex; justify-content:space-between; gap:12px; align-items:flex-start; flex-wrap:wrap;">
+          <div>
+            <p class="muted" style="margin:0;">Last attempt</p>
+            <div style="display:flex; align-items:center; gap:10px; margin-top:6px;">
+              ${icon("target")}
+              <strong style="font-size:18px;">${escapeHtml(lastHeadline)}</strong>
+            </div>
+            <p class="muted small" style="margin-top:6px;">${escapeHtml(lastSub)}</p>
+          </div>
 
-      ${renderMasteryTable(progress)}
-
-      <section class="card" style="margin-top:16px;">
-        <h3 style="margin:0;">Start a custom quiz</h3>
-        <p class="muted small" style="margin:8px 0 0 0;">Target one topic to build mastery faster.</p>
-
-        <div class="grid" style="margin-top:12px;">
-          <label class="field">
-            <span>Category</span>
-            <select id="category">
-              ${CATEGORIES.map((c) => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join("")}
-            </select>
-          </label>
-
-          <label class="field">
-            <span>Level</span>
-            <select id="level">
-              ${LEVELS.map((l) => `<option value="${escapeHtml(l)}">${escapeHtml(l)}</option>`).join("")}
-            </select>
-          </label>
-
-          <label class="field inline">
-            <input id="timed" type="checkbox" checked />
-            <span>Timed mode (20 seconds per question)</span>
-          </label>
-
-          <label class="field">
-            <span>Questions</span>
-            <select id="count">
-              <option value="20" selected>20</option>
-              <option value="30">30</option>
-              <option value="50">50</option>
-              <option value="10">10</option>
-            </select>
-          </label>
-
-          <button id="startBtn" class="primary" type="button">
-            <span class="btn-inner">${icon("target")}Start custom quiz</span>
-          </button>
-
-          <p id="status" class="muted" style="margin:0;"></p>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="btn" type="button" data-goto="progress">Progress</button>
+            <button class="btn" type="button" data-goto="faq">How it works</button>
+          </div>
         </div>
       </section>
+
+      <section class="homev2-architecture">
+        <div class="homev2-block">
+          <div class="homev2-block-head">
+            <h3>Offline Core</h3>
+            <p class="muted small">Built for consistency.</p>
+          </div>
+
+          <div class="homev2-links">
+            <button class="homev2-link" type="button" data-goto="daily">
+              <div class="k">${icon("bolt")}</div>
+              <div>
+                <div class="t">Daily Quiz</div>
+                <div class="d muted small">Locked set each day.</div>
+              </div>
+            </button>
+
+            <button class="homev2-link" type="button" data-goto="home">
+              <div class="k">${icon("target")}</div>
+              <div>
+                <div class="t">Custom Quiz</div>
+                <div class="d muted small">Pick category and level.</div>
+              </div>
+            </button>
+
+            <button class="homev2-link" type="button" data-goto="review">
+              <div class="k">${icon("layers")}</div>
+              <div>
+                <div class="t">Mistake Review</div>
+                <div class="d muted small">Fix weak points first.</div>
+              </div>
+            </button>
+
+            <button class="homev2-link" type="button" data-goto="calendar">
+              <div class="k">${icon("calendar")}</div>
+              <div>
+                <div class="t">Hijri Calendar</div>
+                <div class="d muted small">White days and rhythm.</div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <div class="homev2-block">
+          <div class="homev2-block-head">
+            <h3>Fasl Archive</h3>
+            <p class="muted small">Offline library.</p>
+          </div>
+
+          <div class="homev2-links">
+            <button class="homev2-link" type="button" data-goto="fasl">
+              <div class="k">${icon("book")}</div>
+              <div>
+                <div class="t">Open Fasl</div>
+                <div class="d muted small">Learn, Track, Library packs.</div>
+              </div>
+            </button>
+
+            <button class="homev2-link" type="button" data-goto="library">
+              <div class="k">${icon("book")}</div>
+              <div>
+                <div class="t">Library (Direct)</div>
+                <div class="d muted small">Jump straight into cases.</div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <div class="homev2-block">
+          <div class="homev2-block-head">
+            <h3>Private</h3>
+            <p class="muted small">Yours alone.</p>
+          </div>
+
+          <div class="homev2-links">
+            <button class="homev2-link" type="button" data-goto="diary">
+              <div class="k">${icon("shield")}</div>
+              <div>
+                <div class="t">Diary</div>
+                <div class="d muted small">Offline journal</div>
+              </div>
+            </button>
+
+            <button class="homev2-link" type="button" data-goto="lock">
+              <div class="k">${icon("shield")}</div>
+              <div>
+                <div class="t">Lock</div>
+                <div class="d muted small">Protect Diary and Progress.</div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <div class="homev2-block">
+          <div class="homev2-block-head">
+            <h3>Online Layer</h3>
+            <p class="muted small">Community learning.</p>
+          </div>
+
+          <div class="homev2-links">
+            <button class="homev2-link" type="button" data-goto="learning">
+              <div class="k">${icon("layers")}</div>
+              <div>
+                <div class="t">Learning Space</div>
+                <div class="d muted small">Rooms, and messages.</div>
+              </div>
+            </button>
+
+            <button class="homev2-link" type="button" data-goto="auth">
+              <div class="k">${icon("shield")}</div>
+              <div>
+                <div class="t">Login / Signup</div>
+                <div class="d muted small">Only needed for Learning Space.</div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <div class="homev2-block">
+          <div class="homev2-block-head">
+            <h3>Tools</h3>
+            <p class="muted small">Practical utilities.</p>
+          </div>
+
+          <div class="homev2-links">
+            <button class="homev2-link" type="button" data-goto="zakat">
+              <div class="k">${icon("target")}</div>
+              <div>
+                <div class="t">Zakat Calculator</div>
+                <div class="d muted small">Offline tool. Quick estimate.</div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+      ${renderMasteryTable(progress)}
     </section>
   `;
 
   bindGotoButtons();
-
-  document.getElementById("startBtn").addEventListener("click", async () => {
-    const category = document.getElementById("category").value;
-    const level = document.getElementById("level").value;
-    const timed = document.getElementById("timed").checked;
-    const count = Number(document.getElementById("count").value);
-    const status = document.getElementById("status");
-
-    state.lastSettings = { category, level, timed, count, mode: "custom" };
-    state._finalized = false;
-
-    try {
-      const all = await loadQuestions();
-      const eligible = all.filter((q) => isEligibleQuestion(q, category, level));
-
-      if (!eligible.length) {
-        status.textContent = `No questions found for ${category} • ${level}. Add them in data/questions.json.`;
-        return;
-      }
-
-      const ids = eligible.map((q) => q.id);
-      const bagKey = `custom|${category}|${level}`;
-      const pickCount = Math.min(count, ids.length);
-
-      const pickedIds = drawFromBag(ids, bagKey, pickCount);
-      state.quizQuestions = buildQuestionsByIds(all, pickedIds);
-
-      state.index = 0;
-      state.score = 0;
-      state.timed = timed;
-      state.answerLog = [];
-
-      withTransition(renderQuiz);
-    } catch (err) {
-      status.textContent = String(err?.message || err);
-    }
-  });
 }
 
 /* =======================
@@ -1032,7 +1092,7 @@ async function renderDaily() {
   app.innerHTML = `
     <section class="card" style="margin-top:20px;">
       <h2>Today’s Quiz</h2>
-      <p class="muted">This quiz is locked for today. Refreshing will not change the questions.</p>
+      <p class="muted">Refreshing will not change the questions till tomorrow.</p>
 
       <div class="grid" style="margin-top:12px;">
         <label class="field">
