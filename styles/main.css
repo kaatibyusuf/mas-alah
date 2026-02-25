@@ -2347,3 +2347,44 @@ details[open] summary::after{
   color: rgba(255,187,0,.85);
   font-weight: 950;
 }
+.diary-page {
+  background: var(--diary-paper);
+  border-radius: 18px;
+  padding: 14px;
+}
+
+.diary-editor, .diary-side, .diary-modal-inner {
+  background: var(--diary-card);
+}
+
+.diary-style-compact .diary-text { line-height: 1.45; }
+.diary-style-classic .diary-text { line-height: 1.7; }
+.diary-style-spacious .diary-text { line-height: 1.95; }
+
+.diary-calendar .diary-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.diary-cal-cell {
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 12px;
+  padding: 10px;
+  text-align: left;
+  background: rgba(255,255,255,.03);
+}
+
+.diary-cal-cell.is-on {
+  outline: 2px solid rgba(255,255,255,.22);
+}
+
+.diary-dotcount {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.65);
+  margin-top: 8px;
+}

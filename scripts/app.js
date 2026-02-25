@@ -3023,6 +3023,749 @@ function zakat_renderResult({ auto, method }) {
   `;
 }
 /* =======================
+   Diary (offline module)
+   - Private, local-only
+   - Calendar sync (in-app month view)
+   - Theme + style presets
+   - PIN lock hooks (uses your existing Lock route)
+   - Reminder (works while app is open)
+======================= */
+
+const DIARY_DEFAULTS = {
+  entriesKey: "masalah_diary_entries_v2",
+  settingsKey: "masalah_diary_settings_v2",
+  draftKey: "masalah_diary_draft_v2"
+};
+
+const DIARY_THEMES = [
+  { key: "ink", label: "Ink (default)", card: "#0f0f11", paper: "#121216" },
+  { key: "sand", label: "Sand", card: "#14110b", paper: "#18130a" },
+  { key: "slate", label: "Slate", card: "#0f131a", paper: "#101622" },
+  { key: "forest", label: "Forest", card: "#0f1613", paper: "#0f1a15" },
+  { key: "wine", label: "Wine", card: "#1a0f13", paper: "#221018" }
+];
+
+const DIARY_STYLES = [
+  { key: "classic", label: "Classic" },
+  { key: "compact", label: "Compact" },
+  { key: "spacious", label: "Spacious" }
+];
+
+let diaryReminderTimer = null;
+
+/* ---------- storage ---------- */
+function diary_loadEntries() {
+  try {
+    const raw = localStorage.getItem(DIARY_DEFAULTS.entriesKey);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function diary_saveEntries(entries) {
+  try {
+    localStorage.setItem(DIARY_DEFAULTS.entriesKey, JSON.stringify(entries));
+  } catch {}
+}
+
+function diary_loadSettings() {
+  try {
+    const raw = localStorage.getItem(DIARY_DEFAULTS.settingsKey);
+    const parsed = raw ? JSON.parse(raw) : null;
+    const base = {
+      theme: "ink",
+      style: "classic",
+      reminderEnabled: false,
+      reminderTime: "20:00" // local time
+    };
+    return parsed && typeof parsed === "object" ? { ...base, ...parsed } : base;
+  } catch {
+    return { theme: "ink", style: "classic", reminderEnabled: false, reminderTime: "20:00" };
+  }
+}
+
+function diary_saveSettings(settings) {
+  try {
+    localStorage.setItem(DIARY_DEFAULTS.settingsKey, JSON.stringify(settings));
+  } catch {}
+}
+
+function diary_loadDraft() {
+  try {
+    const raw = localStorage.getItem(DIARY_DEFAULTS.draftKey);
+    const parsed = raw ? JSON.parse(raw) : null;
+    return parsed && typeof parsed === "object" ? parsed : { title: "", text: "", dateISO: todayISO(), updatedAt: 0 };
+  } catch {
+    return { title: "", text: "", dateISO: todayISO(), updatedAt: 0 };
+  }
+}
+
+function diary_saveDraft(draft) {
+  try {
+    localStorage.setItem(DIARY_DEFAULTS.draftKey, JSON.stringify(draft));
+  } catch {}
+}
+
+function diary_clearDraft() {
+  localStorage.removeItem(DIARY_DEFAULTS.draftKey);
+}
+
+/* ---------- helpers ---------- */
+function diary_fmtHumanDate(iso) {
+  const d = iso ? new Date(iso + "T00:00:00") : new Date();
+  return d.toLocaleDateString(undefined, { weekday: "short", day: "2-digit", month: "short", year: "numeric" });
+}
+
+function diary_fmtTime(ms) {
+  const d = new Date(ms || Date.now());
+  return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+}
+
+function diary_uid() {
+  return crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()) + "_" + Math.random().toString(16).slice(2);
+}
+
+function diary_themeByKey(k) {
+  return DIARY_THEMES.find((t) => t.key === k) || DIARY_THEMES[0];
+}
+
+function diary_daysInMonth(y, m) {
+  return new Date(y, m + 1, 0).getDate();
+}
+
+function diary_startWeekday(y, m) {
+  return new Date(y, m, 1).getDay(); // 0 Sun .. 6 Sat
+}
+
+function diary_entryCountByDate(entries) {
+  const map = new Map();
+  for (const e of entries) {
+    const iso = e.dateISO || "";
+    if (!iso) continue;
+    map.set(iso, (map.get(iso) || 0) + 1);
+  }
+  return map;
+}
+
+function diary_filterEntries(entries, dateISO, q) {
+  let out = [...entries];
+
+  if (dateISO) out = out.filter((e) => e.dateISO === dateISO);
+
+  const s = String(q || "").trim().toLowerCase();
+  if (s) {
+    out = out.filter((e) => {
+      const blob = `${e.title || ""}\n${e.text || ""}`.toLowerCase();
+      return blob.includes(s);
+    });
+  }
+
+  out.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+  return out;
+}
+
+/* ---------- reminder (soft, in-app) ---------- */
+function diary_stopReminder() {
+  if (diaryReminderTimer) clearTimeout(diaryReminderTimer);
+  diaryReminderTimer = null;
+}
+
+function diary_scheduleReminderIfEnabled() {
+  diary_stopReminder();
+
+  const s = diary_loadSettings();
+  if (!s.reminderEnabled) return;
+
+  const [hh, mm] = String(s.reminderTime || "20:00").split(":").map((x) => Number(x));
+  if (!Number.isFinite(hh) || !Number.isFinite(mm)) return;
+
+  const now = new Date();
+  const target = new Date();
+  target.setHours(hh, mm, 0, 0);
+
+  // if already passed today, schedule for tomorrow
+  if (target <= now) target.setDate(target.getDate() + 1);
+
+  const wait = target.getTime() - now.getTime();
+  diaryReminderTimer = setTimeout(() => {
+    showToast("Diary reminder: write a few lines.");
+    // reschedule next day
+    diary_scheduleReminderIfEnabled();
+  }, wait);
+}
+
+/* ---------- view ---------- */
+function renderDiary() {
+  state.currentRoute = "diary";
+
+  const settings = diary_loadSettings();
+  const theme = diary_themeByKey(settings.theme);
+
+  const entries = diary_loadEntries();
+  const draft = diary_loadDraft();
+
+  const now = new Date();
+  const viewYear = now.getFullYear();
+  const viewMonth = now.getMonth();
+
+  app.innerHTML = `
+    <section class="diary-page diary-style-${escapeHtml(settings.style)}"
+      style="--diary-card:${escapeHtml(theme.card)}; --diary-paper:${escapeHtml(theme.paper)};">
+
+      <header class="diary-head">
+        <div>
+          <h2 class="diary-h">Private Diary</h2>
+        </div>
+
+        <div class="diary-head-right">
+          <span id="diary_save_chip" class="pill ${draft.updatedAt ? "is-saved" : ""}">
+            ${draft.updatedAt ? "Draft saved" : "Not saved yet"}
+          </span>
+          <button id="diary_settings_btn" class="btn" type="button">Settings</button>
+          <button id="diary_clear_filter" class="btn mini" type="button">All</button>
+        </div>
+      </header>
+
+      <div class="diary-shell">
+        <main class="diary-editor">
+
+          <div class="diary-editor-top">
+            <div class="diary-date">
+              <span class="muted">Entry date</span>
+              <input id="diary_date" type="date" value="${escapeHtml(draft.dateISO || todayISO())}" />
+              <div class="muted small" id="diary_date_human">${escapeHtml(diary_fmtHumanDate(draft.dateISO || todayISO()))}</div>
+            </div>
+
+            <input
+              id="diary_title"
+              class="diary-title"
+              placeholder="A short headline (optional)"
+              maxlength="80"
+              value="${escapeHtml(draft.title || "")}"
+            />
+          </div>
+
+          <div class="diary-pad">
+            <textarea
+              id="diary_text"
+              class="diary-text"
+              placeholder="Write plainly."
+              maxlength="8000"
+            >${escapeHtml(draft.text || "")}</textarea>
+          </div>
+
+          <div class="diary-foot">
+            <div class="diary-meta muted">
+              <span id="diary_count">0 / 8000</span>
+              <span class="diary-dot">•</span>
+              <span id="diary_last_saved">${draft.updatedAt ? `Draft saved at ${escapeHtml(diary_fmtTime(draft.updatedAt))}` : "Draft not saved"}</span>
+            </div>
+
+            <div class="diary-actions">
+              <button id="diary_save" class="primary" type="button">Save entry</button>
+              <button id="diary_clear" class="btn" type="button">Clear</button>
+            </div>
+          </div>
+
+          <div id="diary_notice" class="diary-notice" aria-live="polite"></div>
+        </main>
+
+        <aside class="diary-side">
+          <div class="diary-side-head">
+            <h3 class="diary-side-title">Calendar</h3>
+            <p class="muted diary-side-sub">Tap a day to filter entries.</p>
+          </div>
+
+          <div id="diary_calendar" class="diary-calendar"></div>
+
+          <div class="diary-side-head" style="margin-top:14px;">
+            <h3 class="diary-side-title">Entries</h3>
+            <div class="diary-side-tools">
+              <input id="diary_search" class="diary-search" placeholder="Search..." />
+              <button id="diary_clear_filter" class="btn mini" type="button">All</button>
+            </div>
+          </div>
+
+          <div class="muted small" id="diary_filter_label" style="margin-top:8px;"></div>
+
+          <div id="diary_list" class="diary-list"></div>
+        </aside>
+      </div>
+
+      <div class="diary-modal" id="diary_modal" aria-hidden="true">
+        <div class="diary-modal-inner" role="dialog" aria-modal="true" aria-label="Diary entry">
+          <div class="diary-modal-head">
+            <div>
+              <p class="diary-modal-date muted" id="diary_modal_date"></p>
+              <h3 class="diary-modal-title" id="diary_modal_title"></h3>
+            </div>
+            <button class="btn" id="diary_modal_close" type="button">Close</button>
+          </div>
+
+          <div class="diary-modal-body">
+            <pre class="diary-modal-text" id="diary_modal_text"></pre>
+          </div>
+
+          <div class="diary-modal-actions">
+            <button class="btn danger" id="diary_delete" type="button">Delete entry</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="diary-modal" id="diary_settings" aria-hidden="true">
+        <div class="diary-modal-inner" role="dialog" aria-modal="true" aria-label="Diary settings">
+          <div class="diary-modal-head">
+            <div>
+              <p class="muted" style="margin:0;">Diary settings</p>
+              <h3 style="margin:6px 0 0;">Appearance, lock, reminders</h3>
+            </div>
+            <button class="btn" id="diary_settings_close" type="button">Close</button>
+          </div>
+
+          <div class="diary-modal-body">
+
+            <div class="grid" style="gap:12px;">
+              <label class="field">
+                <span>Theme</span>
+                <select id="diary_theme">
+                  ${DIARY_THEMES.map((t) => `<option ${t.key === settings.theme ? "selected" : ""} value="${escapeHtml(t.key)}">${escapeHtml(t.label)}</option>`).join("")}
+                </select>
+              </label>
+
+              <label class="field">
+                <span>Reading style</span>
+                <select id="diary_style">
+                  ${DIARY_STYLES.map((t) => `<option ${t.key === settings.style ? "selected" : ""} value="${escapeHtml(t.key)}">${escapeHtml(t.label)}</option>`).join("")}
+                </select>
+              </label>
+
+              <div class="card" style="box-shadow:none;">
+                <p class="muted" style="margin:0 0 8px 0;">Lock</p>
+                <p class="muted small" style="margin:0 0 10px 0;">Diary is protected by your PIN lock screen.</p>
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                  <button id="diary_go_lock" class="btn" type="button">Open Lock</button>
+                  <button id="diary_lock_now" class="btn" type="button">Lock now</button>
+                </div>
+              </div>
+
+              <div class="card" style="box-shadow:none;">
+                <p class="muted" style="margin:0 0 8px 0;">Reminder</p>
+
+                <label class="checkline">
+                  <input id="diary_reminder_on" type="checkbox" ${settings.reminderEnabled ? "checked" : ""} />
+                  <span>Enable daily reminder (works while app is open)</span>
+                </label>
+
+                <label class="field" style="margin-top:10px;">
+                  <span>Reminder time</span>
+                  <input id="diary_reminder_time" type="time" value="${escapeHtml(settings.reminderTime || "20:00")}" />
+                </label>
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="diary-modal-actions">
+            <button id="diary_settings_save" class="primary" type="button">Save settings</button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  `;
+
+  diary_bind({ viewYear, viewMonth });
+  diary_scheduleReminderIfEnabled();
+}
+
+/* ---------- binding + UI paint ---------- */
+function diary_bind({ viewYear, viewMonth }) {
+  const entries = diary_loadEntries();
+  const counts = diary_entryCountByDate(entries);
+
+  const elDate = app.querySelector("#diary_date");
+  const elDateHuman = app.querySelector("#diary_date_human");
+  const elTitle = app.querySelector("#diary_title");
+  const elText = app.querySelector("#diary_text");
+  const elCount = app.querySelector("#diary_count");
+  const elNotice = app.querySelector("#diary_notice");
+  const elSaveChip = app.querySelector("#diary_save_chip");
+  const elLastSaved = app.querySelector("#diary_last_saved");
+
+  const elCalendar = app.querySelector("#diary_calendar");
+  const elList = app.querySelector("#diary_list");
+  const elSearch = app.querySelector("#diary_search");
+  const elClearFilter = app.querySelector("#diary_clear_filter");
+  const elFilterLabel = app.querySelector("#diary_filter_label");
+
+  const elModal = app.querySelector("#diary_modal");
+  const elModalDate = app.querySelector("#diary_modal_date");
+  const elModalTitle = app.querySelector("#diary_modal_title");
+  const elModalText = app.querySelector("#diary_modal_text");
+  const elModalClose = app.querySelector("#diary_modal_close");
+  const elDelete = app.querySelector("#diary_delete");
+
+  const elSettingsBtn = app.querySelector("#diary_settings_btn");
+  const elSettings = app.querySelector("#diary_settings");
+  const elSettingsClose = app.querySelector("#diary_settings_close");
+  const elSettingsSave = app.querySelector("#diary_settings_save");
+
+  let openedId = null;
+  let deleteArmed = false;
+  let deleteArmTimer = null;
+
+  let filterDate = ""; // ISO date
+  let query = "";
+
+  let autosaveTimer = null;
+
+  function notice(msg, kind) {
+    elNotice.textContent = msg || "";
+    elNotice.classList.remove("is-warn", "is-good");
+    if (kind === "warn") elNotice.classList.add("is-warn");
+    if (kind === "good") elNotice.classList.add("is-good");
+  }
+
+  function updateCount() {
+    elCount.textContent = `${(elText.value || "").length} / 8000`;
+  }
+
+  function setDraftUI(mode, whenMs) {
+    if (!elSaveChip || !elLastSaved) return;
+
+    if (mode === "dirty") {
+      elSaveChip.textContent = "Typing…";
+      elSaveChip.classList.add("is-dirty");
+      elSaveChip.classList.remove("is-saved");
+      elLastSaved.textContent = "Typing…";
+      return;
+    }
+    if (mode === "saved") {
+      elSaveChip.textContent = "Draft saved";
+      elSaveChip.classList.add("is-saved");
+      elSaveChip.classList.remove("is-dirty");
+      elLastSaved.textContent = `Draft saved at ${diary_fmtTime(whenMs || Date.now())}`;
+      return;
+    }
+    elSaveChip.textContent = "Not saved yet";
+    elSaveChip.classList.remove("is-saved", "is-dirty");
+    elLastSaved.textContent = "Draft not saved";
+  }
+
+  function scheduleDraftSave() {
+    setDraftUI("dirty");
+    if (autosaveTimer) clearTimeout(autosaveTimer);
+
+    autosaveTimer = setTimeout(() => {
+      const draft = {
+        dateISO: elDate.value || todayISO(),
+        title: elTitle.value || "",
+        text: elText.value || "",
+        updatedAt: Date.now()
+      };
+      diary_saveDraft(draft);
+      setDraftUI("saved", draft.updatedAt);
+    }, 600);
+  }
+
+  function renderCalendar() {
+    const days = diary_daysInMonth(viewYear, viewMonth);
+    const start = diary_startWeekday(viewYear, viewMonth);
+    const monthName = new Date(viewYear, viewMonth, 1).toLocaleDateString(undefined, { month: "long", year: "numeric" });
+
+    let html = `
+      <div class="diary-cal-head">
+        <strong>${escapeHtml(monthName)}</strong>
+        <span class="muted small">Dots mean entries</span>
+      </div>
+      <div class="diary-cal-grid">
+        <div class="diary-cal-dow muted">S</div>
+        <div class="diary-cal-dow muted">M</div>
+        <div class="diary-cal-dow muted">T</div>
+        <div class="diary-cal-dow muted">W</div>
+        <div class="diary-cal-dow muted">T</div>
+        <div class="diary-cal-dow muted">F</div>
+        <div class="diary-cal-dow muted">S</div>
+    `;
+
+    for (let i = 0; i < start; i++) html += `<div class="diary-cal-cell blank"></div>`;
+
+    for (let d = 1; d <= days; d++) {
+      const iso = isoFromDate(new Date(viewYear, viewMonth, d));
+      const n = counts.get(iso) || 0;
+      const on = filterDate === iso ? "is-on" : "";
+      const dot = n ? `<span class="diary-dotcount" aria-hidden="true"></span>` : "";
+      html += `
+        <button class="diary-cal-cell ${on}" type="button" data-cal-date="${escapeHtml(iso)}" aria-label="Day ${d}">
+          <span class="diary-cal-num">${d}</span>
+          ${dot}
+        </button>
+      `;
+    }
+
+    html += `</div>`;
+    elCalendar.innerHTML = html;
+  }
+
+  function renderList() {
+    const all = diary_loadEntries();
+    const filtered = diary_filterEntries(all, filterDate, query);
+
+    elFilterLabel.textContent = filterDate
+      ? `Filtered by: ${diary_fmtHumanDate(filterDate)}`
+      : query.trim()
+        ? `Search results`
+        : "";
+
+    if (!filtered.length) {
+      elList.innerHTML = `<p class="muted">No entries found.</p>`;
+      return;
+    }
+
+    elList.innerHTML = filtered
+      .map((e) => {
+        const title = escapeHtml(e.title || "Untitled");
+        const date = escapeHtml(diary_fmtHumanDate(e.dateISO));
+        const preview = escapeHtml(String(e.text || "").slice(0, 120));
+        return `
+          <button class="diary-item" type="button" data-diary-open="${escapeHtml(e.id)}">
+            <div class="diary-item-top">
+              <span class="diary-date">${date}</span>
+              <span class="diary-title">${title}</span>
+            </div>
+            <div class="diary-preview muted">${preview}${(e.text || "").length > 120 ? "…" : ""}</div>
+          </button>
+        `;
+      })
+      .join("");
+  }
+
+  function openModal(entry) {
+    openedId = entry.id;
+
+    elModalDate.textContent = diary_fmtHumanDate(entry.dateISO);
+    elModalTitle.textContent = entry.title || "Untitled";
+    elModalText.textContent = entry.text || "";
+
+    deleteArmed = false;
+    elDelete.textContent = "Delete entry";
+    clearTimeout(deleteArmTimer);
+
+    elModal.classList.add("is-open");
+    elModal.setAttribute("aria-hidden", "false");
+  }
+
+  function closeModal() {
+    openedId = null;
+
+    elModal.classList.remove("is-open");
+    elModal.setAttribute("aria-hidden", "true");
+
+    deleteArmed = false;
+    elDelete.textContent = "Delete entry";
+    clearTimeout(deleteArmTimer);
+  }
+
+  function openSettings() {
+    elSettings.classList.add("is-open");
+    elSettings.setAttribute("aria-hidden", "false");
+  }
+
+  function closeSettings() {
+    elSettings.classList.remove("is-open");
+    elSettings.setAttribute("aria-hidden", "true");
+  }
+
+  // Initial paint
+  updateCount();
+  renderCalendar();
+  renderList();
+
+  // Draft date human label
+  elDateHuman.textContent = diary_fmtHumanDate(elDate.value || todayISO());
+
+  // Draft autosave
+  elText.addEventListener("input", () => {
+    updateCount();
+    scheduleDraftSave();
+  });
+  elTitle.addEventListener("input", scheduleDraftSave);
+
+  elDate.addEventListener("change", () => {
+    elDateHuman.textContent = diary_fmtHumanDate(elDate.value || todayISO());
+    scheduleDraftSave();
+  });
+
+  // Save entry
+  app.querySelector("#diary_save").addEventListener("click", () => {
+    const title = String(elTitle.value || "").trim();
+    const text = String(elText.value || "").trim();
+    const dateISO = elDate.value || todayISO();
+
+    if (!text) {
+      notice("Write something first.", "warn");
+      return;
+    }
+
+    const all = diary_loadEntries();
+    all.push({
+      id: diary_uid(),
+      dateISO,
+      title: title || "Untitled",
+      text,
+      createdAt: Date.now()
+    });
+
+    diary_saveEntries(all);
+
+    // clear editor, keep date as chosen
+    elTitle.value = "";
+    elText.value = "";
+    updateCount();
+
+    diary_clearDraft();
+    setDraftUI("idle");
+    notice("Saved privately on this device.", "good");
+
+    // repaint calendar + list
+    const fresh = diary_loadEntries();
+    const map = diary_entryCountByDate(fresh);
+    counts.clear();
+    for (const [k, v] of map.entries()) counts.set(k, v);
+
+    renderCalendar();
+    renderList();
+  });
+
+  // Clear editor
+  app.querySelector("#diary_clear").addEventListener("click", () => {
+    elTitle.value = "";
+    elText.value = "";
+    updateCount();
+    diary_clearDraft();
+    setDraftUI("idle");
+    notice("Cleared.", "good");
+  });
+
+  // Calendar filtering
+  elCalendar.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-cal-date]");
+    if (!btn) return;
+    const iso = btn.getAttribute("data-cal-date");
+    filterDate = filterDate === iso ? "" : iso;
+    renderCalendar();
+    renderList();
+  });
+
+  // Search
+  elSearch.addEventListener("input", () => {
+    query = String(elSearch.value || "");
+    renderList();
+  });
+
+  elClearFilter.addEventListener("click", () => {
+    filterDate = "";
+    query = "";
+    elSearch.value = "";
+    renderCalendar();
+    renderList();
+  });
+
+  // Open entry modal
+  app.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-diary-open]");
+    if (!btn) return;
+
+    const id = btn.getAttribute("data-diary-open");
+    const data = diary_loadEntries();
+    const entry = data.find((x) => x.id === id);
+    if (!entry) return;
+    openModal(entry);
+  });
+
+  elModalClose.addEventListener("click", closeModal);
+  elModal.addEventListener("click", (e) => {
+    if (e.target === elModal) closeModal();
+  });
+
+  // Delete with double-tap safety
+  elDelete.addEventListener("click", () => {
+    if (!openedId) return;
+
+    if (!deleteArmed) {
+      deleteArmed = true;
+      elDelete.textContent = "Tap again to delete";
+      notice("Tap delete again to confirm.", "warn");
+
+      clearTimeout(deleteArmTimer);
+      deleteArmTimer = setTimeout(() => {
+        deleteArmed = false;
+        elDelete.textContent = "Delete entry";
+        notice("", "");
+      }, 2500);
+
+      return;
+    }
+
+    const data = diary_loadEntries();
+    const next = data.filter((x) => x.id !== openedId);
+    diary_saveEntries(next);
+
+    closeModal();
+    notice("Deleted.", "good");
+
+    // repaint
+    const map = diary_entryCountByDate(next);
+    counts.clear();
+    for (const [k, v] of map.entries()) counts.set(k, v);
+
+    renderCalendar();
+    renderList();
+  });
+
+  // Settings modal
+  elSettingsBtn.addEventListener("click", openSettings);
+  elSettingsClose.addEventListener("click", closeSettings);
+  elSettings.addEventListener("click", (e) => {
+    if (e.target === elSettings) closeSettings();
+  });
+
+  // Settings save
+  elSettingsSave.addEventListener("click", () => {
+    const themeKey = app.querySelector("#diary_theme")?.value || "ink";
+    const styleKey = app.querySelector("#diary_style")?.value || "classic";
+    const reminderEnabled = !!app.querySelector("#diary_reminder_on")?.checked;
+    const reminderTime = app.querySelector("#diary_reminder_time")?.value || "20:00";
+
+    diary_saveSettings({
+      theme: themeKey,
+      style: styleKey,
+      reminderEnabled,
+      reminderTime
+    });
+
+    closeSettings();
+    showToast("Diary settings saved.");
+    renderDiary(); // simplest, safest refresh
+  });
+
+  // Lock actions
+  app.querySelector("#diary_go_lock").addEventListener("click", () => {
+    closeSettings();
+    go("lock");
+  });
+
+  app.querySelector("#diary_lock_now").addEventListener("click", () => {
+    closeSettings();
+    lockNow(); // uses your existing global function
+    showToast("Locked.");
+    go("lock");
+  });
+}
+/* =======================
    Footer year
 ======================= */
 function setFooterYear() {
