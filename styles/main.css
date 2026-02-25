@@ -1,8 +1,8 @@
 /* =========================================================
-   Mas'alah main.css (Updated)
-   Clean + deduplicated. Works with your App.js structure.
-   Includes: nav dropdown, welcome, quiz, calendar,
-   zakat, diary, lock, toast, transitions, learning UI.
+   Mas'alah main.css (Final)
+   Clean + deduplicated. Works with the current App.js + new architecture.
+   Includes: nav dropdown, welcomev2, homev2, quiz, calendar,
+   zakat, diary, lock, toast, transitions, learning UI, mufti, fatwa, fasl library.
 ========================================================= */
 
 /* =========================================================
@@ -37,6 +37,10 @@
   --tap: 44px;
 
   --ease-warm: cubic-bezier(.22, 1, .36, 1);
+
+  /* Diary theme defaults (can be overridden via JS by setting CSS variables on body/app) */
+  --diary-paper: rgba(255,255,255,.00);
+  --diary-card: rgba(255,255,255,.03);
 }
 
 /* =========================================================
@@ -486,166 +490,167 @@ input[type="password"]:focus{
 }
 
 /* =========================================================
-   Welcome
+   Welcome v2 (ONLY welcome system kept)
 ========================================================= */
-.welcome{ padding: 26px 0 18px; }
-.welcome-shell{
-  max-width: var(--wrap);
-  width: 100%;
-  margin: 0 auto;
+.welcomev2{ margin-top: 18px; }
+
+.welcomev2-shell{
+  max-width: 1100px;
+  margin-inline: auto;
   display: grid;
-  gap: 14px;
+  gap: 16px;
 }
 
-.welcome-hero{
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 34px;
-  text-align:center;
+.welcomev2-hero{
+  border: 1px solid rgba(255,255,255,.10);
+  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+  border-radius: 18px;
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 14px;
+  align-items: start;
+  position: relative;
+  overflow: hidden;
   box-shadow: var(--shadow2);
 }
 
-.welcome-topline{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding: 7px 12px;
+.welcomev2-hero::after{
+  content:"";
+  position:absolute;
+  inset:-40px -40px auto auto;
+  width: 220px;
+  height: 220px;
   border-radius: 999px;
-  border: 1px solid rgba(255,187,0,.25);
-  background: rgba(255,187,0,.10);
-  color: var(--text);
-  font-size: 12px;
+  background: radial-gradient(circle, rgba(255,255,255,.10), transparent 60%);
+  filter: blur(1px);
+  opacity: .8;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.welcomev2-mark{
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  font-weight: 950;
+  font-size: 26px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.18);
+  position: relative;
+  z-index: 1;
+}
+
+.welcomev2-heroText{
+  position: relative;
+  z-index: 1;
+}
+
+.welcomev2-kicker{
+  display:flex;
+  gap: 10px;
+  align-items:center;
+  flex-wrap:wrap;
   font-weight: 850;
 }
+.welcomev2-kicker .dot{ opacity:.5; }
 
-.welcome-hero h2{
-  margin: 14px 0 0 0;
-  font-size: clamp(32px, 4vw, 52px);
-  line-height: 1.06;
-  letter-spacing: -0.6px;
-  color: var(--text);
+.welcomev2-title{
+  margin: 10px 0 0 0;
+  font-size: clamp(28px, 3.4vw, 44px);
+  letter-spacing: -0.4px;
+  line-height: 1.08;
 }
 
-.welcome-hero p{
-  margin: 12px auto 0;
+.welcomev2-sub{
+  margin: 8px 0 0 0;
+  line-height: 1.7;
   max-width: 70ch;
   color: var(--muted);
-  line-height: 1.7;
-  font-size: 15px;
 }
 
-.welcome-cta{
-  margin-top: 18px;
+.welcomev2-cta{
+  margin-top: 14px;
   display:flex;
-  justify-content:center;
   gap:10px;
   flex-wrap:wrap;
 }
-.welcome-cta .btn,
-.welcome-cta .primary{ padding: 12px 18px; }
 
-.welcome-values{
+.welcomev2-badges{
+  margin-top: 12px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.welcomev2-grid{
   display:grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap:12px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+@media (max-width: 980px){
+  .welcomev2-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 520px){
+  .welcomev2-hero{ grid-template-columns: 1fr; }
+  .welcomev2-grid{ grid-template-columns: 1fr; }
 }
 
-.welcome-card{
-  background: rgba(255,255,255,.03);
+.welcomev2-card{
   border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.03);
   border-radius: 16px;
-  padding: 16px;
-  box-shadow: var(--shadow);
-  text-align:left;
+  padding: 14px;
+  box-shadow: 0 14px 40px rgba(0,0,0,.30);
+  transition: transform .12s ease, border-color .12s ease, background .12s ease;
+}
+.welcomev2-card:hover{
+  transform: translateY(-1px);
+  border-color: rgba(255,187,0,.28);
+  background: rgba(255,255,255,.04);
 }
 
-.welcome-card .icon{
+.welcomev2-cardTop{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+.welcomev2-cardTop .k{
   width: 38px;
   height: 38px;
-  border-radius: 14px;
   display:grid;
   place-items:center;
-  background: rgba(255,187,0,.12);
-  border: 1px solid rgba(255,187,0,.22);
-  margin-bottom: 10px;
-  color: var(--gold);
-}
-.welcome-card .icon svg{ width: 18px; height: 18px; display:block; }
-
-.welcome-card h3{ margin:0; font-size:14px; color: var(--text); font-weight: 900; }
-.welcome-card p{ margin:6px 0 0 0; font-size:13px; color: var(--muted); line-height: 1.55; }
-
-.welcome-how{
-  background: rgba(255,255,255,.03);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 18px;
-  box-shadow: var(--shadow);
-}
-.welcome-how h3{ margin:0; font-size:16px; color: var(--text); }
-.welcome-how .sub{ margin: 6px 0 0 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
-
-.steps{
-  margin-top: 12px;
-  display:grid;
-  gap:10px;
-}
-.step{
-  display:grid;
-  grid-template-columns: 34px 1fr;
-  gap:12px;
-  align-items:start;
-  padding: 10px;
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,.08);
-  background: rgba(255,255,255,.02);
-}
-.step .num{
-  width:34px;
-  height:34px;
   border-radius: 12px;
-  display:grid;
-  place-items:center;
-  font-weight: 900;
-  background: rgba(255,187,0,.14);
-  border: 1px solid rgba(255,187,0,.25);
-  color: var(--gold);
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.18);
 }
-.step h4{ margin: 1px 0 0 0; font-size: 14px; color: var(--text); font-weight: 900; }
-.step p{ margin: 4px 0 0 0; font-size: 13px; color: var(--muted); line-height: 1.6; }
+.welcomev2-card h3{
+  margin: 0;
+  font-size: 15px;
+}
+.welcomev2-card p{
+  margin: 10px 0 0 0;
+  line-height: 1.6;
+  color: var(--muted);
+}
 
-.welcome-bottom{
+.welcomev2-mini{ margin-top: 12px; }
+
+.welcomev2-footnote{
+  border: 1px dashed rgba(255,255,255,.14);
+  border-radius: 16px;
+  padding: 12px 14px;
+  background: rgba(0,0,0,.12);
   display:flex;
-  justify-content:center;
-  gap:10px;
-  flex-wrap:wrap;
+  gap:12px;
+  align-items:center;
 }
-
-@media (max-width: 900px){
-  .welcome-hero{ padding: 24px; }
-  .welcome-values{ grid-template-columns: 1fr; }
-}
-
-/* Desktop welcome layout */
-@media (min-width: 1024px){
-  .welcome{ padding: 38px 0 22px; }
-  .welcome-shell{
-    grid-template-columns: 1.35fr 0.65fr;
-    gap: 16px;
-    align-items: start;
-  }
-  .welcome-hero{ text-align:left; padding: 38px; }
-  .welcome-hero p{ margin-left:0; margin-right:0; }
-  .welcome-cta{ justify-content:flex-start; }
-  .welcome-values{ grid-template-columns: 1fr; }
-  .welcome-how{ grid-column: 1 / -1; }
-}
-
-/* Tablet: single column */
-@media (min-width: 721px) and (max-width: 1023px){
-  .welcome-shell{ max-width: min(920px, 100%); }
-  .welcome-hero{ padding: 28px; }
+.welcomev2-rule{
+  width: 34px;
+  height: 1px;
+  background: rgba(255,255,255,.25);
 }
 
 /* =========================================================
@@ -1011,12 +1016,14 @@ input[type="password"]:focus{
 .warn{ color: rgba(255,187,0,0.92); }
 
 /* =========================================================
-   Diary (App.js diary uses diary-page + diary-shell etc.)
+   Diary
 ========================================================= */
 .diary-page{
   max-width: 980px;
   margin: 0 auto;
   padding: 16px 0 40px;
+  background: var(--diary-paper);
+  border-radius: 18px;
 }
 
 .diary-head{
@@ -1025,6 +1032,8 @@ input[type="password"]:focus{
   gap: 14px;
   align-items:flex-end;
   flex-wrap:wrap;
+  position: relative;
+  z-index: 2;
 }
 
 .diary-h{ font-size: 28px; margin: 0; }
@@ -1042,9 +1051,11 @@ input[type="password"]:focus{
 
 .diary-editor{
   border: 1px solid rgba(255,255,255,0.08);
-  background: rgba(255,255,255,0.03);
+  background: var(--diary-card);
   border-radius: 16px;
   padding: 16px;
+  position: relative;
+  z-index: 2;
 }
 
 .diary-editor-top{
@@ -1110,9 +1121,11 @@ input[type="password"]:focus{
 
 .diary-side{
   border: 1px solid rgba(255,255,255,0.08);
-  background: rgba(255,255,255,0.03);
+  background: var(--diary-card);
   border-radius: 16px;
   padding: 16px;
+  position: relative;
+  z-index: 2;
 }
 
 .diary-side-head{
@@ -1218,6 +1231,37 @@ input[type="password"]:focus{
   justify-content:flex-end;
 }
 
+/* Diary style modes */
+.diary-style-compact .diary-text { line-height: 1.45; }
+.diary-style-classic .diary-text { line-height: 1.7; }
+.diary-style-spacious .diary-text { line-height: 1.95; }
+
+/* Diary calendar (optional UI in diary) */
+.diary-calendar .diary-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-top: 10px;
+}
+.diary-cal-cell {
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 12px;
+  padding: 10px;
+  text-align: left;
+  background: rgba(255,255,255,.03);
+}
+.diary-cal-cell.is-on {
+  outline: 2px solid rgba(255,255,255,.22);
+}
+.diary-dotcount {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.65);
+  margin-top: 8px;
+}
+
 /* =========================================================
    Lock
 ========================================================= */
@@ -1259,40 +1303,82 @@ input[type="password"]:focus{
 }
 
 /* =========================================================
-   Home / Dashboard
+   Home v2 (new architecture)
 ========================================================= */
-.dash { margin-top: 18px; }
-.dash-top { display:flex; gap:16px; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; }
-.dash-title h2 { margin:0; }
-.dash-actions { display:flex; gap:10px; flex-wrap:wrap; }
+.homev2 { margin-top: 18px; display: grid; gap: 16px; }
 
-.dash-grid{
+.homev2-head{
+  display:flex;
+  justify-content:space-between;
+  gap:14px;
+  flex-wrap:wrap;
+  align-items:flex-start;
+}
+.homev2-title h2{ margin:0; font-size:26px; letter-spacing:.2px; }
+.homev2-quick{ display:flex; gap:10px; flex-wrap:wrap; }
+
+.homev2-status{
   display:grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap:12px;
-  margin-top:14px;
 }
-@media (max-width: 900px){
-  .dash-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 920px){
+  .homev2-status{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-@media (max-width: 560px){
-  .dash-grid{ grid-template-columns: 1fr; }
+@media (max-width: 520px){
+  .homev2-status{ grid-template-columns: 1fr; }
 }
 
-.big{ font-size: 26px; font-weight: 700; margin-top: 6px; }
+.homev2-last{ max-width: 1100px; margin-inline:auto; }
 
-.mrow{
-  display:flex;
-  justify-content:space-between;
+.homev2-architecture{
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap:12px;
-  padding:10px 0;
-  border-top:1px solid rgba(255,255,255,.06);
 }
-.mrow:first-child{ border-top: none; }
-.mleft{ display:flex; flex-direction:column; gap:2px; }
-.mright{ display:flex; flex-direction:column; align-items:flex-end; gap:6px; min-width: 140px; }
-.mbar{ width:140px; height:8px; border-radius:999px; background:rgba(255,255,255,.08); overflow:hidden; }
-.mfill{ height:100%; border-radius:999px; background:rgba(255,255,255,.65); }
+@media (max-width: 920px){
+  .homev2-architecture{ grid-template-columns: 1fr; }
+}
+
+.homev2-block{
+  border:1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.03);
+  border-radius: 16px;
+  padding: 14px;
+}
+.homev2-block-head h3{ margin:0; font-size:16px; }
+.homev2-block-head p{ margin:6px 0 0 0; color: var(--muted); line-height: 1.6; }
+
+.homev2-links{ display:grid; gap:10px; margin-top:12px; }
+
+.homev2-link{
+  width:100%;
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.18);
+  cursor:pointer;
+  text-align:left;
+}
+.homev2-link:hover{
+  border-color: rgba(255,255,255,.18);
+  background: rgba(255,255,255,.05);
+}
+.homev2-link .k{
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  border-radius: 12px;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.03);
+  flex: 0 0 auto;
+}
+.homev2-link .t{ font-weight: 850; }
+.homev2-link .d{ margin-top: 3px; line-height: 1.4; color: var(--muted); }
 
 /* =========================================================
    WhatsApp-style Learning UI
@@ -1537,7 +1623,10 @@ input[type="password"]:focus{
 .wa-status.is-warn{ color: rgba(255,187,0,.92); }
 .wa-status.is-good{ color: rgba(255,255,255,.90); }
 .wa-status.is-bad{ color: rgba(255,120,140,.92); }
-/* Fasl calendar alias styles */
+
+/* =========================================================
+   Fasl calendar alias styles
+========================================================= */
 .fasl-grid{
   margin-top: 14px;
   display: grid;
@@ -1563,27 +1652,21 @@ input[type="password"]:focus{
   border: 0;
   cursor: pointer;
 }
-
 .fasl-day:hover{ background: rgba(255,255,255,.06); }
 .fasl-day:active{ transform: translateY(1px); }
+
 /* =========================================================
    Mufti Dashboard
 ========================================================= */
-
-.mufti-shell {
-  margin-top: 20px;
-}
+.mufti-shell { margin-top: 20px; }
 
 .mufti-grid {
   display: grid;
   grid-template-columns: 1fr 1.1fr;
   gap: 14px;
 }
-
 @media (max-width: 980px){
-  .mufti-grid {
-    grid-template-columns: 1fr;
-  }
+  .mufti-grid { grid-template-columns: 1fr; }
 }
 
 /* Case list panel */
@@ -1593,7 +1676,7 @@ input[type="password"]:focus{
   padding-right: 4px;
 }
 
-/* Case card tweaks */
+/* Case card */
 .mufti-case {
   border-radius: 16px;
   padding: 12px;
@@ -1603,16 +1686,11 @@ input[type="password"]:focus{
   text-align: left;
   cursor: pointer;
 }
-
 .mufti-case:hover {
   background: rgba(255,255,255,.05);
   border-color: rgba(255,187,0,.35);
 }
-
-.mufti-case:active {
-  transform: translateY(1px);
-}
-
+.mufti-case:active { transform: translateY(1px); }
 .mufti-case.is-active {
   border-color: rgba(255,187,0,.60);
   background: rgba(255,187,0,.08);
@@ -1629,7 +1707,6 @@ input[type="password"]:focus{
   border: 1px solid rgba(255,255,255,.12);
   background: rgba(255,255,255,.04);
 }
-
 .mufti-status.submitted { border-color: rgba(255,255,255,.25); }
 .mufti-status.assigned  { border-color: rgba(255,187,0,.45); color: var(--gold); }
 .mufti-status.answered  { border-color: rgba(36,194,106,.45); color: var(--good); }
@@ -1669,10 +1746,10 @@ input[type="password"]:focus{
   flex-wrap: wrap;
   margin-top: 12px;
 }
+
 /* =========================================================
    Public Fatwa Archive
 ========================================================= */
-
 .fatwa-shell {
   max-width: 1000px;
   margin: 0 auto;
@@ -1700,10 +1777,7 @@ input[type="password"]:focus{
   box-shadow: var(--shadow);
   transition: border-color .15s ease, transform .12s ease;
 }
-
-.fatwa-card:hover {
-  border-color: rgba(255,187,0,.35);
-}
+.fatwa-card:hover { border-color: rgba(255,187,0,.35); }
 
 .fatwa-title {
   font-size: 18px;
@@ -1741,7 +1815,6 @@ input[type="password"]:focus{
   border-top: 1px solid rgba(255,255,255,.08);
   padding-top: 12px;
 }
-
 .fatwa-evidence-item {
   padding: 8px 0;
   font-size: 13px;
@@ -1755,7 +1828,6 @@ input[type="password"]:focus{
   flex-wrap: wrap;
   margin-top: 12px;
 }
-
 .fatwa-tag {
   padding: 6px 10px;
   border-radius: 999px;
@@ -1765,17 +1837,16 @@ input[type="password"]:focus{
   background: rgba(255,187,0,.12);
   color: var(--gold);
 }
-/* =========================================================
-   Fasl: Library (details/summary)
-========================================================= */
 
+/* =========================================================
+   Fasl: Library (details/summary) base
+========================================================= */
 details{
   border: 1px solid rgba(255,255,255,.10);
   background: rgba(255,255,255,.02);
   border-radius: 16px;
   overflow: hidden;
 }
-
 details + details{ margin-top: 12px; }
 
 summary{
@@ -1789,7 +1860,6 @@ summary{
   justify-content:space-between;
   gap: 12px;
 }
-
 summary::-webkit-details-marker{ display:none; }
 
 details[open] summary{
@@ -1806,10 +1876,7 @@ details p{
   margin: 10px 0 0 0;
   line-height: 1.7;
 }
-
-details p strong{
-  color: rgba(255,255,255,.92);
-}
+details p strong{ color: rgba(255,255,255,.92); }
 
 details summary:focus-visible{
   outline: 2px solid rgba(255,187,0,.55);
@@ -1817,7 +1884,6 @@ details summary:focus-visible{
   border-radius: 14px;
 }
 
-/* A small subtle chevron */
 summary::after{
   content: "▾";
   opacity: .65;
@@ -1825,21 +1891,20 @@ summary::after{
   transition: transform .18s ease, opacity .18s ease;
   margin-left: auto;
 }
-
 details[open] summary::after{
   transform: rotate(180deg);
   opacity: .9;
 }
 
-/* Optional: library wrapper spacing */
 #fasl_lib_list{
   margin-top: 12px;
   display: grid;
   gap: 12px;
 }
-/* =========================
+
+/* =========================================================
    Fasl Library (Premium UI)
-========================= */
+========================================================= */
 .fasl-lib-head{
   display:flex;
   justify-content:space-between;
@@ -1847,14 +1912,12 @@ details[open] summary::after{
   gap:12px;
   flex-wrap:wrap;
 }
-
 .fasl-lib-title{
   font-size: 18px;
   font-weight: 950;
   letter-spacing: -0.2px;
   margin:0;
 }
-
 .fasl-lib-sub{
   margin:6px 0 0 0;
   color: var(--muted);
@@ -1869,11 +1932,8 @@ details[open] summary::after{
   gap:10px;
   align-items:end;
 }
-
 @media (max-width: 860px){
-  .fasl-lib-controls{
-    grid-template-columns: 1fr;
-  }
+  .fasl-lib-controls{ grid-template-columns: 1fr; }
 }
 
 .fasl-chiprow{
@@ -1882,7 +1942,6 @@ details[open] summary::after{
   flex-wrap:wrap;
   margin-top:10px;
 }
-
 .fasl-chip{
   padding: 6px 10px;
   border-radius: 999px;
@@ -1912,7 +1971,6 @@ details[open] summary::after{
   gap: 12px;
   user-select:none;
 }
-
 .fasl-case summary::-webkit-details-marker{ display:none; }
 
 .fasl-case-title{
@@ -1920,7 +1978,6 @@ details[open] summary::after{
   letter-spacing: -0.2px;
   line-height: 1.25;
 }
-
 .fasl-case-meta{
   margin-top:6px;
   display:flex;
@@ -1948,7 +2005,6 @@ details[open] summary::after{
   color: rgba(255,255,255,.65);
   transition: transform .18s ease;
 }
-
 .fasl-case[open] .fasl-chevron{ transform: rotate(180deg); }
 
 .fasl-case-body{
@@ -1985,13 +2041,11 @@ details[open] summary::after{
   margin: 12px 0;
 }
 
-/* Search input feel */
 #fasl_lib_search{
   border-radius: 999px;
   padding: 12px 14px;
 }
 
-/* Make details feel responsive */
 .fasl-case summary:hover{
   background: rgba(255,255,255,.03);
 }
@@ -2000,18 +2054,16 @@ details[open] summary::after{
   outline: 2px solid rgba(255,187,0,.25);
   outline-offset: 2px;
 }
-/* =========================================================
-   Fasl Library: Classical Madrasa Archive UI
-========================================================= */
 
-/* Library shell */
+/* =========================================================
+   Fasl Library: Classical Madrasa Archive UI (optional)
+========================================================= */
 .library {
   max-width: 1100px;
   margin: 0 auto;
   padding: 6px 0 40px;
 }
 
-/* Archive header */
 .library-hero{
   background:
     radial-gradient(circle at 18% 12%, rgba(255,187,0,.08), transparent 40%),
@@ -2067,7 +2119,6 @@ details[open] summary::after{
 }
 .lib-badge strong{ color: var(--gold); font-weight: 950; }
 
-/* Shelf controls */
 .library-controls{
   display:flex;
   gap: 10px;
@@ -2086,7 +2137,6 @@ details[open] summary::after{
   gap: 10px;
   align-items:center;
 }
-
 .library-search input{
   width: 100%;
   border-radius: 999px;
@@ -2096,7 +2146,6 @@ details[open] summary::after{
   padding: 12px 14px;
   outline:none;
 }
-
 .library-search input:focus{
   border-color: rgba(255,187,0,.45);
   box-shadow: 0 0 0 4px rgba(255,187,0,.10);
@@ -2133,7 +2182,6 @@ details[open] summary::after{
   color: var(--text);
 }
 
-/* Layout */
 .library-grid{
   margin-top: 14px;
   display:grid;
@@ -2144,7 +2192,6 @@ details[open] summary::after{
   .library-grid{ grid-template-columns: 1fr; }
 }
 
-/* Topic shelf */
 .topic-shelf{
   background: rgba(255,255,255,.03);
   border: 1px solid rgba(255,255,255,.10);
@@ -2201,7 +2248,6 @@ details[open] summary::after{
 .topic-meta{ color: var(--muted); font-size: 12px; }
 .topic-desc{ margin-top: 6px; color: var(--muted); font-size: 12px; line-height: 1.6; }
 
-/* Archive panel */
 .archive-panel{
   background: rgba(255,255,255,.03);
   border: 1px solid rgba(255,255,255,.10);
@@ -2244,12 +2290,11 @@ details[open] summary::after{
     rgba(0,0,0,.14);
 }
 
-/* Fatwa card */
+/* Archive fatwa block */
 .fatwa{
   border-radius: 18px;
   border: 1px solid rgba(255,255,255,.10);
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.02));
+  background: linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.02));
   padding: 14px 14px 12px;
   margin-bottom: 10px;
   box-shadow: 0 12px 36px rgba(0,0,0,.30);
@@ -2268,26 +2313,6 @@ details[open] summary::after{
   align-items:center;
   gap: 8px;
   font-weight: 950;
-}
-
-.fatwa-tag{
-  display:inline-flex;
-  align-items:center;
-  gap: 8px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(255,187,0,.30);
-  background: rgba(255,187,0,.10);
-  color: rgba(255,255,255,.92);
-  font-weight: 900;
-  font-size: 12px;
-}
-
-.fatwa-title{
-  margin: 8px 0 0;
-  font-size: 14px;
-  font-weight: 950;
-  line-height: 1.35;
 }
 
 .fatwa-body{
@@ -2319,279 +2344,7 @@ details[open] summary::after{
   margin: 0;
 }
 
-/* Collapsible */
-.fatwa details{ margin-top: 10px; }
-.fatwa summary{
-  list-style:none;
-  cursor:pointer;
-  user-select:none;
-  font-weight: 900;
-  color: rgba(255,255,255,.88);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap: 10px;
-  padding: 8px 10px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(0,0,0,.16);
-}
-.fatwa summary::-webkit-details-marker{ display:none; }
-.fatwa details[open] summary{
-  border-color: rgba(255,187,0,.35);
-  background: rgba(255,187,0,.08);
-}
-
-/* Tiny marks */
 .khutut{
   color: rgba(255,187,0,.85);
   font-weight: 950;
-}
-.diary-page {
-  background: var(--diary-paper);
-  border-radius: 18px;
-  padding: 14px;
-}
-
-.diary-editor, .diary-side, .diary-modal-inner {
-  background: var(--diary-card);
-}
-
-.diary-style-compact .diary-text { line-height: 1.45; }
-.diary-style-classic .diary-text { line-height: 1.7; }
-.diary-style-spacious .diary-text { line-height: 1.95; }
-
-.diary-calendar .diary-cal-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 8px;
-  margin-top: 10px;
-}
-
-.diary-cal-cell {
-  border: 1px solid rgba(255,255,255,.08);
-  border-radius: 12px;
-  padding: 10px;
-  text-align: left;
-  background: rgba(255,255,255,.03);
-}
-
-.diary-cal-cell.is-on {
-  outline: 2px solid rgba(255,255,255,.22);
-}
-
-.diary-dotcount {
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: rgba(255,255,255,.65);
-  margin-top: 8px;
-}
-.btn, .btn.mini { pointer-events: auto !important; position: relative; z-index: 5; }
-.diary-head, .diary-side { position: relative; z-index: 5; }
-.homev2 { margin-top: 18px; display: grid; gap: 16px; }
-
-.homev2-head{
-  display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap;
-  align-items:flex-start;
-}
-.homev2-title h2{ margin:0; font-size:26px; letter-spacing:.2px; }
-.homev2-quick{ display:flex; gap:10px; flex-wrap:wrap; }
-
-.homev2-status{
-  display:grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap:12px;
-}
-@media (max-width: 920px){
-  .homev2-status{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-@media (max-width: 520px){
-  .homev2-status{ grid-template-columns: 1fr; }
-}
-
-.homev2-last{ max-width: 1100px; margin-inline:auto; }
-
-.homev2-architecture{
-  display:grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap:12px;
-}
-@media (max-width: 920px){
-  .homev2-architecture{ grid-template-columns: 1fr; }
-}
-
-.homev2-block{
-  border:1px solid rgba(255,255,255,.10);
-  background: rgba(255,255,255,.03);
-  border-radius: 16px;
-  padding: 14px;
-}
-.homev2-block-head h3{ margin:0; font-size:16px; }
-.homev2-block-head p{ margin:6px 0 0 0; }
-
-.homev2-links{ display:grid; gap:10px; margin-top:12px; }
-
-.homev2-link{
-  width:100%;
-  display:flex; align-items:flex-start; gap:12px;
-  padding: 12px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(0,0,0,.18);
-  cursor:pointer;
-  text-align:left;
-}
-.homev2-link:hover{
-  border-color: rgba(255,255,255,.18);
-  background: rgba(255,255,255,.05);
-}
-.homev2-link .k{
-  width:38px; height:38px;
-  display:grid; place-items:center;
-  border-radius: 12px;
-  border:1px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.03);
-  flex: 0 0 auto;
-}
-.homev2-link .t{ font-weight: 850; }
-.homev2-link .d{ margin-top: 3px; line-height: 1.4; }
-.welcomev2{
-  margin-top: 18px;
-}
-.welcomev2-shell{
-  max-width: 1100px;
-  margin-inline: auto;
-  display: grid;
-  gap: 16px;
-}
-
-.welcomev2-hero{
-  border: 1px solid rgba(255,255,255,.10);
-  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
-  border-radius: 18px;
-  padding: 16px;
-  display: grid;
-  grid-template-columns: 64px 1fr;
-  gap: 14px;
-  align-items: start;
-  position: relative;
-  overflow: hidden;
-}
-.welcomev2-hero::after{
-  content:"";
-  position:absolute;
-  inset:-40px -40px auto auto;
-  width: 220px;
-  height: 220px;
-  border-radius: 999px;
-  background: radial-gradient(circle, rgba(255,255,255,.10), transparent 60%);
-  filter: blur(1px);
-  opacity: .8;
-}
-.welcomev2-mark{
-  width: 56px;
-  height: 56px;
-  border-radius: 16px;
-  display: grid;
-  place-items: center;
-  font-weight: 950;
-  font-size: 26px;
-  border: 1px solid rgba(255,255,255,.14);
-  background: rgba(0,0,0,.18);
-}
-
-.welcomev2-kicker{
-  display:flex;
-  gap: 10px;
-  align-items:center;
-  flex-wrap:wrap;
-  font-weight: 850;
-}
-.welcomev2-kicker .dot{ opacity:.5; }
-
-.welcomev2-title{
-  margin: 10px 0 0 0;
-  font-size: 30px;
-  letter-spacing: .2px;
-}
-.welcomev2-sub{
-  margin: 8px 0 0 0;
-  line-height: 1.7;
-  max-width: 70ch;
-}
-
-.welcomev2-cta{
-  margin-top: 14px;
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-.welcomev2-badges{
-  margin-top: 12px;
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-.welcomev2-grid{
-  display:grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
-}
-@media (max-width: 980px){
-  .welcomev2-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
-@media (max-width: 520px){
-  .welcomev2-hero{ grid-template-columns: 1fr; }
-  .welcomev2-grid{ grid-template-columns: 1fr; }
-}
-
-.welcomev2-card{
-  border: 1px solid rgba(255,255,255,.10);
-  background: rgba(255,255,255,.03);
-  border-radius: 16px;
-  padding: 14px;
-}
-.welcomev2-cardTop{
-  display:flex;
-  gap:10px;
-  align-items:center;
-}
-.welcomev2-cardTop .k{
-  width: 38px;
-  height: 38px;
-  display:grid;
-  place-items:center;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,.12);
-  background: rgba(0,0,0,.18);
-}
-.welcomev2-card h3{
-  margin: 0;
-  font-size: 15px;
-}
-.welcomev2-card p{
-  margin: 10px 0 0 0;
-  line-height: 1.6;
-}
-.welcomev2-mini{
-  margin-top: 12px;
-}
-
-.welcomev2-footnote{
-  border: 1px dashed rgba(255,255,255,.14);
-  border-radius: 16px;
-  padding: 12px 14px;
-  background: rgba(0,0,0,.12);
-  display:flex;
-  gap:12px;
-  align-items:center;
-}
-.welcomev2-rule{
-  width: 34px;
-  height: 1px;
-  background: rgba(255,255,255,.25);
 }
