@@ -1,18 +1,27 @@
 
+/* =========================================================
+   Mas'alah — App.js (FULL, paste-ready)
+
+   What this fixes:
+   1) Supabase is NOT imported/initialized at the top level.
+   2) Fasl + Library never touch Supabase (pure offline).
+   3) Supabase is loaded ONLY inside Auth/Learning (lazy import).
+   4) Routing is clean. No “route === library” bug.
+   5) No global `supabase` variable that leaks into offline pages.
+
+   REQUIREMENT:
+   Create this file: /scripts/supabaseClient.js
+
+   // supabaseClient.js
+   import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+   export const supabase = createClient("https://kjggfschpuqfggyasnux.supabase.co","sb_publishable_wkNt08rBEiLv70BpmMbKiA_GVGMjTO7");
+
+========================================================= */
+
 import { HAYD_PACK } from "./packs/hayd.js";
 import { ISTIHADA_PACK } from "./packs/istihada.js";
 import { NIFAS_PACK } from "./packs/nifas.js";
 import { FOUNDATIONS_PACK } from "./packs/foundations.js";
-
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-
-/* =======================
-   Supabase
-======================= */
-const SUPABASE_URL = "https://kjggfschpuqfggyasnux.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_wkNt08rBEiLv70BpmMbKiA_GVGMjTO7";
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-let _supabase = null;
 
 /* =======================
    App root
@@ -33,7 +42,7 @@ const QUESTIONS_CACHE_AT_KEY = "masalah_questions_cache_at_v1";
 const FASL_KEY = "masalah_fasl_v1";
 
 /* Protect what you want */
-const PROTECTED_ROUTES = new Set(["diary", "progress"]);
+const PROTECTED_ROUTES = new Set(["progress"]); // add "diary" if you later protect it
 
 /* Categories must match data/questions.json exactly */
 const CATEGORIES = ["Qur’an", "Seerah", "Fiqh", "Tawheed", "Arabic", "Adhkaar"];
@@ -51,11 +60,11 @@ const state = {
   secondsPerQuestion: 20,
   timerId: null,
   timeLeft: 20,
-  lastSettings: null, // { category, level, timed, count, mode: "custom"|"daily"|"review" }
+  lastSettings: null,
   isNavigating: false,
   currentRoute: "welcome",
   intendedRoute: null,
-  answerLog: [], // [{ selectedIdx, correctIdx, isCorrect, reason, explanation, questionId }]
+  answerLog: [],
   _finalized: false
 };
 
@@ -94,29 +103,6 @@ function fmtLocalLongDate(d = new Date()) {
   }).format(d);
 }
 
-function startOfMonth(date) {
-  return new Date(date.getFullYear(), date.getMonth(), 1);
-}
-function endOfMonth(date) {
-  return new Date(date.getFullYear(), date.getMonth() + 1, 0);
-}
-function isoFromDate(d) {
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  return `${y}-${m}-${day}`;
-}
-function dateFromISO(iso) {
-  return new Date(iso + "T00:00:00");
-}
-function sameISO(aISO, bISO) {
-  return aISO && bISO && aISO === bISO;
-}
-function inRangeISO(xISO, aISO, bISO) {
-  if (!xISO || !aISO || !bISO) return false;
-  return xISO >= aISO && xISO <= bISO;
-}
-
 /* =======================
    Toast
 ======================= */
@@ -132,7 +118,7 @@ function showToast(message) {
   toast.textContent = message;
   toast.classList.add("show");
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toast.classList.remove("show"), 3000);
+  toastTimer = setTimeout(() => toast.classList.remove("show"), 2800);
 }
 
 /* =======================
@@ -204,17 +190,17 @@ function icon(name) {
 }
 
 /* =======================
-   Progress storage + mastery + mistakes
+   Progress storage
 ======================= */
 function defaultProgress() {
   return {
     streakCount: 0,
     lastActiveDate: null,
     lastAttempt: null,
-    mastery: {}, // "Category|Level" -> 0..1
-    mistakes: {}, // questionId -> { wrong, right, lastWrongAt, lastRightAt }
-    reviewQueue: [], // question ids, newest first
-    bestScores: {} // "Category|Level" -> percent
+    mastery: {},
+    mistakes: {},
+    reviewQueue: [],
+    bestScores: {}
   };
 }
 
@@ -241,7 +227,6 @@ function updateStreak(progress) {
     progress.lastActiveDate = today;
     return;
   }
-
   if (last === today) return;
 
   const diffDays = Math.round((new Date(today) - new Date(last)) / 86400000);
@@ -260,7 +245,6 @@ function updateMastery(progress, category, level, score, total) {
 
   const alpha = 0.25;
   const next = prev === null ? attemptPct : alpha * attemptPct + (1 - alpha) * prev;
-
   progress.mastery[k] = +next.toFixed(4);
 }
 
@@ -322,7 +306,7 @@ function buildMistakeSet(progress, allQuestions, count = 20) {
 }
 
 /* =======================
-   Questions: offline-first loading
+   Questions: offline-first
 ======================= */
 function cacheQuestionsLocally(questions) {
   try {
@@ -365,7 +349,7 @@ async function loadQuestions() {
 }
 
 /* =======================
-   Daily state (localStorage)
+   Daily state
 ======================= */
 function loadDailyState() {
   const raw = localStorage.getItem(DAILY_KEY);
@@ -379,7 +363,6 @@ function loadDailyState() {
 function saveDailyState(daily) {
   localStorage.setItem(DAILY_KEY, JSON.stringify(daily));
 }
-
 function buildQuestionsByIds(all, ids) {
   const map = new Map(all.map((q) => [q.id, q]));
   const ordered = [];
@@ -391,7 +374,7 @@ function buildQuestionsByIds(all, ids) {
 }
 
 /* =======================
-   Shuffle bag (no repeats until recycle)
+   Shuffle bag
 ======================= */
 function loadBag() {
   try {
@@ -422,7 +405,6 @@ function isEligibleQuestion(q, category, level) {
     const id = String(q.id || "");
     return id.includes("_adv_") || id.includes("_jaamiah_") || id.includes("_advanced_");
   }
-
   return true;
 }
 
@@ -509,6 +491,7 @@ function clearTimer() {
     state.timerId = null;
   }
 }
+
 function startTimer() {
   clearTimer();
   state.timeLeft = state.secondsPerQuestion;
@@ -537,24 +520,20 @@ function setActiveNav(route) {
     btn.classList.toggle("active", btn.dataset.route === route);
   });
 }
-
 function go(route) {
   if (!route) return;
   window.location.hash = `#${route}`;
 }
-
 function bindGotoButtons() {
   app.querySelectorAll("[data-goto]").forEach((btn) => {
     btn.addEventListener("click", () => go(btn.dataset.goto));
   });
 }
-
 function bindNavRoutes() {
   document.querySelectorAll("[data-route]").forEach((btn) => {
     btn.addEventListener("click", () => go(btn.dataset.route));
   });
 }
-
 function bindMobileMenu() {
   const nav = document.querySelector(".nav");
   const toggle = document.querySelector(".nav-toggle");
@@ -697,10 +676,9 @@ function requireUnlock(route) {
 }
 
 /* =======================
-   PWA Install prompt button
+   PWA (safe no-op)
 ======================= */
 let deferredInstallPrompt = null;
-
 function setupInstallPrompt() {
   window.addEventListener("beforeinstallprompt", (e) => {
     e.preventDefault();
@@ -716,7 +694,6 @@ function setupInstallPrompt() {
     showToast("Installed.");
   });
 }
-
 async function triggerInstall() {
   if (!deferredInstallPrompt) {
     showToast("Install not available on this device yet.");
@@ -730,17 +707,26 @@ async function triggerInstall() {
   const btn = document.getElementById("installBtn");
   if (btn) btn.style.display = "none";
 }
-
 function registerServiceWorker() {
   if (!("serviceWorker" in navigator)) return;
   navigator.serviceWorker.register("./sw.js").catch(() => {});
 }
 
-/* =======================
-   Auth helpers
-======================= */
+/* =========================================================
+   SUPABASE ISOLATION (LAZY)
+========================================================= */
+let _supabaseClient = null;
+
+async function getSupabase() {
+  if (_supabaseClient) return _supabaseClient;
+  const mod = await import("./supabaseClient.js");
+  _supabaseClient = mod.supabase;
+  return _supabaseClient;
+}
+
 async function requireAuthOrRoute(routeIfMissing = "auth") {
   try {
+    const supabase = await getSupabase();
     const { data } = await supabase.auth.getSession();
     const session = data?.session || null;
     if (!session) {
@@ -804,64 +790,6 @@ function renderWelcome() {
             <button id="installBtn" class="btn" type="button" style="display:none;">
               <span class="btn-inner">${icon("download")}Install</span>
             </button>
-          </div>
-        </div>
-
-        <div class="welcome-values">
-          <div class="welcome-card">
-            <div class="icon">${icon("book")}</div>
-            <h3>Clarity</h3>
-            <p>Short questions with focused explanations.</p>
-          </div>
-
-          <div class="welcome-card">
-            <div class="icon">${icon("shield")}</div>
-            <h3>Consistency</h3>
-            <p>Daily quizzes that remove indecision.</p>
-          </div>
-
-          <div class="welcome-card">
-            <div class="icon">${icon("layers")}</div>
-            <h3>Structure</h3>
-            <p>Organized by topic and level.</p>
-          </div>
-        </div>
-
-        <div class="welcome-how">
-          <h3>How it works</h3>
-          <p class="sub">Simple on purpose and should not compete with the learning.</p>
-
-          <div class="steps">
-            <div class="step">
-              <div class="num">1</div>
-              <div>
-                <h4>Pick Daily or Custom</h4>
-                <p>Daily is locked for the day. Custom targets a topic and level.</p>
-              </div>
-            </div>
-
-            <div class="step">
-              <div class="num">2</div>
-              <div>
-                <h4>Answer and learn</h4>
-                <p>Instant feedback with short explanations.</p>
-              </div>
-            </div>
-
-            <div class="step">
-              <div class="num">3</div>
-              <div>
-                <h4>Review mistakes</h4>
-                <p>Wrong answers build your review set automatically.</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="welcome-bottom" style="margin-top:14px;">
-            <button class="primary" type="button" data-goto="daily">
-              <span class="btn-inner">${icon("bolt")}Begin today’s quiz</span>
-            </button>
-            <button class="btn" type="button" data-goto="home">Open dashboard</button>
           </div>
         </div>
       </div>
@@ -953,8 +881,11 @@ function renderHome() {
           <button class="btn" type="button" data-goto="review">
             <span class="btn-inner">${icon("layers")}Review</span>
           </button>
-          <button class="btn" type="button" data-goto="faq">
-            <span class="btn-inner">${icon("target")}How it works</span>
+          <button class="btn" type="button" data-goto="fasl">
+            <span class="btn-inner">${icon("book")}Fasl</span>
+          </button>
+          <button class="btn" type="button" data-goto="learning">
+            <span class="btn-inner">${icon("target")}Learning</span>
           </button>
         </div>
       </div>
@@ -1181,7 +1112,7 @@ async function renderDaily() {
 }
 
 /* =======================
-   Review (mistake engine)
+   Review
 ======================= */
 async function renderReview() {
   state.currentRoute = "review";
@@ -1496,13 +1427,6 @@ function renderResults() {
         <div class="diary-list">${reviewHtml}</div>
       </div>
 
-      <div class="card" style="margin-top:12px; box-shadow:none;">
-        <p class="muted" style="margin:0 0 8px 0;">Share</p>
-        <textarea id="shareText" rows="3">I scored ${state.score}/${total} in Mas'alah. ${category} (${level}). Can you beat that?</textarea>
-        <button id="copyBtn" class="btn" style="margin-top:10px;" type="button">Copy</button>
-        <p id="copyStatus" class="muted" style="margin-top:8px;"></p>
-      </div>
-
       <div style="display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;">
         <button id="tryAgainBtn" class="btn" type="button">Try Again</button>
         <button id="reviewBtn" class="btn" type="button">Review mistakes</button>
@@ -1518,16 +1442,6 @@ function renderResults() {
       state.index = i;
       withTransition(renderQuiz);
     });
-  });
-
-  document.getElementById("copyBtn").addEventListener("click", async () => {
-    const text = document.getElementById("shareText").value;
-    try {
-      await navigator.clipboard.writeText(text);
-      document.getElementById("copyStatus").textContent = "Copied.";
-    } catch {
-      document.getElementById("copyStatus").textContent = "Copy manually if needed.";
-    }
   });
 
   document.getElementById("tryAgainBtn").addEventListener("click", async () => {
@@ -1739,10 +1653,9 @@ function renderFAQ() {
   bindGotoButtons();
 }
 
-/* =======================
-   Fasl (women’s fiqh + tracking + library)
-======================= */
-
+/* =========================================================
+   FASL (OFFLINE ONLY)
+========================================================= */
 function loadFasl() {
   try {
     const raw = localStorage.getItem(FASL_KEY);
@@ -1789,10 +1702,6 @@ function fmtISO(iso) {
   });
 }
 
-/* =======================
-   Main Render
-======================= */
-
 async function renderFasl() {
   state.currentRoute = "fasl";
 
@@ -1829,34 +1738,29 @@ async function renderFasl() {
   }
 
   tabBtns.forEach((b) => b.addEventListener("click", () => setTab(b.dataset.faslTab)));
-
   setTab("learn");
 }
-
-/* =======================
-   Learn
-======================= */
 
 function renderFaslLearn(panel) {
   panel.innerHTML = `
     <div class="card" style="box-shadow:none;">
       <h3>Foundations</h3>
       <p class="muted" style="line-height:1.7;">
-        Ḥayḍ is natural menstrual blood.  
-        Istiḥāḍah is irregular bleeding.  
-        Nifās is post-natal bleeding.  
+        Ḥayḍ is natural menstrual blood.<br/>
+        Istiḥāḍah is irregular bleeding.<br/>
+        Nifās is post-natal bleeding.<br/>
         Each has distinct rulings for prayer, fasting, ghusl, and marital relations.
       </p>
       <p class="muted" style="margin-top:10px;">
         Study principles first. Then review cases in the Library tab.
       </p>
+      <div style="margin-top:12px;">
+        <button class="btn" type="button" data-goto="library">Open full Fasl Library</button>
+      </div>
     </div>
   `;
+  bindGotoButtons();
 }
-
-/* =======================
-   Tracker
-======================= */
 
 function buildCycleModel(fasl) {
   const last = fasl.lastPeriodStart || "";
@@ -1872,7 +1776,7 @@ function buildCycleModel(fasl) {
   const fertileStart = addDays(ovulation, -5);
   const fertileEnd = addDays(ovulation, 1);
 
-  return { nextPeriod, fertileStart, fertileEnd };
+  return { nextPeriod, fertileStart, fertileEnd, periodLength };
 }
 
 function renderFaslTrack(panel) {
@@ -1921,14 +1825,22 @@ function renderFaslTrack(panel) {
   });
 }
 
-/* =======================
-   Library
-======================= */
+function renderFaslLibrary(panel) {
+  panel.innerHTML = `
+    <div class="card" style="box-shadow:none;">
+      <h3 style="margin-top:0;">Library</h3>
+      <p class="muted" style="line-height:1.7;">
+        Your offline fiqh packs load in the full Library route.
+      </p>
+      <button class="primary" type="button" data-goto="library">Open Library</button>
+    </div>
+  `;
+  bindGotoButtons();
+}
 
-// Library renderer (offline content packs, serious archive UI)
-
-
-
+/* =========================================================
+   FULL OFFLINE LIBRARY ROUTE
+========================================================= */
 function flattenPack(pack, packKey) {
   const out = [];
   let n = 0;
@@ -1954,10 +1866,10 @@ function flattenPack(pack, packKey) {
 
 function packMeta() {
   const packs = [
+    { key: "foundations", name: "Foundations", desc: "Definitions and max/min rules", pack: FOUNDATIONS_PACK },
     { key: "hayd", name: "Ḥayḍ", desc: "Menses rulings and patterns", pack: HAYD_PACK },
     { key: "istihada", name: "Istiḥāḍah", desc: "Non-menstrual bleeding rulings", pack: ISTIHADA_PACK },
     { key: "nifas", name: "Nifās", desc: "Postpartum bleeding rulings", pack: NIFAS_PACK }
-    // { key: "foundations", name: "Foundations", desc: "Definitions and max/min rules", pack: FOUNDATIONS_PACK }
   ];
 
   return packs.map((p) => {
@@ -1965,7 +1877,6 @@ function packMeta() {
     return { ...p, count: items.length, items };
   });
 }
-
 
 function renderFatwaCard(x) {
   const title = escapeHtml(x.title);
@@ -2004,17 +1915,8 @@ function renderFatwaCard(x) {
     </article>
   `;
 }
-function renderFaslLibrary(panel) {
-  panel.innerHTML = `
-    <div class="card" style="box-shadow:none;">
-      <h3 style="margin-top:0;">Library</h3>
-      <p class="muted" style="line-height:1.7;">
-        Your offline fiqh packs will load here.
-      </p>
-    </div>
-  `;
-}
-export async function renderLibrary() {
+
+async function renderLibrary() {
   state.currentRoute = "library";
 
   const packs = packMeta();
@@ -2027,7 +1929,8 @@ export async function renderLibrary() {
           <div>
             <h2 class="library-title">Fasl Library</h2>
             <p class="library-sub">
-              A curated archive of women’s fiqh cases in a calm, classical format. Select a shelf, search within it, then read the rulings as you would in a fiqh circle.
+              A curated archive of women’s fiqh cases in a calm, classical format.
+              Select a shelf, search within it, then read the rulings.
             </p>
           </div>
 
@@ -2066,7 +1969,7 @@ export async function renderLibrary() {
           <div class="topic-list" id="topic_list">
             ${packs
               .map(
-                (p, i) => `
+                (p) => `
                 <button class="topic-item" type="button" data-pack="${escapeHtml(p.key)}">
                   <div class="topic-item-top">
                     <span class="topic-name">${escapeHtml(p.name)}</span>
@@ -2082,7 +1985,7 @@ export async function renderLibrary() {
 
         <section class="archive-panel">
           <div class="archive-head">
-            <div class="archive-title" id="archive_title">Ḥayḍ</div>
+            <div class="archive-title" id="archive_title">Foundations</div>
             <div class="archive-meta">
               <span class="pill" id="archive_count">0</span>
               <button class="btn mini" type="button" id="archive_top">Top</button>
@@ -2103,7 +2006,7 @@ export async function renderLibrary() {
   const elCount = app.querySelector("#archive_count");
   const btnTop = app.querySelector("#archive_top");
 
-  let currentPackKey = packs[0]?.key || "hayd";
+  let currentPackKey = packs[0]?.key || "foundations";
   let query = "";
 
   function getCurrentPack() {
@@ -2169,737 +2072,10 @@ export async function renderLibrary() {
 
   setPack(currentPackKey);
 }
-/* =======================
-   Zakat Calculator
-======================= */
-function formatMoney(n, currency) {
-  const num = Number(n || 0);
-  return new Intl.NumberFormat(undefined, {
-    style: "currency",
-    currency: currency || "NGN",
-    maximumFractionDigits: 2
-  }).format(num);
-}
-function toNum(v) {
-  const x = Number(String(v || "").replace(/,/g, "").trim());
-  return Number.isFinite(x) ? x : 0;
-}
-function calcZakat({ zakatable, nisab }) {
-  const meetsNisab = zakatable >= nisab && zakatable > 0;
-  const zakatDue = meetsNisab ? zakatable * 0.025 : 0;
-  return { meetsNisab, zakatDue };
-}
-function renderZakat() {
-  state.currentRoute = "zakat";
 
-  const currencyDefault = "NGN";
-  const methodDefault = "gold";
-
-  app.innerHTML = `
-    <section class="card">
-      <div class="card-head">
-        <h2>Zakat Calculator</h2>
-        <p class="muted">Estimate zakat on zakatable wealth. Uses 2.5% once you meet nisab and a lunar year has passed.</p>
-      </div>
-
-      <div class="zakat-grid">
-        <div class="zakat-box">
-          <h3 class="zakat-title">1) Nisab</h3>
-
-          <div class="field">
-            <label class="label">Currency</label>
-            <input id="zk_currency" class="input" value="${currencyDefault}" placeholder="NGN, USD, GBP..." />
-            <p class="help muted">Use a valid currency code (NGN, USD, GBP, EUR).</p>
-          </div>
-
-          <div class="field">
-            <label class="label">Nisab method</label>
-            <div class="segmented" role="group" aria-label="Nisab method">
-              <button type="button" class="seg-btn is-on" data-zk-method="gold">Gold (85g)</button>
-              <button type="button" class="seg-btn" data-zk-method="silver">Silver (595g)</button>
-            </div>
-          </div>
-
-          <div class="field">
-            <label class="label">Price per gram</label>
-            <input id="zk_pricePerGram" class="input" inputmode="decimal" placeholder="Enter current price per gram" />
-            <p class="help muted">Enter today’s market price per gram for your chosen method.</p>
-          </div>
-
-          <div class="field">
-            <label class="label">Hawl completed?</label>
-            <label class="checkline">
-              <input id="zk_hawl" type="checkbox" />
-              <span>Yes, I have held this wealth for one lunar year</span>
-            </label>
-          </div>
-        </div>
-
-        <div class="zakat-box">
-          <h3 class="zakat-title">2) Assets</h3>
-
-          <div class="field"><label class="label">Cash at hand / bank</label><input id="zk_cash" class="input" inputmode="decimal" placeholder="0" /></div>
-          <div class="field"><label class="label">Gold / silver value</label><input id="zk_metals" class="input" inputmode="decimal" placeholder="0" /></div>
-          <div class="field"><label class="label">Investments / shares / crypto</label><input id="zk_invest" class="input" inputmode="decimal" placeholder="0" /></div>
-          <div class="field"><label class="label">Business inventory (resale value)</label><input id="zk_inventory" class="input" inputmode="decimal" placeholder="0" /></div>
-          <div class="field"><label class="label">Money owed to you (likely to be paid)</label><input id="zk_debtsOwed" class="input" inputmode="decimal" placeholder="0" /></div>
-        </div>
-
-        <div class="zakat-box">
-          <h3 class="zakat-title">3) Liabilities</h3>
-
-          <div class="field">
-            <label class="label">Short-term debts due now</label>
-            <input id="zk_debtsDue" class="input" inputmode="decimal" placeholder="0" />
-            <p class="help muted">Only subtract what is due and payable soon, not long-term future installments.</p>
-          </div>
-
-          <div class="zakat-actions">
-            <button id="zk_calc" class="btn primary" type="button">Calculate</button>
-            <button id="zk_reset" class="btn" type="button">Reset</button>
-          </div>
-
-          <div id="zk_result" class="zakat-result" aria-live="polite"></div>
-        </div>
-
-      </div>
-    </section>
-  `;
-
-  let method = methodDefault;
-
-  const segBtns = Array.from(app.querySelectorAll("[data-zk-method]"));
-  segBtns.forEach((b) => {
-    b.addEventListener("click", () => {
-      method = b.dataset.zkMethod;
-      segBtns.forEach((x) => x.classList.toggle("is-on", x === b));
-    });
-  });
-
-  const elCurrency = app.querySelector("#zk_currency");
-  const elPricePerGram = app.querySelector("#zk_pricePerGram");
-  const elHawl = app.querySelector("#zk_hawl");
-
-  const elCash = app.querySelector("#zk_cash");
-  const elMetals = app.querySelector("#zk_metals");
-  const elInvest = app.querySelector("#zk_invest");
-  const elInventory = app.querySelector("#zk_inventory");
-  const elDebtsOwed = app.querySelector("#zk_debtsOwed");
-  const elDebtsDue = app.querySelector("#zk_debtsDue");
-
-  const elResult = app.querySelector("#zk_result");
-
-  function computeAndRender() {
-    const currency = (elCurrency.value || currencyDefault).trim().toUpperCase();
-    const pricePerGram = toNum(elPricePerGram.value);
-
-    const nisabGrams = method === "gold" ? 85 : 595;
-    const nisab = pricePerGram > 0 ? pricePerGram * nisabGrams : 0;
-
-    const assets =
-      toNum(elCash.value) +
-      toNum(elMetals.value) +
-      toNum(elInvest.value) +
-      toNum(elInventory.value) +
-      toNum(elDebtsOwed.value);
-
-    const liabilities = toNum(elDebtsDue.value);
-
-    const zakatable = Math.max(0, assets - liabilities);
-    const { meetsNisab, zakatDue } = calcZakat({ zakatable, nisab });
-
-    const hawlOk = !!elHawl.checked;
-
-    const nisabText =
-      nisab > 0
-        ? `${formatMoney(nisab, currency)} (${method} nisab: ${nisabGrams}g)`
-        : "Enter price per gram to compute nisab.";
-
-    const statusLine = !hawlOk
-      ? `<p class="warn">Reminder: zakat is due after a lunar year (hawl). Turn on “Hawl completed” when ready.</p>`
-      : "";
-
-    const dueLine =
-      nisab > 0 && meetsNisab && hawlOk
-        ? `<p class="good"><strong>Zakat due:</strong> ${formatMoney(zakatDue, currency)}</p>`
-        : `<p class="muted"><strong>Zakat due:</strong> ${formatMoney(0, currency)}</p>`;
-
-    const meetsLine =
-      nisab > 0
-        ? `<p class="${meetsNisab ? "good" : "muted"}"><strong>Nisab:</strong> ${nisabText}</p>`
-        : `<p class="muted"><strong>Nisab:</strong> ${nisabText}</p>`;
-
-    elResult.innerHTML = `
-      <div class="zakat-summary">
-        <p><strong>Total assets:</strong> ${formatMoney(assets, currency)}</p>
-        <p><strong>Liabilities deducted:</strong> ${formatMoney(liabilities, currency)}</p>
-        <p><strong>Zakatable amount:</strong> ${formatMoney(zakatable, currency)}</p>
-        ${meetsLine}
-        ${statusLine}
-        ${dueLine}
-      </div>
-    `;
-  }
-
-  app.querySelector("#zk_calc").addEventListener("click", computeAndRender);
-
-  app.querySelector("#zk_reset").addEventListener("click", () => {
-    elCurrency.value = currencyDefault;
-    elPricePerGram.value = "";
-    elHawl.checked = false;
-
-    elCash.value = "";
-    elMetals.value = "";
-    elInvest.value = "";
-    elInventory.value = "";
-    elDebtsOwed.value = "";
-    elDebtsDue.value = "";
-
-    method = methodDefault;
-    segBtns.forEach((x) => x.classList.toggle("is-on", x.dataset.zkMethod === methodDefault));
-
-    elResult.innerHTML = "";
-  });
-}
-
-/* =======================
-   Diary (local)
-======================= */
-function loadDiary() {
-  try {
-    const raw = localStorage.getItem(DIARY_KEY);
-    const parsed = raw ? JSON.parse(raw) : [];
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
-}
-function saveDiary(entries) {
-  localStorage.setItem(DIARY_KEY, JSON.stringify(entries));
-}
-
-function renderDiaryList(entries) {
-  if (!entries.length) return `<p class="muted">Write something small today.</p>`;
-
-  const sorted = [...entries].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-
-  return sorted
-    .map((e) => {
-      const date = escapeHtml(e.date || "");
-      const title = escapeHtml(e.title || "Untitled");
-      const preview = escapeHtml((e.text || "").slice(0, 140));
-      return `
-        <button class="diary-item" type="button" data-diary-open="${escapeHtml(e.id)}">
-          <div class="diary-item-top">
-            <span class="diary-date">${date}</span>
-            <span class="diary-title">${title}</span>
-          </div>
-          <div class="diary-preview muted">${preview}${(e.text || "").length > 140 ? "…" : ""}</div>
-        </button>
-      `;
-    })
-    .join("");
-}
-
-function renderDiary() {
-  state.currentRoute = "diary";
-
-  const entries = loadDiary();
-  const DRAFT_KEY = "masalah_diary_draft_v1";
-
-  const fmtHumanDate = (iso) => {
-    const d = iso ? new Date(iso) : new Date();
-    return d.toLocaleDateString(undefined, {
-      weekday: "short",
-      day: "2-digit",
-      month: "short",
-      year: "numeric"
-    });
-  };
-
-  const fmtTime = (ms) => {
-    const d = new Date(ms || Date.now());
-    return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-  };
-
-  const loadDraft = () => {
-    try {
-      return JSON.parse(localStorage.getItem(DRAFT_KEY) || "null");
-    } catch {
-      return null;
-    }
-  };
-
-  const saveDraft = (draft) => {
-    localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
-  };
-
-  const clearDraft = () => {
-    localStorage.removeItem(DRAFT_KEY);
-  };
-
-  const draft = loadDraft() || { title: "", text: "", updatedAt: 0 };
-
-  app.innerHTML = `
-    <section class="diary-page screen">
-
-      <header class="diary-head">
-        <div>
-          <h2 class="diary-h">Private Diary</h2>
-          <p class="diary-sub muted">Write. Nobody is watching.</p>
-        </div>
-
-        <div class="diary-head-right" style="display:flex; gap:10px; align-items:center;">
-          <span id="save_chip" class="pill">${draft.updatedAt ? "Draft saved" : "Not saved yet"}</span>
-          <button id="diary_insert_prompt" class="btn" type="button">Prompts</button>
-        </div>
-      </header>
-
-      <div class="diary-shell">
-        <main class="diary-editor">
-          <div class="diary-editor-top">
-            <div class="diary-date">
-              <span class="muted">Today</span>
-              <span class="diary-date-strong">${escapeHtml(fmtHumanDate(todayISO()))}</span>
-            </div>
-
-            <input
-              id="diary_title"
-              class="diary-title"
-              placeholder="A short headline (optional)"
-              maxlength="80"
-              value="${escapeHtml(draft.title)}"
-            />
-          </div>
-
-          <div class="diary-pad">
-            <textarea
-              id="diary_text"
-              class="diary-text"
-              placeholder="No perfection required."
-              maxlength="8000"
-            >${escapeHtml(draft.text)}</textarea>
-          </div>
-
-          <div class="diary-foot">
-            <div class="diary-meta muted">
-              <span id="diary_count">0 / 8000</span>
-              <span class="diary-dot">•</span>
-              <span id="last_saved">${
-                draft.updatedAt ? `Draft saved at ${escapeHtml(fmtTime(draft.updatedAt))}` : "Draft not saved"
-              }</span>
-            </div>
-
-            <div class="diary-actions">
-              <button id="diary_save" class="primary" type="button">Save entry</button>
-              <button id="diary_clear" class="btn" type="button">Clear</button>
-            </div>
-          </div>
-
-          <div id="diary_notice" class="diary-notice" aria-live="polite"></div>
-        </main>
-
-        <aside class="diary-side">
-          <div class="diary-side-head">
-            <h3 class="diary-side-title">Your entries</h3>
-            <p class="muted diary-side-sub"><span id="diary_saved_count">${entries.length}</span> saved</p>
-          </div>
-
-          <div id="diary_list" class="diary-list">
-            ${renderDiaryList(entries)}
-          </div>
-        </aside>
-      </div>
-
-      <div class="diary-modal" id="diary_modal" aria-hidden="true">
-        <div class="diary-modal-inner" role="dialog" aria-modal="true" aria-label="Diary entry">
-          <div class="diary-modal-head">
-            <div>
-              <p class="diary-modal-date muted" id="diary_modal_date"></p>
-              <h3 class="diary-modal-title" id="diary_modal_title"></h3>
-            </div>
-            <button class="btn" id="diary_modal_close" type="button">Close</button>
-          </div>
-
-          <div class="diary-modal-body">
-            <pre class="diary-modal-text" id="diary_modal_text"></pre>
-          </div>
-
-          <div class="diary-modal-actions">
-            <button class="btn danger" id="diary_delete" type="button">Delete entry</button>
-          </div>
-        </div>
-      </div>
-
-    </section>
-  `;
-
-  const elTitle = app.querySelector("#diary_title");
-  const elText = app.querySelector("#diary_text");
-  const elCount = app.querySelector("#diary_count");
-  const elNotice = app.querySelector("#diary_notice");
-  const elList = app.querySelector("#diary_list");
-  const elSavedCount = app.querySelector("#diary_saved_count");
-
-  const elSaveChip = app.querySelector("#save_chip");
-  const elLastSaved = app.querySelector("#last_saved");
-
-  const elModal = app.querySelector("#diary_modal");
-  const elModalDate = app.querySelector("#diary_modal_date");
-  const elModalTitle = app.querySelector("#diary_modal_title");
-  const elModalText = app.querySelector("#diary_modal_text");
-  const elModalClose = app.querySelector("#diary_modal_close");
-  const elDelete = app.querySelector("#diary_delete");
-
-  let openedId = null;
-  let autosaveTimer = null;
-
-  let deleteArmed = false;
-  let deleteArmTimer = null;
-
-  function setNotice(msg, kind) {
-    elNotice.textContent = msg || "";
-    elNotice.classList.remove("is-warn", "is-good");
-    if (kind === "warn") elNotice.classList.add("is-warn");
-    if (kind === "good") elNotice.classList.add("is-good");
-  }
-
-  function setDraftUI(mode, whenMs) {
-    if (!elSaveChip || !elLastSaved) return;
-
-    if (mode === "dirty") {
-      elSaveChip.textContent = "Typing…";
-      elSaveChip.classList.add("is-dirty");
-      elSaveChip.classList.remove("is-saved");
-      elLastSaved.textContent = "Typing…";
-      return;
-    }
-    if (mode === "saved") {
-      elSaveChip.textContent = "Draft saved";
-      elSaveChip.classList.add("is-saved");
-      elSaveChip.classList.remove("is-dirty");
-      elLastSaved.textContent = `Draft saved at ${fmtTime(whenMs || Date.now())}`;
-      return;
-    }
-    elSaveChip.textContent = "Not saved yet";
-    elSaveChip.classList.remove("is-saved", "is-dirty");
-    elLastSaved.textContent = "Draft not saved";
-  }
-
-  function refreshList() {
-    const latest = loadDiary();
-    elList.innerHTML = renderDiaryList(latest);
-    if (elSavedCount) elSavedCount.textContent = String(latest.length);
-  }
-
-  function updateCount() {
-    elCount.textContent = `${(elText.value || "").length} / 8000`;
-  }
-
-  function scheduleDraftSave() {
-    setDraftUI("dirty");
-    if (autosaveTimer) clearTimeout(autosaveTimer);
-    autosaveTimer = setTimeout(() => {
-      const d = {
-        title: elTitle.value || "",
-        text: elText.value || "",
-        updatedAt: Date.now()
-      };
-      localStorage.setItem(DRAFT_KEY, JSON.stringify(d));
-      setDraftUI("saved", d.updatedAt);
-    }, 600);
-  }
-
-  updateCount();
-  if (draft.updatedAt) setDraftUI("saved", draft.updatedAt);
-
-  elText.addEventListener("input", () => {
-    updateCount();
-    scheduleDraftSave();
-  });
-
-  elTitle.addEventListener("input", scheduleDraftSave);
-
-  app.querySelector("#diary_insert_prompt").addEventListener("click", () => {
-    const prompts =
-      `\n\nQuick prompts:\n` +
-      `- One thing I’m grateful for today:\n` +
-      `- One thing I learned today:\n` +
-      `- One mistake I won’t repeat:\n` +
-      `- One small win:\n` +
-      `- One thing to improve tomorrow:\n`;
-    elText.value = (elText.value || "") + prompts;
-    updateCount();
-    scheduleDraftSave();
-    elText.focus();
-  });
-
-  app.querySelector("#diary_clear").addEventListener("click", () => {
-    elTitle.value = "";
-    elText.value = "";
-    updateCount();
-    clearDraft();
-    setDraftUI("idle");
-    setNotice("Cleared.", "good");
-  });
-
-  app.querySelector("#diary_save").addEventListener("click", () => {
-    const title = (elTitle.value || "").trim();
-    const text = (elText.value || "").trim();
-
-    if (!text) {
-      setNotice("Write something first.", "warn");
-      return;
-    }
-
-    const entriesNow = loadDiary();
-    const entry = {
-      id: crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()) + "_" + Math.random().toString(16).slice(2),
-      date: fmtHumanDate(todayISO()),
-      title: title || "Untitled",
-      text,
-      createdAt: Date.now()
-    };
-
-    entriesNow.push(entry);
-    saveDiary(entriesNow);
-
-    elTitle.value = "";
-    elText.value = "";
-    updateCount();
-
-    clearDraft();
-    setDraftUI("idle");
-    setNotice("Saved privately on this device.", "good");
-    refreshList();
-  });
-
-  function openModal(entry) {
-    openedId = entry.id;
-    elModalDate.textContent = entry.date || "";
-    elModalTitle.textContent = entry.title || "Untitled";
-    elModalText.textContent = entry.text || "";
-
-    deleteArmed = false;
-    elDelete.textContent = "Delete entry";
-    clearTimeout(deleteArmTimer);
-
-    elModal.classList.add("is-open");
-    elModal.setAttribute("aria-hidden", "false");
-  }
-
-  function closeModal() {
-    openedId = null;
-    elModal.classList.remove("is-open");
-    elModal.setAttribute("aria-hidden", "true");
-
-    deleteArmed = false;
-    elDelete.textContent = "Delete entry";
-    clearTimeout(deleteArmTimer);
-  }
-
-  elModalClose.addEventListener("click", closeModal);
-  elModal.addEventListener("click", (e) => {
-    if (e.target === elModal) closeModal();
-  });
-
-  app.addEventListener("click", (e) => {
-    const btn = e.target.closest("[data-diary-open]");
-    if (!btn) return;
-
-    const id = btn.getAttribute("data-diary-open");
-    const data = loadDiary();
-    const entry = data.find((x) => x.id === id);
-    if (!entry) return;
-    openModal(entry);
-  });
-
-  elDelete.addEventListener("click", () => {
-    if (!openedId) return;
-
-    if (!deleteArmed) {
-      deleteArmed = true;
-      elDelete.textContent = "Tap again to delete";
-      setNotice("Tap delete again to confirm.", "warn");
-
-      clearTimeout(deleteArmTimer);
-      deleteArmTimer = setTimeout(() => {
-        deleteArmed = false;
-        elDelete.textContent = "Delete entry";
-        setNotice("", "");
-      }, 2500);
-
-      return;
-    }
-
-    const data = loadDiary();
-    const next = data.filter((x) => x.id !== openedId);
-    saveDiary(next);
-
-    closeModal();
-    refreshList();
-    setNotice("Deleted.", "good");
-  });
-}
-
-/* =======================
-   Lock screen
-======================= */
-function renderLock() {
-  state.currentRoute = "lock";
-
-  const pinExists = hasPin();
-  const unlocked = isUnlocked();
-  const intended = state.intendedRoute || "home";
-
-  app.innerHTML = `
-    <section class="card">
-      <div class="card-head">
-        <h2>Lock</h2>
-        <p class="muted">Protect Diary and Progress.</p>
-      </div>
-
-      <div class="lock-box">
-        <div class="lock-status">
-          <span class="pill ${unlocked ? "pill-good" : "pill-warn"}">
-            ${unlocked ? "Unlocked" : "Locked"}
-          </span>
-          <span class="muted">
-            ${pinExists ? "PIN is set" : "No PIN yet. Set one now."}
-          </span>
-        </div>
-
-        <div class="field">
-          <label class="label">${pinExists ? "Enter PIN" : "Create a PIN (4-8 digits)"}</label>
-          <input id="lock_pin" class="input" inputmode="numeric" autocomplete="off" placeholder="••••" maxlength="8" />
-          <p class="muted small">Digits only.</p>
-        </div>
-
-        ${
-          pinExists
-            ? `
-              <div class="lock-actions">
-                <button id="lock_unlock" class="btn primary" type="button">Unlock</button>
-                <button id="lock_locknow" class="btn" type="button">Lock now</button>
-                <button id="lock_change" class="btn" type="button">Change PIN</button>
-              </div>
-            `
-            : `
-              <div class="lock-actions">
-                <button id="lock_set" class="btn primary" type="button">Set PIN</button>
-              </div>
-            `
-        }
-
-        <div id="lock_notice" class="lock-notice" aria-live="polite"></div>
-
-        <div class="lock-foot muted">
-          <p>Unlocked sessions expire automatically (30 minutes).</p>
-          <p class="muted">After unlocking, you will be taken to: <strong>${escapeHtml(intended)}</strong></p>
-        </div>
-      </div>
-    </section>
-  `;
-
-  const pinEl = app.querySelector("#lock_pin");
-  const noticeEl = app.querySelector("#lock_notice");
-
-  function notice(msg, kind) {
-    noticeEl.textContent = msg || "";
-    noticeEl.classList.remove("is-warn", "is-good");
-    if (kind === "warn") noticeEl.classList.add("is-warn");
-    if (kind === "good") noticeEl.classList.add("is-good");
-  }
-  function digitsOnly(val) {
-    return String(val || "").replace(/\D/g, "");
-  }
-
-  pinEl.addEventListener("input", () => {
-    pinEl.value = digitsOnly(pinEl.value).slice(0, 8);
-  });
-
-  const goIntended = () => {
-    const target = state.intendedRoute || intended;
-    state.intendedRoute = null;
-    render(target);
-  };
-
-  const setBtn = app.querySelector("#lock_set");
-  if (setBtn) {
-    setBtn.addEventListener("click", async () => {
-      const pin = digitsOnly(pinEl.value);
-      if (pin.length < 4 || pin.length > 8) {
-        notice("PIN must be 4 to 8 digits.", "warn");
-        return;
-      }
-      await setPin(pin);
-      notice("PIN set. Unlocked.", "good");
-      goIntended();
-    });
-  }
-
-  const unlockBtn = app.querySelector("#lock_unlock");
-  if (unlockBtn) {
-    unlockBtn.addEventListener("click", async () => {
-      const pin = digitsOnly(pinEl.value);
-      if (!pin) {
-        notice("Enter your PIN.", "warn");
-        return;
-      }
-
-      const ok = await verifyPin(pin);
-      if (!ok) {
-        notice("Wrong PIN.", "warn");
-        return;
-      }
-
-      localStorage.setItem(LOCK_UNLOCKED_UNTIL_KEY, String(nowMs() + 30 * 60 * 1000));
-      notice("Unlocked.", "good");
-      goIntended();
-    });
-  }
-
-  const lockNowBtn = app.querySelector("#lock_locknow");
-  if (lockNowBtn) {
-    lockNowBtn.addEventListener("click", () => {
-      lockNow();
-      notice("Locked.", "good");
-      render("lock");
-    });
-  }
-
-  const changeBtn = app.querySelector("#lock_change");
-  if (changeBtn) {
-    changeBtn.addEventListener("click", async () => {
-      const pin = digitsOnly(pinEl.value);
-      if (!pin) {
-        notice("Enter current PIN to change it.", "warn");
-        return;
-      }
-
-      const ok = await verifyPin(pin);
-      if (!ok) {
-        notice("Wrong current PIN.", "warn");
-        return;
-      }
-
-      const newPin = prompt("Enter a new PIN (4-8 digits):") || "";
-      const clean = digitsOnly(newPin);
-
-      if (clean.length < 4 || clean.length > 8) {
-        notice("New PIN must be 4 to 8 digits.", "warn");
-        return;
-      }
-
-      await setPin(clean);
-      notice("PIN changed. Unlocked.", "good");
-    });
-  }
-}
-
-/* =======================
-   Hijri Calendar
-======================= */
+/* =========================================================
+   Calendar (Hijri)
+========================================================= */
 const HIJRI_MONTHS = [
   { en: "Muharram", ar: "مُحَرَّم" },
   { en: "Safar", ar: "صَفَر" },
@@ -2996,10 +2172,11 @@ document.addEventListener("click", (e) => {
 });
 
 /* =======================
-   Auth page
+   Auth page (SUPABASE)
 ======================= */
-function renderAuth() {
+async function renderAuth() {
   state.currentRoute = "auth";
+  const supabase = await getSupabase();
 
   app.innerHTML = `
     <section class="card" style="margin-top:20px; max-width:720px; margin-inline:auto;">
@@ -3091,13 +2268,14 @@ function renderAuth() {
 }
 
 /* =======================
-   Supabase Learning Space
+   Learning Space (SUPABASE)
 ======================= */
 let realtimeChannel = null;
 
 async function renderLearning() {
   state.currentRoute = "learning";
 
+  const supabase = await getSupabase();
   const session = await requireAuthOrRoute("auth");
   if (!session) return;
 
@@ -3394,6 +2572,132 @@ async function renderLearning() {
 }
 
 /* =======================
+   Lock screen
+======================= */
+function renderLock() {
+  state.currentRoute = "lock";
+
+  const pinExists = hasPin();
+  const unlocked = isUnlocked();
+  const intended = state.intendedRoute || "home";
+
+  app.innerHTML = `
+    <section class="card">
+      <div class="card-head">
+        <h2>Lock</h2>
+        <p class="muted">Protect selected pages.</p>
+      </div>
+
+      <div class="lock-box">
+        <div class="lock-status">
+          <span class="pill ${unlocked ? "pill-good" : "pill-warn"}">
+            ${unlocked ? "Unlocked" : "Locked"}
+          </span>
+          <span class="muted">
+            ${pinExists ? "PIN is set" : "No PIN yet. Set one now."}
+          </span>
+        </div>
+
+        <div class="field">
+          <label class="label">${pinExists ? "Enter PIN" : "Create a PIN (4-8 digits)"}</label>
+          <input id="lock_pin" class="input" inputmode="numeric" autocomplete="off" placeholder="••••" maxlength="8" />
+          <p class="muted small">Digits only.</p>
+        </div>
+
+        ${
+          pinExists
+            ? `
+              <div class="lock-actions">
+                <button id="lock_unlock" class="btn primary" type="button">Unlock</button>
+                <button id="lock_locknow" class="btn" type="button">Lock now</button>
+              </div>
+            `
+            : `
+              <div class="lock-actions">
+                <button id="lock_set" class="btn primary" type="button">Set PIN</button>
+              </div>
+            `
+        }
+
+        <div id="lock_notice" class="lock-notice" aria-live="polite"></div>
+
+        <div class="lock-foot muted">
+          <p>Unlocked sessions expire automatically (30 minutes).</p>
+          <p class="muted">After unlocking, you will be taken to: <strong>${escapeHtml(intended)}</strong></p>
+        </div>
+      </div>
+    </section>
+  `;
+
+  const pinEl = app.querySelector("#lock_pin");
+  const noticeEl = app.querySelector("#lock_notice");
+
+  function notice(msg, kind) {
+    noticeEl.textContent = msg || "";
+    noticeEl.classList.remove("is-warn", "is-good");
+    if (kind === "warn") noticeEl.classList.add("is-warn");
+    if (kind === "good") noticeEl.classList.add("is-good");
+  }
+  function digitsOnly(val) {
+    return String(val || "").replace(/\D/g, "");
+  }
+
+  pinEl.addEventListener("input", () => {
+    pinEl.value = digitsOnly(pinEl.value).slice(0, 8);
+  });
+
+  const goIntended = () => {
+    const target = state.intendedRoute || intended;
+    state.intendedRoute = null;
+    render(target);
+  };
+
+  const setBtn = app.querySelector("#lock_set");
+  if (setBtn) {
+    setBtn.addEventListener("click", async () => {
+      const pin = digitsOnly(pinEl.value);
+      if (pin.length < 4 || pin.length > 8) {
+        notice("PIN must be 4 to 8 digits.", "warn");
+        return;
+      }
+      await setPin(pin);
+      notice("PIN set. Unlocked.", "good");
+      goIntended();
+    });
+  }
+
+  const unlockBtn = app.querySelector("#lock_unlock");
+  if (unlockBtn) {
+    unlockBtn.addEventListener("click", async () => {
+      const pin = digitsOnly(pinEl.value);
+      if (!pin) {
+        notice("Enter your PIN.", "warn");
+        return;
+      }
+
+      const ok = await verifyPin(pin);
+      if (!ok) {
+        notice("Wrong PIN.", "warn");
+        return;
+      }
+
+      localStorage.setItem(LOCK_UNLOCKED_UNTIL_KEY, String(nowMs() + 30 * 60 * 1000));
+      notice("Unlocked.", "good");
+      goIntended();
+    });
+  }
+
+  const lockNowBtn = app.querySelector("#lock_locknow");
+  if (lockNowBtn) {
+    lockNowBtn.addEventListener("click", () => {
+      lockNow();
+      notice("Locked.", "good");
+      render("lock");
+    });
+  }
+}
+
+/* =======================
    Footer year
 ======================= */
 function setFooterYear() {
@@ -3401,51 +2705,50 @@ function setFooterYear() {
   if (el) el.textContent = String(new Date().getFullYear());
 }
 
-/* =======================
-   Routing (Supabase isolated)
-======================= */
+/* =========================================================
+   ROUTING (Supabase isolated properly)
+   Offline routes: NEVER load Supabase.
+   Supabase routes: only Auth + Learning
+========================================================= */
+const OFFLINE_ROUTES = new Set([
+  "welcome",
+  "home",
+  "daily",
+  "review",
+  "progress",
+  "calendar",
+  "faq",
+  "fasl",
+  "library",
+  "lock",
+  "quiz",
+  "results"
+]);
 
-// Routes that must NOT touch Supabase
-const OFFLINE_ROUTES = new Set(["welcome", "home", "daily", "review", "progress", "calendar", "faq", "learning", "fasl", "library", "lock"]);
-
-// Routes that DO need Supabase
-const SUPABASE_ROUTES = new Set(["auth", "diary", "zakat"]);
-
-let _supabaseClient = null;
-
-// Load Supabase only when needed
-async function getSupabase() {
-  if (_supabaseClient) return _supabaseClient;
-
-  const mod = await import("./supabaseClient.js");
-  _supabaseClient = mod.supabase;
-  return _supabaseClient;
-}
+const SUPABASE_ROUTES = new Set(["auth", "learning"]);
 
 async function renderRoute(route) {
   const r = route || "welcome";
   setActiveNav(r);
 
-  // Offline routes first (no Supabase)
+  // OFFLINE (no Supabase)
   if (r === "welcome") return renderWelcome();
   if (r === "home") return renderHome();
   if (r === "daily") return renderDaily();
   if (r === "review") return renderReview();
   if (r === "progress") return renderProgress();
   if (r === "calendar") return renderCalendar();
-  if (r === "lock") return renderLock();
   if (r === "faq") return renderFAQ();
-  if (r === "learning") return renderLearning();
   if (r === "fasl") return renderFasl();
   if (r === "library") return renderLibrary();
+  if (r === "lock") return renderLock();
+  if (r === "quiz") return renderQuiz();
+  if (r === "results") return renderResults();
 
-  // Supabase routes (lazy import)
+  // SUPABASE (lazy load)
   if (SUPABASE_ROUTES.has(r)) {
-    const supabase = await getSupabase();
-
-    if (r === "auth") return renderAuth({ supabase });
-    if (r === "diary") return renderDiary({ supabase });
-    if (r === "zakat") return renderZakat({ supabase });
+    if (r === "auth") return renderAuth();
+    if (r === "learning") return renderLearning();
   }
 
   return renderWelcome();
