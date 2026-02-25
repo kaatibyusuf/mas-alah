@@ -763,35 +763,93 @@ function renderWelcome() {
     Object.keys(progress.bestScores || {}).length > 0;
 
   app.innerHTML = `
-    <section class="welcome">
-      <div class="welcome-shell">
-        <div class="welcome-hero">
-          <div class="welcome-topline">
-            ${icon("spark")}
-            <span>Mas'alah</span>
-          </div>
+    <section class="welcomev2">
+      <div class="welcomev2-shell">
 
-          <h2>Learn consistently</h2>
+        <header class="welcomev2-hero">
+          <div class="welcomev2-mark" aria-hidden="true">م</div>
 
-          <p>
-            Short Islamic quizzes built for calm revision. Clear explanations, daily structure,
-            and progress you can sustain.
+          <div class="welcomev2-heroText">
+            <div class="welcomev2-kicker">
+              ${icon("spark")}
+              <span>Mas'alah</span>
+              <span class="dot">•</span>
+              <span class="muted">Quiet revision</span>
+            </div>
+
+            <h2 class="welcomev2-title">Build knowledge that stays</h2>
+
+            <p class="welcomev2-sub muted">
+              Quizzes and Learning space.
+            </p>
+
+            <div class="welcomev2-cta">
+              <button class="primary" type="button" data-goto="daily">
+                <span class="btn-inner">${icon("bolt")}Start today’s quiz</span>
+              </button>
+
+              <button class="btn" type="button" data-goto="${hasAnyActivity ? "home" : "faq"}">
+                <span class="btn-inner">${icon("target")}${hasAnyActivity ? "Open dashboard" : "How it works"}</span>
+              </button>
+
+              <button id="installBtn" class="btn" type="button" style="display:none;">
+                <span class="btn-inner">${icon("download")}Install</span>
+              </button>
+            </div>
+        </header>
+
+        <section class="welcomev2-grid">
+          <article class="welcomev2-card">
+            <div class="welcomev2-cardTop">
+              <div class="k">${icon("bolt")}</div>
+              <h3>Daily Discipline</h3>
+            </div>
+            <p class="muted">
+              Locked so you stop negotiating with yourself.
+            </p>
+            <button class="welcomev2-mini btn" type="button" data-goto="daily">Start Daily</button>
+          </article>
+
+          <article class="welcomev2-card">
+            <div class="welcomev2-cardTop">
+              <div class="k">${icon("book")}</div>
+              <h3>Fasl Archive</h3>
+            </div>
+            <p class="muted">Cases to be read like a fiqh circle.</p>
+            <button class="welcomev2-mini btn" type="button" data-goto="fasl">Open Fasl</button>
+          </article>
+
+          <article class="welcomev2-card">
+            <div class="welcomev2-cardTop">
+              <div class="k">${icon("shield")}</div>
+              <h3>Private by Design</h3>
+            </div>
+            <p class="muted">Lock what matters.</p>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <button class="welcomev2-mini btn" type="button" data-goto="diary">Diary</button>
+              <button class="welcomev2-mini btn" type="button" data-goto="lock">Lock</button>
+            </div>
+          </article>
+
+          <article class="welcomev2-card">
+            <div class="welcomev2-cardTop">
+              <div class="k">${icon("layers")}</div>
+              <h3>Learning Space</h3>
+            </div>
+            <p class="muted">
+              Rooms and Community.
+            </p>
+            <button class="welcomev2-mini btn" type="button" data-goto="learning">Enter</button>
+          </article>
+        </section>
+
+        <section class="welcomev2-footnote">
+          <div class="welcomev2-rule" aria-hidden="true"></div>
+          <p class="muted">
+            Principle: consistency beats intensity. One steady step daily.
           </p>
+        </section>
 
-          <div class="welcome-cta">
-            <button class="primary" type="button" data-goto="daily">
-              <span class="btn-inner">${icon("bolt")}Start today’s quiz</span>
-            </button>
-
-            <button class="btn" type="button" data-goto="${hasAnyActivity ? "home" : "faq"}">
-              <span class="btn-inner">${icon("target")}${hasAnyActivity ? "Continue" : "How it works"}</span>
-            </button>
-
-            <button id="installBtn" class="btn" type="button" style="display:none;">
-              <span class="btn-inner">${icon("download")}Install</span>
-            </button>
-          </div>
-        </div>
       </div>
     </section>
   `;

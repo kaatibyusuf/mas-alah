@@ -2457,3 +2457,141 @@ details[open] summary::after{
 }
 .homev2-link .t{ font-weight: 850; }
 .homev2-link .d{ margin-top: 3px; line-height: 1.4; }
+.welcomev2{
+  margin-top: 18px;
+}
+.welcomev2-shell{
+  max-width: 1100px;
+  margin-inline: auto;
+  display: grid;
+  gap: 16px;
+}
+
+.welcomev2-hero{
+  border: 1px solid rgba(255,255,255,.10);
+  background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+  border-radius: 18px;
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 14px;
+  align-items: start;
+  position: relative;
+  overflow: hidden;
+}
+.welcomev2-hero::after{
+  content:"";
+  position:absolute;
+  inset:-40px -40px auto auto;
+  width: 220px;
+  height: 220px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255,255,255,.10), transparent 60%);
+  filter: blur(1px);
+  opacity: .8;
+}
+.welcomev2-mark{
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  font-weight: 950;
+  font-size: 26px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.18);
+}
+
+.welcomev2-kicker{
+  display:flex;
+  gap: 10px;
+  align-items:center;
+  flex-wrap:wrap;
+  font-weight: 850;
+}
+.welcomev2-kicker .dot{ opacity:.5; }
+
+.welcomev2-title{
+  margin: 10px 0 0 0;
+  font-size: 30px;
+  letter-spacing: .2px;
+}
+.welcomev2-sub{
+  margin: 8px 0 0 0;
+  line-height: 1.7;
+  max-width: 70ch;
+}
+
+.welcomev2-cta{
+  margin-top: 14px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.welcomev2-badges{
+  margin-top: 12px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.welcomev2-grid{
+  display:grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+@media (max-width: 980px){
+  .welcomev2-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 520px){
+  .welcomev2-hero{ grid-template-columns: 1fr; }
+  .welcomev2-grid{ grid-template-columns: 1fr; }
+}
+
+.welcomev2-card{
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.03);
+  border-radius: 16px;
+  padding: 14px;
+}
+.welcomev2-cardTop{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+.welcomev2-cardTop .k{
+  width: 38px;
+  height: 38px;
+  display:grid;
+  place-items:center;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.18);
+}
+.welcomev2-card h3{
+  margin: 0;
+  font-size: 15px;
+}
+.welcomev2-card p{
+  margin: 10px 0 0 0;
+  line-height: 1.6;
+}
+.welcomev2-mini{
+  margin-top: 12px;
+}
+
+.welcomev2-footnote{
+  border: 1px dashed rgba(255,255,255,.14);
+  border-radius: 16px;
+  padding: 12px 14px;
+  background: rgba(0,0,0,.12);
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+.welcomev2-rule{
+  width: 34px;
+  height: 1px;
+  background: rgba(255,255,255,.25);
+}
