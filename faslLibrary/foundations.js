@@ -10,22 +10,51 @@ export const FOUNDATIONS_PACK = {
 
         [
           "Definition of Ḥayḍ",
-          `Ḥayḍ in the Maliki school refers to natural menstrual blood that exits from a healthy woman at intervals. When legally classified as ḥayḍ, it suspends prayer, fasting, marital intimacy, and certain acts of worship. It is determined by time limits, habit, and continuity.`
+          `In the Mālikī school, ḥayḍ is the natural blood that exits from the womb of a healthy woman at known intervals, not due to childbirth, not due to illness, and not due to injury. It is a cyclical phenomenon tied to the fitrah of women.
+
+Legally, ḥayḍ is not defined merely by color. Nor merely by sensation. Nor merely by assumption. It is defined through three controlling elements: possibility, time structure, and continuity.
+
+When blood appears from a woman who is of menstruating age, and it falls within the legally recognized limits, it is treated as ḥayḍ unless proven otherwise. Its legal effect is suspension. Prayer is suspended. Fasting is suspended. Marital intimacy is suspended. Ṭawāf is suspended. This suspension is not punitive. It is legislative mercy.
+
+The Mālikī jurists emphasize that ḥayḍ is determined by legal structure, not by emotional reaction to the sight of blood. It has maximum limits. It has separation requirements. It has evidentiary standards. Without structure, every discharge would create doubt.`
         ],
 
         [
           "Definition of Ṭuhr",
-          `Ṭuhr is the state of legal purity between menstrual cycles. It begins when bleeding ceases and is confirmed through dryness or the well-known white discharge. Upon ṭuhr, ghusl becomes obligatory before resuming prayer.`
+          `Ṭuhr is a legally confirmed state of purity between two menstrual cycles.
+
+Ṭuhr is established by certainty. That certainty is recognized by either complete dryness such that cotton emerges clean, or by the well-known white discharge. Once one of these signs is present, menstruation ends immediately.
+
+From that moment, ghusl becomes obligatory before prayer. Delay without excuse is sinful.
+
+Ṭuhr is not invalidated by doubt. If purity was confirmed clearly, later suspicion does not revert the ruling. Certainty in Mālikī legal reasoning is not overturned by doubt.`
         ],
 
         [
           "Definition of Istiḥāḍah",
-          `Istiḥāḍah is irregular bleeding that does not fall within menstrual or nifās parameters. It does not suspend worship. The woman continues prayer and fasting while observing purification discipline.`
+          `Istiḥāḍah is irregular, non-menstrual bleeding that exits from the womb outside the recognized limits of ḥayḍ and nifās.
+
+It is not the natural cyclical blood of menstruation. It is considered bleeding from a vein or a medical cause rather than the normal menstrual process. Because of this, its legal ruling is different.
+
+A woman experiencing istiḥāḍah is not treated as menstruating. She remains legally pure in the sense that she must pray, she must fast in Ramaḍān, she may recite Qur’an, and intimacy with her husband is permitted.
+
+Practically, she manages the bleeding by washing the affected area, using protection, and performing wuḍū’ when the time of each prayer begins. That wuḍū’ is valid for that prayer time even if the bleeding continues.
+
+The key distinction is this. Ḥayḍ suspends prayer and fasting. Istiḥāḍah does not. It is treated as an ongoing excuse similar to chronic bleeding, not as menstruation.
+`
         ],
 
         [
           "Definition of Nifās",
-          `Nifās is blood that exits following childbirth. It suspends worship like ḥayḍ until purity is confirmed or the maximum duration is reached.`
+          `Nifās is the bleeding that occurs after childbirth.
+
+It is the blood that comes out of a woman as a result of delivery, whether the baby is born alive or stillborn, as long as childbirth has taken place. This bleeding is directly connected to the womb recovering after pregnancy.
+
+In Islamic law, nifās carries rulings similar to ḥayḍ. A woman in nifās does not pray and does not fast. She is not sinful for leaving these acts. When the bleeding stops and she sees purity, she performs ghusl and resumes her prayers. If she missed fasts in Ramaḍān, she makes them up later, but she does not make up the missed prayers.
+
+There is no fixed minimum duration. It could end in a few days if the bleeding stops. However, the majority of scholars state that its maximum limit is forty days. If bleeding continues beyond forty days, what remains is treated as istiḥāḍah unless it coincides with her normal menstrual pattern.
+
+So nifās is post-delivery bleeding that temporarily suspends certain acts of worship until purity returns.`
         ],
 
         [
