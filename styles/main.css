@@ -2403,3 +2403,33 @@ details[open] summary::after{
   font-size: 12px;
   opacity: .8;
 }
+/* Make the whole case collapsible */
+.fatwa-summary{
+  list-style:none;
+  cursor:pointer;
+  user-select:none;
+  padding: 14px 14px 12px;
+  display:grid;
+  gap:10px;
+  position: relative;
+}
+.fatwa-summary::-webkit-details-marker{ display:none; }
+
+.fatwa-chevron{
+  position:absolute;
+  right: 14px;
+  top: 14px;
+  opacity:.7;
+  transition: transform .18s ease, opacity .18s ease;
+}
+.fatwa[open] .fatwa-chevron{
+  transform: rotate(180deg);
+  opacity:.95;
+}
+
+/* The content should be hidden until open (details does this already, but this keeps spacing clean) */
+.fatwa > .fatwa-body{
+  padding: 0 14px 14px;
+  border-top: 1px solid rgba(255,255,255,.08);
+  background: rgba(0,0,0,.12);
+}

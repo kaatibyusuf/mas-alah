@@ -10,17 +10,42 @@ export const HAYD_PACK = {
 
         [
           "Habit 6 days. Bleeds exactly 6.",
-          `When bleeding aligns precisely with her established habit and remains within the valid menstrual limits recognized in the Maliki school, the classification is clear. This is ḥayḍ without dispute. The ruling remains in force until clear purity appears, either through dryness or the well-known white discharge. At that point, ghusl becomes obligatory and all suspended acts of worship resume.`
+          `If her established habit is six days, and in a given month she bleeds exactly six days, then the matter is straightforward.
+
+Those six days are ḥayḍ.
+
+When the bleeding stops and she sees a clear sign of ṭuhr, either confirmed dryness or the white discharge, she performs ghusl and resumes prayer and fasting. There is no need for extended calculation because the bleeding did not exceed her habit and did not approach the maximum of fifteen days.
+
+If bleeding stops on the sixth day and purity is seen, the cycle has ended normally. If slight discharge continues but no real ṭuhr has appeared, then she waits until purity is established.
+
+When habit and reality match exactly, there is no complexity. The law follows what is clear and stable.`
         ],
 
         [
           "Habit 7 days. Bleeds only 5.",
-          `A shorter episode does not invalidate menstruation. In the Maliki school, what matters is that the bleeding fulfills the legal criteria of menstrual blood. Variations in length occur naturally. Therefore, the five days are valid ḥayḍ. Upon confirmed cessation, ghusl is performed and worship resumes immediately.`
+          `If her established habit is seven days, but in a particular month the bleeding stops at five days, then we do not force the cycle to remain seven simply because that was the past pattern.
+
+The ruling follows what is actually present.
+
+If on the fifth day she sees clear ṭuhr. That means confirmed dryness or the white discharge. Then her ḥayḍ has ended at five days. She performs ghusl and resumes prayer and fasting. She does not wait two extra days just to match her former habit.
+
+Habit guides when bleeding is unclear or exceeds limits. It does not extend menstruation when purity has clearly appeared.
+
+However, if bleeding appears to pause on day five but she does not see true ṭuhr. Only lightening, spotting, or unstable fluctuation. Then she waits until purity is firmly established or until the maximum of fifteen days is reached. The principle is simple. When purity is certain, ḥayḍ ends, even if earlier than usual. The Sharīʿah follows reality, not expectation.`
         ],
 
         [
           "Bleeding begins three days earlier than usual.",
-          `Menstrual cycles are not bound to exact calendar dates. If the blood fulfills the recognized characteristics and falls within valid time limits, it is ḥayḍ even if it begins earlier than expected. Habit guides excess cases, not normal variation.`
+          `If her bleeding begins three days earlier than her usual time, the Mālikī ruling does not automatically reject it.
+
+The first thing to check is whether the minimum interval of ṭuhr has passed. If fifteen full days of valid purity have passed since the end of her last ḥayḍ, then this new bleeding can legally be ḥayḍ, even if it arrived earlier than her normal schedule.
+
+Habit helps with expectation, but it does not lock the calendar. The body can shift. If the bleeding has the characteristics of menstruation and occurs within a time where ḥayḍ is legally possible, it is treated as ḥayḍ.
+
+However, if fifteen days of ṭuhr have not yet passed, then it cannot be classified as a new ḥayḍ, even if it looks identical to her usual menses. In that case it is treated as istiḥāḍah.
+
+So, the key is not whether it is early. The key is whether the conditions for ḥayḍ are legally met. If they are, the earlier timing does not invalidate it.
+.`
         ],
 
         [

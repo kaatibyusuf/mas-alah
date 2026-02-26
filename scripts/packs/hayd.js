@@ -10,31 +10,77 @@ export const HAYD_PACK = {
 
         [
           "Habit 6 days. Bleeds exactly 6.",
-          `When bleeding aligns precisely with her established habit and remains within the valid menstrual limits recognized in the Maliki school, the classification is clear. This is ḥayḍ without dispute. The ruling remains in force until clear purity appears, either through dryness or the well-known white discharge. At that point, ghusl becomes obligatory and all suspended acts of worship resume.`
+          `If her established habit is six days, and in a given month she bleeds exactly six days, then the matter is straightforward.
+
+Those six days are ḥayḍ.
+
+When the bleeding stops and she sees a clear sign of ṭuhr, either confirmed dryness or the white discharge, she performs ghusl and resumes prayer and fasting. There is no need for extended calculation because the bleeding did not exceed her habit and did not approach the maximum of fifteen days.
+
+If bleeding stops on the sixth day and purity is seen, the cycle has ended normally. If slight discharge continues but no real ṭuhr has appeared, then she waits until purity is established.
+
+When habit and reality match exactly, there is no complexity. The law follows what is clear and stable.
+.`
         ],
 
         [
           "Habit 7 days. Bleeds only 5.",
-          `A shorter episode does not invalidate menstruation. In the Maliki school, what matters is that the bleeding fulfills the legal criteria of menstrual blood. Variations in length occur naturally. Therefore, the five days are valid ḥayḍ. Upon confirmed cessation, ghusl is performed and worship resumes immediately.`
+          `If her established habit is seven days, but in a particular month the bleeding stops at five days, then we do not force the cycle to remain seven simply because that was the past pattern.
+
+The ruling follows what is actually present.
+
+If on the fifth day she sees clear ṭuhr. That means confirmed dryness or the white discharge. Then her ḥayḍ has ended at five days. She performs ghusl and resumes prayer and fasting. She does not wait two extra days just to match her former habit.
+
+Habit guides when bleeding is unclear or exceeds limits. It does not extend menstruation when purity has clearly appeared.
+
+However, if bleeding appears to pause on day five but she does not see true ṭuhr. Only lightening, spotting, or unstable fluctuation. Then she waits until purity is firmly established or until the maximum of fifteen days is reached.
+
+So the principle is simple. When purity is certain, ḥayḍ ends, even if earlier than usual. The Sharīʿah follows reality, not expectation.`
         ],
 
         [
           "Bleeding begins three days earlier than usual.",
-          `Menstrual cycles are not bound to exact calendar dates. If the blood fulfills the recognized characteristics and falls within valid time limits, it is ḥayḍ even if it begins earlier than expected. Habit guides excess cases, not normal variation.`
+          `If her bleeding begins three days earlier than her usual time, the Mālikī ruling does not automatically reject it.
+
+The first thing we check is whether the minimum interval of ṭuhr has passed. If fifteen full days of valid purity have passed since the end of her last ḥayḍ, then this new bleeding can legally be ḥayḍ, even if it arrived earlier than her normal schedule.
+
+Habit helps with expectation, but it does not lock the calendar. The body can shift. If the bleeding has the characteristics of menstruation and occurs within a time where ḥayḍ is legally possible, it is treated as ḥayḍ.
+
+However, if fifteen days of ṭuhr have not yet passed, then it cannot be classified as a new ḥayḍ, even if it looks identical to her usual menses. In that case it is treated as istiḥāḍah. The key is not whether it is early. The key is whether the conditions for ḥayḍ are legally met. If they are, the earlier timing does not invalidate it.
+.`
         ],
 
         [
           "Flow is very light for entire duration.",
-          `Intensity of flow is not decisive in Maliki fiqh. Even minimal bleeding can constitute ḥayḍ so long as it fulfills the required legal minimum and falls within menstrual limits. Lightness does not negate validity.`
+          `In the Mālikī madhhab, heaviness of flow is not a condition for ḥayḍ.
+
+Menstruation is not defined by how much blood exits, but by its occurrence within valid time, its continuity, and its staying within the legal limits.
+
+If the flow is light from beginning to end, yet it continues within a period where ḥayḍ is possible, and it does not exceed fifteen days, then it is still treated as ḥayḍ. Light bleeding does not downgrade it to istiḥāḍah simply because it is not heavy.
+
+What matters is that it is uterine bleeding occurring within valid parameters, not the volume.
+
+Only when the bleeding crosses the maximum of fifteen days, or appears before fifteen days of ṭuhr have passed, or is clearly irregular outside the framework of menstruation, does the ruling change.
+
+So, light flow alone does not alter classification. The law follows structure and limits, not intensity.`
         ],
 
         [
           "Severe cramps but minimal visible blood.",
-          `Pain is not the determinant in fiqh classification. Legal rulings attach to the presence of blood, not physical discomfort. If blood is present within menstrual parameters, it is ḥayḍ. If no blood appears, cramps alone do not suspend worship.`
+          `Severe pain by itself does not determine the ruling.
+
+In the Mālikī madhhab, ḥayḍ is established by the presence of blood, not by cramps alone. Pain may accompany menstruation, but it is not the legal cause. The cause is خروج الدم. The exiting of blood.
+
+If there is visible blood, even if minimal, and it occurs within a time where ḥayḍ is possible and within the legal limits, then it is treated as ḥayḍ, regardless of how light it appears.
+
+If there are severe cramps but no visible blood at all, then she is not considered menstruating. Pain without discharge does not suspend prayer or fasting.
+
+If blood is extremely minimal, such as slight spotting with cramps, we then examine timing. If fifteen days of ṭuhr have passed and it is connected to what appears to be the start of her cycle, it may be treated as ḥayḍ even if light. If it is outside those conditions, it may be istiḥāḍah.
+
+Cramps inform the biological picture, but they do not establish the legal ruling. The ruling follows confirmed bleeding within valid limits.`
         ],
 
         [
-          "Color changes from red to dark brown during same episode.",
+          "Colour changes from red to dark brown during same episode.",
           `Variation in color does not divide a menstrual episode so long as continuity remains and limits are not exceeded. In Maliki doctrine, connected blood of varying shades within time limits is one unified ḥayḍ.`
         ]
       ]

@@ -2021,16 +2021,20 @@ function renderFatwaCard(x) {
   const section = escapeHtml(x.section);
 
   return `
-    <article class="fatwa">
-      <div class="fatwa-top">
-        <div class="fatwa-no">
-          <span class="khutut">⟡</span>
-          <span>Case ${escapeHtml(x.no)}</span>
+    <details class="fatwa" data-case="${escapeHtml(x.id)}">
+      <summary class="fatwa-summary">
+        <div class="fatwa-top">
+          <div class="fatwa-no">
+            <span class="khutut">⟡</span>
+            <span>Case ${escapeHtml(x.no)}</span>
+          </div>
+          <span class="fatwa-tag">${section || "General"}</span>
         </div>
-        <span class="fatwa-tag">${section || "General"}</span>
-      </div>
 
-      <h4 class="fatwa-title">${title}</h4>
+        <h4 class="fatwa-title">${title}</h4>
+
+        <span class="fatwa-chevron" aria-hidden="true">▾</span>
+      </summary>
 
       <div class="fatwa-body">
         <div>
@@ -2038,7 +2042,7 @@ function renderFatwaCard(x) {
           <p class="fatwa-text">${answer}</p>
         </div>
 
-        <details>
+        <details class="fatwa-inner">
           <summary>
             Show “Mas’alah” header
             <span class="muted small">tap</span>
@@ -2049,7 +2053,7 @@ function renderFatwaCard(x) {
           </div>
         </details>
       </div>
-    </article>
+    </details>
   `;
 }
 
@@ -2066,7 +2070,7 @@ async function renderLibrary() {
           <div>
             <h2 class="library-title">Fasl Library</h2>
             <p class="library-sub">
-              A curated archive of women’s fiqh cases in a calm, classical format.
+              A curated archive of women’s fiqh cases.
               Select a shelf, search within it, then read the rulings.
             </p>
           </div>
