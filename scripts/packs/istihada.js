@@ -180,32 +180,76 @@ Consistency creates certainty. Once a pattern stabilizes, it becomes the anchor 
 
         [
           "Habit 5 days, bleeds only 2 this month.",
-          `Two days may not fulfill menstrual minimum. If threshold unmet, it may be treated as istiḥāḍah.`
+          `If her established habit is five days, but this month she bleeds only two days, the ruling follows what actually occurred, not the old expectation.
+
+If on the second day she sees confirmed ṭuhr. Meaning complete dryness or the white discharge. Then her ḥayḍ has ended at two days. She performs ghusl and resumes prayer and fasting. She does not wait until day five simply because that was her previous habit.
+
+Habit guides when bleeding continues or becomes confusing. It does not prolong menstruation when purity has clearly appeared.
+
+If bleeding stops at two days and does not return, the cycle for that month is two days. If bleeding resumes later within fifteen days without confirmed ṭuhr in between, it may be treated as continuation.
+
+The law follows reality, not memory of past patterns.`
         ],
 
         [
           "Habit shifts gradually over months.",
-          `If new duration stabilizes across repeated cycles, it becomes the new habit.`
+          `When a habit shifts gradually over several months, the law recognizes the new stability once it becomes consistent.
+
+Habit in fiqh is not frozen. It reflects what is established and recurring. If a woman used to bleed five days, then for several consecutive months she bleeds six, then seven, and that pattern stabilizes, the new consistent length becomes her ʿādah.
+
+The key is repetition and stability, not a single fluctuation. One unusual month does not immediately redefine the habit. But a recurring pattern over multiple cycles establishes a new reference point.
+
+All of this operates within the legal limits. No ḥayḍ can exceed fifteen days. No new cycle can begin without fifteen days of valid ṭuhr between them.
+
+Gradual shifts are normal. Once the new pattern proves consistent, it becomes the anchor for future rulings.`
         ],
 
         [
           "Single abnormal extended month.",
-          `One irregular month does not override established habit. Excess beyond habit remains istiḥāḍah.`
+          `If one month is abnormally extended, but it is a single occurrence, it does not immediately redefine her established habit.
+
+If the bleeding remained within fifteen days, then the entire extended period is treated as ḥayḍ for that month, even if it exceeded her usual number of days. Her prior habit is not erased by one fluctuation.
+
+If the bleeding exceeded fifteen days, then only the first fifteen days are treated as ḥayḍ. Anything beyond that is istiḥāḍah. After this month ends, her previous stable habit remains her reference for future cycles unless a new consistent pattern develops over time.
+
+A single abnormal month is treated as an exception. Habit changes only with repeated stability, not with one irregular episode.`
         ],
 
         [
           "PCOS causes long irregular bleeding.",
-          `Medical irregularity does not override legal maximum. Habit governs classification.`
+          `PCOS can cause prolonged, irregular, or unpredictable bleeding. That is a medical reality. But the legal ruling is not built on the diagnosis. It is built on structure and limits.
+
+If bleeding begins at a time when ḥayḍ is legally possible, then the first fifteen days are treated as ḥayḍ. Once day fifteen is completed, anything beyond that is istiḥāḍah, even if the bleeding continues in the same pattern for weeks.
+
+If bleeding appears before fifteen days of valid ṭuhr have passed since the last cycle, it cannot be a new ḥayḍ. It is istiḥāḍah from the start.
+
+When PCOS causes frequent irregular discharge, the woman does not suspend prayer for weeks or months. The Sharʿī ceiling protects her from that. She performs ghusl at the end of the valid ḥayḍ window and resumes prayer and fasting, managing the ongoing bleeding as istiḥāḍah with cleaning and wuḍū’ for each prayer time.
+
+Medical causes explain why the bleeding happens. Legal limits determine how it is classified.`
         ],
 
         [
           "Habit 7, now stable at 10 for months.",
-          `Repeated extended pattern establishes new habit. Excess beyond that still becomes istiḥāḍah.`
+          `If her old habit was seven days, but for several consecutive months she has been bleeding ten days in a stable and consistent pattern, then ten days becomes her new ʿādah.
+
+Habit in fiqh follows stability. Once a new length repeats consistently over multiple cycles, it replaces the former one.
+
+So if she now regularly bleeds ten days and then sees confirmed ṭuhr, those ten days are treated as ḥayḍ. If irregularity later occurs, she refers back to this new established pattern of ten.
+
+All of this remains within the legal maximum of fifteen days. As long as the bleeding does not exceed that limit, the consistent ten-day pattern is fully valid.
+
+Habit is anchored to what is presently stable, not what was distant in the past.`
         ],
 
         [
           "Bleeding resumes briefly after habit days.",
-          `If habit portion completed, additional bleeding is istiḥāḍah unless valid new cycle begins.`
+          `If her established habit ends, for example, at seven days, and bleeding resumes briefly after those habit days, we do not immediately separate it from the cycle.
+
+The first question is whether confirmed ṭuhr had appeared. If she saw clear dryness or the white discharge in a stable way that marks the end of her menses, then the habit cycle ended. If bleeding resumes afterward and fifteen days of valid ṭuhr have not passed, that resumed blood is treated as istiḥāḍah, not a new ḥayḍ.
+
+If there was no confirmed ṭuhr. Meaning the flow lightened or paused but did not reach clear purity. Then the resumed bleeding is treated as continuation of the same ḥayḍ, provided the total duration does not exceed fifteen days.
+
+So the decisive factor is whether true purity was established. If yes, the cycle ended. If not, the resumed bleeding remains part of the same menstrual episode within the legal maximum.`
         ]
       ]
     },
@@ -222,12 +266,26 @@ Consistency creates certainty. Once a pattern stabilizes, it becomes the anchor 
 
         [
           "Bleeding stops briefly during prayer window.",
-          `If sufficient clean time exists to purify and pray, she must wait for that interval and pray normally.`
+          `In cases of istiḥāḍah, brief pauses during the prayer window are assessed based on practicality.
+
+When the bleeding stops long enough for her to wash, perform wuḍū’, and complete the prayer within its time, she should take advantage of that pause and pray during it. In this situation, she is not treated as someone with continuous discharge because there is a workable window of dryness.
+
+When the pause is extremely short or unpredictable, such that she cannot realistically complete purification and prayer before bleeding resumes, she is treated as having continuous istiḥāḍah. She waits for the prayer time to enter, cleans herself, applies protection, performs wuḍū’, and prays. The prayer remains valid even if bleeding resumes during it.
+
+The ruling follows realistic capacity. A usable pause should be used. An unusable pause does not create hardship.`
         ],
 
         [
           "Discharge appears immediately after wuḍūʾ.",
-          `If classified as excused, she continues prayer without restarting wuḍūʾ for each emission.`
+          `In cases of istiḥāḍah, discharge appearing immediately after wuḍūʾ does not invalidate the prayer for that prayer time.
+
+Once the prayer time enters, she cleans the area, applies protection, and performs wuḍūʾ. After that, any discharge that continues is excused for that specific prayer time. Even if it appears right after wuḍūʾ, she proceeds to pray, and the prayer is valid.
+
+She does not repeat wuḍūʾ for the same prayer time unless another nullifier unrelated to istiḥāḍah occurs.
+
+When the next prayer time enters, she repeats the process: cleaning if necessary, protection, then a fresh wuḍūʾ for that new time.
+
+The key principle is that continuous or near-continuous discharge in istiḥāḍah is treated as a chronic excuse. It does not place her in endless repetition of wuḍūʾ within the same prayer window.`
         ],
 
         [
@@ -242,7 +300,15 @@ Consistency creates certainty. Once a pattern stabilizes, it becomes the anchor 
 
         [
           "Fears Qur’an recitation invalid.",
-          `Istiḥāḍah does not prohibit Qur’an recitation or dhikr. Only ḥayḍ suspends it.`
+          `Fear does not invalidate recitation. Law is not built on anxiety.
+
+In istiḥāḍah, a woman is considered ṭāhir in ruling. She may pray, fast, and recite the Qur’an. Ongoing discharge does not prohibit recitation.
+
+If she has performed wuḍūʾ properly and then discharge appears due to istiḥāḍah, her state remains valid for that prayer time. Her recitation is valid. Her prayer is valid. She does not need to stop or repeat unless another nullifier occurs.
+
+Even beyond istiḥāḍah, doubt alone does not cancel an act of worship. Certainty is not removed by fear.
+
+The Qur’an is not invalidated by waswasah. If she has fulfilled the conditions within her capacity, her recitation stands.`
         ]
       ]
     },
@@ -259,12 +325,26 @@ Consistency creates certainty. Once a pattern stabilizes, it becomes the anchor 
 
         [
           "Occasional spotting during day.",
-          `If not continuous, each new emission breaks wuḍūʾ and requires renewal.`
+          `Occasional spotting during the day is judged by timing and legal structure, not by frequency alone.
+
+When it occurs outside the valid window of ḥayḍ, meaning fifteen days of ṭuhr have not passed since the previous cycle, it is treated as istiḥāḍah. The same applies when it does not form a connected menstrual episode within the fifteen-day maximum.
+
+Brief, scattered spotting that appears once or twice during the day and does not develop into a coherent flow is not treated as ḥayḍ. It does not suspend prayer or fasting.
+
+In such cases, she manages it as istiḥāḍah. She cleans the area, uses protection if needed, performs wuḍūʾ after the prayer time enters, and prays. The occasional nature of the spotting does not change the obligation of worship.`
         ],
 
         [
           "Unsure whether stain is blood.",
-          `Certainty is not removed by doubt. Unless certain, ruling does not change.`
+          `Uncertainty does not change a ruling.
+
+When she is unsure whether the stain is blood or something else, she returns to certainty. If she was previously ṭāhir, she remains ṭāhir. If she was previously in ḥayḍ, she remains in ḥayḍ until purity is clearly established.
+
+A faint mark whose nature is unclear does not suspend prayer or invalidate wuḍūʾ. The Sharʿī principle is that certainty is not removed by doubt.
+
+Only when it is clearly blood, and it occurs within the framework of menstruation, does the ruling shift. Mere suspicion or unclear staining does not create a new legal state.
+
+She should not overanalyze every trace. What is doubtful carries no legal weight until it becomes clear.`
         ],
 
         [
