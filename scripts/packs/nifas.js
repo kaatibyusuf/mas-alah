@@ -23,7 +23,13 @@ So bleeding that begins right after childbirth is nifās from its onset, and its
 
         [
           "No bleeding after childbirth.",
-          `If no blood appears after childbirth, there is no nifās. Worship remains obligatory.`
+          `When no bleeding occurs after childbirth, there is no nifās.
+
+Nifās is defined by the presence of postnatal blood. If delivery occurs and no blood follows, she is considered ṭāhir in ruling. Prayer and fasting remain obligatory. There is no waiting period attached to nifās without bleeding.
+
+Ghusl is not required merely because of childbirth itself, unless there was blood. She continues her worship as normal.
+
+If bleeding appears later within a timeframe connected to childbirth, it would then be evaluated as nifās. But in the absence of blood, there is no suspension of worship.`
         ],
 
         [
