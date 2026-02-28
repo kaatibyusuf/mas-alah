@@ -10,7 +10,15 @@ export const NIFAS_PACK = {
 
         [
           "Bleeding begins immediately after childbirth.",
-          `Any blood that exits following childbirth is classified as nifās in the Maliki school. It suspends prayer, fasting, and marital relations until purity is confirmed or the maximum period is reached.`
+          `Bleeding that begins immediately after childbirth is classified as nifās.
+
+Any blood that exits following delivery is treated as postnatal bleeding. It does not have to be heavy. It does not need to begin hours later. The moment childbirth occurs and bleeding follows as a result of it, that blood is nifās.
+
+During nifās, she does not pray and does not fast. She is not sinful for leaving these acts. When the bleeding stops and she sees confirmed ṭuhr through complete dryness or the white discharge, she performs ghusl and resumes prayer and fasting.
+
+There is no fixed minimum length for nifās. It may last a few days or longer. The maximum limit is sixty days. If bleeding continues beyond sixty days, what remains is treated as istiḥāḍah.
+
+So bleeding that begins right after childbirth is nifās from its onset, and its rulings apply until purity is established or the maximum limit is reached.`
         ],
 
         [
