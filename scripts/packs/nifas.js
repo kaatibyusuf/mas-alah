@@ -34,17 +34,37 @@ If bleeding appears later within a timeframe connected to childbirth, it would t
 
         [
           "Very light spotting postpartum.",
-          `Even minimal blood after childbirth qualifies as nifās if within legal limits. Quantity does not alter classification.`
+          `Nifās is not defined by heaviness. Any blood that exits as a result of childbirth, even if minimal or light spotting, falls under the ruling of postnatal bleeding.
+
+From the moment that spotting appears, the rulings of nifās apply. She does not pray or fast during it. When the bleeding stops and she sees confirmed ṭuhr, she performs ghusl and resumes worship.
+
+There is no minimum duration for nifās. It may be very short. The maximum is sixty days. If spotting continues beyond sixty days, what remains is treated as istiḥāḍah.
+
+Lightness does not remove the ruling. The presence of blood connected to childbirth establishes nifās.`
         ],
 
         [
           "Dark brown discharge after delivery.",
-          `Color variation does not affect classification. If it occurs within postpartum window, it is nifās.`
+          `This is treated as nifās as long as it is connected to childbirth and occurs within the postnatal window.
+
+Nifās is not restricted to bright red blood. It may appear dark, brown, or change in shade. Any discharge that is blood-based and connected to delivery carries the ruling of nifās.
+
+During that time, she does not pray or fast. When the discharge stops and she sees confirmed ṭuhr through complete dryness or the white discharge, she performs ghusl and resumes worship.
+
+The maximum duration of nifās is sixty days. If discharge continues beyond that, what remains is treated as istiḥāḍah.
+
+Color variation does not alter the classification. Connection to childbirth determines the ruling.`
         ],
 
         [
           "Pain but no blood after delivery.",
-          `Pain alone does not establish nifās. The ruling attaches to blood, not physical sensation.`
+          `Pain alone after delivery does not establish nifās.
+
+Nifās is defined by the presence of blood connected to childbirth. If there is pain, cramping, or discomfort but no bleeding at all, she is considered ṭāhir in ruling. Prayer and fasting remain obligatory.
+
+Childbirth itself does not suspend worship. The suspension is tied to postnatal bleeding.
+
+If blood appears later and is clearly connected to the delivery, it is then treated as nifās from the time it appears. In the absence of blood, pain carries no legal ruling in this matter.`
         ],
 
         [

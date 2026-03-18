@@ -777,7 +777,7 @@ function renderWelcome() {
               <span class="muted">Quiet revision</span>
             </div>
 
-            <h2 class="welcomev2-title">Build knowledge that stays</h2>
+            <h2 class="welcomev2-title">Build knowledge that stays.</h2>
 
             <p class="welcomev2-sub muted">
               Quizzes and Learning space.
@@ -2279,7 +2279,7 @@ function renderCalendar() {
       <h2>Hijri Calendar</h2>
 
       <p class="muted" style="margin-top:6px;">
-        Today (local): <strong>${escapeHtml(localLong)}</strong>
+        Today: <strong>${escapeHtml(localLong)}</strong>
       </p>
 
       <p class="muted" style="margin-top:6px;">
@@ -2291,7 +2291,7 @@ function renderCalendar() {
       </div>
 
       <p class="muted" style="margin-top:12px;">
-        The 13th, 14th, and 15th are the white days (Ayyām al-Bīḍ).
+        13th, 14th, and 15th are the white days (Ayyāmul-Bīḍ).
       </p>
     </section>
   `;
