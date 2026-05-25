@@ -1828,8 +1828,7 @@ async function renderFasl() {
       <div class="card-head">
         <h2 style="margin:0;">Fasl</h2>
         <p class="muted" style="margin:8px 0 0 0; line-height:1.6;">
-          Women’s blood rulings with a private cycle tracker.
-          This does not replace medical care. If symptoms are severe or unusual, speak to a clinician.
+          Learn rulings of ḥayḍ, istiḥāḍah, and nifās. If symptoms are severe or unusual, speak to a clinician.
         </p>
       </div>
 <button id="expertBtn" class="expertBtn" type="button">
@@ -1975,9 +1974,6 @@ function renderFaslLibrary(panel) {
   bindGotoButtons();
 }
 
-/* =========================================================
-   FULL OFFLINE LIBRARY ROUTE
-========================================================= */
 function flattenPack(pack, packKey) {
   const out = [];
   let n = 0;
@@ -2214,9 +2210,6 @@ async function renderLibrary() {
   setPack(currentPackKey);
 }
 
-/* =========================================================
-   Calendar (Hijri)
-========================================================= */
 const HIJRI_MONTHS = [
   { en: "Muharram", ar: "مُحَرَّم" },
   { en: "Safar", ar: "صَفَر" },
@@ -2312,9 +2305,6 @@ document.addEventListener("click", (e) => {
   showToast(`White Day reminder: ${day}th. Sunnah fasting is recommended on the 13th, 14th, and 15th.`);
 });
 
-/* =======================
-   Auth page (SUPABASE)
-======================= */
 async function renderAuth() {
   state.currentRoute = "auth";
   const supabase = await getSupabase();
@@ -2408,9 +2398,6 @@ async function renderAuth() {
   });
 }
 
-/* =======================
-   Learning Space (SUPABASE)
-======================= */
 let realtimeChannel = null;
 
 async function renderLearning() {
@@ -2712,9 +2699,6 @@ async function renderLearning() {
   await loadRooms();
 }
 
-/* =======================
-   Lock screen
-======================= */
 function renderLock() {
   state.currentRoute = "lock";
 
@@ -2837,14 +2821,7 @@ function renderLock() {
     });
   }
 }
-/* =======================
-   Zakat (offline module)
-   - Pure calculation core
-   - One renderer
-   - One binder
-======================= */
 
-/** Zakat defaults kept in one place */
 const ZAKAT_DEFAULTS = {
   currency: "NGN",
   method: "gold", // "gold" | "silver"
@@ -2932,7 +2909,6 @@ function zakat_compute({
   };
 }
 
-/** Rendering: only HTML + placeholders */
 function renderZakat() {
   state.currentRoute = "zakat";
 
@@ -3163,14 +3139,6 @@ function zakat_renderResult({ auto, method }) {
     </div>
   `;
 }
-/* =======================
-   Diary (offline module)
-   - Private, local-only
-   - Calendar sync (in-app month view)
-   - Theme + style presets
-   - PIN lock hooks (uses your existing Lock route)
-   - Reminder (works while app is open)
-======================= */
 
 const DIARY_DEFAULTS = {
   entriesKey: "masalah_diary_entries_v2",
